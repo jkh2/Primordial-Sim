@@ -1,0 +1,764 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Primordial — Genesis Engine v2 · Sentinel Edition</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+<style>
+:root{--bg:#050a14;--panel:rgba(8,14,28,0.82);--panel-border:rgba(100,160,255,0.08);--text:#d8e4f0;--muted:#7a8ba8;--accent:#4a9eff;--accent2:#00e5c8;--accent3:#b47aff;--warm:#ff6b4a;--radius:16px;--font-display:'Outfit',sans-serif;--font-mono:'JetBrains Mono',monospace}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html,body{width:100%;height:100%;overflow:hidden;background:var(--bg);color:var(--text);font-family:var(--font-display);-webkit-font-smoothing:antialiased}
+canvas#gl{position:fixed;inset:0;width:100%;height:100%;display:block;z-index:0}
+
+.panel{position:fixed;top:12px;left:12px;width:360px;max-height:calc(100vh - 24px);z-index:10;border-radius:var(--radius);background:var(--panel);border:1px solid var(--panel-border);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);box-shadow:0 8px 40px rgba(0,0,0,0.5),inset 0 1px 0 rgba(255,255,255,0.04);display:flex;flex-direction:column;overflow:hidden;transition:transform 0.35s cubic-bezier(0.22,1,0.36,1),opacity 0.3s ease}
+.panel.collapsed{transform:translateX(-372px);opacity:0;pointer-events:none}
+.panel-toggle{position:fixed;top:12px;left:12px;z-index:11;width:42px;height:42px;border-radius:12px;background:var(--panel);border:1px solid var(--panel-border);backdrop-filter:blur(16px);color:var(--accent);font-size:1.2rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all 0.25s ease;box-shadow:0 4px 20px rgba(0,0,0,0.3)}
+.panel-toggle:hover{background:rgba(74,158,255,0.12);border-color:rgba(74,158,255,0.25)}
+.panel-toggle.hidden{opacity:0;pointer-events:none}
+.panel-header{padding:16px 16px 0;flex-shrink:0}
+.panel-title{font-size:1.15rem;font-weight:600;background:linear-gradient(135deg,var(--accent2),var(--accent));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;letter-spacing:-0.02em}
+.panel-subtitle{font-size:0.72rem;color:var(--muted);font-family:var(--font-mono);font-weight:300;margin-top:2px;letter-spacing:0.03em}
+.panel-close{position:absolute;top:14px;right:14px;background:none;border:none;color:var(--muted);cursor:pointer;font-size:1.1rem;padding:4px;border-radius:8px;transition:all 0.2s}
+.panel-close:hover{color:var(--text);background:rgba(255,255,255,0.06)}
+.tabs{display:flex;gap:2px;padding:12px 16px 0;flex-shrink:0}
+.tab{flex:1;padding:8px 2px;border:none;background:transparent;color:var(--muted);font-family:var(--font-mono);font-size:0.62rem;font-weight:500;letter-spacing:0.04em;text-transform:uppercase;cursor:pointer;border-radius:10px;transition:all 0.2s}
+.tab:hover{color:var(--text);background:rgba(255,255,255,0.04)}
+.tab.active{color:var(--accent);background:rgba(74,158,255,0.08);box-shadow:inset 0 -2px 0 var(--accent)}
+.tab-body{flex:1;overflow-y:auto;overflow-x:hidden;padding:12px 16px 16px;scrollbar-width:thin;scrollbar-color:rgba(255,255,255,0.08) transparent}
+.tab-page{display:none}.tab-page.active{display:block}
+.ctrl{margin-bottom:12px}
+.ctrl-label{display:flex;justify-content:space-between;align-items:center;margin-bottom:5px}
+.ctrl-label span{font-size:0.78rem;color:var(--muted);font-weight:400}
+.ctrl-label strong{font-family:var(--font-mono);font-size:0.75rem;color:var(--accent);font-weight:500}
+input[type="range"]{-webkit-appearance:none;appearance:none;width:100%;height:4px;background:rgba(255,255,255,0.06);border-radius:2px;outline:none;cursor:pointer}
+input[type="range"]::-webkit-slider-thumb{-webkit-appearance:none;width:14px;height:14px;background:var(--accent);border-radius:50%;border:2px solid rgba(255,255,255,0.15);box-shadow:0 0 8px rgba(74,158,255,0.4);transition:transform 0.15s}
+input[type="range"]::-webkit-slider-thumb:hover{transform:scale(1.2)}
+input[type="range"]::-moz-range-thumb{width:14px;height:14px;background:var(--accent);border-radius:50%;border:2px solid rgba(255,255,255,0.15)}
+.btn-row{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
+button.btn{padding:7px 12px;border-radius:10px;border:1px solid rgba(255,255,255,0.06);background:rgba(255,255,255,0.04);color:var(--text);font-family:var(--font-display);font-size:0.78rem;font-weight:500;cursor:pointer;transition:all 0.2s}
+button.btn:hover{background:rgba(74,158,255,0.1);border-color:rgba(74,158,255,0.2)}
+button.btn.primary{background:linear-gradient(135deg,rgba(0,229,200,0.2),rgba(74,158,255,0.15));border-color:rgba(0,229,200,0.2)}
+button.btn.active{background:rgba(74,158,255,0.2);border-color:var(--accent);color:var(--accent)}
+.toggle-row{display:flex;justify-content:space-between;align-items:center;padding:8px 10px;border-radius:10px;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.04);margin-bottom:12px}
+.toggle-row span{font-size:0.78rem;color:var(--muted)}
+.toggle-row input[type="checkbox"]{width:16px;height:16px;accent-color:var(--accent2);cursor:pointer}
+.section-label{font-family:var(--font-mono);font-size:0.65rem;color:var(--muted);letter-spacing:0.1em;text-transform:uppercase;margin:14px 0 8px;opacity:0.7}
+.stats-bar{display:flex;gap:6px;flex-wrap:wrap;padding:10px 16px;border-top:1px solid rgba(255,255,255,0.04);flex-shrink:0}
+.stat-chip{padding:4px 8px;border-radius:8px;background:rgba(255,255,255,0.03);font-family:var(--font-mono);font-size:0.65rem;color:var(--muted)}
+.stat-chip .sv{color:var(--accent);font-weight:500}
+.species-legend{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px}
+.sp-chip{display:flex;align-items:center;gap:5px;padding:4px 8px;border-radius:8px;background:rgba(255,255,255,0.03);font-family:var(--font-mono);font-size:0.68rem;color:var(--muted)}
+.sp-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+#popGraph{width:100%;height:80px;border-radius:10px;background:rgba(0,0,0,0.3);border:1px solid rgba(255,255,255,0.06);margin-bottom:12px}
+.badge{position:fixed;bottom:12px;right:12px;z-index:8;padding:8px 14px;border-radius:12px;background:rgba(8,14,28,0.75);border:1px solid rgba(255,255,255,0.06);backdrop-filter:blur(12px);font-family:var(--font-mono);font-size:0.68rem;color:var(--muted)}
+.hint{position:fixed;inset:0;z-index:5;display:flex;align-items:center;justify-content:center;pointer-events:none;background:radial-gradient(ellipse at center,rgba(5,10,20,0.1),rgba(5,10,20,0.5));opacity:1;transition:opacity 1.2s ease}
+.hint.gone{opacity:0}
+.hint-card{padding:24px 32px;border-radius:20px;background:var(--panel);border:1px solid var(--panel-border);backdrop-filter:blur(16px);text-align:center;max-width:min(90vw,540px);box-shadow:0 20px 60px rgba(0,0,0,0.4)}
+.hint-card h2{font-size:1rem;font-weight:600;margin-bottom:6px;background:linear-gradient(135deg,var(--accent2),var(--accent));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.hint-card p{font-size:0.82rem;color:var(--muted);line-height:1.5}
+/* Tooltip */
+#tooltip{position:fixed;z-index:20;pointer-events:none;padding:10px 14px;border-radius:12px;background:rgba(8,14,28,0.92);border:1px solid rgba(100,160,255,0.15);backdrop-filter:blur(16px);font-family:var(--font-mono);font-size:0.72rem;color:var(--text);line-height:1.6;opacity:0;transition:opacity 0.15s;max-width:220px;box-shadow:0 8px 30px rgba(0,0,0,0.4)}
+#tooltip.show{opacity:1}
+/* Time display */
+.time-display{position:fixed;top:12px;right:12px;z-index:8;padding:8px 14px;border-radius:12px;background:rgba(8,14,28,0.75);border:1px solid rgba(255,255,255,0.06);backdrop-filter:blur(12px);font-family:var(--font-mono);font-size:0.78rem;color:var(--accent);letter-spacing:0.03em}
+select.sel{padding:7px 10px;border-radius:10px;border:1px solid rgba(255,255,255,0.06);background:rgba(255,255,255,0.04);color:var(--text);font-family:var(--font-display);font-size:0.78rem;cursor:pointer;appearance:none;transition:all 0.2s}
+select.sel:hover{border-color:rgba(74,158,255,0.2)}
+@media(max-width:600px){.panel{width:calc(100vw - 24px);left:12px}.panel.collapsed{transform:translateX(calc(-100vw + 12px))}}
+</style>
+</head>
+<body>
+<canvas id="gl"></canvas>
+<div id="tooltip"></div>
+<div class="time-display" id="timeDisplay">0:00</div>
+<div class="hint" id="hint">
+  <div class="hint-card">
+    <h2>Primordial — Life Evolves from Simple Rules</h2>
+    <p>Organisms eat, grow, hunt, flee, reproduce, mutate, and die<br/>
+    Species evolve traits over generations · Territories form naturally<br/>
+    Click = drop food · Right-click = spawn organisms · Hover = inspect<br/>
+    Keys: Space=pause · 1-4=speed · S=sound</p>
+  </div>
+</div>
+<button class="panel-toggle hidden" id="panelToggle" title="Open controls">&#9776;</button>
+<div class="panel" id="panel">
+  <div class="panel-header">
+    <div class="panel-title">Primordial</div>
+    <div class="panel-subtitle">Genesis Engine · Sentinel Edition · v2.0</div>
+    <button class="panel-close" id="panelClose" title="Collapse panel">&#10005;</button>
+  </div>
+  <div class="tabs">
+    <button class="tab active" data-tab="sim">World</button>
+    <button class="tab" data-tab="species">Species</button>
+    <button class="tab" data-tab="rules">Rules</button>
+    <button class="tab" data-tab="evo">Evolve</button>
+    <button class="tab" data-tab="viz">Visual</button>
+  </div>
+  <div class="tab-body">
+    <!-- WORLD -->
+    <div class="tab-page active" id="tab-sim">
+      <div class="btn-row">
+        <button class="btn primary" id="btnPause">Pause</button>
+        <button class="btn" id="btnReset">Reset World</button>
+        <button class="btn" id="btnSound">Sound On</button>
+        <button class="btn" id="btnFullscreen">&#9974;</button>
+      </div>
+      <div class="section-label">Scenario Presets</div>
+      <div class="btn-row">
+        <select class="sel" id="selPreset">
+          <option value="eden">Stable Eden</option>
+          <option value="armsrace">Arms Race</option>
+          <option value="battleroyale">Battle Royale</option>
+          <option value="superorganism">Superorganism</option>
+          <option value="foodchain">Food Chain Cycle</option>
+          <option value="extinction">Extinction Event</option>
+          <option value="custom">Custom</option>
+        </select>
+      </div>
+      <div class="ctrl"><div class="ctrl-label"><span>Organisms</span><strong id="vOrganisms">5000</strong></div><input type="range" id="sOrganisms" min="500" max="50000" step="500" value="5000"/></div>
+      <div class="ctrl"><div class="ctrl-label"><span>Food Pellets</span><strong id="vFood">2000</strong></div><input type="range" id="sFood" min="100" max="10000" step="100" value="2000"/></div>
+      <div class="ctrl"><div class="ctrl-label"><span>Food Spawn Rate</span><strong id="vFoodRate">15</strong></div><input type="range" id="sFoodRate" min="1" max="80" step="1" value="15"/></div>
+      <div class="ctrl"><div class="ctrl-label"><span>Simulation Speed</span><strong id="vSpeed">1.00</strong></div><input type="range" id="sSpeed" min="0.1" max="5.0" step="0.05" value="1.00"/></div>
+      <div class="section-label">Population Over Time</div>
+      <canvas id="popGraph" width="328" height="80"></canvas>
+      <div class="section-label">Species Census</div>
+      <div class="species-legend" id="speciesLegend"></div>
+    </div>
+    <!-- SPECIES -->
+    <div class="tab-page" id="tab-species">
+      <div class="ctrl"><div class="ctrl-label"><span>Number of Species</span><strong id="vSpecies">5</strong></div><input type="range" id="sSpecies" min="2" max="12" step="1" value="5"/></div>
+      <div class="ctrl"><div class="ctrl-label"><span>Starting Size</span><strong id="vStartSize">3.0</strong></div><input type="range" id="sStartSize" min="1.0" max="8.0" step="0.5" value="3.0"/></div>
+      <div class="ctrl"><div class="ctrl-label"><span>Max Size</span><strong id="vMaxSize">18</strong></div><input type="range" id="sMaxSize" min="8" max="40" step="1" value="18"/></div>
+      <div class="ctrl"><div class="ctrl-label"><span>Organism Speed</span><strong id="vOrgSpeed">1.2</strong></div><input type="range" id="sOrgSpeed" min="0.3" max="4.0" step="0.1" value="1.2"/></div>
+      <div class="ctrl"><div class="ctrl-label"><span>Lifespan</span><strong id="vLifespan">30s</strong></div><input type="range" id="sLifespan" min="10" max="120" step="5" value="30"/></div>
+      <div class="section-label">Reproduction</div>
+      <div class="ctrl"><div class="ctrl-label"><span>Reproduce at Size</span><strong id="vReproSize">12</strong></div><input type="range" id="sReproSize" min="5" max="30" step="1" value="12"/></div>
+      <div class="ctrl"><div class="ctrl-label"><span>Offspring Count</span><strong id="vOffspring">2</strong></div><input type="range" id="sOffspring" min="1" max="5" step="1" value="2"/></div>
+      <div class="ctrl"><div class="ctrl-label"><span>Food Oases</span><strong id="vOases">4</strong></div><input type="range" id="sOases" min="0" max="8" step="1" value="4"/></div>
+    </div>
+    <!-- RULES -->
+    <div class="tab-page" id="tab-rules">
+      <div class="section-label">Predation</div>
+      <div class="toggle-row"><span>Same Species Protected</span><input type="checkbox" id="chkSameSpecies" checked/></div>
+      <div class="toggle-row"><span>Food Chain (Rock-Paper-Scissors)</span><input type="checkbox" id="chkFoodChain"/></div>
+      <div class="ctrl"><div class="ctrl-label"><span>Size Advantage to Eat</span><strong id="vEatRatio">1.3x</strong></div><input type="range" id="sEatRatio" min="1.05" max="2.0" step="0.05" value="1.3"/></div>
+      <div class="ctrl"><div class="ctrl-label"><span>Energy from Eating</span><strong id="vEatGain">0.50</strong></div><input type="range" id="sEatGain" min="0.1" max="1.0" step="0.05" value="0.50"/></div>
+      <div class="section-label">Behavior</div>
+      <div class="ctrl"><div class="ctrl-label"><span>Hunt Drive</span><strong id="vHunt">0.8</strong></div><input type="range" id="sHunt" min="0" max="3" step="0.1" value="0.8"/></div>
+      <div class="ctrl"><div class="ctrl-label"><span>Flee Drive</span><strong id="vFlee">1.5</strong></div><input type="range" id="sFlee" min="0" max="4" step="0.1" value="1.5"/></div>
+      <div class="ctrl"><div class="ctrl-label"><span>Flock Cohesion</span><strong id="vFlock">0.4</strong></div><input type="range" id="sFlock" min="0" max="2" step="0.05" value="0.4"/></div>
+      <div class="ctrl"><div class="ctrl-label"><span>Food Attraction</span><strong id="vFoodDrive">1.2</strong></div><input type="range" id="sFoodDrive" min="0" max="3" step="0.1" value="1.2"/></div>
+      <div class="ctrl"><div class="ctrl-label"><span>Separation Force</span><strong id="vSeparation">0.6</strong></div><input type="range" id="sSeparation" min="0" max="2" step="0.05" value="0.6"/></div>
+    </div>
+    <!-- EVOLUTION -->
+    <div class="tab-page" id="tab-evo">
+      <div class="section-label">Mutation</div>
+      <div class="toggle-row"><span>Enable Mutation</span><input type="checkbox" id="chkMutation" checked/></div>
+      <div class="ctrl"><div class="ctrl-label"><span>Mutation Rate</span><strong id="vMutRate">0.15</strong></div><input type="range" id="sMutRate" min="0" max="0.5" step="0.01" value="0.15"/></div>
+      <div class="ctrl"><div class="ctrl-label"><span>Mutation Strength</span><strong id="vMutStr">0.20</strong></div><input type="range" id="sMutStr" min="0.01" max="0.5" step="0.01" value="0.20"/></div>
+      <div class="section-label">Traits That Evolve</div>
+      <div class="toggle-row"><span>Speed Gene</span><input type="checkbox" id="chkEvoSpeed" checked/></div>
+      <div class="toggle-row"><span>Aggression Gene</span><input type="checkbox" id="chkEvoAggro" checked/></div>
+      <div class="toggle-row"><span>Efficiency Gene (metabolism)</span><input type="checkbox" id="chkEvoEfficiency" checked/></div>
+      <div class="toggle-row"><span>Perception Gene (sight range)</span><input type="checkbox" id="chkEvoPerception" checked/></div>
+    </div>
+    <!-- VISUAL -->
+    <div class="tab-page" id="tab-viz">
+      <div class="toggle-row"><span>Additive Glow</span><input type="checkbox" id="chkGlow" checked/></div>
+      <div class="toggle-row"><span>Death Particles</span><input type="checkbox" id="chkDeathFX" checked/></div>
+      <div class="toggle-row"><span>Show Food Oases</span><input type="checkbox" id="chkShowOases" checked/></div>
+      <div class="ctrl"><div class="ctrl-label"><span>Food Glow</span><strong id="vFoodGlow">1.0</strong></div><input type="range" id="sFoodGlow" min="0.2" max="2.0" step="0.1" value="1.0"/></div>
+      <div class="ctrl"><div class="ctrl-label"><span>Trail Length</span><strong id="vTrail">Off</strong></div><input type="range" id="sTrail" min="0" max="0.95" step="0.01" value="0"/></div>
+    </div>
+  </div>
+  <div class="stats-bar">
+    <div class="stat-chip">FPS <span class="sv" id="sFps">--</span></div>
+    <div class="stat-chip">Alive <span class="sv" id="sAlive">0</span></div>
+    <div class="stat-chip">Food <span class="sv" id="sFoodCount">0</span></div>
+    <div class="stat-chip">Gen <span class="sv" id="sGen">0</span></div>
+  </div>
+</div>
+<div class="badge">Primordial · Sentinel AI Systems × Claude Sentinel · SIDLF</div>
+
+<script>
+'use strict';
+const TAU=Math.PI*2;
+const canvas=document.getElementById('gl');
+const gl=canvas.getContext('webgl',{alpha:false,antialias:false,preserveDrawingBuffer:true});
+if(!gl){document.body.innerHTML='<div style="color:#fff;padding:40px">WebGL not supported.</div>';throw new Error('No WebGL');}
+
+// ── Shaders ──
+const PART_VS=`attribute vec2 a_pos;attribute float a_hue;attribute float a_alpha;attribute float a_size;uniform vec2 u_res;varying float v_hue;varying float v_alpha;void main(){vec2 clip=(a_pos/u_res)*2.0-1.0;clip.y=-clip.y;gl_Position=vec4(clip,0.0,1.0);gl_PointSize=a_size;v_hue=a_hue;v_alpha=a_alpha;}`;
+const PART_FS=`precision mediump float;varying float v_hue;varying float v_alpha;vec3 hsv(float h,float s,float v){vec3 c=vec3(h,s,v);vec3 p=abs(fract(c.xxx+vec3(1.0,2.0/3.0,1.0/3.0))*6.0-3.0);return c.z*mix(vec3(1.0),clamp(p-1.0,0.0,1.0),c.y);}void main(){float d=length(gl_PointCoord-0.5)*2.0;if(d>1.0)discard;float soft=1.0-d*d;float core=exp(-d*2.0)*0.6+soft*0.4;vec3 col=hsv(v_hue,0.85,0.7+core*0.3);gl_FragColor=vec4(col*core,v_alpha*(core*0.7+0.3));}`;
+const FADE_VS=`attribute vec2 a_pos;void main(){gl_Position=vec4(a_pos,0.0,1.0);}`;
+const FADE_FS=`precision mediump float;uniform vec4 u_color;void main(){gl_FragColor=u_color;}`;
+function compileShader(src,type){const s=gl.createShader(type);gl.shaderSource(s,src);gl.compileShader(s);return s;}
+function buildProgram(vs,fs){const p=gl.createProgram();gl.attachShader(p,compileShader(vs,gl.VERTEX_SHADER));gl.attachShader(p,compileShader(fs,gl.FRAGMENT_SHADER));gl.linkProgram(p);return p;}
+const prog=buildProgram(PART_VS,PART_FS);
+const aPos=gl.getAttribLocation(prog,'a_pos'),aHue=gl.getAttribLocation(prog,'a_hue'),aAlpha=gl.getAttribLocation(prog,'a_alpha'),aSize=gl.getAttribLocation(prog,'a_size'),uRes=gl.getUniformLocation(prog,'u_res');
+const fadeProg=buildProgram(FADE_VS,FADE_FS);
+const aFadePos=gl.getAttribLocation(fadeProg,'a_pos'),uFadeColor=gl.getUniformLocation(fadeProg,'u_color');
+const quadBuf=gl.createBuffer();gl.bindBuffer(gl.ARRAY_BUFFER,quadBuf);gl.bufferData(gl.ARRAY_BUFFER,new Float32Array([-1,-1,1,-1,-1,1,1,1]),gl.STATIC_DRAW);
+const posBuf=gl.createBuffer(),hueBuf=gl.createBuffer(),alphaBuf=gl.createBuffer(),sizeBuf=gl.createBuffer();
+gl.enable(gl.BLEND);
+
+const SPECIES_HUES=[0.0,0.08,0.15,0.30,0.45,0.55,0.65,0.75,0.83,0.92,0.18,0.38];
+function speciesColor(idx){const h=SPECIES_HUES[idx%SPECIES_HUES.length],s=0.85,v=0.9,hi=Math.floor(h*6)%6,f=h*6-Math.floor(h*6),p=v*(1-s),q=v*(1-f*s),t=v*(1-(1-f)*s);let r,g,b;switch(hi){case 0:r=v;g=t;b=p;break;case 1:r=q;g=v;b=p;break;case 2:r=p;g=v;b=t;break;case 3:r=p;g=q;b=v;break;case 4:r=t;g=p;b=v;break;default:r=v;g=p;b=q;}return{h,r,g,b,css:`rgb(${r*255|0},${g*255|0},${b*255|0})`};}
+
+const $=id=>document.getElementById(id);
+const ui={panel:$('panel'),panelToggle:$('panelToggle'),panelClose:$('panelClose'),hint:$('hint'),tooltip:$('tooltip'),timeDisplay:$('timeDisplay'),
+btnPause:$('btnPause'),btnReset:$('btnReset'),btnSound:$('btnSound'),btnFullscreen:$('btnFullscreen'),selPreset:$('selPreset'),
+sOrganisms:$('sOrganisms'),sFood:$('sFood'),sFoodRate:$('sFoodRate'),sSpeed:$('sSpeed'),
+sSpecies:$('sSpecies'),sStartSize:$('sStartSize'),sMaxSize:$('sMaxSize'),sOrgSpeed:$('sOrgSpeed'),sLifespan:$('sLifespan'),
+sReproSize:$('sReproSize'),sOffspring:$('sOffspring'),sOases:$('sOases'),
+chkSameSpecies:$('chkSameSpecies'),chkFoodChain:$('chkFoodChain'),sEatRatio:$('sEatRatio'),sEatGain:$('sEatGain'),
+sHunt:$('sHunt'),sFlee:$('sFlee'),sFlock:$('sFlock'),sFoodDrive:$('sFoodDrive'),sSeparation:$('sSeparation'),
+chkMutation:$('chkMutation'),sMutRate:$('sMutRate'),sMutStr:$('sMutStr'),
+chkEvoSpeed:$('chkEvoSpeed'),chkEvoAggro:$('chkEvoAggro'),chkEvoEfficiency:$('chkEvoEfficiency'),chkEvoPerception:$('chkEvoPerception'),
+chkGlow:$('chkGlow'),chkDeathFX:$('chkDeathFX'),chkShowOases:$('chkShowOases'),sFoodGlow:$('sFoodGlow'),sTrail:$('sTrail'),
+vOrganisms:$('vOrganisms'),vFood:$('vFood'),vFoodRate:$('vFoodRate'),vSpeed:$('vSpeed'),
+vSpecies:$('vSpecies'),vStartSize:$('vStartSize'),vMaxSize:$('vMaxSize'),vOrgSpeed:$('vOrgSpeed'),vLifespan:$('vLifespan'),
+vReproSize:$('vReproSize'),vOffspring:$('vOffspring'),vOases:$('vOases'),
+vEatRatio:$('vEatRatio'),vEatGain:$('vEatGain'),vHunt:$('vHunt'),vFlee:$('vFlee'),vFlock:$('vFlock'),vFoodDrive:$('vFoodDrive'),vSeparation:$('vSeparation'),
+vMutRate:$('vMutRate'),vMutStr:$('vMutStr'),
+vFoodGlow:$('vFoodGlow'),vTrail:$('vTrail'),
+sFps:$('sFps'),sAlive:$('sAlive'),sFoodCount:$('sFoodCount'),sGen:$('sGen'),
+speciesLegend:$('speciesLegend'),popGraph:$('popGraph')};
+
+let W=0,H=0,running=true,hasInteracted=false;
+let lastT=performance.now(),fpsT=0,fpsN=0,generation=0,simTime=0;
+
+// ── Organisms (SoA) — now with genetic traits ──
+const MAX_ORG=60000;let orgCount=0;
+const ox=new Float32Array(MAX_ORG),oy=new Float32Array(MAX_ORG);
+const ovx=new Float32Array(MAX_ORG),ovy=new Float32Array(MAX_ORG);
+const osize=new Float32Array(MAX_ORG),oenergy=new Float32Array(MAX_ORG);
+const ospecies=new Uint8Array(MAX_ORG),oage=new Float32Array(MAX_ORG);
+const oalive=new Uint8Array(MAX_ORG);
+const okills=new Uint16Array(MAX_ORG);
+// Genetic traits (0-1 normalized)
+const gSpeed=new Float32Array(MAX_ORG);     // speed multiplier gene
+const gAggro=new Float32Array(MAX_ORG);     // aggression gene
+const gEfficiency=new Float32Array(MAX_ORG);// metabolic efficiency
+const gPerception=new Float32Array(MAX_ORG);// sight range multiplier
+
+// ── Food ──
+const MAX_FOOD=15000;let foodCount=0;
+const fx=new Float32Array(MAX_FOOD),fy=new Float32Array(MAX_FOOD);
+const falive=new Uint8Array(MAX_FOOD),fglow=new Float32Array(MAX_FOOD);
+
+// ── Death Particles ──
+const MAX_DFX=2000;let dfxCount=0;
+const dfxX=new Float32Array(MAX_DFX),dfxY=new Float32Array(MAX_DFX);
+const dfxVX=new Float32Array(MAX_DFX),dfxVY=new Float32Array(MAX_DFX);
+const dfxHue=new Float32Array(MAX_DFX),dfxLife=new Float32Array(MAX_DFX);
+const dfxSize=new Float32Array(MAX_DFX);
+
+function spawnDeathFX(x,y,hue,count,strength){
+  if(!ui.chkDeathFX.checked)return;
+  for(let i=0;i<count;i++){
+    const idx=dfxCount%MAX_DFX;dfxCount=Math.min(dfxCount+1,MAX_DFX);
+    dfxX[idx]=x;dfxY[idx]=y;
+    const a=Math.random()*TAU,spd=1+Math.random()*strength*2;
+    dfxVX[idx]=Math.cos(a)*spd;dfxVY[idx]=Math.sin(a)*spd;
+    dfxHue[idx]=hue;dfxLife[idx]=0.6+Math.random()*0.4;
+    dfxSize[idx]=1.5+Math.random()*2*strength;
+  }
+}
+
+// ── Food Oases ──
+const MAX_OASES=8;
+let oases=[]; // {x, y, radius, strength}
+function initOases(){
+  oases=[];
+  const n=+ui.sOases.value;
+  for(let i=0;i<n;i++){
+    oases.push({x:Math.random()*W,y:Math.random()*H,radius:80+Math.random()*120,strength:2+Math.random()*3});
+  }
+}
+
+// ── Spatial Hash ──
+const CELL=40;let gridW=0,gridH=0,gridCounts,gridEntries;const GMAX=64;
+let fgridCounts,fgridEntries;const FGMAX=32;
+function initGrids(){gridW=Math.ceil(W/CELL)+1;gridH=Math.ceil(H/CELL)+1;const n=gridW*gridH;gridCounts=new Uint16Array(n);gridEntries=new Int32Array(n*GMAX);fgridCounts=new Uint16Array(n);fgridEntries=new Int32Array(n*FGMAX);}
+function buildGrid(){gridCounts.fill(0);for(let i=0;i<orgCount;i++){if(!oalive[i])continue;const c=Math.min(gridW-1,Math.max(0,ox[i]/CELL|0))+Math.min(gridH-1,Math.max(0,oy[i]/CELL|0))*gridW;const k=gridCounts[c];if(k<GMAX){gridEntries[c*GMAX+k]=i;gridCounts[c]=k+1;}}}
+function buildFoodGrid(){fgridCounts.fill(0);for(let i=0;i<foodCount;i++){if(!falive[i])continue;const c=Math.min(gridW-1,Math.max(0,fx[i]/CELL|0))+Math.min(gridH-1,Math.max(0,fy[i]/CELL|0))*gridW;const k=fgridCounts[c];if(k<FGMAX){fgridEntries[c*FGMAX+k]=i;fgridCounts[c]=k+1;}}}
+
+const POP_LEN=200;let popHistory=[];const popCtx=ui.popGraph.getContext('2d');let popTick=0;
+
+function clamp(v,lo,hi){return v<lo?lo:v>hi?hi:v;}
+const rand=(()=>{let s=Date.now()>>>0;return()=>{s+=0x6D2B79F5;let r=Math.imul(s^(s>>>15),s|1);r^=r+Math.imul(r^(r>>>7),r|61);return((r^(r>>>14))>>>0)/4294967296;};})();
+
+// ── Audio System ──
+let audioCtx=null,masterGain=null,soundOn=false;
+let ambOsc=null,ambGain=null;
+function initAudio(){
+  if(audioCtx)return;
+  const AC=window.AudioContext||window.webkitAudioContext;if(!AC)return;
+  audioCtx=new AC();
+  masterGain=audioCtx.createGain();masterGain.gain.value=0.15;masterGain.connect(audioCtx.destination);
+  // Ambient drone
+  ambOsc=audioCtx.createOscillator();ambGain=audioCtx.createGain();
+  ambOsc.type='sine';ambOsc.frequency.value=55;ambGain.gain.value=0;
+  ambOsc.connect(ambGain);ambGain.connect(masterGain);ambOsc.start();
+}
+function toggleSound(){
+  if(!audioCtx)initAudio();
+  if(!audioCtx)return;
+  soundOn=!soundOn;
+  if(audioCtx.state==='suspended')audioCtx.resume();
+  ambGain.gain.setTargetAtTime(soundOn?0.08:0,audioCtx.currentTime,0.1);
+  ui.btnSound.textContent=soundOn?'Sound Off':'Sound On';
+  ui.btnSound.classList.toggle('active',soundOn);
+}
+function playPop(freq,vol){
+  if(!soundOn||!audioCtx)return;
+  const o=audioCtx.createOscillator(),g=audioCtx.createGain();
+  o.type='sine';o.frequency.value=freq;g.gain.value=vol*0.12;
+  o.connect(g);g.connect(masterGain);o.start();
+  g.gain.exponentialRampToValueAtTime(0.001,audioCtx.currentTime+0.15);
+  o.stop(audioCtx.currentTime+0.16);
+}
+function playThud(vol){
+  if(!soundOn||!audioCtx)return;
+  const o=audioCtx.createOscillator(),g=audioCtx.createGain();
+  o.type='sine';o.frequency.value=40+vol*30;g.gain.value=Math.min(0.15,vol*0.08);
+  o.connect(g);g.connect(masterGain);o.start();
+  g.gain.exponentialRampToValueAtTime(0.001,audioCtx.currentTime+0.25);
+  o.stop(audioCtx.currentTime+0.26);
+}
+let lastPopSound=0,lastThudSound=0;
+
+// ── Scenario Presets ──
+// Each preset sets every tunable parameter for a distinct experience
+const PRESETS={
+  // Aquarium mode — life thrives, territories form peacefully
+  eden:{org:4000,food:3000,rate:25,species:5,speed:1.0,startSize:3.0,maxSize:18,orgSpeed:1.0,
+    lifespan:45,reproSize:12,offspring:2,oases:5,
+    hunt:0.3,flee:1.0,flock:0.8,foodDrive:1.0,sep:0.5,eatRatio:1.5,eatGain:0.4,
+    chain:false,mutation:true,mutRate:0.08,mutStr:0.10},
+  // Evolution is the story — moderate scarcity forces adaptation
+  armsrace:{org:5000,food:1800,rate:12,species:4,speed:1.2,startSize:2.5,maxSize:20,orgSpeed:1.3,
+    lifespan:30,reproSize:11,offspring:2,oases:3,
+    hunt:1.2,flee:1.8,flock:0.3,foodDrive:1.4,sep:0.6,eatRatio:1.25,eatGain:0.55,
+    chain:false,mutation:true,mutRate:0.25,mutStr:0.30},
+  // Massive population, scarce food, fast carnage
+  battleroyale:{org:12000,food:600,rate:4,species:6,speed:1.5,startSize:2.0,maxSize:24,orgSpeed:1.6,
+    lifespan:20,reproSize:14,offspring:1,oases:1,
+    hunt:2.5,flee:1.2,flock:0.1,foodDrive:0.8,sep:0.3,eatRatio:1.1,eatGain:0.7,
+    chain:false,mutation:true,mutRate:0.15,mutStr:0.20},
+  // Max flocking — species move as tight swarms like slime molds
+  superorganism:{org:6000,food:2500,rate:18,species:4,speed:0.9,startSize:2.5,maxSize:14,orgSpeed:1.0,
+    lifespan:35,reproSize:10,offspring:2,oases:4,
+    hunt:0.5,flee:1.5,flock:2.0,foodDrive:1.0,sep:0.8,eatRatio:1.35,eatGain:0.45,
+    chain:false,mutation:true,mutRate:0.10,mutStr:0.12},
+  // Rock-paper-scissors predation — classic oscillating populations
+  foodchain:{org:4500,food:2200,rate:18,species:3,speed:1.0,startSize:3.0,maxSize:16,orgSpeed:1.2,
+    lifespan:35,reproSize:11,offspring:2,oases:4,
+    hunt:1.0,flee:1.6,flock:0.5,foodDrive:1.2,sep:0.5,eatRatio:1.3,eatGain:0.5,
+    chain:true,mutation:true,mutRate:0.12,mutStr:0.15},
+  // Many species start strong, food dries up — who survives?
+  extinction:{org:8000,food:4000,rate:2,species:8,speed:1.0,startSize:3.5,maxSize:18,orgSpeed:1.1,
+    lifespan:40,reproSize:13,offspring:2,oases:2,
+    hunt:1.0,flee:1.5,flock:0.6,foodDrive:1.5,sep:0.5,eatRatio:1.3,eatGain:0.5,
+    chain:false,mutation:true,mutRate:0.12,mutStr:0.18},
+};
+function applyPreset(name){
+  const p=PRESETS[name];if(!p)return;
+  ui.sOrganisms.value=p.org;ui.sFood.value=p.food;ui.sFoodRate.value=p.rate;
+  ui.sSpecies.value=p.species;ui.sSpeed.value=p.speed;
+  ui.sStartSize.value=p.startSize;ui.sMaxSize.value=p.maxSize;
+  ui.sOrgSpeed.value=p.orgSpeed;ui.sLifespan.value=p.lifespan;
+  ui.sReproSize.value=p.reproSize;ui.sOffspring.value=p.offspring;
+  ui.sOases.value=p.oases;
+  ui.sHunt.value=p.hunt;ui.sFlee.value=p.flee;ui.sFlock.value=p.flock;
+  ui.sFoodDrive.value=p.foodDrive;ui.sSeparation.value=p.sep;
+  ui.sEatRatio.value=p.eatRatio;ui.sEatGain.value=p.eatGain;
+  ui.chkFoodChain.checked=p.chain;
+  ui.chkMutation.checked=p.mutation;ui.sMutRate.value=p.mutRate;ui.sMutStr.value=p.mutStr;
+  updateLabels();
+}
+
+// ── Init World ──
+function initWorld(){
+  const nOrg=+ui.sOrganisms.value,nFood=+ui.sFood.value,nSp=+ui.sSpecies.value,sz0=+ui.sStartSize.value;
+  orgCount=nOrg;
+  for(let i=0;i<orgCount;i++){
+    ox[i]=rand()*W;oy[i]=rand()*H;
+    ovx[i]=(rand()-0.5)*2;ovy[i]=(rand()-0.5)*2;
+    ospecies[i]=i%nSp;osize[i]=sz0+(rand()-0.5)*1.5;
+    oenergy[i]=osize[i]*2;oage[i]=rand()*5;oalive[i]=1;okills[i]=0;
+    gSpeed[i]=0.4+rand()*0.2;gAggro[i]=0.4+rand()*0.2;
+    gEfficiency[i]=0.4+rand()*0.2;gPerception[i]=0.4+rand()*0.2;
+  }
+  foodCount=nFood;
+  for(let i=0;i<foodCount;i++){fx[i]=rand()*W;fy[i]=rand()*H;falive[i]=1;fglow[i]=rand()*TAU;}
+  dfxCount=0;generation=0;simTime=0;
+  popHistory=[];for(let s=0;s<nSp;s++)popHistory.push([]);
+  initGrids();initOases();
+  let html='';for(let i=0;i<nSp;i++){const c=speciesColor(i);html+=`<div class="sp-chip"><div class="sp-dot" style="background:${c.css}"></div><span id="spC${i}">0</span></div>`;}
+  ui.speciesLegend.innerHTML=html;
+}
+
+// ── Spawn food (with oasis bias) ──
+let foodAccum=0;
+function spawnFood(dt){
+  foodAccum+=(+ui.sFoodRate.value)*dt;
+  let n=foodAccum|0;foodAccum-=n;
+  while(n-->0){
+    let idx=-1;for(let i=0;i<foodCount;i++){if(!falive[i]){idx=i;break;}}
+    if(idx<0&&foodCount<MAX_FOOD)idx=foodCount++;if(idx<0)return;
+    // Oasis-biased spawn: 60% near oases, 40% random
+    if(oases.length>0&&rand()<0.6){
+      const o=oases[rand()*oases.length|0];
+      const a=rand()*TAU,r=rand()*o.radius;
+      fx[idx]=((o.x+Math.cos(a)*r)%W+W)%W;
+      fy[idx]=((o.y+Math.sin(a)*r)%H+H)%H;
+    }else{fx[idx]=rand()*W;fy[idx]=rand()*H;}
+    falive[idx]=1;fglow[idx]=rand()*TAU;
+  }
+}
+
+// ── Reproduce with mutation ──
+function reproduce(pi){
+  const nOff=+ui.sOffspring.value,sz0=+ui.sStartSize.value;
+  const mutOn=ui.chkMutation.checked,mutRate=+ui.sMutRate.value,mutStr=+ui.sMutStr.value;
+  const now=performance.now();
+  if(now-lastPopSound>50){playPop(600+rand()*400,0.3);lastPopSound=now;}
+  for(let c=0;c<nOff;c++){
+    let idx=-1;for(let i=0;i<orgCount;i++){if(!oalive[i]){idx=i;break;}}
+    if(idx<0&&orgCount<MAX_ORG)idx=orgCount++;if(idx<0)return;
+    ox[idx]=ox[pi]+(rand()-0.5)*20;oy[idx]=oy[pi]+(rand()-0.5)*20;
+    ovx[idx]=(rand()-0.5)*3;ovy[idx]=(rand()-0.5)*3;
+    ospecies[idx]=ospecies[pi];osize[idx]=sz0;oenergy[idx]=sz0*2;oage[idx]=0;oalive[idx]=1;okills[idx]=0;
+    // Inherit genes with possible mutation
+    gSpeed[idx]=gSpeed[pi];gAggro[idx]=gAggro[pi];
+    gEfficiency[idx]=gEfficiency[pi];gPerception[idx]=gPerception[pi];
+    if(mutOn){
+      if(ui.chkEvoSpeed.checked&&rand()<mutRate)gSpeed[idx]=clamp(gSpeed[idx]+(rand()-0.5)*mutStr,0.05,1);
+      if(ui.chkEvoAggro.checked&&rand()<mutRate)gAggro[idx]=clamp(gAggro[idx]+(rand()-0.5)*mutStr,0.05,1);
+      if(ui.chkEvoEfficiency.checked&&rand()<mutRate)gEfficiency[idx]=clamp(gEfficiency[idx]+(rand()-0.5)*mutStr,0.05,1);
+      if(ui.chkEvoPerception.checked&&rand()<mutRate)gPerception[idx]=clamp(gPerception[idx]+(rand()-0.5)*mutStr,0.05,1);
+    }
+  }
+  generation++;
+}
+
+// ── Food Chain Logic ──
+function canEatInChain(predSp,preySp,nSp){
+  // Each species hunts the next one in the cycle
+  return((predSp+1)%nSp)===preySp;
+}
+
+// ── Simulate ──
+function simulate(dt){
+  const spd=+ui.sSpeed.value,orgSpd=+ui.sOrgSpeed.value;
+  const maxSz=+ui.sMaxSize.value,life=+ui.sLifespan.value;
+  const reproSz=+ui.sReproSize.value,eatR=+ui.sEatRatio.value;
+  const eatG=+ui.sEatGain.value,sameSafe=ui.chkSameSpecies.checked;
+  const foodChain=ui.chkFoodChain.checked,nSp=+ui.sSpecies.value;
+  const hunt=+ui.sHunt.value,flee=+ui.sFlee.value;
+  const flock=+ui.sFlock.value,foodD=+ui.sFoodDrive.value;
+  const sep=+ui.sSeparation.value;
+  const sDt=dt*spd;if(sDt<0.0001)return;
+  simTime+=sDt;
+
+  // Update ambient pitch based on population
+  if(soundOn&&ambOsc){
+    let alive=0;for(let i=0;i<orgCount;i++)if(oalive[i])alive++;
+    const ratio=alive/Math.max(1,+ui.sOrganisms.value);
+    ambOsc.frequency.setTargetAtTime(40+ratio*80,audioCtx.currentTime,0.5);
+  }
+
+  buildGrid();buildFoodGrid();
+  const repro=[];
+
+  for(let i=0;i<orgCount;i++){
+    if(!oalive[i])continue;
+    let ax=0,ay=0;
+    const cx=Math.min(gridW-1,Math.max(0,ox[i]/CELL|0));
+    const cy=Math.min(gridH-1,Math.max(0,oy[i]/CELL|0));
+    const mySp=ospecies[i],mySz=osize[i];
+    const myAggro=0.5+gAggro[i];
+    const myPerc=0.5+gPerception[i]*1.5;
+    let flX=0,flY=0,flN=0;
+    const scanR=foodChain?2:1; // wider scan in food chain mode
+
+    for(let dy=-scanR;dy<=scanR;dy++)for(let dx=-scanR;dx<=scanR;dx++){
+      const nx=cx+dx,ny=cy+dy;
+      if(nx<0||nx>=gridW||ny<0||ny>=gridH)continue;
+      const ci=ny*gridW+nx,cnt=gridCounts[ci],base=ci*GMAX;
+      for(let k=0;k<cnt;k++){
+        const j=gridEntries[base+k];if(j===i)continue;
+        const ddx=ox[j]-ox[i],ddy=oy[j]-oy[i];
+        const d2=ddx*ddx+ddy*ddy,d=Math.sqrt(d2)+0.1;
+        const cR=mySz+osize[j];
+        const inPerception=d<CELL*myPerc;
+
+        if(ospecies[j]===mySp){
+          if(d<CELL*1.5){flX+=ddx;flY+=ddy;flN++;}
+          if(d<cR*0.8){const sf=sep*2/(d+1);ax-=ddx/d*sf;ay-=ddy/d*sf;}
+        }else{
+          let canEat=false,isPreyOf=false;
+          if(foodChain){
+            canEat=canEatInChain(mySp,ospecies[j],nSp);
+            isPreyOf=canEatInChain(ospecies[j],mySp,nSp);
+          }else{
+            canEat=mySz>osize[j]*eatR;
+            isPreyOf=osize[j]>mySz*eatR;
+          }
+          if(canEat&&inPerception){
+            const hf=hunt*myAggro*0.5/(d+5);ax+=ddx/d*hf;ay+=ddy/d*hf;
+            if(d<cR*0.6){
+              oalive[j]=0;oenergy[i]+=osize[j]*eatG;okills[i]++;
+              spawnDeathFX(ox[j],oy[j],SPECIES_HUES[ospecies[j]%SPECIES_HUES.length],4+osize[j]*0.5|0,osize[j]/maxSz);
+              const now=performance.now();if(now-lastThudSound>80){playThud(osize[j]/maxSz);lastThudSound=now;}
+            }
+          }else if(isPreyOf&&inPerception){
+            const ff=flee*1.2/(d+3);ax-=ddx/d*ff;ay-=ddy/d*ff;
+          }else{
+            if(d<cR*1.2){const sf=sep*0.5/(d+2);ax-=ddx/d*sf;ay-=ddy/d*sf;}
+          }
+        }
+      }
+    }
+
+    if(flN>0){flX/=flN;flY/=flN;const fd=Math.sqrt(flX*flX+flY*flY)+0.1;ax+=flX/fd*flock*0.15;ay+=flY/fd*flock*0.15;}
+
+    // Food search (wider for high perception)
+    let nfD=999999,nfI=-1;
+    const fScan=Math.min(3,1+gPerception[i]*2|0);
+    for(let dy2=-fScan;dy2<=fScan;dy2++)for(let dx2=-fScan;dx2<=fScan;dx2++){
+      const nx=cx+dx2,ny=cy+dy2;if(nx<0||nx>=gridW||ny<0||ny>=gridH)continue;
+      const ci=ny*gridW+nx,cnt=fgridCounts[ci],base=ci*FGMAX;
+      for(let k=0;k<cnt;k++){const fi=fgridEntries[base+k];if(!falive[fi])continue;const fdx=fx[fi]-ox[i],fdy=fy[fi]-oy[i],fd2=fdx*fdx+fdy*fdy;if(fd2<nfD){nfD=fd2;nfI=fi;}}
+    }
+    if(nfI>=0){const fdx=fx[nfI]-ox[i],fdy=fy[nfI]-oy[i],fd=Math.sqrt(nfD)+0.1;
+      if(fd<mySz+3){falive[nfI]=0;oenergy[i]+=3;}
+      else{ax+=fdx/fd*foodD*0.3;ay+=fdy/fd*foodD*0.3;}
+    }
+
+    // Wander
+    const wt=performance.now()*0.001+i*0.7;
+    ax+=Math.sin(wt*1.3+oy[i]*0.01)*0.15;ay+=Math.cos(wt*0.9+ox[i]*0.01)*0.15;
+
+    // Integrate with genetic speed
+    const spdGene=0.6+gSpeed[i]*0.8;
+    const sS=orgSpd*spdGene*(1/(1+mySz*0.04));
+    ovx[i]=(ovx[i]+ax*sDt*60)*0.95;ovy[i]=(ovy[i]+ay*sDt*60)*0.95;
+    const vel=Math.sqrt(ovx[i]*ovx[i]+ovy[i]*ovy[i]),mv=sS*3;
+    if(vel>mv){ovx[i]=ovx[i]/vel*mv;ovy[i]=ovy[i]/vel*mv;}
+    ox[i]+=ovx[i]*sS;oy[i]+=ovy[i]*sS;
+    if(ox[i]<0)ox[i]+=W;else if(ox[i]>W)ox[i]-=W;
+    if(oy[i]<0)oy[i]+=H;else if(oy[i]>H)oy[i]-=H;
+
+    // Metabolism — efficiency gene reduces cost
+    const metaCost=0.3*(1.2-gEfficiency[i]*0.5);
+    oenergy[i]-=sDt*metaCost;
+    osize[i]=clamp(Math.sqrt(Math.max(0.5,oenergy[i]))*1.5,1,maxSz);
+    oage[i]+=sDt;
+
+    if(oenergy[i]<=0||oage[i]>life){
+      if(oenergy[i]<=0)spawnDeathFX(ox[i],oy[i],SPECIES_HUES[mySp%SPECIES_HUES.length],2,0.3);
+      oalive[i]=0;continue;
+    }
+    if(osize[i]>=reproSz&&oenergy[i]>reproSz*2.5){
+      oenergy[i]*=0.4;osize[i]=clamp(Math.sqrt(Math.max(0.5,oenergy[i]))*1.5,1,maxSz);
+      repro.push(i);
+    }
+  }
+  for(const r of repro)reproduce(r);
+
+  // Update death particles
+  for(let i=0;i<dfxCount;i++){
+    dfxLife[i]-=sDt*2;if(dfxLife[i]<=0)continue;
+    dfxX[i]+=dfxVX[i];dfxY[i]+=dfxVY[i];
+    dfxVX[i]*=0.95;dfxVY[i]*=0.95;
+  }
+}
+
+// ── Heatmap ──
+// ── Draw Oasis Indicators (lightweight 2D overlay) ──
+const oasisCanvas=document.createElement('canvas');
+oasisCanvas.style.cssText='position:fixed;inset:0;width:100%;height:100%;display:block;z-index:0;pointer-events:none';
+document.body.insertBefore(oasisCanvas,document.getElementById('tooltip'));
+const oasisCtx=oasisCanvas.getContext('2d');
+function drawOases(){
+  oasisCanvas.width=W;oasisCanvas.height=H;
+  oasisCtx.clearRect(0,0,W,H);
+  if(!ui.chkShowOases.checked)return;
+  oasisCtx.globalAlpha=0.12;
+  for(const o of oases){oasisCtx.beginPath();oasisCtx.arc(o.x,o.y,o.radius,0,TAU);oasisCtx.fillStyle='#00e5c8';oasisCtx.fill();}
+  oasisCtx.globalAlpha=1;
+}
+
+function updatePopGraph(dt){
+  popTick+=dt;if(popTick<0.25)return;popTick=0;
+  const nSp=+ui.sSpecies.value,counts=new Array(nSp).fill(0);
+  for(let i=0;i<orgCount;i++)if(oalive[i])counts[ospecies[i]]++;
+  for(let s=0;s<nSp;s++){if(!popHistory[s])popHistory[s]=[];popHistory[s].push(counts[s]);if(popHistory[s].length>POP_LEN)popHistory[s].shift();}
+  const w=328,h=80;popCtx.fillStyle='rgba(0,0,0,0.6)';popCtx.fillRect(0,0,w,h);
+  let mx=10;for(let s=0;s<nSp;s++)for(const v of popHistory[s])if(v>mx)mx=v;
+  for(let s=0;s<nSp;s++){const hist=popHistory[s];if(!hist||hist.length<2)continue;popCtx.strokeStyle=speciesColor(s).css;popCtx.lineWidth=1.5;popCtx.globalAlpha=0.8;popCtx.beginPath();for(let x=0;x<hist.length;x++){const px=x/POP_LEN*w,py=h-(hist[x]/mx)*(h-4)-2;x===0?popCtx.moveTo(px,py):popCtx.lineTo(px,py);}popCtx.stroke();popCtx.globalAlpha=1;}
+  for(let s=0;s<nSp;s++){const el=$('spC'+s);if(el)el.textContent=counts[s];}
+}
+
+// ── Organism Inspection (Tooltip) ──
+let mouseX=0,mouseY=0,hoveredOrg=-1;
+function findOrgAtMouse(){
+  let best=-1,bestD=400; // 20px radius squared
+  const cx=Math.min(gridW-1,Math.max(0,mouseX/CELL|0)),cy=Math.min(gridH-1,Math.max(0,mouseY/CELL|0));
+  for(let dy=-1;dy<=1;dy++)for(let dx=-1;dx<=1;dx++){
+    const nx=cx+dx,ny=cy+dy;if(nx<0||nx>=gridW||ny<0||ny>=gridH)continue;
+    const ci=ny*gridW+nx,cnt=gridCounts[ci],base=ci*GMAX;
+    for(let k=0;k<cnt;k++){const j=gridEntries[base+k];if(!oalive[j])continue;
+      const ddx=ox[j]-mouseX,ddy=oy[j]-mouseY,d2=ddx*ddx+ddy*ddy;
+      if(d2<bestD){bestD=d2;best=j;}
+    }
+  }
+  return best;
+}
+function updateTooltip(){
+  hoveredOrg=findOrgAtMouse();
+  if(hoveredOrg<0){ui.tooltip.classList.remove('show');return;}
+  const i=hoveredOrg;
+  const spName=['Red','Orange','Gold','Green','Teal','Cyan','Blue','Indigo','Purple','Magenta','Lime','Emerald'][ospecies[i]%12];
+  ui.tooltip.innerHTML=`<b style="color:${speciesColor(ospecies[i]).css}">${spName} #${i}</b><br>`+
+    `Size: ${osize[i].toFixed(1)} · Energy: ${oenergy[i].toFixed(1)}<br>`+
+    `Age: ${oage[i].toFixed(1)}s · Kills: ${okills[i]}<br>`+
+    `<span style="color:var(--accent2)">Spd:</span>${(gSpeed[i]*100|0)}% `+
+    `<span style="color:var(--warm)">Agg:</span>${(gAggro[i]*100|0)}% `+
+    `<span style="color:var(--accent)">Eff:</span>${(gEfficiency[i]*100|0)}% `+
+    `<span style="color:var(--accent3)">Per:</span>${(gPerception[i]*100|0)}%`;
+  ui.tooltip.style.left=Math.min(W-230,mouseX+15)+'px';
+  ui.tooltip.style.top=Math.min(H-100,mouseY+15)+'px';
+  ui.tooltip.classList.add('show');
+}
+
+// ── GL Buffers ──
+const RMAX=MAX_ORG+MAX_FOOD+MAX_DFX;
+let glPos=new Float32Array(RMAX*2),glHue=new Float32Array(RMAX);
+let glAlpha=new Float32Array(RMAX),glSize=new Float32Array(RMAX);
+
+// ── Main Loop ──
+let frameCount=0,heatTick=0,tooltipTick=0;
+function frame(now){
+  requestAnimationFrame(frame);
+  const rawDt=Math.min(0.05,(now-lastT)/1000);lastT=now;
+  if(!running){updateTooltip();return;}
+
+  spawnFood(rawDt);simulate(rawDt);
+
+  if(++heatTick>=4){drawOases();heatTick=0;}
+  updatePopGraph(rawDt);
+  if(++tooltipTick>=3){updateTooltip();tooltipTick=0;}
+
+  // Time display
+  const mins=simTime/60|0,secs=simTime%60|0;
+  ui.timeDisplay.textContent=(mins<10?'0':'')+mins+':'+(secs<10?'0':'')+secs;
+
+  // Render
+  const trail=+ui.sTrail.value;
+  if(trail>0.01){
+    gl.useProgram(fadeProg);gl.bindBuffer(gl.ARRAY_BUFFER,quadBuf);
+    gl.enableVertexAttribArray(aFadePos);gl.vertexAttribPointer(aFadePos,2,gl.FLOAT,false,0,0);
+    gl.uniform4f(uFadeColor,0.02,0.04,0.08,1-trail);gl.blendFunc(gl.SRC_ALPHA,gl.ONE_MINUS_SRC_ALPHA);
+    gl.drawArrays(gl.TRIANGLE_STRIP,0,4);gl.disableVertexAttribArray(aFadePos);
+  }else{gl.clearColor(0.02,0.04,0.08,1);gl.clear(gl.COLOR_BUFFER_BIT);}
+
+  let wi=0;const fGlow=+ui.sFoodGlow.value;
+  // Food
+  for(let i=0;i<foodCount;i++){if(!falive[i])continue;fglow[i]+=rawDt*3;
+    glPos[wi*2]=fx[i];glPos[wi*2+1]=fy[i];glHue[wi]=0.22+Math.sin(fglow[i])*0.05;
+    glAlpha[wi]=0.5+Math.sin(fglow[i]*1.3)*0.2;glSize[wi]=(2.5+Math.sin(fglow[i]*0.8)*0.5)*fGlow;wi++;}
+  // Death particles
+  for(let i=0;i<dfxCount;i++){if(dfxLife[i]<=0)continue;
+    glPos[wi*2]=dfxX[i];glPos[wi*2+1]=dfxY[i];glHue[wi]=dfxHue[i];
+    glAlpha[wi]=dfxLife[i]*0.8;glSize[wi]=dfxSize[i]*dfxLife[i];wi++;}
+  // Organisms
+  const mxSz=+ui.sMaxSize.value;
+  for(let i=0;i<orgCount;i++){if(!oalive[i])continue;
+    glPos[wi*2]=ox[i];glPos[wi*2+1]=oy[i];
+    glHue[wi]=SPECIES_HUES[ospecies[i]%SPECIES_HUES.length];
+    glAlpha[wi]=0.6+(osize[i]/mxSz)*0.4;
+    // Highlight hovered organism
+    let sz=Math.max(1.5,osize[i]*1.2);
+    if(i===hoveredOrg)sz*=1.8;
+    glSize[wi]=sz;wi++;}
+
+  gl.blendFunc(gl.SRC_ALPHA,ui.chkGlow.checked?gl.ONE:gl.ONE_MINUS_SRC_ALPHA);
+  gl.useProgram(prog);gl.uniform2f(uRes,W,H);
+  gl.bindBuffer(gl.ARRAY_BUFFER,posBuf);gl.bufferData(gl.ARRAY_BUFFER,glPos.subarray(0,wi*2),gl.DYNAMIC_DRAW);gl.enableVertexAttribArray(aPos);gl.vertexAttribPointer(aPos,2,gl.FLOAT,false,0,0);
+  gl.bindBuffer(gl.ARRAY_BUFFER,hueBuf);gl.bufferData(gl.ARRAY_BUFFER,glHue.subarray(0,wi),gl.DYNAMIC_DRAW);gl.enableVertexAttribArray(aHue);gl.vertexAttribPointer(aHue,1,gl.FLOAT,false,0,0);
+  gl.bindBuffer(gl.ARRAY_BUFFER,alphaBuf);gl.bufferData(gl.ARRAY_BUFFER,glAlpha.subarray(0,wi),gl.DYNAMIC_DRAW);gl.enableVertexAttribArray(aAlpha);gl.vertexAttribPointer(aAlpha,1,gl.FLOAT,false,0,0);
+  gl.bindBuffer(gl.ARRAY_BUFFER,sizeBuf);gl.bufferData(gl.ARRAY_BUFFER,glSize.subarray(0,wi),gl.DYNAMIC_DRAW);gl.enableVertexAttribArray(aSize);gl.vertexAttribPointer(aSize,1,gl.FLOAT,false,0,0);
+  gl.drawArrays(gl.POINTS,0,wi);
+
+  fpsT+=rawDt;fpsN++;if(fpsT>=0.4){ui.sFps.textContent=(fpsN/fpsT|0);fpsT=0;fpsN=0;}
+  let alive=0;for(let i=0;i<orgCount;i++)if(oalive[i])alive++;
+  let fAlive=0;for(let i=0;i<foodCount;i++)if(falive[i])fAlive++;
+  ui.sAlive.textContent=alive;ui.sFoodCount.textContent=fAlive;ui.sGen.textContent=generation;
+  updateLabels();frameCount++;
+}
+
+function updateLabels(){
+  ui.vOrganisms.textContent=ui.sOrganisms.value;ui.vFood.textContent=ui.sFood.value;
+  ui.vFoodRate.textContent=ui.sFoodRate.value+'/s';ui.vSpeed.textContent=(+ui.sSpeed.value).toFixed(2);
+  ui.vSpecies.textContent=ui.sSpecies.value;ui.vStartSize.textContent=(+ui.sStartSize.value).toFixed(1);
+  ui.vMaxSize.textContent=ui.sMaxSize.value;ui.vOrgSpeed.textContent=(+ui.sOrgSpeed.value).toFixed(1);
+  ui.vLifespan.textContent=ui.sLifespan.value+'s';ui.vReproSize.textContent=ui.sReproSize.value;
+  ui.vOffspring.textContent=ui.sOffspring.value;ui.vOases.textContent=ui.sOases.value;
+  ui.vEatRatio.textContent=(+ui.sEatRatio.value).toFixed(2)+'x';ui.vEatGain.textContent=(+ui.sEatGain.value).toFixed(2);
+  ui.vHunt.textContent=(+ui.sHunt.value).toFixed(1);ui.vFlee.textContent=(+ui.sFlee.value).toFixed(1);
+  ui.vFlock.textContent=(+ui.sFlock.value).toFixed(2);ui.vFoodDrive.textContent=(+ui.sFoodDrive.value).toFixed(1);
+  ui.vSeparation.textContent=(+ui.sSeparation.value).toFixed(2);
+  ui.vMutRate.textContent=(+ui.sMutRate.value).toFixed(2);ui.vMutStr.textContent=(+ui.sMutStr.value).toFixed(2);
+  ui.vFoodGlow.textContent=(+ui.sFoodGlow.value).toFixed(1);
+  const tv=+ui.sTrail.value;ui.vTrail.textContent=tv<0.05?'Off':tv<0.3?'Short':tv<0.6?'Medium':'Long';
+  ui.btnPause.textContent=running?'Pause':'Play';ui.btnPause.classList.toggle('active',!running);
+}
+
+function resize(){W=window.innerWidth;H=window.innerHeight;canvas.width=W;canvas.height=H;gl.viewport(0,0,W,H);gl.useProgram(prog);gl.uniform2f(uRes,W,H);gl.clearColor(0.02,0.04,0.08,1);gl.clear(gl.COLOR_BUFFER_BIT);}
+window.addEventListener('resize',()=>{resize();initGrids();});
+
+function interact(){hasInteracted=true;if(ui.hint&&!ui.hint.classList.contains('gone')){ui.hint.classList.add('gone');setTimeout(()=>{ui.hint.style.display='none';},1200);}}
+
+// Tabs
+document.querySelectorAll('.tab').forEach(tab=>{tab.addEventListener('click',()=>{document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));document.querySelectorAll('.tab-page').forEach(p=>p.classList.remove('active'));tab.classList.add('active');document.getElementById('tab-'+tab.dataset.tab).classList.add('active');});});
+ui.panelClose.addEventListener('click',()=>{ui.panel.classList.add('collapsed');ui.panelToggle.classList.remove('hidden');});
+ui.panelToggle.addEventListener('click',()=>{ui.panel.classList.remove('collapsed');ui.panelToggle.classList.add('hidden');});
+ui.btnPause.addEventListener('click',()=>{interact();running=!running;updateLabels();});
+ui.btnReset.addEventListener('click',()=>{interact();resize();initWorld();});
+ui.btnSound.addEventListener('click',()=>{interact();toggleSound();});
+ui.btnFullscreen.addEventListener('click',()=>{interact();if(!document.fullscreenElement)document.documentElement.requestFullscreen?.();else document.exitFullscreen?.();});
+ui.selPreset.addEventListener('change',()=>{interact();const v=ui.selPreset.value;if(v!=='custom'){applyPreset(v);resize();initWorld();}});
+document.querySelectorAll('input[type="range"]').forEach(s=>{s.addEventListener('input',()=>{interact();updateLabels();ui.selPreset.value='custom';});});
+ui.sOrganisms.addEventListener('change',()=>{interact();initWorld();});
+ui.sSpecies.addEventListener('change',()=>{interact();initWorld();});
+ui.sOases.addEventListener('change',()=>{interact();initOases();});
+
+// Mouse
+canvas.addEventListener('mousemove',(e)=>{mouseX=e.clientX;mouseY=e.clientY;});
+canvas.addEventListener('click',(e)=>{interact();for(let s=0;s<8;s++){let idx=-1;for(let i=0;i<foodCount;i++){if(!falive[i]){idx=i;break;}}if(idx<0&&foodCount<MAX_FOOD)idx=foodCount++;if(idx<0)break;fx[idx]=e.clientX+(Math.random()-0.5)*30;fy[idx]=e.clientY+(Math.random()-0.5)*30;falive[idx]=1;fglow[idx]=Math.random()*TAU;}});
+canvas.addEventListener('contextmenu',(e)=>{e.preventDefault();interact();const nSp=+ui.sSpecies.value,sz0=+ui.sStartSize.value,sp=Math.random()*nSp|0;for(let s=0;s<5;s++){let idx=-1;for(let i=0;i<orgCount;i++){if(!oalive[i]){idx=i;break;}}if(idx<0&&orgCount<MAX_ORG)idx=orgCount++;if(idx<0)break;ox[idx]=e.clientX+(Math.random()-0.5)*25;oy[idx]=e.clientY+(Math.random()-0.5)*25;ovx[idx]=(Math.random()-0.5)*2;ovy[idx]=(Math.random()-0.5)*2;ospecies[idx]=sp;osize[idx]=sz0;oenergy[idx]=sz0*2;oage[idx]=0;oalive[idx]=1;okills[idx]=0;gSpeed[idx]=0.3+Math.random()*0.4;gAggro[idx]=0.3+Math.random()*0.4;gEfficiency[idx]=0.3+Math.random()*0.4;gPerception[idx]=0.3+Math.random()*0.4;}});
+
+// Keyboard shortcuts
+window.addEventListener('keydown',(e)=>{
+  if(e.target.tagName==='INPUT'||e.target.tagName==='SELECT')return;
+  interact();
+  if(e.code==='Space'){e.preventDefault();running=!running;updateLabels();}
+  else if(e.key==='1'){ui.sSpeed.value='0.5';updateLabels();}
+  else if(e.key==='2'){ui.sSpeed.value='1.0';updateLabels();}
+  else if(e.key==='3'){ui.sSpeed.value='2.0';updateLabels();}
+  else if(e.key==='4'){ui.sSpeed.value='5.0';updateLabels();}
+  else if(e.key==='s'||e.key==='S'){toggleSound();}
+});
+
+function adaptiveCount(){const touch=window.matchMedia?.('(pointer:coarse)')?.matches;if(touch)return Math.min(window.innerWidth,window.innerHeight)<700?2000:4000;if(window.innerWidth>1500)return 8000;if(window.innerWidth>1100)return 5000;return 3000;}
+
+// Boot
+resize();ui.sOrganisms.value=String(adaptiveCount());initWorld();requestAnimationFrame(frame);
+</script>
+</body>
+</html>
