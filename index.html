@@ -100,6 +100,12 @@ button.btn.active{background:rgba(74,158,255,0.2);border-color:var(--accent);col
 .time-display{position:fixed;top:12px;left:50%;transform:translateX(-50%);z-index:8;padding:8px 14px;border-radius:12px;background:rgba(8,14,28,0.75);border:1px solid rgba(255,255,255,0.06);backdrop-filter:blur(12px);font-family:var(--font-mono);font-size:0.78rem;color:var(--accent);letter-spacing:0.03em}
 select.sel{padding:7px 10px;border-radius:10px;border:1px solid rgba(255,255,255,0.06);background:rgba(255,255,255,0.04);color:var(--text);font-family:var(--font-display);font-size:0.78rem;cursor:pointer;appearance:none;transition:all 0.2s}
 select.sel:hover{border-color:rgba(74,158,255,0.2)}
+/* Recording indicator */
+.rec-dot{position:fixed;top:16px;right:16px;z-index:20;display:flex;align-items:center;gap:8px;padding:8px 14px;border-radius:12px;background:rgba(8,14,28,0.8);border:1px solid rgba(255,60,60,0.3);backdrop-filter:blur(12px);font-family:var(--font-mono);font-size:0.72rem;color:#ff4444;pointer-events:none;opacity:0;transition:opacity 0.3s ease}
+.rec-dot.active{opacity:1}
+.rec-dot::before{content:'';width:10px;height:10px;border-radius:50%;background:#ff3333;animation:recPulse 1s ease-in-out infinite}
+@keyframes recPulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.4;transform:scale(0.8)}}
+button.btn.recording{background:rgba(255,50,50,0.25)!important;border-color:rgba(255,50,50,0.4)!important;color:#ff4444!important}
 @media(max-width:900px){.ai-panel{width:calc(100vw - 24px);right:12px}.ai-panel.collapsed{transform:translateX(calc(100vw - 12px))}}
 @media(max-width:600px){.panel{width:calc(100vw - 24px);left:12px}.panel.collapsed{transform:translateX(calc(-100vw + 12px))}}
 </style>
@@ -141,6 +147,7 @@ select.sel:hover{border-color:rgba(74,158,255,0.2)}
         <button class="btn primary" id="btnPause">Pause</button>
         <button class="btn" id="btnReset">Reset World</button>
         <button class="btn" id="btnSound">Sound On</button>
+        <button class="btn" id="btnRecord">&#9210; Record</button>
         <button class="btn" id="btnFullscreen">&#9974;</button>
       </div>
       <div class="section-label">Scenario Presets</div>
@@ -155,6 +162,13 @@ select.sel:hover{border-color:rgba(74,158,255,0.2)}
           <option value="custom">Custom</option>
         </select>
       </div>
+      <div class="btn-row">
+        <button class="btn" id="btnShareLink" title="Copy shareable URL">Share Link</button>
+        <button class="btn" id="btnExport" title="Download .primordial file">Export</button>
+        <button class="btn" id="btnImport" title="Load .primordial file">Import</button>
+        <input type="file" id="importFile" accept=".primordial,.json" style="display:none"/>
+      </div>
+      <div id="shareStatus" style="font-family:var(--font-mono);font-size:0.65rem;color:var(--muted);margin-bottom:8px;word-break:break-all"></div>
       <div class="ctrl"><div class="ctrl-label"><span>Organisms</span><strong id="vOrganisms">5000</strong></div><input type="range" id="sOrganisms" min="500" max="50000" step="500" value="5000"/></div>
       <div class="ctrl"><div class="ctrl-label"><span>Food Pellets</span><strong id="vFood">2000</strong></div><input type="range" id="sFood" min="100" max="10000" step="100" value="2000"/></div>
       <div class="ctrl"><div class="ctrl-label"><span>Food Spawn Rate</span><strong id="vFoodRate">15</strong></div><input type="range" id="sFoodRate" min="1" max="80" step="1" value="15"/></div>
@@ -274,6 +288,7 @@ Configure your AI provider in the settings above, then try asking me to analyze 
 </div>
 
 <div class="badge">Primordial v3 · Sentinel AI Systems × Claude Sentinel · SIDLF</div>
+<div class="rec-dot" id="recDot">REC <span id="recTime">0:00</span></div>
 
 <script>
 'use strict';
@@ -308,7 +323,7 @@ function speciesColor(idx){const h=SPECIES_HUES[idx%SPECIES_HUES.length],s=0.85,
 // ═══════════════════════════════════════════════
 const $=id=>document.getElementById(id);
 const ui={panel:$('panel'),panelToggle:$('panelToggle'),panelClose:$('panelClose'),hint:$('hint'),tooltip:$('tooltip'),timeDisplay:$('timeDisplay'),
-btnPause:$('btnPause'),btnReset:$('btnReset'),btnSound:$('btnSound'),btnFullscreen:$('btnFullscreen'),selPreset:$('selPreset'),
+btnPause:$('btnPause'),btnReset:$('btnReset'),btnSound:$('btnSound'),btnRecord:$('btnRecord'),btnFullscreen:$('btnFullscreen'),selPreset:$('selPreset'),
 sOrganisms:$('sOrganisms'),sFood:$('sFood'),sFoodRate:$('sFoodRate'),sSpeed:$('sSpeed'),
 sSpecies:$('sSpecies'),sStartSize:$('sStartSize'),sMaxSize:$('sMaxSize'),sOrgSpeed:$('sOrgSpeed'),sLifespan:$('sLifespan'),
 sReproSize:$('sReproSize'),sOffspring:$('sOffspring'),sOases:$('sOases'),
@@ -376,6 +391,151 @@ function toggleSound(){if(!audioCtx)initAudio();if(!audioCtx)return;soundOn=!sou
 function playPop(freq,vol){if(!soundOn||!audioCtx)return;const o=audioCtx.createOscillator(),g=audioCtx.createGain();o.type='sine';o.frequency.value=freq;g.gain.value=vol*0.12;o.connect(g);g.connect(masterGain);o.start();g.gain.exponentialRampToValueAtTime(0.001,audioCtx.currentTime+0.15);o.stop(audioCtx.currentTime+0.16);}
 function playThud(vol){if(!soundOn||!audioCtx)return;const o=audioCtx.createOscillator(),g=audioCtx.createGain();o.type='sine';o.frequency.value=40+vol*30;g.gain.value=Math.min(0.15,vol*0.08);o.connect(g);g.connect(masterGain);o.start();g.gain.exponentialRampToValueAtTime(0.001,audioCtx.currentTime+0.25);o.stop(audioCtx.currentTime+0.26);}
 let lastPopSound=0,lastThudSound=0;
+
+// ═══════════════════════════════════════════════
+// SESSION RECORDING SYSTEM
+// ═══════════════════════════════════════════════
+let mediaRecorder=null,recordedChunks=[],isRecording=false,recStartTime=0,recTimerInterval=null;
+
+function startRecording(){
+  if(isRecording){stopRecording();return;}
+  const canvasStream=canvas.captureStream(30);
+  let combinedStream;
+  if(audioCtx&&soundOn){
+    try{
+      const audioDest=audioCtx.createMediaStreamDestination();
+      if(masterGain)masterGain.connect(audioDest);
+      combinedStream=new MediaStream([...canvasStream.getVideoTracks(),...audioDest.stream.getAudioTracks()]);
+    }catch(e){combinedStream=canvasStream;}
+  }else{combinedStream=canvasStream;}
+  const mimeTypes=['video/webm;codecs=vp9,opus','video/webm;codecs=vp8,opus','video/webm;codecs=vp9','video/webm;codecs=vp8','video/webm'];
+  let mimeType='';for(const mt of mimeTypes){if(MediaRecorder.isTypeSupported(mt)){mimeType=mt;break;}}
+  if(!mimeType){addAiMsg('system','Recording not supported in this browser');return;}
+  try{
+    recordedChunks=[];
+    mediaRecorder=new MediaRecorder(combinedStream,{mimeType,videoBitsPerSecond:5000000});
+    mediaRecorder.ondataavailable=(e)=>{if(e.data&&e.data.size>0)recordedChunks.push(e.data);};
+    mediaRecorder.onstop=()=>{
+      const blob=new Blob(recordedChunks,{type:mimeType});
+      const url=URL.createObjectURL(blob);
+      const a=document.createElement('a');
+      a.href=url;a.download='primordial-'+new Date().toISOString().slice(0,19).replace(/[T:]/g,'-')+'.webm';
+      document.body.appendChild(a);a.click();document.body.removeChild(a);
+      setTimeout(()=>URL.revokeObjectURL(url),10000);
+    };
+    mediaRecorder.start(1000);isRecording=true;recStartTime=performance.now();
+    $('recDot').classList.add('active');
+    $('btnRecord').textContent='\u23F9 Stop';$('btnRecord').classList.add('recording');
+    recTimerInterval=setInterval(updateRecTimer,500);
+  }catch(e){console.error('Recording failed:',e);}
+}
+function stopRecording(){
+  if(!isRecording||!mediaRecorder)return;
+  mediaRecorder.stop();isRecording=false;
+  $('recDot').classList.remove('active');
+  $('btnRecord').textContent='\u23FA Record';$('btnRecord').classList.remove('recording');
+  if(recTimerInterval){clearInterval(recTimerInterval);recTimerInterval=null;}
+}
+function updateRecTimer(){
+  if(!isRecording)return;
+  const elapsed=(performance.now()-recStartTime)/1000;
+  const m=Math.floor(elapsed/60),s=Math.floor(elapsed%60);
+  $('recTime').textContent=m+':'+(s<10?'0':'')+s;
+}
+
+// ═══════════════════════════════════════════════
+// SETTINGS SHARE / EXPORT / IMPORT
+// ═══════════════════════════════════════════════
+
+// All configurable slider/checkbox IDs
+const SETTING_SLIDERS=['sOrganisms','sFood','sFoodRate','sSpeed','sSpecies','sStartSize','sMaxSize','sOrgSpeed','sLifespan','sReproSize','sOffspring','sOases','sEatRatio','sEatGain','sHunt','sFlee','sFlock','sFoodDrive','sSeparation','sMutRate','sMutStr','sFoodGlow','sTrail'];
+const SETTING_CHECKS=['chkSameSpecies','chkFoodChain','chkMutation','chkEvoSpeed','chkEvoAggro','chkEvoEfficiency','chkEvoPerception','chkGlow','chkDeathFX','chkShowOases'];
+
+function captureSettings(){
+  const s={_format:'primordial-settings',_version:3,_date:new Date().toISOString(),_preset:$('selPreset').value,sliders:{},checks:{}};
+  for(const id of SETTING_SLIDERS){const el=$(id);if(el)s.sliders[id]=el.value;}
+  for(const id of SETTING_CHECKS){const el=$(id);if(el)s.checks[id]=el.checked;}
+  return s;
+}
+
+function applySettings(s){
+  if(!s||!s.sliders)return false;
+  for(const[id,val]of Object.entries(s.sliders)){const el=$(id);if(el)el.value=val;}
+  for(const[id,val]of Object.entries(s.checks)){const el=$(id);if(el)el.checked=val;}
+  if(s._preset&&s._preset!=='custom')$('selPreset').value=s._preset;
+  else $('selPreset').value='custom';
+  updateLabels();
+  return true;
+}
+
+// Tier 1: Share Link — encode settings in URL
+function shareSettingsLink(){
+  const s=captureSettings();
+  const code=btoa(JSON.stringify(s));
+  const url=window.location.origin+window.location.pathname+'?s='+encodeURIComponent(code);
+  navigator.clipboard.writeText(url).then(()=>{
+    $('shareStatus').textContent='Link copied to clipboard!';
+    $('shareStatus').style.color='var(--accent2)';
+    setTimeout(()=>{$('shareStatus').textContent='';},3000);
+  }).catch(()=>{
+    $('shareStatus').textContent=url;
+    $('shareStatus').style.color='var(--accent)';
+  });
+}
+
+function loadSettingsFromURL(){
+  const params=new URLSearchParams(window.location.search);
+  const code=params.get('s');
+  if(!code)return false;
+  try{
+    const s=JSON.parse(atob(decodeURIComponent(code)));
+    if(applySettings(s)){resize();initWorld();return true;}
+  }catch(e){console.warn('Failed to load settings from URL:',e);}
+  return false;
+}
+
+// Tier 2: Export/Import .primordial file
+function exportSettings(){
+  const s=captureSettings();
+  const json=JSON.stringify(s,null,2);
+  const blob=new Blob([json],{type:'application/json'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');
+  a.href=url;
+  const preset=s._preset!=='custom'?s._preset:'custom';
+  a.download='primordial-'+preset+'-'+new Date().toISOString().slice(0,10)+'.primordial';
+  document.body.appendChild(a);a.click();document.body.removeChild(a);
+  setTimeout(()=>URL.revokeObjectURL(url),5000);
+  $('shareStatus').textContent='Settings exported!';
+  $('shareStatus').style.color='var(--accent2)';
+  setTimeout(()=>{$('shareStatus').textContent='';},3000);
+}
+
+function importSettings(file){
+  const reader=new FileReader();
+  reader.onload=(e)=>{
+    try{
+      const s=JSON.parse(e.target.result);
+      if(s._format!=='primordial-settings'){
+        $('shareStatus').textContent='Invalid file format';
+        $('shareStatus').style.color='var(--warm)';
+        setTimeout(()=>{$('shareStatus').textContent='';},3000);
+        return;
+      }
+      if(applySettings(s)){
+        resize();initWorld();
+        $('shareStatus').textContent='Settings loaded! (v'+(s._version||'?')+', '+(s._preset||'custom')+')';
+        $('shareStatus').style.color='var(--accent2)';
+        setTimeout(()=>{$('shareStatus').textContent='';},4000);
+      }
+    }catch(err){
+      $('shareStatus').textContent='Error reading file: '+err.message;
+      $('shareStatus').style.color='var(--warm)';
+      setTimeout(()=>{$('shareStatus').textContent='';},4000);
+    }
+  };
+  reader.readAsText(file);
+}
 
 // Presets (same as v2)
 const PRESETS={
@@ -825,12 +985,19 @@ ui.aiToggle.addEventListener('click',()=>{interact();ui.aiPanel.classList.remove
 ui.btnPause.addEventListener('click',()=>{interact();running=!running;updateLabels();});
 ui.btnReset.addEventListener('click',()=>{interact();resize();initWorld();});
 ui.btnSound.addEventListener('click',()=>{interact();toggleSound();});
+ui.btnRecord.addEventListener('click',()=>{interact();startRecording();});
 ui.btnFullscreen.addEventListener('click',()=>{interact();if(!document.fullscreenElement)document.documentElement.requestFullscreen?.();else document.exitFullscreen?.();});
 ui.selPreset.addEventListener('change',()=>{interact();const v=ui.selPreset.value;if(v!=='custom'){applyPreset(v);resize();initWorld();}});
 document.querySelectorAll('input[type="range"]').forEach(s=>{s.addEventListener('input',()=>{interact();updateLabels();ui.selPreset.value='custom';});});
 ui.sOrganisms.addEventListener('change',()=>{interact();initWorld();});
 ui.sSpecies.addEventListener('change',()=>{interact();initWorld();});
 ui.sOases.addEventListener('change',()=>{interact();initOases();});
+
+// Share / Export / Import
+$('btnShareLink').addEventListener('click',()=>{interact();shareSettingsLink();});
+$('btnExport').addEventListener('click',()=>{interact();exportSettings();});
+$('btnImport').addEventListener('click',()=>{interact();$('importFile').click();});
+$('importFile').addEventListener('change',(e)=>{if(e.target.files[0])importSettings(e.target.files[0]);e.target.value='';});
 
 canvas.addEventListener('mousemove',(e)=>{mouseX=e.clientX;mouseY=e.clientY;});
 canvas.addEventListener('click',(e)=>{interact();for(let s=0;s<8;s++){let idx=-1;for(let i=0;i<foodCount;i++){if(!falive[i]){idx=i;break;}}if(idx<0&&foodCount<MAX_FOOD)idx=foodCount++;if(idx<0)break;fx[idx]=e.clientX+(Math.random()-0.5)*30;fy[idx]=e.clientY+(Math.random()-0.5)*30;falive[idx]=1;fglow[idx]=Math.random()*TAU;}});
@@ -854,7 +1021,10 @@ window.addEventListener('keydown',(e)=>{
 function adaptiveCount(){const touch=window.matchMedia?.('(pointer:coarse)')?.matches;if(touch)return Math.min(window.innerWidth,window.innerHeight)<700?2000:4000;if(window.innerWidth>1500)return 8000;if(window.innerWidth>1100)return 5000;return 3000;}
 
 // Boot
-resize();ui.sOrganisms.value=String(adaptiveCount());loadAiSettings();initWorld();requestAnimationFrame(frame);
+resize();ui.sOrganisms.value=String(adaptiveCount());loadAiSettings();initWorld();
+const loadedFromURL=loadSettingsFromURL();
+if(loadedFromURL){resize();initWorld();}
+requestAnimationFrame(frame);
 </script>
 </body>
 </html>
