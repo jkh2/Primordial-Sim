@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Primordial — Genesis Engine v2 · Sentinel Edition</title>
+<title>Primordial — Genesis Engine v3 · Sentinel Edition</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
 <style>
@@ -11,12 +11,49 @@
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html,body{width:100%;height:100%;overflow:hidden;background:var(--bg);color:var(--text);font-family:var(--font-display);-webkit-font-smoothing:antialiased}
 canvas#gl{position:fixed;inset:0;width:100%;height:100%;display:block;z-index:0}
-
+/* Left Panel — Controls */
 .panel{position:fixed;top:12px;left:12px;width:360px;max-height:calc(100vh - 24px);z-index:10;border-radius:var(--radius);background:var(--panel);border:1px solid var(--panel-border);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);box-shadow:0 8px 40px rgba(0,0,0,0.5),inset 0 1px 0 rgba(255,255,255,0.04);display:flex;flex-direction:column;overflow:hidden;transition:transform 0.35s cubic-bezier(0.22,1,0.36,1),opacity 0.3s ease}
 .panel.collapsed{transform:translateX(-372px);opacity:0;pointer-events:none}
 .panel-toggle{position:fixed;top:12px;left:12px;z-index:11;width:42px;height:42px;border-radius:12px;background:var(--panel);border:1px solid var(--panel-border);backdrop-filter:blur(16px);color:var(--accent);font-size:1.2rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all 0.25s ease;box-shadow:0 4px 20px rgba(0,0,0,0.3)}
-.panel-toggle:hover{background:rgba(74,158,255,0.12);border-color:rgba(74,158,255,0.25)}
+.panel-toggle:hover{background:rgba(74,158,255,0.12)}
 .panel-toggle.hidden{opacity:0;pointer-events:none}
+/* Right Panel — AI Lab */
+.ai-panel{position:fixed;top:12px;right:12px;width:380px;max-height:calc(100vh - 24px);z-index:10;border-radius:var(--radius);background:var(--panel);border:1px solid var(--panel-border);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);box-shadow:0 8px 40px rgba(0,0,0,0.5),inset 0 1px 0 rgba(255,255,255,0.04);display:flex;flex-direction:column;overflow:hidden;transition:transform 0.35s cubic-bezier(0.22,1,0.36,1),opacity 0.3s ease}
+.ai-panel.collapsed{transform:translateX(392px);opacity:0;pointer-events:none}
+.ai-toggle{position:fixed;top:12px;right:12px;z-index:11;width:42px;height:42px;border-radius:12px;background:var(--panel);border:1px solid rgba(180,122,255,0.15);backdrop-filter:blur(16px);color:var(--accent3);font-size:1.1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all 0.25s ease;box-shadow:0 4px 20px rgba(0,0,0,0.3)}
+.ai-toggle:hover{background:rgba(180,122,255,0.12)}
+.ai-toggle.hidden{opacity:0;pointer-events:none}
+.ai-header{padding:16px 16px 0;flex-shrink:0}
+.ai-title{font-size:1.05rem;font-weight:600;background:linear-gradient(135deg,var(--accent3),var(--accent));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.ai-subtitle{font-size:0.7rem;color:var(--muted);font-family:var(--font-mono);font-weight:300;margin-top:2px}
+.ai-close{position:absolute;top:14px;right:14px;background:none;border:none;color:var(--muted);cursor:pointer;font-size:1.1rem;padding:4px;border-radius:8px;transition:all 0.2s}
+.ai-close:hover{color:var(--text);background:rgba(255,255,255,0.06)}
+/* AI Chat area */
+.ai-chat{flex:1;overflow-y:auto;padding:12px 16px;scrollbar-width:thin;scrollbar-color:rgba(255,255,255,0.08) transparent;display:flex;flex-direction:column;gap:10px}
+.ai-msg{padding:10px 12px;border-radius:12px;font-size:0.8rem;line-height:1.55;max-width:100%;word-wrap:break-word;white-space:pre-wrap}
+.ai-msg.assistant{background:rgba(180,122,255,0.08);border:1px solid rgba(180,122,255,0.12);color:var(--text)}
+.ai-msg.user{background:rgba(74,158,255,0.08);border:1px solid rgba(74,158,255,0.12);color:var(--text);align-self:flex-end}
+.ai-msg.system{background:rgba(0,229,200,0.06);border:1px solid rgba(0,229,200,0.1);color:var(--accent2);font-family:var(--font-mono);font-size:0.72rem}
+.ai-msg.report{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);color:var(--text);font-family:var(--font-mono);font-size:0.72rem;line-height:1.6}
+.ai-msg b,.ai-msg strong{color:var(--accent)}
+/* AI Input */
+.ai-input-row{display:flex;gap:6px;padding:12px 16px;border-top:1px solid rgba(255,255,255,0.04);flex-shrink:0}
+.ai-input{flex:1;padding:8px 12px;border-radius:10px;border:1px solid rgba(255,255,255,0.06);background:rgba(255,255,255,0.04);color:var(--text);font-family:var(--font-display);font-size:0.82rem;outline:none;resize:none}
+.ai-input:focus{border-color:rgba(180,122,255,0.3)}
+.ai-input::placeholder{color:var(--muted)}
+.ai-send{padding:8px 14px;border-radius:10px;border:1px solid rgba(180,122,255,0.2);background:linear-gradient(135deg,rgba(180,122,255,0.2),rgba(74,158,255,0.15));color:var(--text);font-family:var(--font-display);font-size:0.78rem;font-weight:500;cursor:pointer;transition:all 0.2s;white-space:nowrap}
+.ai-send:hover{background:rgba(180,122,255,0.25);border-color:rgba(180,122,255,0.35)}
+.ai-send:disabled{opacity:0.4;cursor:not-allowed}
+/* Quick actions */
+.ai-actions{display:flex;gap:6px;flex-wrap:wrap;padding:8px 16px;border-top:1px solid rgba(255,255,255,0.04);flex-shrink:0}
+.ai-action{padding:5px 10px;border-radius:8px;border:1px solid rgba(180,122,255,0.1);background:rgba(180,122,255,0.05);color:var(--accent3);font-family:var(--font-mono);font-size:0.65rem;cursor:pointer;transition:all 0.2s}
+.ai-action:hover{background:rgba(180,122,255,0.12);border-color:rgba(180,122,255,0.25)}
+/* Experiment status */
+.exp-status{padding:8px 16px;border-top:1px solid rgba(255,255,255,0.04);flex-shrink:0;font-family:var(--font-mono);font-size:0.68rem;color:var(--accent2);display:none}
+.exp-status.active{display:flex;align-items:center;gap:8px}
+.exp-dot{width:8px;height:8px;border-radius:50%;background:var(--accent2);animation:expPulse 1s ease-in-out infinite}
+@keyframes expPulse{0%,100%{opacity:1}50%{opacity:0.3}}
+/* Shared styles */
 .panel-header{padding:16px 16px 0;flex-shrink:0}
 .panel-title{font-size:1.15rem;font-weight:600;background:linear-gradient(135deg,var(--accent2),var(--accent));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;letter-spacing:-0.02em}
 .panel-subtitle{font-size:0.72rem;color:var(--muted);font-family:var(--font-mono);font-weight:300;margin-top:2px;letter-spacing:0.03em}
@@ -58,13 +95,12 @@ button.btn.active{background:rgba(74,158,255,0.2);border-color:var(--accent);col
 .hint-card{padding:24px 32px;border-radius:20px;background:var(--panel);border:1px solid var(--panel-border);backdrop-filter:blur(16px);text-align:center;max-width:min(90vw,540px);box-shadow:0 20px 60px rgba(0,0,0,0.4)}
 .hint-card h2{font-size:1rem;font-weight:600;margin-bottom:6px;background:linear-gradient(135deg,var(--accent2),var(--accent));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
 .hint-card p{font-size:0.82rem;color:var(--muted);line-height:1.5}
-/* Tooltip */
 #tooltip{position:fixed;z-index:20;pointer-events:none;padding:10px 14px;border-radius:12px;background:rgba(8,14,28,0.92);border:1px solid rgba(100,160,255,0.15);backdrop-filter:blur(16px);font-family:var(--font-mono);font-size:0.72rem;color:var(--text);line-height:1.6;opacity:0;transition:opacity 0.15s;max-width:220px;box-shadow:0 8px 30px rgba(0,0,0,0.4)}
 #tooltip.show{opacity:1}
-/* Time display */
-.time-display{position:fixed;top:12px;right:12px;z-index:8;padding:8px 14px;border-radius:12px;background:rgba(8,14,28,0.75);border:1px solid rgba(255,255,255,0.06);backdrop-filter:blur(12px);font-family:var(--font-mono);font-size:0.78rem;color:var(--accent);letter-spacing:0.03em}
+.time-display{position:fixed;top:12px;left:50%;transform:translateX(-50%);z-index:8;padding:8px 14px;border-radius:12px;background:rgba(8,14,28,0.75);border:1px solid rgba(255,255,255,0.06);backdrop-filter:blur(12px);font-family:var(--font-mono);font-size:0.78rem;color:var(--accent);letter-spacing:0.03em}
 select.sel{padding:7px 10px;border-radius:10px;border:1px solid rgba(255,255,255,0.06);background:rgba(255,255,255,0.04);color:var(--text);font-family:var(--font-display);font-size:0.78rem;cursor:pointer;appearance:none;transition:all 0.2s}
 select.sel:hover{border-color:rgba(74,158,255,0.2)}
+@media(max-width:900px){.ai-panel{width:calc(100vw - 24px);right:12px}.ai-panel.collapsed{transform:translateX(calc(100vw - 12px))}}
 @media(max-width:600px){.panel{width:calc(100vw - 24px);left:12px}.panel.collapsed{transform:translateX(calc(-100vw + 12px))}}
 </style>
 </head>
@@ -72,20 +108,24 @@ select.sel:hover{border-color:rgba(74,158,255,0.2)}
 <canvas id="gl"></canvas>
 <div id="tooltip"></div>
 <div class="time-display" id="timeDisplay">0:00</div>
+
 <div class="hint" id="hint">
   <div class="hint-card">
     <h2>Primordial — Life Evolves from Simple Rules</h2>
     <p>Organisms eat, grow, hunt, flee, reproduce, mutate, and die<br/>
-    Species evolve traits over generations · Territories form naturally<br/>
-    Click = drop food · Right-click = spawn organisms · Hover = inspect<br/>
-    Keys: Space=pause · 1-4=speed · S=sound</p>
+    AI Lab Partner observes, experiments, and writes research reports<br/>
+    Click = food · Right-click = spawn · Hover = inspect · Space = pause<br/>
+    Keys: 1-4 = speed · S = sound · L = AI Lab</p>
   </div>
 </div>
+
 <button class="panel-toggle hidden" id="panelToggle" title="Open controls">&#9776;</button>
+
+<!-- LEFT PANEL — Simulation Controls (same as v2) -->
 <div class="panel" id="panel">
   <div class="panel-header">
     <div class="panel-title">Primordial</div>
-    <div class="panel-subtitle">Genesis Engine · Sentinel Edition · v2.0</div>
+    <div class="panel-subtitle">Genesis Engine · Sentinel Edition · v3.0</div>
     <button class="panel-close" id="panelClose" title="Collapse panel">&#10005;</button>
   </div>
   <div class="tabs">
@@ -96,7 +136,6 @@ select.sel:hover{border-color:rgba(74,158,255,0.2)}
     <button class="tab" data-tab="viz">Visual</button>
   </div>
   <div class="tab-body">
-    <!-- WORLD -->
     <div class="tab-page active" id="tab-sim">
       <div class="btn-row">
         <button class="btn primary" id="btnPause">Pause</button>
@@ -125,7 +164,6 @@ select.sel:hover{border-color:rgba(74,158,255,0.2)}
       <div class="section-label">Species Census</div>
       <div class="species-legend" id="speciesLegend"></div>
     </div>
-    <!-- SPECIES -->
     <div class="tab-page" id="tab-species">
       <div class="ctrl"><div class="ctrl-label"><span>Number of Species</span><strong id="vSpecies">5</strong></div><input type="range" id="sSpecies" min="2" max="12" step="1" value="5"/></div>
       <div class="ctrl"><div class="ctrl-label"><span>Starting Size</span><strong id="vStartSize">3.0</strong></div><input type="range" id="sStartSize" min="1.0" max="8.0" step="0.5" value="3.0"/></div>
@@ -137,7 +175,6 @@ select.sel:hover{border-color:rgba(74,158,255,0.2)}
       <div class="ctrl"><div class="ctrl-label"><span>Offspring Count</span><strong id="vOffspring">2</strong></div><input type="range" id="sOffspring" min="1" max="5" step="1" value="2"/></div>
       <div class="ctrl"><div class="ctrl-label"><span>Food Oases</span><strong id="vOases">4</strong></div><input type="range" id="sOases" min="0" max="8" step="1" value="4"/></div>
     </div>
-    <!-- RULES -->
     <div class="tab-page" id="tab-rules">
       <div class="section-label">Predation</div>
       <div class="toggle-row"><span>Same Species Protected</span><input type="checkbox" id="chkSameSpecies" checked/></div>
@@ -151,7 +188,6 @@ select.sel:hover{border-color:rgba(74,158,255,0.2)}
       <div class="ctrl"><div class="ctrl-label"><span>Food Attraction</span><strong id="vFoodDrive">1.2</strong></div><input type="range" id="sFoodDrive" min="0" max="3" step="0.1" value="1.2"/></div>
       <div class="ctrl"><div class="ctrl-label"><span>Separation Force</span><strong id="vSeparation">0.6</strong></div><input type="range" id="sSeparation" min="0" max="2" step="0.05" value="0.6"/></div>
     </div>
-    <!-- EVOLUTION -->
     <div class="tab-page" id="tab-evo">
       <div class="section-label">Mutation</div>
       <div class="toggle-row"><span>Enable Mutation</span><input type="checkbox" id="chkMutation" checked/></div>
@@ -163,7 +199,6 @@ select.sel:hover{border-color:rgba(74,158,255,0.2)}
       <div class="toggle-row"><span>Efficiency Gene (metabolism)</span><input type="checkbox" id="chkEvoEfficiency" checked/></div>
       <div class="toggle-row"><span>Perception Gene (sight range)</span><input type="checkbox" id="chkEvoPerception" checked/></div>
     </div>
-    <!-- VISUAL -->
     <div class="tab-page" id="tab-viz">
       <div class="toggle-row"><span>Additive Glow</span><input type="checkbox" id="chkGlow" checked/></div>
       <div class="toggle-row"><span>Death Particles</span><input type="checkbox" id="chkDeathFX" checked/></div>
@@ -179,7 +214,66 @@ select.sel:hover{border-color:rgba(74,158,255,0.2)}
     <div class="stat-chip">Gen <span class="sv" id="sGen">0</span></div>
   </div>
 </div>
-<div class="badge">Primordial · Sentinel AI Systems × Claude Sentinel · SIDLF</div>
+
+<!-- RIGHT PANEL — AI Lab Partner -->
+<button class="ai-toggle" id="aiToggle" title="AI Lab Partner">&#9883;</button>
+<div class="ai-panel collapsed" id="aiPanel">
+  <div class="ai-header">
+    <div class="ai-title">AI Lab Partner</div>
+    <div class="ai-subtitle">Sentinel Research Assistant</div>
+    <button class="ai-close" id="aiClose" title="Close AI Lab">&#10005;</button>
+  </div>
+  <!-- AI Settings (collapsible) -->
+  <div id="aiSettings" style="padding:10px 16px;border-bottom:1px solid rgba(255,255,255,0.04);flex-shrink:0">
+    <div style="display:flex;justify-content:space-between;align-items:center;cursor:pointer;margin-bottom:8px" onclick="document.getElementById('aiSettingsBody').style.display=document.getElementById('aiSettingsBody').style.display==='none'?'block':'none'">
+      <span style="font-family:var(--font-mono);font-size:0.68rem;color:var(--accent3);letter-spacing:0.06em;text-transform:uppercase">AI Provider Settings</span>
+      <span style="color:var(--muted);font-size:0.8rem">&#9660;</span>
+    </div>
+    <div id="aiSettingsBody">
+      <div style="margin-bottom:8px">
+        <select class="sel" id="aiProvider" style="width:100%;margin-bottom:6px">
+          <option value="openai">OpenAI (GPT)</option>
+          <option value="anthropic">Anthropic (Claude)</option>
+          <option value="xai">xAI (Grok)</option>
+          <option value="custom">Custom / Local (OpenAI-compatible)</option>
+        </select>
+      </div>
+      <div style="margin-bottom:6px">
+        <input class="ai-input" id="aiApiKey" type="password" placeholder="API Key" style="width:100%;font-size:0.72rem"/>
+      </div>
+      <div style="margin-bottom:6px">
+        <input class="ai-input" id="aiModel" placeholder="Model (e.g. gpt-4o, claude-sonnet-4-20250514)" style="width:100%;font-size:0.72rem"/>
+      </div>
+      <div id="aiCustomUrlRow" style="margin-bottom:6px;display:none">
+        <input class="ai-input" id="aiCustomUrl" placeholder="Endpoint URL (e.g. http://localhost:1234/v1/chat/completions)" style="width:100%;font-size:0.72rem"/>
+      </div>
+      <div style="display:flex;gap:6px">
+        <button class="ai-action" onclick="saveAiSettings()" style="flex:1">Save Settings</button>
+        <button class="ai-action" onclick="testAiConnection()" style="flex:1">Test Connection</button>
+      </div>
+      <div id="aiSettingsStatus" style="font-family:var(--font-mono);font-size:0.65rem;color:var(--muted);margin-top:6px"></div>
+    </div>
+  </div>
+  <div class="ai-chat" id="aiChat">
+    <div class="ai-msg assistant">Welcome to the Primordial Research Lab. I can observe the simulation, design experiments, run them automatically, and write reports on the results.
+
+Configure your AI provider in the settings above, then try asking me to analyze the current state, propose an experiment, or explain what's happening. You can also use the quick actions below.</div>
+  </div>
+  <div class="exp-status" id="expStatus"><div class="exp-dot"></div><span id="expStatusText">Running experiment...</span></div>
+  <div class="ai-actions">
+    <button class="ai-action" onclick="aiQuick('analyze')">Analyze Now</button>
+    <button class="ai-action" onclick="aiQuick('experiment')">Design Experiment</button>
+    <button class="ai-action" onclick="aiQuick('compare')">Compare Species</button>
+    <button class="ai-action" onclick="aiQuick('predict')">Predict Outcomes</button>
+    <button class="ai-action" onclick="aiQuick('report')">Full Report</button>
+  </div>
+  <div class="ai-input-row">
+    <input class="ai-input" id="aiInput" placeholder="Ask the lab partner..." maxlength="500"/>
+    <button class="ai-send" id="aiSend" onclick="sendAiMessage()">Send</button>
+  </div>
+</div>
+
+<div class="badge">Primordial v3 · Sentinel AI Systems × Claude Sentinel · SIDLF</div>
 
 <script>
 'use strict';
@@ -188,7 +282,9 @@ const canvas=document.getElementById('gl');
 const gl=canvas.getContext('webgl',{alpha:false,antialias:false,preserveDrawingBuffer:true});
 if(!gl){document.body.innerHTML='<div style="color:#fff;padding:40px">WebGL not supported.</div>';throw new Error('No WebGL');}
 
-// ── Shaders ──
+// ═══════════════════════════════════════════════
+// WEBGL RENDERER (unchanged from v2)
+// ═══════════════════════════════════════════════
 const PART_VS=`attribute vec2 a_pos;attribute float a_hue;attribute float a_alpha;attribute float a_size;uniform vec2 u_res;varying float v_hue;varying float v_alpha;void main(){vec2 clip=(a_pos/u_res)*2.0-1.0;clip.y=-clip.y;gl_Position=vec4(clip,0.0,1.0);gl_PointSize=a_size;v_hue=a_hue;v_alpha=a_alpha;}`;
 const PART_FS=`precision mediump float;varying float v_hue;varying float v_alpha;vec3 hsv(float h,float s,float v){vec3 c=vec3(h,s,v);vec3 p=abs(fract(c.xxx+vec3(1.0,2.0/3.0,1.0/3.0))*6.0-3.0);return c.z*mix(vec3(1.0),clamp(p-1.0,0.0,1.0),c.y);}void main(){float d=length(gl_PointCoord-0.5)*2.0;if(d>1.0)discard;float soft=1.0-d*d;float core=exp(-d*2.0)*0.6+soft*0.4;vec3 col=hsv(v_hue,0.85,0.7+core*0.3);gl_FragColor=vec4(col*core,v_alpha*(core*0.7+0.3));}`;
 const FADE_VS=`attribute vec2 a_pos;void main(){gl_Position=vec4(a_pos,0.0,1.0);}`;
@@ -204,8 +300,12 @@ const posBuf=gl.createBuffer(),hueBuf=gl.createBuffer(),alphaBuf=gl.createBuffer
 gl.enable(gl.BLEND);
 
 const SPECIES_HUES=[0.0,0.08,0.15,0.30,0.45,0.55,0.65,0.75,0.83,0.92,0.18,0.38];
+const SPECIES_NAMES=['Red','Orange','Gold','Green','Teal','Cyan','Blue','Indigo','Purple','Magenta','Lime','Emerald'];
 function speciesColor(idx){const h=SPECIES_HUES[idx%SPECIES_HUES.length],s=0.85,v=0.9,hi=Math.floor(h*6)%6,f=h*6-Math.floor(h*6),p=v*(1-s),q=v*(1-f*s),t=v*(1-(1-f)*s);let r,g,b;switch(hi){case 0:r=v;g=t;b=p;break;case 1:r=q;g=v;b=p;break;case 2:r=p;g=v;b=t;break;case 3:r=p;g=q;b=v;break;case 4:r=t;g=p;b=v;break;default:r=v;g=p;b=q;}return{h,r,g,b,css:`rgb(${r*255|0},${g*255|0},${b*255|0})`};}
 
+// ═══════════════════════════════════════════════
+// UI REFERENCES
+// ═══════════════════════════════════════════════
 const $=id=>document.getElementById(id);
 const ui={panel:$('panel'),panelToggle:$('panelToggle'),panelClose:$('panelClose'),hint:$('hint'),tooltip:$('tooltip'),timeDisplay:$('timeDisplay'),
 btnPause:$('btnPause'),btnReset:$('btnReset'),btnSound:$('btnSound'),btnFullscreen:$('btnFullscreen'),selPreset:$('selPreset'),
@@ -216,69 +316,48 @@ chkSameSpecies:$('chkSameSpecies'),chkFoodChain:$('chkFoodChain'),sEatRatio:$('s
 sHunt:$('sHunt'),sFlee:$('sFlee'),sFlock:$('sFlock'),sFoodDrive:$('sFoodDrive'),sSeparation:$('sSeparation'),
 chkMutation:$('chkMutation'),sMutRate:$('sMutRate'),sMutStr:$('sMutStr'),
 chkEvoSpeed:$('chkEvoSpeed'),chkEvoAggro:$('chkEvoAggro'),chkEvoEfficiency:$('chkEvoEfficiency'),chkEvoPerception:$('chkEvoPerception'),
-chkGlow:$('chkGlow'),chkDeathFX:$('chkDeathFX'),chkShowOases:$('chkShowOases'),sFoodGlow:$('sFoodGlow'),sTrail:$('sTrail'),
+chkGlow:$('chkGlow'),chkDeathFX:$('chkDeathFX'),chkShowOases:$('chkShowOases'),
+sFoodGlow:$('sFoodGlow'),sTrail:$('sTrail'),
 vOrganisms:$('vOrganisms'),vFood:$('vFood'),vFoodRate:$('vFoodRate'),vSpeed:$('vSpeed'),
 vSpecies:$('vSpecies'),vStartSize:$('vStartSize'),vMaxSize:$('vMaxSize'),vOrgSpeed:$('vOrgSpeed'),vLifespan:$('vLifespan'),
 vReproSize:$('vReproSize'),vOffspring:$('vOffspring'),vOases:$('vOases'),
 vEatRatio:$('vEatRatio'),vEatGain:$('vEatGain'),vHunt:$('vHunt'),vFlee:$('vFlee'),vFlock:$('vFlock'),vFoodDrive:$('vFoodDrive'),vSeparation:$('vSeparation'),
-vMutRate:$('vMutRate'),vMutStr:$('vMutStr'),
-vFoodGlow:$('vFoodGlow'),vTrail:$('vTrail'),
+vMutRate:$('vMutRate'),vMutStr:$('vMutStr'),vFoodGlow:$('vFoodGlow'),vTrail:$('vTrail'),
 sFps:$('sFps'),sAlive:$('sAlive'),sFoodCount:$('sFoodCount'),sGen:$('sGen'),
-speciesLegend:$('speciesLegend'),popGraph:$('popGraph')};
+speciesLegend:$('speciesLegend'),popGraph:$('popGraph'),
+// AI panel
+aiPanel:$('aiPanel'),aiToggle:$('aiToggle'),aiClose:$('aiClose'),aiChat:$('aiChat'),aiInput:$('aiInput'),aiSend:$('aiSend'),
+expStatus:$('expStatus'),expStatusText:$('expStatusText')};
 
 let W=0,H=0,running=true,hasInteracted=false;
 let lastT=performance.now(),fpsT=0,fpsN=0,generation=0,simTime=0;
 
-// ── Organisms (SoA) — now with genetic traits ──
+// ═══════════════════════════════════════════════
+// ORGANISMS (SoA with genetic traits — same as v2)
+// ═══════════════════════════════════════════════
 const MAX_ORG=60000;let orgCount=0;
 const ox=new Float32Array(MAX_ORG),oy=new Float32Array(MAX_ORG);
 const ovx=new Float32Array(MAX_ORG),ovy=new Float32Array(MAX_ORG);
 const osize=new Float32Array(MAX_ORG),oenergy=new Float32Array(MAX_ORG);
 const ospecies=new Uint8Array(MAX_ORG),oage=new Float32Array(MAX_ORG);
-const oalive=new Uint8Array(MAX_ORG);
-const okills=new Uint16Array(MAX_ORG);
-// Genetic traits (0-1 normalized)
-const gSpeed=new Float32Array(MAX_ORG);     // speed multiplier gene
-const gAggro=new Float32Array(MAX_ORG);     // aggression gene
-const gEfficiency=new Float32Array(MAX_ORG);// metabolic efficiency
-const gPerception=new Float32Array(MAX_ORG);// sight range multiplier
+const oalive=new Uint8Array(MAX_ORG),okills=new Uint16Array(MAX_ORG);
+const gSpeed=new Float32Array(MAX_ORG),gAggro=new Float32Array(MAX_ORG);
+const gEfficiency=new Float32Array(MAX_ORG),gPerception=new Float32Array(MAX_ORG);
 
-// ── Food ──
 const MAX_FOOD=15000;let foodCount=0;
 const fx=new Float32Array(MAX_FOOD),fy=new Float32Array(MAX_FOOD);
 const falive=new Uint8Array(MAX_FOOD),fglow=new Float32Array(MAX_FOOD);
 
-// ── Death Particles ──
 const MAX_DFX=2000;let dfxCount=0;
 const dfxX=new Float32Array(MAX_DFX),dfxY=new Float32Array(MAX_DFX);
 const dfxVX=new Float32Array(MAX_DFX),dfxVY=new Float32Array(MAX_DFX);
-const dfxHue=new Float32Array(MAX_DFX),dfxLife=new Float32Array(MAX_DFX);
-const dfxSize=new Float32Array(MAX_DFX);
+const dfxHue=new Float32Array(MAX_DFX),dfxLife=new Float32Array(MAX_DFX),dfxSize=new Float32Array(MAX_DFX);
 
-function spawnDeathFX(x,y,hue,count,strength){
-  if(!ui.chkDeathFX.checked)return;
-  for(let i=0;i<count;i++){
-    const idx=dfxCount%MAX_DFX;dfxCount=Math.min(dfxCount+1,MAX_DFX);
-    dfxX[idx]=x;dfxY[idx]=y;
-    const a=Math.random()*TAU,spd=1+Math.random()*strength*2;
-    dfxVX[idx]=Math.cos(a)*spd;dfxVY[idx]=Math.sin(a)*spd;
-    dfxHue[idx]=hue;dfxLife[idx]=0.6+Math.random()*0.4;
-    dfxSize[idx]=1.5+Math.random()*2*strength;
-  }
-}
+function spawnDeathFX(x,y,hue,count,strength){if(!ui.chkDeathFX.checked)return;for(let i=0;i<count;i++){const idx=dfxCount%MAX_DFX;dfxCount=Math.min(dfxCount+1,MAX_DFX);dfxX[idx]=x;dfxY[idx]=y;const a=Math.random()*TAU,spd=1+Math.random()*strength*2;dfxVX[idx]=Math.cos(a)*spd;dfxVY[idx]=Math.sin(a)*spd;dfxHue[idx]=hue;dfxLife[idx]=0.6+Math.random()*0.4;dfxSize[idx]=1.5+Math.random()*2*strength;}}
 
-// ── Food Oases ──
-const MAX_OASES=8;
-let oases=[]; // {x, y, radius, strength}
-function initOases(){
-  oases=[];
-  const n=+ui.sOases.value;
-  for(let i=0;i<n;i++){
-    oases.push({x:Math.random()*W,y:Math.random()*H,radius:80+Math.random()*120,strength:2+Math.random()*3});
-  }
-}
+const MAX_OASES=8;let oases=[];
+function initOases(){oases=[];const n=+ui.sOases.value;for(let i=0;i<n;i++)oases.push({x:Math.random()*W,y:Math.random()*H,radius:80+Math.random()*120,strength:2+Math.random()*3});}
 
-// ── Spatial Hash ──
 const CELL=40;let gridW=0,gridH=0,gridCounts,gridEntries;const GMAX=64;
 let fgridCounts,fgridEntries;const FGMAX=32;
 function initGrids(){gridW=Math.ceil(W/CELL)+1;gridH=Math.ceil(H/CELL)+1;const n=gridW*gridH;gridCounts=new Uint16Array(n);gridEntries=new Int32Array(n*GMAX);fgridCounts=new Uint16Array(n);fgridEntries=new Int32Array(n*FGMAX);}
@@ -290,108 +369,341 @@ const POP_LEN=200;let popHistory=[];const popCtx=ui.popGraph.getContext('2d');le
 function clamp(v,lo,hi){return v<lo?lo:v>hi?hi:v;}
 const rand=(()=>{let s=Date.now()>>>0;return()=>{s+=0x6D2B79F5;let r=Math.imul(s^(s>>>15),s|1);r^=r+Math.imul(r^(r>>>7),r|61);return((r^(r>>>14))>>>0)/4294967296;};})();
 
-// ── Audio System ──
-let audioCtx=null,masterGain=null,soundOn=false;
-let ambOsc=null,ambGain=null;
-function initAudio(){
-  if(audioCtx)return;
-  const AC=window.AudioContext||window.webkitAudioContext;if(!AC)return;
-  audioCtx=new AC();
-  masterGain=audioCtx.createGain();masterGain.gain.value=0.15;masterGain.connect(audioCtx.destination);
-  // Ambient drone
-  ambOsc=audioCtx.createOscillator();ambGain=audioCtx.createGain();
-  ambOsc.type='sine';ambOsc.frequency.value=55;ambGain.gain.value=0;
-  ambOsc.connect(ambGain);ambGain.connect(masterGain);ambOsc.start();
-}
-function toggleSound(){
-  if(!audioCtx)initAudio();
-  if(!audioCtx)return;
-  soundOn=!soundOn;
-  if(audioCtx.state==='suspended')audioCtx.resume();
-  ambGain.gain.setTargetAtTime(soundOn?0.08:0,audioCtx.currentTime,0.1);
-  ui.btnSound.textContent=soundOn?'Sound Off':'Sound On';
-  ui.btnSound.classList.toggle('active',soundOn);
-}
-function playPop(freq,vol){
-  if(!soundOn||!audioCtx)return;
-  const o=audioCtx.createOscillator(),g=audioCtx.createGain();
-  o.type='sine';o.frequency.value=freq;g.gain.value=vol*0.12;
-  o.connect(g);g.connect(masterGain);o.start();
-  g.gain.exponentialRampToValueAtTime(0.001,audioCtx.currentTime+0.15);
-  o.stop(audioCtx.currentTime+0.16);
-}
-function playThud(vol){
-  if(!soundOn||!audioCtx)return;
-  const o=audioCtx.createOscillator(),g=audioCtx.createGain();
-  o.type='sine';o.frequency.value=40+vol*30;g.gain.value=Math.min(0.15,vol*0.08);
-  o.connect(g);g.connect(masterGain);o.start();
-  g.gain.exponentialRampToValueAtTime(0.001,audioCtx.currentTime+0.25);
-  o.stop(audioCtx.currentTime+0.26);
-}
+// Audio (same as v2)
+let audioCtx=null,masterGain=null,soundOn=false,ambOsc=null,ambGain=null;
+function initAudio(){if(audioCtx)return;const AC=window.AudioContext||window.webkitAudioContext;if(!AC)return;audioCtx=new AC();masterGain=audioCtx.createGain();masterGain.gain.value=0.15;masterGain.connect(audioCtx.destination);ambOsc=audioCtx.createOscillator();ambGain=audioCtx.createGain();ambOsc.type='sine';ambOsc.frequency.value=55;ambGain.gain.value=0;ambOsc.connect(ambGain);ambGain.connect(masterGain);ambOsc.start();}
+function toggleSound(){if(!audioCtx)initAudio();if(!audioCtx)return;soundOn=!soundOn;if(audioCtx.state==='suspended')audioCtx.resume();ambGain.gain.setTargetAtTime(soundOn?0.08:0,audioCtx.currentTime,0.1);ui.btnSound.textContent=soundOn?'Sound Off':'Sound On';ui.btnSound.classList.toggle('active',soundOn);}
+function playPop(freq,vol){if(!soundOn||!audioCtx)return;const o=audioCtx.createOscillator(),g=audioCtx.createGain();o.type='sine';o.frequency.value=freq;g.gain.value=vol*0.12;o.connect(g);g.connect(masterGain);o.start();g.gain.exponentialRampToValueAtTime(0.001,audioCtx.currentTime+0.15);o.stop(audioCtx.currentTime+0.16);}
+function playThud(vol){if(!soundOn||!audioCtx)return;const o=audioCtx.createOscillator(),g=audioCtx.createGain();o.type='sine';o.frequency.value=40+vol*30;g.gain.value=Math.min(0.15,vol*0.08);o.connect(g);g.connect(masterGain);o.start();g.gain.exponentialRampToValueAtTime(0.001,audioCtx.currentTime+0.25);o.stop(audioCtx.currentTime+0.26);}
 let lastPopSound=0,lastThudSound=0;
 
-// ── Scenario Presets ──
-// Each preset sets every tunable parameter for a distinct experience
+// Presets (same as v2)
 const PRESETS={
-  // Aquarium mode — life thrives, territories form peacefully
-  eden:{org:4000,food:3000,rate:25,species:5,speed:1.0,startSize:3.0,maxSize:18,orgSpeed:1.0,
-    lifespan:45,reproSize:12,offspring:2,oases:5,
-    hunt:0.3,flee:1.0,flock:0.8,foodDrive:1.0,sep:0.5,eatRatio:1.5,eatGain:0.4,
-    chain:false,mutation:true,mutRate:0.08,mutStr:0.10},
-  // Evolution is the story — moderate scarcity forces adaptation
-  armsrace:{org:5000,food:1800,rate:12,species:4,speed:1.2,startSize:2.5,maxSize:20,orgSpeed:1.3,
-    lifespan:30,reproSize:11,offspring:2,oases:3,
-    hunt:1.2,flee:1.8,flock:0.3,foodDrive:1.4,sep:0.6,eatRatio:1.25,eatGain:0.55,
-    chain:false,mutation:true,mutRate:0.25,mutStr:0.30},
-  // Massive population, scarce food, fast carnage
-  battleroyale:{org:12000,food:600,rate:4,species:6,speed:1.5,startSize:2.0,maxSize:24,orgSpeed:1.6,
-    lifespan:20,reproSize:14,offspring:1,oases:1,
-    hunt:2.5,flee:1.2,flock:0.1,foodDrive:0.8,sep:0.3,eatRatio:1.1,eatGain:0.7,
-    chain:false,mutation:true,mutRate:0.15,mutStr:0.20},
-  // Max flocking — species move as tight swarms like slime molds
-  superorganism:{org:6000,food:2500,rate:18,species:4,speed:0.9,startSize:2.5,maxSize:14,orgSpeed:1.0,
-    lifespan:35,reproSize:10,offspring:2,oases:4,
-    hunt:0.5,flee:1.5,flock:2.0,foodDrive:1.0,sep:0.8,eatRatio:1.35,eatGain:0.45,
-    chain:false,mutation:true,mutRate:0.10,mutStr:0.12},
-  // Rock-paper-scissors predation — classic oscillating populations
-  foodchain:{org:4500,food:2200,rate:18,species:3,speed:1.0,startSize:3.0,maxSize:16,orgSpeed:1.2,
-    lifespan:35,reproSize:11,offspring:2,oases:4,
-    hunt:1.0,flee:1.6,flock:0.5,foodDrive:1.2,sep:0.5,eatRatio:1.3,eatGain:0.5,
-    chain:true,mutation:true,mutRate:0.12,mutStr:0.15},
-  // Many species start strong, food dries up — who survives?
-  extinction:{org:8000,food:4000,rate:2,species:8,speed:1.0,startSize:3.5,maxSize:18,orgSpeed:1.1,
-    lifespan:40,reproSize:13,offspring:2,oases:2,
-    hunt:1.0,flee:1.5,flock:0.6,foodDrive:1.5,sep:0.5,eatRatio:1.3,eatGain:0.5,
-    chain:false,mutation:true,mutRate:0.12,mutStr:0.18},
+  eden:{org:4000,food:3000,rate:25,species:5,speed:1.0,startSize:3.0,maxSize:18,orgSpeed:1.0,lifespan:45,reproSize:12,offspring:2,oases:5,hunt:0.3,flee:1.0,flock:0.8,foodDrive:1.0,sep:0.5,eatRatio:1.5,eatGain:0.4,chain:false,mutation:true,mutRate:0.08,mutStr:0.10},
+  armsrace:{org:5000,food:1800,rate:12,species:4,speed:1.2,startSize:2.5,maxSize:20,orgSpeed:1.3,lifespan:30,reproSize:11,offspring:2,oases:3,hunt:1.2,flee:1.8,flock:0.3,foodDrive:1.4,sep:0.6,eatRatio:1.25,eatGain:0.55,chain:false,mutation:true,mutRate:0.25,mutStr:0.30},
+  battleroyale:{org:12000,food:600,rate:4,species:6,speed:1.5,startSize:2.0,maxSize:24,orgSpeed:1.6,lifespan:20,reproSize:14,offspring:1,oases:1,hunt:2.5,flee:1.2,flock:0.1,foodDrive:0.8,sep:0.3,eatRatio:1.1,eatGain:0.7,chain:false,mutation:true,mutRate:0.15,mutStr:0.20},
+  superorganism:{org:6000,food:2500,rate:18,species:4,speed:0.9,startSize:2.5,maxSize:14,orgSpeed:1.0,lifespan:35,reproSize:10,offspring:2,oases:4,hunt:0.5,flee:1.5,flock:2.0,foodDrive:1.0,sep:0.8,eatRatio:1.35,eatGain:0.45,chain:false,mutation:true,mutRate:0.10,mutStr:0.12},
+  foodchain:{org:4500,food:2200,rate:18,species:3,speed:1.0,startSize:3.0,maxSize:16,orgSpeed:1.2,lifespan:35,reproSize:11,offspring:2,oases:4,hunt:1.0,flee:1.6,flock:0.5,foodDrive:1.2,sep:0.5,eatRatio:1.3,eatGain:0.5,chain:true,mutation:true,mutRate:0.12,mutStr:0.15},
+  extinction:{org:8000,food:4000,rate:2,species:8,speed:1.0,startSize:3.5,maxSize:18,orgSpeed:1.1,lifespan:40,reproSize:13,offspring:2,oases:2,hunt:1.0,flee:1.5,flock:0.6,foodDrive:1.5,sep:0.5,eatRatio:1.3,eatGain:0.5,chain:false,mutation:true,mutRate:0.12,mutStr:0.18},
 };
-function applyPreset(name){
-  const p=PRESETS[name];if(!p)return;
-  ui.sOrganisms.value=p.org;ui.sFood.value=p.food;ui.sFoodRate.value=p.rate;
-  ui.sSpecies.value=p.species;ui.sSpeed.value=p.speed;
-  ui.sStartSize.value=p.startSize;ui.sMaxSize.value=p.maxSize;
-  ui.sOrgSpeed.value=p.orgSpeed;ui.sLifespan.value=p.lifespan;
-  ui.sReproSize.value=p.reproSize;ui.sOffspring.value=p.offspring;
-  ui.sOases.value=p.oases;
-  ui.sHunt.value=p.hunt;ui.sFlee.value=p.flee;ui.sFlock.value=p.flock;
-  ui.sFoodDrive.value=p.foodDrive;ui.sSeparation.value=p.sep;
-  ui.sEatRatio.value=p.eatRatio;ui.sEatGain.value=p.eatGain;
-  ui.chkFoodChain.checked=p.chain;
-  ui.chkMutation.checked=p.mutation;ui.sMutRate.value=p.mutRate;ui.sMutStr.value=p.mutStr;
-  updateLabels();
+function applyPreset(name){const p=PRESETS[name];if(!p)return;ui.sOrganisms.value=p.org;ui.sFood.value=p.food;ui.sFoodRate.value=p.rate;ui.sSpecies.value=p.species;ui.sSpeed.value=p.speed;ui.sStartSize.value=p.startSize;ui.sMaxSize.value=p.maxSize;ui.sOrgSpeed.value=p.orgSpeed;ui.sLifespan.value=p.lifespan;ui.sReproSize.value=p.reproSize;ui.sOffspring.value=p.offspring;ui.sOases.value=p.oases;ui.sHunt.value=p.hunt;ui.sFlee.value=p.flee;ui.sFlock.value=p.flock;ui.sFoodDrive.value=p.foodDrive;ui.sSeparation.value=p.sep;ui.sEatRatio.value=p.eatRatio;ui.sEatGain.value=p.eatGain;ui.chkFoodChain.checked=p.chain;ui.chkMutation.checked=p.mutation;ui.sMutRate.value=p.mutRate;ui.sMutStr.value=p.mutStr;updateLabels();}
+
+// ═══════════════════════════════════════════════
+// SIMULATION STATE SNAPSHOT SYSTEM
+// ═══════════════════════════════════════════════
+function getSimSnapshot(){
+  const nSp=+ui.sSpecies.value;
+  const counts=new Array(nSp).fill(0);
+  const avgSize=new Array(nSp).fill(0);
+  const avgEnergy=new Array(nSp).fill(0);
+  const avgGenes={speed:new Array(nSp).fill(0),aggro:new Array(nSp).fill(0),efficiency:new Array(nSp).fill(0),perception:new Array(nSp).fill(0)};
+  const maxKiller={idx:-1,kills:0,species:-1};
+  let totalAlive=0,totalFood=0;
+  for(let i=0;i<orgCount;i++){
+    if(!oalive[i])continue;
+    const sp=ospecies[i];counts[sp]++;totalAlive++;
+    avgSize[sp]+=osize[i];avgEnergy[sp]+=oenergy[i];
+    avgGenes.speed[sp]+=gSpeed[i];avgGenes.aggro[sp]+=gAggro[i];
+    avgGenes.efficiency[sp]+=gEfficiency[i];avgGenes.perception[sp]+=gPerception[i];
+    if(okills[i]>maxKiller.kills){maxKiller.idx=i;maxKiller.kills=okills[i];maxKiller.species=sp;}
+  }
+  for(let i=0;i<foodCount;i++)if(falive[i])totalFood++;
+  const speciesData=[];
+  for(let s=0;s<nSp;s++){
+    const n=counts[s]||1;
+    speciesData.push({name:SPECIES_NAMES[s%12],population:counts[s],avgSize:(avgSize[s]/n).toFixed(1),avgEnergy:(avgEnergy[s]/n).toFixed(1),
+      genes:{speed:(avgGenes.speed[s]/n*100).toFixed(0),aggro:(avgGenes.aggro[s]/n*100).toFixed(0),efficiency:(avgGenes.efficiency[s]/n*100).toFixed(0),perception:(avgGenes.perception[s]/n*100).toFixed(0)}
+    });
+  }
+  return{
+    simTime:simTime.toFixed(1),generation,totalAlive,totalFood,speciesCount:nSp,
+    species:speciesData,
+    settings:{organisms:ui.sOrganisms.value,food:ui.sFood.value,foodRate:ui.sFoodRate.value,speed:ui.sSpeed.value,
+      hunt:ui.sHunt.value,flee:ui.sFlee.value,flock:ui.sFlock.value,foodDrive:ui.sFoodDrive.value,
+      eatRatio:ui.sEatRatio.value,mutRate:ui.sMutRate.value,mutStr:ui.sMutStr.value,
+      foodChain:ui.chkFoodChain.checked,mutation:ui.chkMutation.checked},
+    topPredator:maxKiller.kills>0?{species:SPECIES_NAMES[maxKiller.species%12],kills:maxKiller.kills,size:osize[maxKiller.idx]?.toFixed(1)}:null,
+    extinctions:speciesData.filter(s=>s.population===0).map(s=>s.name)
+  };
 }
 
-// ── Init World ──
+// ═══════════════════════════════════════════════
+// EXPERIMENT ENGINE
+// ═══════════════════════════════════════════════
+let experiment=null; // {hypothesis, settings, duration, startTime, startSnapshot, endSnapshot, status}
+
+function setSliderValue(id,value){
+  const el=document.getElementById(id);
+  if(el){el.value=value;el.dispatchEvent(new Event('input'));}
+}
+function setCheckbox(id,value){
+  const el=document.getElementById(id);
+  if(el)el.checked=value;
+}
+
+function startExperiment(config){
+  // config: {hypothesis, changes:{sliderId:value,...}, checkboxes:{id:bool,...}, duration}
+  experiment={
+    hypothesis:config.hypothesis||'No hypothesis stated',
+    changes:config.changes||{},
+    checkboxes:config.checkboxes||{},
+    duration:config.duration||30,
+    startTime:simTime,
+    startSnapshot:getSimSnapshot(),
+    endSnapshot:null,
+    status:'running'
+  };
+  // Apply settings changes
+  for(const[id,val]of Object.entries(experiment.changes))setSliderValue(id,val);
+  for(const[id,val]of Object.entries(experiment.checkboxes))setCheckbox(id,val);
+  updateLabels();
+  if(!running){running=true;updateLabels();}
+  ui.expStatus.classList.add('active');
+  ui.expStatusText.textContent=`Experiment running... ${experiment.duration}s remaining`;
+  addAiMsg('system',`Experiment started: "${experiment.hypothesis}"\nDuration: ${experiment.duration}s | Settings applied.`);
+}
+
+function checkExperiment(){
+  if(!experiment||experiment.status!=='running')return;
+  const elapsed=simTime-experiment.startTime;
+  const remaining=Math.max(0,experiment.duration-elapsed);
+  ui.expStatusText.textContent=`Experiment running... ${remaining.toFixed(0)}s remaining`;
+  if(elapsed>=experiment.duration){
+    experiment.endSnapshot=getSimSnapshot();
+    experiment.status='complete';
+    ui.expStatus.classList.remove('active');
+    addAiMsg('system','Experiment complete. Analyzing results...');
+    analyzeExperiment();
+  }
+}
+
+async function analyzeExperiment(){
+  if(!experiment||experiment.status!=='complete')return;
+  const prompt=`You are a research scientist analyzing an ecosystem simulation experiment in the Primordial life simulator.
+
+EXPERIMENT:
+Hypothesis: ${experiment.hypothesis}
+Duration: ${experiment.duration} seconds
+
+BEFORE (at t=${experiment.startSnapshot.simTime}s):
+${JSON.stringify(experiment.startSnapshot.species,null,1)}
+Total alive: ${experiment.startSnapshot.totalAlive}, Food: ${experiment.startSnapshot.totalFood}, Gen: ${experiment.startSnapshot.generation}
+Extinctions: ${experiment.startSnapshot.extinctions.length?experiment.startSnapshot.extinctions.join(', '):'None'}
+
+AFTER (at t=${experiment.endSnapshot.simTime}s):
+${JSON.stringify(experiment.endSnapshot.species,null,1)}
+Total alive: ${experiment.endSnapshot.totalAlive}, Food: ${experiment.endSnapshot.totalFood}, Gen: ${experiment.endSnapshot.generation}
+Extinctions: ${experiment.endSnapshot.extinctions.length?experiment.endSnapshot.extinctions.join(', '):'None'}
+Top predator: ${experiment.endSnapshot.topPredator?experiment.endSnapshot.topPredator.species+' with '+experiment.endSnapshot.topPredator.kills+' kills':'None'}
+
+Settings changed: ${JSON.stringify(experiment.changes)}
+
+Write a concise lab report with these sections:
+HYPOTHESIS: (restate)
+OBSERVATIONS: (what changed — population shifts, extinctions, gene drift, etc.)
+ANALYSIS: (why these changes occurred based on the simulation mechanics)
+CONCLUSION: (was the hypothesis supported?)
+NEXT EXPERIMENT: (suggest one follow-up experiment with specific slider values)
+
+Keep it concise but insightful. Use species names (Red, Orange, Gold, etc.) not indices.`;
+
+  await callAI(prompt,'report');
+  experiment=null;
+}
+
+// ═══════════════════════════════════════════════
+// AI PROVIDER SYSTEM — Multi-provider support
+// ═══════════════════════════════════════════════
+// Supports: OpenAI, Anthropic, xAI (Grok), Custom/Local (OpenAI-compatible)
+// API key stored in localStorage only — never transmitted except to chosen provider
+
+const AI_DEFAULTS={
+  openai:{url:'https://api.openai.com/v1/chat/completions',model:'gpt-4o'},
+  anthropic:{url:'https://api.anthropic.com/v1/messages',model:'claude-sonnet-4-20250514'},
+  xai:{url:'https://api.x.ai/v1/chat/completions',model:'grok-3-mini'},
+  custom:{url:'http://localhost:1234/v1/chat/completions',model:'local-model'}
+};
+
+let aiConfig={provider:'openai',apiKey:'',model:'',customUrl:''};
+
+function loadAiSettings(){
+  try{
+    const saved=localStorage.getItem('primordial-ai-config');
+    if(saved){
+      const s=JSON.parse(saved);
+      aiConfig.provider=s.provider||'openai';
+      aiConfig.apiKey=s.apiKey||'';
+      aiConfig.model=s.model||'';
+      aiConfig.customUrl=s.customUrl||'';
+    }
+  }catch(e){}
+  // Apply to UI
+  const prov=$('aiProvider'),key=$('aiApiKey'),model=$('aiModel'),curl=$('aiCustomUrl');
+  prov.value=aiConfig.provider;
+  key.value=aiConfig.apiKey;
+  model.value=aiConfig.model||AI_DEFAULTS[aiConfig.provider]?.model||'';
+  curl.value=aiConfig.customUrl;
+  $('aiCustomUrlRow').style.display=aiConfig.provider==='custom'?'block':'none';
+  // Update subtitle
+  const names={openai:'OpenAI',anthropic:'Anthropic',xai:'xAI Grok',custom:'Custom/Local'};
+  document.querySelector('.ai-subtitle').textContent='Sentinel Research Assistant · '+(names[aiConfig.provider]||'AI');
+}
+
+function saveAiSettings(){
+  aiConfig.provider=$('aiProvider').value;
+  aiConfig.apiKey=$('aiApiKey').value;
+  aiConfig.model=$('aiModel').value;
+  aiConfig.customUrl=$('aiCustomUrl').value;
+  try{localStorage.setItem('primordial-ai-config',JSON.stringify(aiConfig));}catch(e){}
+  const names={openai:'OpenAI',anthropic:'Anthropic',xai:'xAI Grok',custom:'Custom/Local'};
+  document.querySelector('.ai-subtitle').textContent='Sentinel Research Assistant · '+(names[aiConfig.provider]||'AI');
+  $('aiSettingsStatus').textContent='Settings saved.';$('aiSettingsStatus').style.color='var(--accent2)';
+  setTimeout(()=>{$('aiSettingsStatus').textContent='';},2000);
+}
+
+async function testAiConnection(){
+  $('aiSettingsStatus').textContent='Testing...';$('aiSettingsStatus').style.color='var(--accent)';
+  saveAiSettings();
+  try{
+    await callProviderAPI([{role:'user',content:'Say "Connection successful" in 3 words or fewer.'}],'You are a helpful assistant. Respond very briefly.');
+    $('aiSettingsStatus').textContent='Connection successful!';$('aiSettingsStatus').style.color='var(--accent2)';
+  }catch(e){
+    $('aiSettingsStatus').textContent='Error: '+e.message;$('aiSettingsStatus').style.color='var(--warm)';
+  }
+}
+
+$('aiProvider').addEventListener('change',()=>{
+  const p=$('aiProvider').value;
+  $('aiCustomUrlRow').style.display=p==='custom'?'block':'none';
+  if(!$('aiModel').value||Object.values(AI_DEFAULTS).some(d=>d.model===$('aiModel').value)){
+    $('aiModel').value=AI_DEFAULTS[p]?.model||'';
+  }
+});
+
+// ── Provider API Adapter ──
+async function callProviderAPI(messages,systemPrompt){
+  const provider=aiConfig.provider;
+  const apiKey=aiConfig.apiKey;
+  const model=aiConfig.model||AI_DEFAULTS[provider]?.model||'gpt-4o';
+
+  if(!apiKey&&provider!=='custom'){throw new Error('No API key configured. Open AI settings to add your key.');}
+
+  if(provider==='anthropic'){
+    // Anthropic Messages API
+    const resp=await fetch(AI_DEFAULTS.anthropic.url,{
+      method:'POST',
+      headers:{'Content-Type':'application/json','x-api-key':apiKey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
+      body:JSON.stringify({model,max_tokens:1000,system:systemPrompt,messages})
+    });
+    if(!resp.ok){const e=await resp.text();throw new Error(`Anthropic ${resp.status}: ${e.slice(0,200)}`);}
+    const data=await resp.json();
+    return data.content?.map(c=>c.text||'').join('\n')||'No response.';
+  }else{
+    // OpenAI-compatible API (OpenAI, xAI, Custom/Local)
+    let url=AI_DEFAULTS[provider]?.url||aiConfig.customUrl;
+    if(provider==='custom')url=aiConfig.customUrl||AI_DEFAULTS.custom.url;
+    const headers={'Content-Type':'application/json'};
+    if(apiKey)headers['Authorization']='Bearer '+apiKey;
+    const body={model,max_tokens:1000,messages:[{role:'system',content:systemPrompt},...messages]};
+    const resp=await fetch(url,{method:'POST',headers,body:JSON.stringify(body)});
+    if(!resp.ok){const e=await resp.text();throw new Error(`${provider} ${resp.status}: ${e.slice(0,200)}`);}
+    const data=await resp.json();
+    return data.choices?.[0]?.message?.content||'No response.';
+  }
+}
+
+// ═══════════════════════════════════════════════
+// AI COMMUNICATION (uses provider adapter)
+// ═══════════════════════════════════════════════
+let aiConversation=[];
+let aiProcessing=false;
+
+function addAiMsg(role,text){
+  const div=document.createElement('div');
+  div.className='ai-msg '+role;
+  div.textContent=text;
+  ui.aiChat.appendChild(div);
+  ui.aiChat.scrollTop=ui.aiChat.scrollHeight;
+}
+
+async function callAI(userPrompt,msgClass='assistant'){
+  if(aiProcessing)return;
+  aiProcessing=true;
+  ui.aiSend.disabled=true;
+
+  const snapshot=getSimSnapshot();
+  const systemPrompt=`You are the AI Lab Partner for Primordial, a WebGL particle ecosystem simulator. You observe a live simulation where organisms eat, hunt, flee, flock, reproduce, mutate, and evolve.
+
+Current simulation state:
+- Time: ${snapshot.simTime}s | Generation: ${snapshot.generation}
+- Alive: ${snapshot.totalAlive} | Food: ${snapshot.totalFood}
+- Species: ${JSON.stringify(snapshot.species)}
+- Extinctions: ${snapshot.extinctions.length?snapshot.extinctions.join(', '):'None yet'}
+- Top predator: ${snapshot.topPredator?snapshot.topPredator.species+' ('+snapshot.topPredator.kills+' kills, size '+snapshot.topPredator.size+')':'None yet'}
+- Settings: ${JSON.stringify(snapshot.settings)}
+
+You can suggest experiments. When you do, output a JSON block in this exact format so the system can parse and execute it:
+\`\`\`experiment
+{"hypothesis":"...","changes":{"sHunt":"2.0","sFlee":"0.5"},"checkboxes":{"chkFoodChain":true},"duration":30}
+\`\`\`
+Valid slider IDs: sOrganisms, sFood, sFoodRate, sSpeed, sSpecies, sStartSize, sMaxSize, sOrgSpeed, sLifespan, sReproSize, sOffspring, sOases, sEatRatio, sEatGain, sHunt, sFlee, sFlock, sFoodDrive, sSeparation, sMutRate, sMutStr
+Valid checkbox IDs: chkSameSpecies, chkFoodChain, chkMutation, chkEvoSpeed, chkEvoAggro, chkEvoEfficiency, chkEvoPerception
+
+Be concise, scientific, and insightful. Use species color names (Red, Orange, Gold, Green, Teal, Cyan, Blue, Indigo, Purple, Magenta). When analyzing, reference specific gene values and population numbers.`;
+
+  aiConversation.push({role:'user',content:userPrompt});
+
+  try{
+    const text=await callProviderAPI(aiConversation.slice(-10),systemPrompt);
+    aiConversation.push({role:'assistant',content:text});
+    addAiMsg(msgClass,text);
+
+    // Check for experiment JSON in response
+    const expMatch=text.match(/```experiment\s*\n?([\s\S]*?)\n?```/);
+    if(expMatch){
+      try{
+        const expConfig=JSON.parse(expMatch[1]);
+        addAiMsg('system','Experiment protocol detected. Starting in 3 seconds...');
+        setTimeout(()=>startExperiment(expConfig),3000);
+      }catch(e){console.warn('Failed to parse experiment JSON',e);}
+    }
+  }catch(err){
+    console.error('AI API error:',err);
+    addAiMsg('assistant','Error: '+err.message+'\n\nCheck your AI Provider Settings (click the settings header at the top of this panel).');
+  }
+  aiProcessing=false;
+  ui.aiSend.disabled=false;
+}
+
+function sendAiMessage(){
+  const text=ui.aiInput.value.trim();
+  if(!text)return;
+  ui.aiInput.value='';
+  addAiMsg('user',text);
+  callAI(text);
+}
+
+function aiQuick(type){
+  const prompts={
+    analyze:'Analyze the current state of the ecosystem. What species are thriving? Which are struggling? What evolutionary trends do you see in the gene data? What do you predict will happen next?',
+    experiment:'Design an experiment to test an interesting hypothesis about this ecosystem. Provide specific slider changes and a duration. Output the experiment JSON so I can run it automatically.',
+    compare:'Compare all current species in detail. Which has the best genes for survival? Which is most vulnerable? Rank them by fitness based on their population trends and gene profiles.',
+    predict:'Based on the current population dynamics, gene averages, and food supply, predict what this ecosystem will look like in 60 seconds. Which species will grow? Which will decline? Will any go extinct?',
+    report:'Write a comprehensive research report on the current state of this simulation. Cover population dynamics, evolutionary trends, resource distribution, predator-prey relationships, and notable observations. Include specific numbers.'
+  };
+  addAiMsg('user',prompts[type]);
+  callAI(prompts[type], type==='report'?'report':'assistant');
+}
+
+ui.aiInput.addEventListener('keydown',(e)=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendAiMessage();}});
+
+// ═══════════════════════════════════════════════
+// WORLD INIT & SIMULATION (same as v2)
+// ═══════════════════════════════════════════════
 function initWorld(){
   const nOrg=+ui.sOrganisms.value,nFood=+ui.sFood.value,nSp=+ui.sSpecies.value,sz0=+ui.sStartSize.value;
   orgCount=nOrg;
-  for(let i=0;i<orgCount;i++){
-    ox[i]=rand()*W;oy[i]=rand()*H;
-    ovx[i]=(rand()-0.5)*2;ovy[i]=(rand()-0.5)*2;
-    ospecies[i]=i%nSp;osize[i]=sz0+(rand()-0.5)*1.5;
-    oenergy[i]=osize[i]*2;oage[i]=rand()*5;oalive[i]=1;okills[i]=0;
-    gSpeed[i]=0.4+rand()*0.2;gAggro[i]=0.4+rand()*0.2;
-    gEfficiency[i]=0.4+rand()*0.2;gPerception[i]=0.4+rand()*0.2;
-  }
+  for(let i=0;i<orgCount;i++){ox[i]=rand()*W;oy[i]=rand()*H;ovx[i]=(rand()-0.5)*2;ovy[i]=(rand()-0.5)*2;ospecies[i]=i%nSp;osize[i]=sz0+(rand()-0.5)*1.5;oenergy[i]=osize[i]*2;oage[i]=rand()*5;oalive[i]=1;okills[i]=0;gSpeed[i]=0.4+rand()*0.2;gAggro[i]=0.4+rand()*0.2;gEfficiency[i]=0.4+rand()*0.2;gPerception[i]=0.4+rand()*0.2;}
   foodCount=nFood;
   for(let i=0;i<foodCount;i++){fx[i]=rand()*W;fy[i]=rand()*H;falive[i]=1;fglow[i]=rand()*TAU;}
   dfxCount=0;generation=0;simTime=0;
@@ -401,292 +713,85 @@ function initWorld(){
   ui.speciesLegend.innerHTML=html;
 }
 
-// ── Spawn food (with oasis bias) ──
 let foodAccum=0;
-function spawnFood(dt){
-  foodAccum+=(+ui.sFoodRate.value)*dt;
-  let n=foodAccum|0;foodAccum-=n;
-  while(n-->0){
-    let idx=-1;for(let i=0;i<foodCount;i++){if(!falive[i]){idx=i;break;}}
-    if(idx<0&&foodCount<MAX_FOOD)idx=foodCount++;if(idx<0)return;
-    // Oasis-biased spawn: 60% near oases, 40% random
-    if(oases.length>0&&rand()<0.6){
-      const o=oases[rand()*oases.length|0];
-      const a=rand()*TAU,r=rand()*o.radius;
-      fx[idx]=((o.x+Math.cos(a)*r)%W+W)%W;
-      fy[idx]=((o.y+Math.sin(a)*r)%H+H)%H;
-    }else{fx[idx]=rand()*W;fy[idx]=rand()*H;}
-    falive[idx]=1;fglow[idx]=rand()*TAU;
-  }
-}
+function spawnFood(dt){foodAccum+=(+ui.sFoodRate.value)*dt;let n=foodAccum|0;foodAccum-=n;while(n-->0){let idx=-1;for(let i=0;i<foodCount;i++){if(!falive[i]){idx=i;break;}}if(idx<0&&foodCount<MAX_FOOD)idx=foodCount++;if(idx<0)return;if(oases.length>0&&rand()<0.6){const o=oases[rand()*oases.length|0];const a=rand()*TAU,r=rand()*o.radius;fx[idx]=((o.x+Math.cos(a)*r)%W+W)%W;fy[idx]=((o.y+Math.sin(a)*r)%H+H)%H;}else{fx[idx]=rand()*W;fy[idx]=rand()*H;}falive[idx]=1;fglow[idx]=rand()*TAU;}}
 
-// ── Reproduce with mutation ──
 function reproduce(pi){
   const nOff=+ui.sOffspring.value,sz0=+ui.sStartSize.value;
   const mutOn=ui.chkMutation.checked,mutRate=+ui.sMutRate.value,mutStr=+ui.sMutStr.value;
-  const now=performance.now();
-  if(now-lastPopSound>50){playPop(600+rand()*400,0.3);lastPopSound=now;}
-  for(let c=0;c<nOff;c++){
-    let idx=-1;for(let i=0;i<orgCount;i++){if(!oalive[i]){idx=i;break;}}
-    if(idx<0&&orgCount<MAX_ORG)idx=orgCount++;if(idx<0)return;
-    ox[idx]=ox[pi]+(rand()-0.5)*20;oy[idx]=oy[pi]+(rand()-0.5)*20;
-    ovx[idx]=(rand()-0.5)*3;ovy[idx]=(rand()-0.5)*3;
-    ospecies[idx]=ospecies[pi];osize[idx]=sz0;oenergy[idx]=sz0*2;oage[idx]=0;oalive[idx]=1;okills[idx]=0;
-    // Inherit genes with possible mutation
-    gSpeed[idx]=gSpeed[pi];gAggro[idx]=gAggro[pi];
-    gEfficiency[idx]=gEfficiency[pi];gPerception[idx]=gPerception[pi];
-    if(mutOn){
-      if(ui.chkEvoSpeed.checked&&rand()<mutRate)gSpeed[idx]=clamp(gSpeed[idx]+(rand()-0.5)*mutStr,0.05,1);
-      if(ui.chkEvoAggro.checked&&rand()<mutRate)gAggro[idx]=clamp(gAggro[idx]+(rand()-0.5)*mutStr,0.05,1);
-      if(ui.chkEvoEfficiency.checked&&rand()<mutRate)gEfficiency[idx]=clamp(gEfficiency[idx]+(rand()-0.5)*mutStr,0.05,1);
-      if(ui.chkEvoPerception.checked&&rand()<mutRate)gPerception[idx]=clamp(gPerception[idx]+(rand()-0.5)*mutStr,0.05,1);
-    }
-  }
-  generation++;
-}
+  const now=performance.now();if(now-lastPopSound>50){playPop(600+rand()*400,0.3);lastPopSound=now;}
+  for(let c=0;c<nOff;c++){let idx=-1;for(let i=0;i<orgCount;i++){if(!oalive[i]){idx=i;break;}}if(idx<0&&orgCount<MAX_ORG)idx=orgCount++;if(idx<0)return;ox[idx]=ox[pi]+(rand()-0.5)*20;oy[idx]=oy[pi]+(rand()-0.5)*20;ovx[idx]=(rand()-0.5)*3;ovy[idx]=(rand()-0.5)*3;ospecies[idx]=ospecies[pi];osize[idx]=sz0;oenergy[idx]=sz0*2;oage[idx]=0;oalive[idx]=1;okills[idx]=0;gSpeed[idx]=gSpeed[pi];gAggro[idx]=gAggro[pi];gEfficiency[idx]=gEfficiency[pi];gPerception[idx]=gPerception[pi];if(mutOn){if(ui.chkEvoSpeed.checked&&rand()<mutRate)gSpeed[idx]=clamp(gSpeed[idx]+(rand()-0.5)*mutStr,0.05,1);if(ui.chkEvoAggro.checked&&rand()<mutRate)gAggro[idx]=clamp(gAggro[idx]+(rand()-0.5)*mutStr,0.05,1);if(ui.chkEvoEfficiency.checked&&rand()<mutRate)gEfficiency[idx]=clamp(gEfficiency[idx]+(rand()-0.5)*mutStr,0.05,1);if(ui.chkEvoPerception.checked&&rand()<mutRate)gPerception[idx]=clamp(gPerception[idx]+(rand()-0.5)*mutStr,0.05,1);}}generation++;}
 
-// ── Food Chain Logic ──
-function canEatInChain(predSp,preySp,nSp){
-  // Each species hunts the next one in the cycle
-  return((predSp+1)%nSp)===preySp;
-}
+function canEatInChain(predSp,preySp,nSp){return((predSp+1)%nSp)===preySp;}
 
-// ── Simulate ──
 function simulate(dt){
-  const spd=+ui.sSpeed.value,orgSpd=+ui.sOrgSpeed.value;
-  const maxSz=+ui.sMaxSize.value,life=+ui.sLifespan.value;
-  const reproSz=+ui.sReproSize.value,eatR=+ui.sEatRatio.value;
-  const eatG=+ui.sEatGain.value,sameSafe=ui.chkSameSpecies.checked;
+  const spd=+ui.sSpeed.value,orgSpd=+ui.sOrgSpeed.value,maxSz=+ui.sMaxSize.value,life=+ui.sLifespan.value;
+  const reproSz=+ui.sReproSize.value,eatR=+ui.sEatRatio.value,eatG=+ui.sEatGain.value,sameSafe=ui.chkSameSpecies.checked;
   const foodChain=ui.chkFoodChain.checked,nSp=+ui.sSpecies.value;
-  const hunt=+ui.sHunt.value,flee=+ui.sFlee.value;
-  const flock=+ui.sFlock.value,foodD=+ui.sFoodDrive.value;
-  const sep=+ui.sSeparation.value;
-  const sDt=dt*spd;if(sDt<0.0001)return;
-  simTime+=sDt;
-
-  // Update ambient pitch based on population
-  if(soundOn&&ambOsc){
-    let alive=0;for(let i=0;i<orgCount;i++)if(oalive[i])alive++;
-    const ratio=alive/Math.max(1,+ui.sOrganisms.value);
-    ambOsc.frequency.setTargetAtTime(40+ratio*80,audioCtx.currentTime,0.5);
-  }
-
-  buildGrid();buildFoodGrid();
-  const repro=[];
-
+  const hunt=+ui.sHunt.value,flee=+ui.sFlee.value,flock=+ui.sFlock.value,foodD=+ui.sFoodDrive.value,sep=+ui.sSeparation.value;
+  const sDt=dt*spd;if(sDt<0.0001)return;simTime+=sDt;
+  if(soundOn&&ambOsc){let alive=0;for(let i=0;i<orgCount;i++)if(oalive[i])alive++;ambOsc.frequency.setTargetAtTime(40+(alive/Math.max(1,+ui.sOrganisms.value))*80,audioCtx.currentTime,0.5);}
+  buildGrid();buildFoodGrid();const repro=[];
   for(let i=0;i<orgCount;i++){
-    if(!oalive[i])continue;
-    let ax=0,ay=0;
-    const cx=Math.min(gridW-1,Math.max(0,ox[i]/CELL|0));
-    const cy=Math.min(gridH-1,Math.max(0,oy[i]/CELL|0));
-    const mySp=ospecies[i],mySz=osize[i];
-    const myAggro=0.5+gAggro[i];
-    const myPerc=0.5+gPerception[i]*1.5;
-    let flX=0,flY=0,flN=0;
-    const scanR=foodChain?2:1; // wider scan in food chain mode
-
-    for(let dy=-scanR;dy<=scanR;dy++)for(let dx=-scanR;dx<=scanR;dx++){
-      const nx=cx+dx,ny=cy+dy;
-      if(nx<0||nx>=gridW||ny<0||ny>=gridH)continue;
-      const ci=ny*gridW+nx,cnt=gridCounts[ci],base=ci*GMAX;
-      for(let k=0;k<cnt;k++){
-        const j=gridEntries[base+k];if(j===i)continue;
-        const ddx=ox[j]-ox[i],ddy=oy[j]-oy[i];
-        const d2=ddx*ddx+ddy*ddy,d=Math.sqrt(d2)+0.1;
-        const cR=mySz+osize[j];
-        const inPerception=d<CELL*myPerc;
-
-        if(ospecies[j]===mySp){
-          if(d<CELL*1.5){flX+=ddx;flY+=ddy;flN++;}
-          if(d<cR*0.8){const sf=sep*2/(d+1);ax-=ddx/d*sf;ay-=ddy/d*sf;}
-        }else{
-          let canEat=false,isPreyOf=false;
-          if(foodChain){
-            canEat=canEatInChain(mySp,ospecies[j],nSp);
-            isPreyOf=canEatInChain(ospecies[j],mySp,nSp);
-          }else{
-            canEat=mySz>osize[j]*eatR;
-            isPreyOf=osize[j]>mySz*eatR;
-          }
-          if(canEat&&inPerception){
-            const hf=hunt*myAggro*0.5/(d+5);ax+=ddx/d*hf;ay+=ddy/d*hf;
-            if(d<cR*0.6){
-              oalive[j]=0;oenergy[i]+=osize[j]*eatG;okills[i]++;
-              spawnDeathFX(ox[j],oy[j],SPECIES_HUES[ospecies[j]%SPECIES_HUES.length],4+osize[j]*0.5|0,osize[j]/maxSz);
-              const now=performance.now();if(now-lastThudSound>80){playThud(osize[j]/maxSz);lastThudSound=now;}
-            }
-          }else if(isPreyOf&&inPerception){
-            const ff=flee*1.2/(d+3);ax-=ddx/d*ff;ay-=ddy/d*ff;
-          }else{
-            if(d<cR*1.2){const sf=sep*0.5/(d+2);ax-=ddx/d*sf;ay-=ddy/d*sf;}
-          }
-        }
-      }
-    }
-
+    if(!oalive[i])continue;let ax=0,ay=0;
+    const cx=Math.min(gridW-1,Math.max(0,ox[i]/CELL|0)),cy=Math.min(gridH-1,Math.max(0,oy[i]/CELL|0));
+    const mySp=ospecies[i],mySz=osize[i],myAggro=0.5+gAggro[i],myPerc=0.5+gPerception[i]*1.5;
+    let flX=0,flY=0,flN=0;const scanR=foodChain?2:1;
+    for(let dy=-scanR;dy<=scanR;dy++)for(let dx=-scanR;dx<=scanR;dx++){const nx=cx+dx,ny=cy+dy;if(nx<0||nx>=gridW||ny<0||ny>=gridH)continue;const ci=ny*gridW+nx,cnt=gridCounts[ci],base=ci*GMAX;
+      for(let k=0;k<cnt;k++){const j=gridEntries[base+k];if(j===i)continue;const ddx=ox[j]-ox[i],ddy=oy[j]-oy[i],d2=ddx*ddx+ddy*ddy,d=Math.sqrt(d2)+0.1,cR=mySz+osize[j],inP=d<CELL*myPerc;
+        if(ospecies[j]===mySp){if(d<CELL*1.5){flX+=ddx;flY+=ddy;flN++;}if(d<cR*0.8){const sf=sep*2/(d+1);ax-=ddx/d*sf;ay-=ddy/d*sf;}}
+        else{let canEat=false,isPrey=false;if(foodChain){canEat=canEatInChain(mySp,ospecies[j],nSp);isPrey=canEatInChain(ospecies[j],mySp,nSp);}else{canEat=mySz>osize[j]*eatR;isPrey=osize[j]>mySz*eatR;}
+          if(canEat&&inP){const hf=hunt*myAggro*0.5/(d+5);ax+=ddx/d*hf;ay+=ddy/d*hf;if(d<cR*0.6){oalive[j]=0;oenergy[i]+=osize[j]*eatG;okills[i]++;spawnDeathFX(ox[j],oy[j],SPECIES_HUES[ospecies[j]%SPECIES_HUES.length],4+osize[j]*0.5|0,osize[j]/maxSz);const now=performance.now();if(now-lastThudSound>80){playThud(osize[j]/maxSz);lastThudSound=now;}}}
+          else if(isPrey&&inP){const ff=flee*1.2/(d+3);ax-=ddx/d*ff;ay-=ddy/d*ff;}
+          else{if(d<cR*1.2){const sf=sep*0.5/(d+2);ax-=ddx/d*sf;ay-=ddy/d*sf;}}}}}
     if(flN>0){flX/=flN;flY/=flN;const fd=Math.sqrt(flX*flX+flY*flY)+0.1;ax+=flX/fd*flock*0.15;ay+=flY/fd*flock*0.15;}
-
-    // Food search (wider for high perception)
-    let nfD=999999,nfI=-1;
-    const fScan=Math.min(3,1+gPerception[i]*2|0);
-    for(let dy2=-fScan;dy2<=fScan;dy2++)for(let dx2=-fScan;dx2<=fScan;dx2++){
-      const nx=cx+dx2,ny=cy+dy2;if(nx<0||nx>=gridW||ny<0||ny>=gridH)continue;
-      const ci=ny*gridW+nx,cnt=fgridCounts[ci],base=ci*FGMAX;
-      for(let k=0;k<cnt;k++){const fi=fgridEntries[base+k];if(!falive[fi])continue;const fdx=fx[fi]-ox[i],fdy=fy[fi]-oy[i],fd2=fdx*fdx+fdy*fdy;if(fd2<nfD){nfD=fd2;nfI=fi;}}
-    }
-    if(nfI>=0){const fdx=fx[nfI]-ox[i],fdy=fy[nfI]-oy[i],fd=Math.sqrt(nfD)+0.1;
-      if(fd<mySz+3){falive[nfI]=0;oenergy[i]+=3;}
-      else{ax+=fdx/fd*foodD*0.3;ay+=fdy/fd*foodD*0.3;}
-    }
-
-    // Wander
-    const wt=performance.now()*0.001+i*0.7;
-    ax+=Math.sin(wt*1.3+oy[i]*0.01)*0.15;ay+=Math.cos(wt*0.9+ox[i]*0.01)*0.15;
-
-    // Integrate with genetic speed
-    const spdGene=0.6+gSpeed[i]*0.8;
-    const sS=orgSpd*spdGene*(1/(1+mySz*0.04));
-    ovx[i]=(ovx[i]+ax*sDt*60)*0.95;ovy[i]=(ovy[i]+ay*sDt*60)*0.95;
-    const vel=Math.sqrt(ovx[i]*ovx[i]+ovy[i]*ovy[i]),mv=sS*3;
-    if(vel>mv){ovx[i]=ovx[i]/vel*mv;ovy[i]=ovy[i]/vel*mv;}
-    ox[i]+=ovx[i]*sS;oy[i]+=ovy[i]*sS;
-    if(ox[i]<0)ox[i]+=W;else if(ox[i]>W)ox[i]-=W;
-    if(oy[i]<0)oy[i]+=H;else if(oy[i]>H)oy[i]-=H;
-
-    // Metabolism — efficiency gene reduces cost
-    const metaCost=0.3*(1.2-gEfficiency[i]*0.5);
-    oenergy[i]-=sDt*metaCost;
-    osize[i]=clamp(Math.sqrt(Math.max(0.5,oenergy[i]))*1.5,1,maxSz);
-    oage[i]+=sDt;
-
-    if(oenergy[i]<=0||oage[i]>life){
-      if(oenergy[i]<=0)spawnDeathFX(ox[i],oy[i],SPECIES_HUES[mySp%SPECIES_HUES.length],2,0.3);
-      oalive[i]=0;continue;
-    }
-    if(osize[i]>=reproSz&&oenergy[i]>reproSz*2.5){
-      oenergy[i]*=0.4;osize[i]=clamp(Math.sqrt(Math.max(0.5,oenergy[i]))*1.5,1,maxSz);
-      repro.push(i);
-    }
+    let nfD=999999,nfI=-1;const fScan=Math.min(3,1+gPerception[i]*2|0);
+    for(let dy2=-fScan;dy2<=fScan;dy2++)for(let dx2=-fScan;dx2<=fScan;dx2++){const nx=cx+dx2,ny=cy+dy2;if(nx<0||nx>=gridW||ny<0||ny>=gridH)continue;const ci=ny*gridW+nx,cnt=fgridCounts[ci],base=ci*FGMAX;for(let k=0;k<cnt;k++){const fi=fgridEntries[base+k];if(!falive[fi])continue;const fdx=fx[fi]-ox[i],fdy=fy[fi]-oy[i],fd2=fdx*fdx+fdy*fdy;if(fd2<nfD){nfD=fd2;nfI=fi;}}}
+    if(nfI>=0){const fdx=fx[nfI]-ox[i],fdy=fy[nfI]-oy[i],fd=Math.sqrt(nfD)+0.1;if(fd<mySz+3){falive[nfI]=0;oenergy[i]+=3;}else{ax+=fdx/fd*foodD*0.3;ay+=fdy/fd*foodD*0.3;}}
+    const wt=performance.now()*0.001+i*0.7;ax+=Math.sin(wt*1.3+oy[i]*0.01)*0.15;ay+=Math.cos(wt*0.9+ox[i]*0.01)*0.15;
+    const spdGene=0.6+gSpeed[i]*0.8,sS=orgSpd*spdGene*(1/(1+mySz*0.04));
+    ovx[i]=(ovx[i]+ax*sDt*60)*0.95;ovy[i]=(ovy[i]+ay*sDt*60)*0.95;const vel=Math.sqrt(ovx[i]*ovx[i]+ovy[i]*ovy[i]),mv=sS*3;if(vel>mv){ovx[i]=ovx[i]/vel*mv;ovy[i]=ovy[i]/vel*mv;}
+    ox[i]+=ovx[i]*sS;oy[i]+=ovy[i]*sS;if(ox[i]<0)ox[i]+=W;else if(ox[i]>W)ox[i]-=W;if(oy[i]<0)oy[i]+=H;else if(oy[i]>H)oy[i]-=H;
+    const metaCost=0.3*(1.2-gEfficiency[i]*0.5);oenergy[i]-=sDt*metaCost;osize[i]=clamp(Math.sqrt(Math.max(0.5,oenergy[i]))*1.5,1,maxSz);oage[i]+=sDt;
+    if(oenergy[i]<=0||oage[i]>life){if(oenergy[i]<=0)spawnDeathFX(ox[i],oy[i],SPECIES_HUES[mySp%SPECIES_HUES.length],2,0.3);oalive[i]=0;continue;}
+    if(osize[i]>=reproSz&&oenergy[i]>reproSz*2.5){oenergy[i]*=0.4;osize[i]=clamp(Math.sqrt(Math.max(0.5,oenergy[i]))*1.5,1,maxSz);repro.push(i);}
   }
   for(const r of repro)reproduce(r);
-
-  // Update death particles
-  for(let i=0;i<dfxCount;i++){
-    dfxLife[i]-=sDt*2;if(dfxLife[i]<=0)continue;
-    dfxX[i]+=dfxVX[i];dfxY[i]+=dfxVY[i];
-    dfxVX[i]*=0.95;dfxVY[i]*=0.95;
-  }
+  for(let i=0;i<dfxCount;i++){dfxLife[i]-=sDt*2;if(dfxLife[i]<=0)continue;dfxX[i]+=dfxVX[i];dfxY[i]+=dfxVY[i];dfxVX[i]*=0.95;dfxVY[i]*=0.95;}
 }
 
-// ── Heatmap ──
-// ── Draw Oasis Indicators (lightweight 2D overlay) ──
-const oasisCanvas=document.createElement('canvas');
-oasisCanvas.style.cssText='position:fixed;inset:0;width:100%;height:100%;display:block;z-index:0;pointer-events:none';
-document.body.insertBefore(oasisCanvas,document.getElementById('tooltip'));
-const oasisCtx=oasisCanvas.getContext('2d');
-function drawOases(){
-  oasisCanvas.width=W;oasisCanvas.height=H;
-  oasisCtx.clearRect(0,0,W,H);
-  if(!ui.chkShowOases.checked)return;
-  oasisCtx.globalAlpha=0.12;
-  for(const o of oases){oasisCtx.beginPath();oasisCtx.arc(o.x,o.y,o.radius,0,TAU);oasisCtx.fillStyle='#00e5c8';oasisCtx.fill();}
-  oasisCtx.globalAlpha=1;
-}
+// Oasis overlay
+const oasisCanvas=document.createElement('canvas');oasisCanvas.style.cssText='position:fixed;inset:0;width:100%;height:100%;display:block;z-index:0;pointer-events:none';document.body.insertBefore(oasisCanvas,document.getElementById('tooltip'));const oasisCtx=oasisCanvas.getContext('2d');
+function drawOases(){oasisCanvas.width=W;oasisCanvas.height=H;oasisCtx.clearRect(0,0,W,H);if(!ui.chkShowOases.checked)return;oasisCtx.globalAlpha=0.12;for(const o of oases){oasisCtx.beginPath();oasisCtx.arc(o.x,o.y,o.radius,0,TAU);oasisCtx.fillStyle='#00e5c8';oasisCtx.fill();}oasisCtx.globalAlpha=1;}
 
-function updatePopGraph(dt){
-  popTick+=dt;if(popTick<0.25)return;popTick=0;
-  const nSp=+ui.sSpecies.value,counts=new Array(nSp).fill(0);
-  for(let i=0;i<orgCount;i++)if(oalive[i])counts[ospecies[i]]++;
-  for(let s=0;s<nSp;s++){if(!popHistory[s])popHistory[s]=[];popHistory[s].push(counts[s]);if(popHistory[s].length>POP_LEN)popHistory[s].shift();}
-  const w=328,h=80;popCtx.fillStyle='rgba(0,0,0,0.6)';popCtx.fillRect(0,0,w,h);
-  let mx=10;for(let s=0;s<nSp;s++)for(const v of popHistory[s])if(v>mx)mx=v;
-  for(let s=0;s<nSp;s++){const hist=popHistory[s];if(!hist||hist.length<2)continue;popCtx.strokeStyle=speciesColor(s).css;popCtx.lineWidth=1.5;popCtx.globalAlpha=0.8;popCtx.beginPath();for(let x=0;x<hist.length;x++){const px=x/POP_LEN*w,py=h-(hist[x]/mx)*(h-4)-2;x===0?popCtx.moveTo(px,py):popCtx.lineTo(px,py);}popCtx.stroke();popCtx.globalAlpha=1;}
-  for(let s=0;s<nSp;s++){const el=$('spC'+s);if(el)el.textContent=counts[s];}
-}
+function updatePopGraph(dt){popTick+=dt;if(popTick<0.25)return;popTick=0;const nSp=+ui.sSpecies.value,counts=new Array(nSp).fill(0);for(let i=0;i<orgCount;i++)if(oalive[i])counts[ospecies[i]]++;for(let s=0;s<nSp;s++){if(!popHistory[s])popHistory[s]=[];popHistory[s].push(counts[s]);if(popHistory[s].length>POP_LEN)popHistory[s].shift();}const w=328,h=80;popCtx.fillStyle='rgba(0,0,0,0.6)';popCtx.fillRect(0,0,w,h);let mx=10;for(let s=0;s<nSp;s++)for(const v of popHistory[s])if(v>mx)mx=v;for(let s=0;s<nSp;s++){const hist=popHistory[s];if(!hist||hist.length<2)continue;popCtx.strokeStyle=speciesColor(s).css;popCtx.lineWidth=1.5;popCtx.globalAlpha=0.8;popCtx.beginPath();for(let x=0;x<hist.length;x++){const px=x/POP_LEN*w,py=h-(hist[x]/mx)*(h-4)-2;x===0?popCtx.moveTo(px,py):popCtx.lineTo(px,py);}popCtx.stroke();popCtx.globalAlpha=1;}for(let s=0;s<nSp;s++){const el=$('spC'+s);if(el)el.textContent=counts[s];}}
 
-// ── Organism Inspection (Tooltip) ──
+// Tooltip
 let mouseX=0,mouseY=0,hoveredOrg=-1;
-function findOrgAtMouse(){
-  let best=-1,bestD=400; // 20px radius squared
-  const cx=Math.min(gridW-1,Math.max(0,mouseX/CELL|0)),cy=Math.min(gridH-1,Math.max(0,mouseY/CELL|0));
-  for(let dy=-1;dy<=1;dy++)for(let dx=-1;dx<=1;dx++){
-    const nx=cx+dx,ny=cy+dy;if(nx<0||nx>=gridW||ny<0||ny>=gridH)continue;
-    const ci=ny*gridW+nx,cnt=gridCounts[ci],base=ci*GMAX;
-    for(let k=0;k<cnt;k++){const j=gridEntries[base+k];if(!oalive[j])continue;
-      const ddx=ox[j]-mouseX,ddy=oy[j]-mouseY,d2=ddx*ddx+ddy*ddy;
-      if(d2<bestD){bestD=d2;best=j;}
-    }
-  }
-  return best;
-}
-function updateTooltip(){
-  hoveredOrg=findOrgAtMouse();
-  if(hoveredOrg<0){ui.tooltip.classList.remove('show');return;}
-  const i=hoveredOrg;
-  const spName=['Red','Orange','Gold','Green','Teal','Cyan','Blue','Indigo','Purple','Magenta','Lime','Emerald'][ospecies[i]%12];
-  ui.tooltip.innerHTML=`<b style="color:${speciesColor(ospecies[i]).css}">${spName} #${i}</b><br>`+
-    `Size: ${osize[i].toFixed(1)} · Energy: ${oenergy[i].toFixed(1)}<br>`+
-    `Age: ${oage[i].toFixed(1)}s · Kills: ${okills[i]}<br>`+
-    `<span style="color:var(--accent2)">Spd:</span>${(gSpeed[i]*100|0)}% `+
-    `<span style="color:var(--warm)">Agg:</span>${(gAggro[i]*100|0)}% `+
-    `<span style="color:var(--accent)">Eff:</span>${(gEfficiency[i]*100|0)}% `+
-    `<span style="color:var(--accent3)">Per:</span>${(gPerception[i]*100|0)}%`;
-  ui.tooltip.style.left=Math.min(W-230,mouseX+15)+'px';
-  ui.tooltip.style.top=Math.min(H-100,mouseY+15)+'px';
-  ui.tooltip.classList.add('show');
-}
+function findOrgAtMouse(){let best=-1,bestD=400;const cx=Math.min(gridW-1,Math.max(0,mouseX/CELL|0)),cy=Math.min(gridH-1,Math.max(0,mouseY/CELL|0));for(let dy=-1;dy<=1;dy++)for(let dx=-1;dx<=1;dx++){const nx=cx+dx,ny=cy+dy;if(nx<0||nx>=gridW||ny<0||ny>=gridH)continue;const ci=ny*gridW+nx,cnt=gridCounts[ci],base=ci*GMAX;for(let k=0;k<cnt;k++){const j=gridEntries[base+k];if(!oalive[j])continue;const ddx=ox[j]-mouseX,ddy=oy[j]-mouseY,d2=ddx*ddx+ddy*ddy;if(d2<bestD){bestD=d2;best=j;}}}return best;}
+function updateTooltip(){hoveredOrg=findOrgAtMouse();if(hoveredOrg<0){ui.tooltip.classList.remove('show');return;}const i=hoveredOrg;ui.tooltip.innerHTML=`<b style="color:${speciesColor(ospecies[i]).css}">${SPECIES_NAMES[ospecies[i]%12]} #${i}</b><br>Size: ${osize[i].toFixed(1)} · Energy: ${oenergy[i].toFixed(1)}<br>Age: ${oage[i].toFixed(1)}s · Kills: ${okills[i]}<br><span style="color:var(--accent2)">Spd:</span>${(gSpeed[i]*100|0)}% <span style="color:var(--warm)">Agg:</span>${(gAggro[i]*100|0)}% <span style="color:var(--accent)">Eff:</span>${(gEfficiency[i]*100|0)}% <span style="color:var(--accent3)">Per:</span>${(gPerception[i]*100|0)}%`;ui.tooltip.style.left=Math.min(W-230,mouseX+15)+'px';ui.tooltip.style.top=Math.min(H-100,mouseY+15)+'px';ui.tooltip.classList.add('show');}
 
-// ── GL Buffers ──
+// GL Buffers
 const RMAX=MAX_ORG+MAX_FOOD+MAX_DFX;
-let glPos=new Float32Array(RMAX*2),glHue=new Float32Array(RMAX);
-let glAlpha=new Float32Array(RMAX),glSize=new Float32Array(RMAX);
+let glPos=new Float32Array(RMAX*2),glHue=new Float32Array(RMAX),glAlpha=new Float32Array(RMAX),glSize=new Float32Array(RMAX);
 
-// ── Main Loop ──
+// Main loop
 let frameCount=0,heatTick=0,tooltipTick=0;
 function frame(now){
-  requestAnimationFrame(frame);
-  const rawDt=Math.min(0.05,(now-lastT)/1000);lastT=now;
+  requestAnimationFrame(frame);const rawDt=Math.min(0.05,(now-lastT)/1000);lastT=now;
   if(!running){updateTooltip();return;}
-
-  spawnFood(rawDt);simulate(rawDt);
-
+  spawnFood(rawDt);simulate(rawDt);checkExperiment();
   if(++heatTick>=4){drawOases();heatTick=0;}
-  updatePopGraph(rawDt);
-  if(++tooltipTick>=3){updateTooltip();tooltipTick=0;}
-
-  // Time display
-  const mins=simTime/60|0,secs=simTime%60|0;
-  ui.timeDisplay.textContent=(mins<10?'0':'')+mins+':'+(secs<10?'0':'')+secs;
-
-  // Render
+  updatePopGraph(rawDt);if(++tooltipTick>=3){updateTooltip();tooltipTick=0;}
+  const mins=simTime/60|0,secs=simTime%60|0;ui.timeDisplay.textContent=(mins<10?'0':'')+mins+':'+(secs<10?'0':'')+secs;
   const trail=+ui.sTrail.value;
-  if(trail>0.01){
-    gl.useProgram(fadeProg);gl.bindBuffer(gl.ARRAY_BUFFER,quadBuf);
-    gl.enableVertexAttribArray(aFadePos);gl.vertexAttribPointer(aFadePos,2,gl.FLOAT,false,0,0);
-    gl.uniform4f(uFadeColor,0.02,0.04,0.08,1-trail);gl.blendFunc(gl.SRC_ALPHA,gl.ONE_MINUS_SRC_ALPHA);
-    gl.drawArrays(gl.TRIANGLE_STRIP,0,4);gl.disableVertexAttribArray(aFadePos);
-  }else{gl.clearColor(0.02,0.04,0.08,1);gl.clear(gl.COLOR_BUFFER_BIT);}
-
+  if(trail>0.01){gl.useProgram(fadeProg);gl.bindBuffer(gl.ARRAY_BUFFER,quadBuf);gl.enableVertexAttribArray(aFadePos);gl.vertexAttribPointer(aFadePos,2,gl.FLOAT,false,0,0);gl.uniform4f(uFadeColor,0.02,0.04,0.08,1-trail);gl.blendFunc(gl.SRC_ALPHA,gl.ONE_MINUS_SRC_ALPHA);gl.drawArrays(gl.TRIANGLE_STRIP,0,4);gl.disableVertexAttribArray(aFadePos);}
+  else{gl.clearColor(0.02,0.04,0.08,1);gl.clear(gl.COLOR_BUFFER_BIT);}
   let wi=0;const fGlow=+ui.sFoodGlow.value;
-  // Food
-  for(let i=0;i<foodCount;i++){if(!falive[i])continue;fglow[i]+=rawDt*3;
-    glPos[wi*2]=fx[i];glPos[wi*2+1]=fy[i];glHue[wi]=0.22+Math.sin(fglow[i])*0.05;
-    glAlpha[wi]=0.5+Math.sin(fglow[i]*1.3)*0.2;glSize[wi]=(2.5+Math.sin(fglow[i]*0.8)*0.5)*fGlow;wi++;}
-  // Death particles
-  for(let i=0;i<dfxCount;i++){if(dfxLife[i]<=0)continue;
-    glPos[wi*2]=dfxX[i];glPos[wi*2+1]=dfxY[i];glHue[wi]=dfxHue[i];
-    glAlpha[wi]=dfxLife[i]*0.8;glSize[wi]=dfxSize[i]*dfxLife[i];wi++;}
-  // Organisms
+  for(let i=0;i<foodCount;i++){if(!falive[i])continue;fglow[i]+=rawDt*3;glPos[wi*2]=fx[i];glPos[wi*2+1]=fy[i];glHue[wi]=0.22+Math.sin(fglow[i])*0.05;glAlpha[wi]=0.5+Math.sin(fglow[i]*1.3)*0.2;glSize[wi]=(2.5+Math.sin(fglow[i]*0.8)*0.5)*fGlow;wi++;}
+  for(let i=0;i<dfxCount;i++){if(dfxLife[i]<=0)continue;glPos[wi*2]=dfxX[i];glPos[wi*2+1]=dfxY[i];glHue[wi]=dfxHue[i];glAlpha[wi]=dfxLife[i]*0.8;glSize[wi]=dfxSize[i]*dfxLife[i];wi++;}
   const mxSz=+ui.sMaxSize.value;
-  for(let i=0;i<orgCount;i++){if(!oalive[i])continue;
-    glPos[wi*2]=ox[i];glPos[wi*2+1]=oy[i];
-    glHue[wi]=SPECIES_HUES[ospecies[i]%SPECIES_HUES.length];
-    glAlpha[wi]=0.6+(osize[i]/mxSz)*0.4;
-    // Highlight hovered organism
-    let sz=Math.max(1.5,osize[i]*1.2);
-    if(i===hoveredOrg)sz*=1.8;
-    glSize[wi]=sz;wi++;}
-
+  for(let i=0;i<orgCount;i++){if(!oalive[i])continue;glPos[wi*2]=ox[i];glPos[wi*2+1]=oy[i];glHue[wi]=SPECIES_HUES[ospecies[i]%SPECIES_HUES.length];glAlpha[wi]=0.6+(osize[i]/mxSz)*0.4;let sz=Math.max(1.5,osize[i]*1.2);if(i===hoveredOrg)sz*=1.8;glSize[wi]=sz;wi++;}
   gl.blendFunc(gl.SRC_ALPHA,ui.chkGlow.checked?gl.ONE:gl.ONE_MINUS_SRC_ALPHA);
   gl.useProgram(prog);gl.uniform2f(uRes,W,H);
   gl.bindBuffer(gl.ARRAY_BUFFER,posBuf);gl.bufferData(gl.ARRAY_BUFFER,glPos.subarray(0,wi*2),gl.DYNAMIC_DRAW);gl.enableVertexAttribArray(aPos);gl.vertexAttribPointer(aPos,2,gl.FLOAT,false,0,0);
@@ -694,7 +799,6 @@ function frame(now){
   gl.bindBuffer(gl.ARRAY_BUFFER,alphaBuf);gl.bufferData(gl.ARRAY_BUFFER,glAlpha.subarray(0,wi),gl.DYNAMIC_DRAW);gl.enableVertexAttribArray(aAlpha);gl.vertexAttribPointer(aAlpha,1,gl.FLOAT,false,0,0);
   gl.bindBuffer(gl.ARRAY_BUFFER,sizeBuf);gl.bufferData(gl.ARRAY_BUFFER,glSize.subarray(0,wi),gl.DYNAMIC_DRAW);gl.enableVertexAttribArray(aSize);gl.vertexAttribPointer(aSize,1,gl.FLOAT,false,0,0);
   gl.drawArrays(gl.POINTS,0,wi);
-
   fpsT+=rawDt;fpsN++;if(fpsT>=0.4){ui.sFps.textContent=(fpsN/fpsT|0);fpsT=0;fpsN=0;}
   let alive=0;for(let i=0;i<orgCount;i++)if(oalive[i])alive++;
   let fAlive=0;for(let i=0;i<foodCount;i++)if(falive[i])fAlive++;
@@ -702,22 +806,7 @@ function frame(now){
   updateLabels();frameCount++;
 }
 
-function updateLabels(){
-  ui.vOrganisms.textContent=ui.sOrganisms.value;ui.vFood.textContent=ui.sFood.value;
-  ui.vFoodRate.textContent=ui.sFoodRate.value+'/s';ui.vSpeed.textContent=(+ui.sSpeed.value).toFixed(2);
-  ui.vSpecies.textContent=ui.sSpecies.value;ui.vStartSize.textContent=(+ui.sStartSize.value).toFixed(1);
-  ui.vMaxSize.textContent=ui.sMaxSize.value;ui.vOrgSpeed.textContent=(+ui.sOrgSpeed.value).toFixed(1);
-  ui.vLifespan.textContent=ui.sLifespan.value+'s';ui.vReproSize.textContent=ui.sReproSize.value;
-  ui.vOffspring.textContent=ui.sOffspring.value;ui.vOases.textContent=ui.sOases.value;
-  ui.vEatRatio.textContent=(+ui.sEatRatio.value).toFixed(2)+'x';ui.vEatGain.textContent=(+ui.sEatGain.value).toFixed(2);
-  ui.vHunt.textContent=(+ui.sHunt.value).toFixed(1);ui.vFlee.textContent=(+ui.sFlee.value).toFixed(1);
-  ui.vFlock.textContent=(+ui.sFlock.value).toFixed(2);ui.vFoodDrive.textContent=(+ui.sFoodDrive.value).toFixed(1);
-  ui.vSeparation.textContent=(+ui.sSeparation.value).toFixed(2);
-  ui.vMutRate.textContent=(+ui.sMutRate.value).toFixed(2);ui.vMutStr.textContent=(+ui.sMutStr.value).toFixed(2);
-  ui.vFoodGlow.textContent=(+ui.sFoodGlow.value).toFixed(1);
-  const tv=+ui.sTrail.value;ui.vTrail.textContent=tv<0.05?'Off':tv<0.3?'Short':tv<0.6?'Medium':'Long';
-  ui.btnPause.textContent=running?'Pause':'Play';ui.btnPause.classList.toggle('active',!running);
-}
+function updateLabels(){ui.vOrganisms.textContent=ui.sOrganisms.value;ui.vFood.textContent=ui.sFood.value;ui.vFoodRate.textContent=ui.sFoodRate.value+'/s';ui.vSpeed.textContent=(+ui.sSpeed.value).toFixed(2);ui.vSpecies.textContent=ui.sSpecies.value;ui.vStartSize.textContent=(+ui.sStartSize.value).toFixed(1);ui.vMaxSize.textContent=ui.sMaxSize.value;ui.vOrgSpeed.textContent=(+ui.sOrgSpeed.value).toFixed(1);ui.vLifespan.textContent=ui.sLifespan.value+'s';ui.vReproSize.textContent=ui.sReproSize.value;ui.vOffspring.textContent=ui.sOffspring.value;ui.vOases.textContent=ui.sOases.value;ui.vEatRatio.textContent=(+ui.sEatRatio.value).toFixed(2)+'x';ui.vEatGain.textContent=(+ui.sEatGain.value).toFixed(2);ui.vHunt.textContent=(+ui.sHunt.value).toFixed(1);ui.vFlee.textContent=(+ui.sFlee.value).toFixed(1);ui.vFlock.textContent=(+ui.sFlock.value).toFixed(2);ui.vFoodDrive.textContent=(+ui.sFoodDrive.value).toFixed(1);ui.vSeparation.textContent=(+ui.sSeparation.value).toFixed(2);ui.vMutRate.textContent=(+ui.sMutRate.value).toFixed(2);ui.vMutStr.textContent=(+ui.sMutStr.value).toFixed(2);ui.vFoodGlow.textContent=(+ui.sFoodGlow.value).toFixed(1);const tv=+ui.sTrail.value;ui.vTrail.textContent=tv<0.05?'Off':tv<0.3?'Short':tv<0.6?'Medium':'Long';ui.btnPause.textContent=running?'Pause':'Play';ui.btnPause.classList.toggle('active',!running);}
 
 function resize(){W=window.innerWidth;H=window.innerHeight;canvas.width=W;canvas.height=H;gl.viewport(0,0,W,H);gl.useProgram(prog);gl.uniform2f(uRes,W,H);gl.clearColor(0.02,0.04,0.08,1);gl.clear(gl.COLOR_BUFFER_BIT);}
 window.addEventListener('resize',()=>{resize();initGrids();});
@@ -728,6 +817,11 @@ function interact(){hasInteracted=true;if(ui.hint&&!ui.hint.classList.contains('
 document.querySelectorAll('.tab').forEach(tab=>{tab.addEventListener('click',()=>{document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));document.querySelectorAll('.tab-page').forEach(p=>p.classList.remove('active'));tab.classList.add('active');document.getElementById('tab-'+tab.dataset.tab).classList.add('active');});});
 ui.panelClose.addEventListener('click',()=>{ui.panel.classList.add('collapsed');ui.panelToggle.classList.remove('hidden');});
 ui.panelToggle.addEventListener('click',()=>{ui.panel.classList.remove('collapsed');ui.panelToggle.classList.add('hidden');});
+
+// AI Panel toggle
+ui.aiClose.addEventListener('click',()=>{ui.aiPanel.classList.add('collapsed');ui.aiToggle.classList.remove('hidden');});
+ui.aiToggle.addEventListener('click',()=>{interact();ui.aiPanel.classList.remove('collapsed');ui.aiToggle.classList.add('hidden');});
+
 ui.btnPause.addEventListener('click',()=>{interact();running=!running;updateLabels();});
 ui.btnReset.addEventListener('click',()=>{interact();resize();initWorld();});
 ui.btnSound.addEventListener('click',()=>{interact();toggleSound();});
@@ -738,14 +832,12 @@ ui.sOrganisms.addEventListener('change',()=>{interact();initWorld();});
 ui.sSpecies.addEventListener('change',()=>{interact();initWorld();});
 ui.sOases.addEventListener('change',()=>{interact();initOases();});
 
-// Mouse
 canvas.addEventListener('mousemove',(e)=>{mouseX=e.clientX;mouseY=e.clientY;});
 canvas.addEventListener('click',(e)=>{interact();for(let s=0;s<8;s++){let idx=-1;for(let i=0;i<foodCount;i++){if(!falive[i]){idx=i;break;}}if(idx<0&&foodCount<MAX_FOOD)idx=foodCount++;if(idx<0)break;fx[idx]=e.clientX+(Math.random()-0.5)*30;fy[idx]=e.clientY+(Math.random()-0.5)*30;falive[idx]=1;fglow[idx]=Math.random()*TAU;}});
 canvas.addEventListener('contextmenu',(e)=>{e.preventDefault();interact();const nSp=+ui.sSpecies.value,sz0=+ui.sStartSize.value,sp=Math.random()*nSp|0;for(let s=0;s<5;s++){let idx=-1;for(let i=0;i<orgCount;i++){if(!oalive[i]){idx=i;break;}}if(idx<0&&orgCount<MAX_ORG)idx=orgCount++;if(idx<0)break;ox[idx]=e.clientX+(Math.random()-0.5)*25;oy[idx]=e.clientY+(Math.random()-0.5)*25;ovx[idx]=(Math.random()-0.5)*2;ovy[idx]=(Math.random()-0.5)*2;ospecies[idx]=sp;osize[idx]=sz0;oenergy[idx]=sz0*2;oage[idx]=0;oalive[idx]=1;okills[idx]=0;gSpeed[idx]=0.3+Math.random()*0.4;gAggro[idx]=0.3+Math.random()*0.4;gEfficiency[idx]=0.3+Math.random()*0.4;gPerception[idx]=0.3+Math.random()*0.4;}});
 
-// Keyboard shortcuts
 window.addEventListener('keydown',(e)=>{
-  if(e.target.tagName==='INPUT'||e.target.tagName==='SELECT')return;
+  if(e.target.tagName==='INPUT'||e.target.tagName==='SELECT'||e.target.tagName==='TEXTAREA')return;
   interact();
   if(e.code==='Space'){e.preventDefault();running=!running;updateLabels();}
   else if(e.key==='1'){ui.sSpeed.value='0.5';updateLabels();}
@@ -753,12 +845,16 @@ window.addEventListener('keydown',(e)=>{
   else if(e.key==='3'){ui.sSpeed.value='2.0';updateLabels();}
   else if(e.key==='4'){ui.sSpeed.value='5.0';updateLabels();}
   else if(e.key==='s'||e.key==='S'){toggleSound();}
+  else if(e.key==='l'||e.key==='L'){
+    if(ui.aiPanel.classList.contains('collapsed')){ui.aiPanel.classList.remove('collapsed');ui.aiToggle.classList.add('hidden');}
+    else{ui.aiPanel.classList.add('collapsed');ui.aiToggle.classList.remove('hidden');}
+  }
 });
 
 function adaptiveCount(){const touch=window.matchMedia?.('(pointer:coarse)')?.matches;if(touch)return Math.min(window.innerWidth,window.innerHeight)<700?2000:4000;if(window.innerWidth>1500)return 8000;if(window.innerWidth>1100)return 5000;return 3000;}
 
 // Boot
-resize();ui.sOrganisms.value=String(adaptiveCount());initWorld();requestAnimationFrame(frame);
+resize();ui.sOrganisms.value=String(adaptiveCount());loadAiSettings();initWorld();requestAnimationFrame(frame);
 </script>
 </body>
 </html>
