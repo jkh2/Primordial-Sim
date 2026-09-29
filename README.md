@@ -4,13 +4,11 @@
 
 ### Emergent Artificial Life Engine
 
-A real-time WebGL particle ecosystem where organisms eat, hunt, flee, flock, reproduce, mutate, and evolve — with a multi-provider AI Lab Partner that observes, experiments, and writes research reports on the living world. All from simple rules, all in your browser.
+A real-time WebGL ecosystem where living cells eat, hunt, flee, flock, reproduce, mutate, and split into new species that nobody designed, with a multi-provider AI Lab Partner that observes, experiments, and writes research reports on the living world. All from simple rules, all in your browser.
 
-**[Launch Primordial](https://jkh2.github.io/Primordial-Sim/)** · Single-file HTML · Zero install · GitHub Pages
+**[Launch Primordial](https://jkh2.github.io/Primordial-Sim/)** · Version 5 · Single-file HTML · Zero install · GitHub Pages
 
-**Versions:** the live site runs **v5** (species that evolve on their own, a live family tree, optional mating). Earlier versions stay playable:
-- **v4** (September 29, 2026: living visuals, seeds and replay, trait costs) at **[/v4](https://jkh2.github.io/Primordial-Sim/v4/)**. Its exact source is on the [`v4-release`](https://github.com/jkh2/Primordial-Sim/tree/v4-release) branch; the `/v4` copy only changes the "Original v3" link so it still works from the subfolder.
-- The original **v3** from March 12, 2026, preserved exactly as first built, at **[/classic](https://jkh2.github.io/Primordial-Sim/classic/)**, with its source on the [`v3-original`](https://github.com/jkh2/Primordial-Sim/tree/v3-original) branch.
+**New here?** Choose the **Origin of Species** preset in the World tab and press **T**. Everything starts as one red species; within a few minutes the family tree fills with species that split off on their own.
 
 ---
 
@@ -26,31 +24,60 @@ We believe this is how humans and AI should work together: as partners with comp
 
 ---
 
+---
+
+## What's New in v5
+
+**v5, September 29, 2026: real evolution**
+
+- **Species arise on their own.** When a family's genes drift far enough from the genome its species was founded with, it splits off. Once it reaches 10 members it gets its own name and a color close to its ancestor's, and it competes with the species it came from.
+- **A live family tree.** The new Tree tab (press T) shows every species as a line from the moment it split off to now or to its extinction. Hover for details; click a species to spotlight it and its descendants in the world and dim everyone else. Esc clears the spotlight.
+- **Lineage trails.** Each species leaves a faint line in its color following where most of its members live, so you can watch families migrate.
+- **Optional mating.** Sexual reproduction mixes a parent's genes with a nearby mate of the same species before mutation.
+- **Origin of Species preset.** One ancestor and plenty of food, tuned so a single species branches into dozens.
+- **Species everywhere.** A Species count in the stats bar; the population graph and census follow every named species; the tooltip shows which species an organism's species split from; and the Lab Partner sees who split from whom and which species went extinct.
+- **Fixes.** The Same Species Protected checkbox now works (before, it had no effect), and prey can no longer be eaten twice in the same step.
+
+**v4, September 29, 2026: honest science and living visuals**
+
+- **Genes have costs.** Speed, perception and aggression burn energy, and high efficiency lowers top speed. Before, only efficiency cost anything, so nothing held the other genes back.
+- **Real generations.** Each newborn is one generation past its parent; the old counter counted births.
+- **Seeds and exact replays.** Every world has a seed you can replay, share in a link, or save in an exported file.
+- **Steadier engine.** Wander motion follows simulation time instead of the wall clock, births no longer scan the whole population for a free slot, and the Lab Partner's default models were brought up to date.
+- **Living visuals.** Organisms became teardrop cells whose genes you can see, swimming in primordial water with caustic light and plankton. Food became swaying algae, oases became glowing springs with rising bubbles, and kills and births got their own effects.
+
+**Earlier versions stay playable:**
+
+| Version | Play it | Its README | Exact source |
+|---------|---------|------------|--------------|
+| v4 (September 29, 2026) | [/v4](https://jkh2.github.io/Primordial-Sim/v4/) | [v4/README.md](v4/README.md) | [`v4-release`](https://github.com/jkh2/Primordial-Sim/tree/v4-release) branch |
+| v3, the original (March 12, 2026) | [/classic](https://jkh2.github.io/Primordial-Sim/classic/) | [classic/README.md](classic/README.md) | [`v3-original`](https://github.com/jkh2/Primordial-Sim/tree/v3-original) branch |
+
 ## What It Is
 
-Primordial is a continuous-space ecosystem simulator running on WebGL with an integrated AI research partner. Every colored dot on screen is a living organism with position, velocity, energy, age, a species identity, and four genetic traits that mutate across generations. Organisms eat food pellets to gain energy, grow larger, hunt smaller organisms of other species, flee from predators, flock with their own kind to form territories, reproduce when they reach a threshold size, and die of starvation or old age.
+Primordial is a continuous-space ecosystem simulator running on WebGL with an integrated AI research partner. Every creature on screen is a living cell with a position, velocity, energy, age, generation, a species it belongs to, and four genetic traits that mutate across generations. Organisms eat food to gain energy, grow larger, hunt smaller organisms of other species, flee from predators, flock with their own kind to form territories, reproduce when they reach a threshold size, and die of starvation or old age. When a family's genes drift far enough, it becomes a new species.
 
-No behavior is scripted. Territories, migration patterns, population cycles, predator-prey dynamics, and evolutionary adaptation all emerge naturally from five simple behavioral drives and the physics of survival.
+No behavior is scripted. Territories, migration, population cycles, predator-prey dynamics, evolutionary trade-offs, and the branching of new species all emerge from five simple behavioral drives and the physics of survival.
 
-The AI Lab Partner watches it all happen, analyzes the data, designs and runs experiments by programmatically adjusting simulation parameters, and writes structured research reports on the results — using whichever AI provider you choose.
+The AI Lab Partner watches it all happen, analyzes the data, designs and runs experiments by adjusting simulation parameters, and writes structured research reports on the results, using whichever AI provider you choose.
 
 ## What It Does
 
-**Ecosystem mechanics** — Organisms consume food pellets scattered across the map (with configurable fertile "oases" that concentrate resources geographically). Energy drives growth: size equals the square root of energy, so bigger organisms need proportionally more food to sustain themselves. When an organism of one species is sufficiently larger than an organism of another species, it eats the smaller one, gaining energy and triggering a burst of death particles in the victim's color. Same-species organisms are protected from cannibalism by default, encouraging territorial clustering.
+**Ecosystem mechanics** — Organisms eat algae scattered across the map, with fertile oases that concentrate food in places. Energy drives growth: size is the square root of energy, so bigger organisms need proportionally more food. When one organism is sufficiently larger than an organism of another species (1.3x by default, set by Size Advantage to Eat), it can eat it and take its energy. Same-species organisms are protected from each other by default, which encourages territories. A parent that reproduces splits its energy with its offspring.
 
-**Genetic evolution** — Every organism carries four heritable genes: Speed (movement multiplier), Aggression (hunt drive intensity), Efficiency (metabolic cost reduction), and Perception (sight range for food and threats). When an organism reproduces, each gene has a configurable probability of mutating by a random amount. Over hundreds of generations, species diverge — some lineages become fast grazers, others become slow efficient apex predators, others develop wide perception ranges to find scarce food. Natural selection is the only force shaping this. No fitness function, no selection pressure beyond survival itself.
+**Genetic evolution with trade-offs** — Every organism carries four heritable genes: Speed, Aggression, Efficiency (metabolism), and Perception (sight range). At each birth, each gene may mutate by a random amount. Genes are not free: with Trait Cost above 0, speed, perception and aggression raise an organism's energy bill and high efficiency lowers its top speed, so lineages settle on trade-offs instead of maxing everything. Natural selection is the only force shaping this. There is no fitness function, only survival.
 
-**Species that arise on their own** — Species are lineages, not fixed colors. When a newborn's genes drift far enough from its species' founding genome (the **Split Distance**), it founds a new lineage with a hue close to its ancestor's. Once that lineage has 10 members it becomes a species of its own, with a generated name and its own predators, and it competes with the species it came from. The **Tree** tab draws the family tree live: every species is a line from the moment it split off to now or to its extinction, and clicking one spotlights that family in the world. Faint lineage trails show where each family has lived. An optional sexual reproduction mode mixes genes with a nearby mate of the same lineage.
+**Species that arise on their own** — Species are families, not fixed colors. A newborn whose genes have drifted farther than the Split Distance from its species' founding genome starts a new branch, and a branch that reaches 10 members becomes a named species with its own color close to its ancestor's. The Tree tab draws the whole family tree live, and lineage trails show where each species lives. An optional sexual reproduction mode mixes genes with a nearby mate of the same species.
 
-**Predator-prey food chains** — An optional Rock-Paper-Scissors mode creates circular predation: each species hunts the next one in sequence, wrapping around. This prevents any single species from dominating and produces classic Lotka-Volterra population oscillations visible in the real-time population graph.
+**Predator-prey food chains** — An optional Rock-Paper-Scissors mode creates circular predation: each starting species hunts the next one in sequence, wrapping around, and new species inherit their ancestor's place in the cycle. This prevents any single lineage from dominating and produces classic Lotka-Volterra population oscillations in the population graph.
 
-**Interactive sandbox** — Left-click drops a cluster of food pellets. Right-click spawns a group of organisms. Hover over any organism to inspect its species, size, energy, age, kill count, and all four gene values. Keyboard shortcuts control time: Space pauses, 1-4 set speed from slow-motion to 5x turbo. Six tuned scenario presets offer distinct experiences from peaceful aquariums to extinction events.
+**Interactive sandbox** — Left-click drops a cluster of food. Right-click brings in a small group of a living species (or a new arrival if everything has died out). Hover over any organism to see its species and where that species came from, its size, energy, age, kills, generation, and all four genes. Space pauses, and 1 to 4 set the speed from slow motion to 5x. Seven tuned presets range from a peaceful aquarium to extinction events and the Origin of Species. You can record video of a run, go fullscreen, share your settings as a link, or export them to a file.
 
-**Living visuals** — Organisms are drawn as teardrop cells pointed the way they swim, with a membrane rim and a nucleus. Their genes are visible: a longer tail means a faster swimmer, spines and a redder rim mean aggression, glowing eye-spots mean sharp perception, and a translucent body means an efficient metabolism. Cells pulse like a heartbeat, stretch when they move fast, and dim and flicker when starving. The world is primordial water with drifting caustic light and plankton, food is swaying bioluminescent algae, and oases are glowing springs. Kills pull the prey's motes toward the predator; births split like dividing cells. On slower machines, turn off Water Effects or Detailed Creatures in the Visual tab.
+**Living visuals** — Organisms are drawn as teardrop cells pointed the way they swim, with a membrane rim and a nucleus. Their genes are visible: a longer tail means a faster swimmer, spines and a redder rim mean aggression, glowing eye-spots mean sharp perception, and a translucent body means an efficient metabolism. Cells pulse like a heartbeat, stretch when they move fast, and dim and flicker when starving. The world is primordial water with drifting caustic light and plankton, food is swaying bioluminescent algae, and oases are glowing springs with rising bubbles. Kills pull the prey's motes toward the predator; births split like dividing cells. On slower machines, turn off Water Effects or Detailed Creatures in the Visual tab.
 
 **Ambient sound design** — An optional Web Audio layer provides a low drone that shifts pitch with total population (rising hum = thriving world, falling = collapse), soft pops on reproduction events, and bass thuds when large predators make kills.
 
-**AI Lab Partner (multi-provider)** — An integrated AI research assistant that observes the live simulation and participates as an active scientist. Accessible via the right-side panel (click the star icon or press L). Works with your choice of AI provider:
+**AI Lab Partner (multi-provider)** — An integrated AI research assistant that observes the live simulation and participates as an active scientist. Open it with the star icon or press L. Works with your choice of AI provider:
 
 | Provider | Endpoint | Default Model |
 |----------|----------|---------------|
@@ -65,15 +92,14 @@ Your API key is stored in your browser's localStorage only — it never touches 
 
 The AI Lab Partner can:
 
-- **Analyze** the current ecosystem state — population dynamics, evolutionary trends, gene drift, species fitness rankings, and predictions
-- **Design experiments** with specific hypotheses, parameter changes, and durations — then execute them automatically by adjusting simulation sliders
-- **Run experiments** with before/after data capture — the system snapshots the full simulation state at experiment start and end, then feeds both to the AI for comparative analysis
+- **Analyze** the current ecosystem: population dynamics, which species are rising or falling, where new species came from, gene drift, and predictions
+- **Design experiments** with specific hypotheses, parameter changes, and durations, then run them automatically by adjusting simulation settings
+- **Run experiments** with before/after data capture: the full simulation state is recorded at the start and end and both are sent to the AI for comparison
 - **Write structured lab reports** covering hypothesis, observations, analysis, conclusion, and suggested follow-up experiments
-- **Answer questions** about the simulation in real time — "Why did the red species go extinct?" or "What mutation rate would maximize diversity?"
-- **Compare species** with detailed fitness rankings based on population trends, gene profiles, and vulnerability assessments
-- **Predict outcomes** based on current population dynamics, gene averages, and resource availability
+- **Answer questions** about the simulation in real time, such as "Why did this species go extinct?" or "What mutation rate would maximize diversity?"
+- **Compare species** with fitness rankings based on population trends, gene profiles, and vulnerabilities
 
-The AI sees the full simulation state as context with every interaction: per-species population counts, average gene values, food supply, extinction events, top predator stats, and all current parameter settings. When it proposes an experiment, the system parses the protocol and executes it automatically — applying slider changes, running a countdown timer, capturing data, and triggering the analysis report when complete.
+The AI sees the full simulation state with every message. When it proposes an experiment, the system parses the protocol and runs it automatically: applying setting changes, running a countdown, capturing data, and triggering the analysis report when complete.
 
 ## Why It's Useful
 
@@ -87,7 +113,7 @@ The AI sees the full simulation state as context with every interaction: per-spe
 
 **Human-AI partnership model** — Primordial itself is a product of the SIDLF collaborative framework. We built this together — human and AI as equal creative partners — and we documented the process openly. For anyone exploring how human-AI collaboration can produce real, shipped, functional software, this project is a case study.
 
-**It's also just fun to watch.** Turn on trails, set it to Battle Royale, go fullscreen, and watch 12,000 organisms fight for survival in a world with almost no food. Or set it to Superorganism and watch species move as tight swarms like amoebas under a microscope. Then open the AI Lab and ask it what's happening — the emergent behavior is endlessly surprising, and now you have a research partner to help you understand it.
+**It's also just fun to watch.** Pick Origin of Species, press T, and watch one ancestor branch into dozens of named species on the family tree while their trails wander across the pond. Or turn on trails, set it to Battle Royale, go fullscreen, and watch 12,000 organisms fight for survival in a world with almost no food. Or set it to Superorganism and watch species move as tight swarms like amoebas under a microscope. Then open the AI Lab and ask it what's happening — the emergent behavior is endlessly surprising, and now you have a research partner to help you understand it.
 
 ## How It Works
 
@@ -95,26 +121,29 @@ The AI sees the full simulation state as context with every interaction: per-spe
 
 Primordial is a single self-contained HTML file with no dependencies, no build step, and no backend. It runs entirely client-side using:
 
-- **WebGL** for rendering — organisms and food are drawn as point sprites with per-particle hue, alpha, and size attributes, pushed to the GPU every frame via dynamic buffer uploads
-- **Structure of Arrays (SoA)** for organism data — parallel Float32Array/Uint8Array buffers for position, velocity, size, energy, species, age, genes, and alive-state, supporting up to 60,000 entities with cache-friendly memory access
-- **Spatial hash grid** for neighbor lookups — a 40px cell grid with 64 entities per cell turns O(n²) neighbor scanning into O(1) per organism, making 50k organisms feasible at 60fps on consumer hardware
-- **Separate food grid** for efficient food-seeking with wider search radius for organisms with high perception genes
-- **Web Audio API** for procedural ambient sound design — no audio files, just oscillators and gain nodes
-- **Multi-provider AI adapter** for the Lab Partner — supports OpenAI, Anthropic, xAI, and any OpenAI-compatible local endpoint. Live simulation snapshots are sent as structured context with each query, and experiment protocols are parsed from AI responses and executed programmatically against the simulation
+- **WebGL shaders** for drawing: the water background, swaying algae, lineage trails, birth and death effects, and every creature's body are drawn on the GPU, with each organism's genes and condition passed in so its shape shows what it is
+- **Structure of Arrays (SoA)** for organism data: parallel typed arrays for position, velocity, size, energy, species, generation, age, genes and alive-state, supporting up to 60,000 organisms with cache-friendly memory access
+- **Spatial hash grid** for neighbor lookups: a 40px grid (up to 128 organisms per cell) means each organism only checks the organisms in nearby cells instead of every other organism
+- **Separate food grid** for efficient food-seeking, with a wider search for organisms with high perception
+- **Seeded random numbers and fixed time steps** so the same seed and settings replay the same run
+- **A species census** twice per simulated second that updates populations, names new species, records extinctions, and advances the lineage trails and graphs
+- **Web Audio API** for procedural ambient sound: no audio files, just oscillators and gain nodes
+- **Multi-provider AI adapter** for the Lab Partner: supports OpenAI, Anthropic, xAI, and any OpenAI-compatible local endpoint. Live simulation snapshots are sent as structured context with each query, and experiment protocols are parsed from AI responses and executed against the simulation
 
 ### Simulation Loop
 
-Each frame:
+The world advances in fixed steps of 1/60 of a simulated second, up to two steps per displayed frame. Each step:
 
-1. **Spawn food** — new pellets appear at the configured rate, biased 60/40 toward food oases vs random placement
-2. **Build spatial grids** — organisms and food are bucketed into their grid cells
-3. **Per-organism behavioral step** — for each alive organism, scan the 3x3 (or 5x5 for food chain mode) neighborhood of grid cells. Accumulate five force vectors: hunt (toward smaller edible prey), flee (away from larger predators), flock (toward same-species center of mass), food attraction (toward nearest pellet), and separation (away from overlapping neighbors). Check for eat/collision events. Apply wander noise for organic movement
-4. **Integrate physics** — apply accumulated forces scaled by the organism's genetic speed multiplier and size-based speed penalty (bigger = slightly slower). Clamp velocity, update position, wrap edges
-5. **Metabolism** — deduct energy scaled by the organism's efficiency gene. Update size from energy. Check for death (starvation or old age) and reproduction (size threshold met with sufficient energy)
-6. **Reproduce with mutation** — offspring inherit parent's genes with configurable mutation probability and strength per gene
-7. **Update death particles** — fade and drift any active kill/death effects
-8. **Check experiments** — if an AI experiment is running, monitor elapsed time and capture end-state snapshot when complete
-9. **Render** — clear or fade the previous frame, build the GL attribute arrays (food → death particles → organisms), upload to GPU, draw
+1. **Spawn food**: new algae appear at the configured rate, weighted toward the oases
+2. **Build spatial grids**: organisms and food are sorted into their grid cells
+3. **Sense and steer**: each organism scans the nearby grid cells (wider in food chain mode) and adds up five forces: hunt (toward smaller edible prey), flee (away from larger predators), flock (toward its own species), food attraction (toward the nearest algae), and separation (away from crowding). It also checks whether it can eat something, notes the nearest possible mate, and adds a little wander
+4. **Move**: forces are scaled by the speed gene and a size penalty (bigger is slightly slower), velocity is clamped, and position wraps around the edges
+5. **Metabolism**: energy is spent according to size, the efficiency gene and the trait costs; size follows energy; organisms die of starvation or old age
+6. **Reproduce**: an organism big enough to reproduce splits its energy with its offspring. In sexual mode each gene comes from one parent or the mate, then genes may mutate. The newborn is one generation past its parent, and if its genes have drifted beyond the Split Distance from its species' founder, it starts a new branch
+7. **Census**: twice per simulated second, species populations, names, extinctions, trails, the graph and the family tree are updated
+8. **Experiments**: if an AI experiment is running, its timer is checked and the end-state snapshot captured when it finishes
+
+Each displayed frame then draws the water, algae, lineage trails, effects and creatures.
 
 ### AI Lab Partner Architecture
 
@@ -122,11 +151,11 @@ The AI Lab Partner operates through four integrated systems:
 
 **Multi-Provider Adapter** — A unified API layer that translates between provider-specific formats. Anthropic uses the Messages API with system prompts as a separate parameter and returns content blocks. OpenAI, xAI, and local models use the chat completions format with system messages in the messages array. The adapter handles these differences transparently — the rest of the system just calls `callProviderAPI()` and gets text back regardless of which provider is active. Provider selection, API keys, model names, and custom endpoint URLs are configured in-app and persisted in localStorage.
 
-**State Snapshot Engine** — Captures the full simulation state on demand: per-species population counts, average organism sizes, average energy levels, all four gene averages (speed, aggression, efficiency, perception) per species, current parameter settings, extinction events, top predator statistics, food supply levels, generation count, and elapsed simulation time. This structured data becomes the context for every AI interaction.
+**State Snapshot Engine** — Captures the full simulation state on demand: how many species are alive and how many have ever been named, the largest living species with their population, age, average size and energy, all four gene averages, and which species each one split from, plus recent extinctions, top predator statistics, food supply, the highest and average generation, the world seed, current parameter settings, and elapsed simulation time. This structured data becomes the context for every AI interaction.
 
 **Experiment Engine** — When the AI proposes an experiment, it outputs a structured JSON protocol specifying a hypothesis, specific slider/checkbox changes, and a duration in seconds. The system parses this protocol, programmatically applies the parameter changes to the simulation, starts a countdown timer with visual feedback, captures a "before" snapshot at experiment start, and an "after" snapshot when the timer expires. Both snapshots are then sent to the AI for comparative analysis and report generation.
 
-**Conversational Interface** — A chat panel with freeform text input and five quick-action buttons (Analyze, Design Experiment, Compare Species, Predict Outcomes, Full Report). The AI maintains conversation history (last 10 messages) for context continuity. Every message includes the live simulation snapshot as system context, so the AI always knows the current state of the world when responding.
+**Conversational Interface** — A chat panel with freeform text input and five quick-action buttons (Analyze Now, Design Experiment, Compare Species, Predict Outcomes, Full Report). The AI maintains conversation history (last 10 messages) for context continuity. Every message includes the live simulation snapshot as system context, so the AI always knows the current state of the world when responding.
 
 ### Scenario Presets
 
@@ -145,8 +174,8 @@ The AI Lab Partner operates through four integrated systems:
 | Input | Action |
 |-------|--------|
 | Left click | Drop food cluster |
-| Right click | Spawn organism group |
-| Hover | Inspect organism (species, size, energy, age, kills, genes) |
+| Right click | Bring in a small group of a living species |
+| Hover | Inspect organism (species and its ancestor, size, energy, age, kills, generation, genes) |
 | Space | Pause / Resume |
 | 1 / 2 / 3 / 4 | Speed: 0.5x / 1x / 2x / 5x |
 | S | Toggle sound |
@@ -156,12 +185,14 @@ The AI Lab Partner operates through four integrated systems:
 
 ### UI Tabs (Left Panel)
 
-- **World** — organism count, food settings, speed, population graph, species census
-- **Species** — starting species count, sizes, speed, lifespan, reproduction thresholds, food oases
-- **Rules** — predation settings, food chain toggle, behavioral drive sliders (hunt, flee, flock, food attraction, separation)
-- **Evolve** — mutation on/off, mutation rate and strength, trait cost, per-trait evolution toggles (speed, aggression, efficiency, perception), speciation on/off, split distance, sexual reproduction
-- **Tree** — the live family tree of every named species; hover for details, click to spotlight a family
-- **Visual** — additive glow, detailed creatures, water effects, birth and death effects, oasis springs, lineage trails, algae glow, trail length
+- **World**: pause, reset, sound, video recording, fullscreen, scenario presets, the world seed with Replay, Share Link, Export and Import, organism and food amounts, simulation speed, the population graph, and the species census
+- **Species**: number of starting species, starting and maximum size, organism speed, lifespan, size to reproduce, offspring count, food oases
+- **Rules**: same-species protection, the food chain mode, size advantage to eat, energy from eating, and the five behavior drives (hunt, flee, flock, food attraction, separation)
+- **Evolve**: mutation on or off, mutation rate and strength, trait cost, which genes can evolve, whether new species can form, the split distance, and sexual reproduction
+- **Tree**: the live family tree of every named species; hover for details, click to spotlight a family
+- **Visual**: additive glow, water effects, detailed creatures, birth and death effects, oasis springs, lineage trails, food glow, trail length
+
+The stats bar under the tabs shows frames per second, organisms alive, food, the highest generation reached, and the number of living species.
 
 ### AI Lab Panel (Right Panel)
 
@@ -177,7 +208,7 @@ Every world is built from a numeric seed shown in the World tab. **Reset World**
 
 ### Trait Costs
 
-Genes are not free. With **Trait Cost** above 0, speed (quadratically, like drag), perception and aggression raise an organism's metabolic cost, and high efficiency lowers its top speed. Setting it to 0 restores the original cost-free genes. The **Gen** counter shows the deepest generation alive in the lineage, and the tooltip shows each organism's generation.
+Genes are not free. With **Trait Cost** above 0, speed (quadratically, like drag), perception and aggression raise an organism's metabolic cost, and high efficiency lowers its top speed. Setting it to 0 restores the original cost-free genes. The **Gen** counter shows the highest generation reached so far, and the tooltip shows each organism's generation.
 
 ### Speciation and the Family Tree
 
@@ -199,17 +230,20 @@ Or just open the HTML file directly in any modern browser. No server, no build, 
 
 ## Performance
 
-Tested configurations:
+Drawing runs on the GPU and the simulation runs on the CPU. At startup the organism count is picked from your screen: 8,000 on wide desktop screens, 5,000 on laptops, 3,000 on smaller windows, and 2,000 to 4,000 on touch devices. The Organisms slider goes up to 50,000. If the frame rate drops, lower it, or turn off Water Effects and Detailed Creatures in the Visual tab.
 
-- **Desktop (1080p+)**: 8,000–20,000 organisms at 60fps
-- **Laptop**: 5,000–8,000 organisms at 60fps
-- **Mobile**: 2,000–4,000 organisms at 30-60fps (adaptive startup detects device capability)
-
-The spatial hash grid is the key performance enabler — without it, 50,000 organisms would require 2.5 billion pairwise distance checks per frame. With it, each organism only checks ~30-50 neighbors.
+The spatial hash grid is the key performance enabler. Without it, 50,000 organisms would need 2.5 billion pairwise distance checks per step; with it, each organism only looks at the organisms in the grid cells around it.
 
 ## Browser Support
 
 Any modern browser with WebGL: Chrome, Firefox, Safari, Edge. No plugins, no extensions, no WebGL2 required.
+
+## Where It's Going
+
+- **Next: the Lab Partner as a working scientist.** Proper tool calls instead of parsing text, time-series records so reports cite trends, experiments repeated across several seeds against an unchanged control, a lab notebook that persists between sessions, charts in its reports, and an Alliance mode where Claude, Grok and Gemini each interpret the same result.
+- **Then: richer life and world.** Small evolved brains as an optional replacement for the five fixed drives, seasons, terrain and currents, disease, parental care as a gene that can evolve, and a WebGPU engine for 100,000 or more organisms where the browser supports it.
+- **Then: a world worth sharing.** A camera that follows one creature through its life, zoom and pan, a narrated documentary mode, and the Wellspring at the heart of the world.
+- **Someday: a 3D world** people can step into with VR headsets, right in the browser.
 
 ## About the Partnership
 
