@@ -225,8 +225,10 @@ button.btn.recording{background:rgba(255,50,50,0.25)!important;border-color:rgba
     </div>
     <div class="tab-page" id="tab-viz">
       <div class="toggle-row"><span>Additive Glow</span><input type="checkbox" id="chkGlow" checked/></div>
-      <div class="toggle-row"><span>Death Particles</span><input type="checkbox" id="chkDeathFX" checked/></div>
-      <div class="toggle-row"><span>Show Food Oases</span><input type="checkbox" id="chkShowOases" checked/></div>
+      <div class="toggle-row"><span>Water Effects</span><input type="checkbox" id="chkWater" checked/></div>
+      <div class="toggle-row"><span>Detailed Creatures</span><input type="checkbox" id="chkDetail" checked/></div>
+      <div class="toggle-row"><span>Birth &amp; Death Effects</span><input type="checkbox" id="chkDeathFX" checked/></div>
+      <div class="toggle-row"><span>Show Oasis Springs</span><input type="checkbox" id="chkShowOases" checked/></div>
       <div class="ctrl"><div class="ctrl-label"><span>Food Glow</span><strong id="vFoodGlow">1.0</strong></div><input type="range" id="sFoodGlow" min="0.2" max="2.0" step="0.1" value="1.0"/></div>
       <div class="ctrl"><div class="ctrl-label"><span>Trail Length</span><strong id="vTrail">Off</strong></div><input type="range" id="sTrail" min="0" max="0.95" step="0.01" value="0"/></div>
     </div>
@@ -312,17 +314,101 @@ if(!gl){document.body.innerHTML='<div style="color:#fff;padding:40px">WebGL not 
 // ═══════════════════════════════════════════════
 const PART_VS=`attribute vec2 a_pos;attribute float a_hue;attribute float a_alpha;attribute float a_size;uniform vec2 u_res;varying float v_hue;varying float v_alpha;void main(){vec2 clip=(a_pos/u_res)*2.0-1.0;clip.y=-clip.y;gl_Position=vec4(clip,0.0,1.0);gl_PointSize=a_size;v_hue=a_hue;v_alpha=a_alpha;}`;
 const PART_FS=`precision mediump float;varying float v_hue;varying float v_alpha;vec3 hsv(float h,float s,float v){vec3 c=vec3(h,s,v);vec3 p=abs(fract(c.xxx+vec3(1.0,2.0/3.0,1.0/3.0))*6.0-3.0);return c.z*mix(vec3(1.0),clamp(p-1.0,0.0,1.0),c.y);}void main(){float d=length(gl_PointCoord-0.5)*2.0;if(d>1.0)discard;float soft=1.0-d*d;float core=exp(-d*2.0)*0.6+soft*0.4;vec3 col=hsv(v_hue,0.85,0.7+core*0.3);gl_FragColor=vec4(col*core,v_alpha*(core*0.7+0.3));}`;
-const FADE_VS=`attribute vec2 a_pos;void main(){gl_Position=vec4(a_pos,0.0,1.0);}`;
-const FADE_FS=`precision mediump float;uniform vec4 u_color;void main(){gl_FragColor=u_color;}`;
 function compileShader(src,type){const s=gl.createShader(type);gl.shaderSource(s,src);gl.compileShader(s);return s;}
 function buildProgram(vs,fs){const p=gl.createProgram();gl.attachShader(p,compileShader(vs,gl.VERTEX_SHADER));gl.attachShader(p,compileShader(fs,gl.FRAGMENT_SHADER));gl.linkProgram(p);return p;}
 const prog=buildProgram(PART_VS,PART_FS);
 const aPos=gl.getAttribLocation(prog,'a_pos'),aHue=gl.getAttribLocation(prog,'a_hue'),aAlpha=gl.getAttribLocation(prog,'a_alpha'),aSize=gl.getAttribLocation(prog,'a_size'),uRes=gl.getUniformLocation(prog,'u_res');
-const fadeProg=buildProgram(FADE_VS,FADE_FS);
-const aFadePos=gl.getAttribLocation(fadeProg,'a_pos'),uFadeColor=gl.getUniformLocation(fadeProg,'u_color');
 const quadBuf=gl.createBuffer();gl.bindBuffer(gl.ARRAY_BUFFER,quadBuf);gl.bufferData(gl.ARRAY_BUFFER,new Float32Array([-1,-1,1,-1,-1,1,1,1]),gl.STATIC_DRAW);
 const posBuf=gl.createBuffer(),hueBuf=gl.createBuffer(),alphaBuf=gl.createBuffer(),sizeBuf=gl.createBuffer();
 gl.enable(gl.BLEND);
+
+// ═══════════════════════════════════════════════
+// LIVING VISUALS (Phase 2): water world, algae, creature bodies
+// ═══════════════════════════════════════════════
+const HP=`#ifdef GL_FRAGMENT_PRECISION_HIGH
+precision highp float;
+#else
+precision mediump float;
+#endif
+`;
+const HSV_GLSL=`vec3 hsv(float h,float s,float v){vec3 p=abs(fract(vec3(h)+vec3(1.0,2.0/3.0,1.0/3.0))*6.0-3.0);return v*mix(vec3(1.0),clamp(p-1.0,0.0,1.0),s);}`;
+
+// Primordial water: depth gradient, drifting caustic light, plankton specks, glowing springs at the oases
+const BG_VS=`attribute vec2 a_pos;void main(){gl_Position=vec4(a_pos,0.0,1.0);}`;
+const BG_FS=HP+`uniform vec2 u_res;uniform float u_scale;uniform float u_time;uniform float u_fx;uniform vec4 u_oases[8];uniform int u_nOases;
+float hash(vec2 p){return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453);}
+float caustic(vec2 p,float t){vec2 q=p;float c=0.0;for(int k=0;k<3;k++){float fk=float(k);q+=vec2(sin(q.y*1.7+t*0.6+fk),cos(q.x*1.3-t*0.5+fk*1.7))*0.45;c+=abs(sin(q.x+q.y)*cos(q.x*0.7-q.y*1.1));}return pow(1.0-clamp(c/3.0,0.0,1.0),4.0);}
+void main(){vec2 px=vec2(gl_FragCoord.x*u_scale,u_res.y-gl_FragCoord.y*u_scale);vec2 uv=px/u_res;float t=u_time;
+vec3 col=mix(vec3(0.018,0.062,0.085),vec3(0.006,0.016,0.038),uv.y*0.85+0.1);
+if(u_fx>0.5){float c=caustic(px*0.011,t*0.55)*0.6+caustic(px*0.019+7.0,t*0.8)*0.4;
+col+=vec3(0.04,0.12,0.14)*c*(1.0-uv.y*0.55);
+vec2 g=px/22.0+vec2(t*0.12,t*0.04);vec2 id=floor(g);vec2 f=fract(g)-0.5;float h=hash(id);
+if(h>0.94){vec2 o=vec2(hash(id+3.1),hash(id+7.7))-0.5;float d=length(f-o*0.6);float tw=0.5+0.5*sin(t*(1.0+h*2.0)+h*40.0);col+=vec3(0.3,0.5,0.55)*smoothstep(0.09,0.0,d)*tw*0.3;}}
+for(int i=0;i<8;i++){if(i>=u_nOases)break;vec4 o=u_oases[i];float d=length(px-o.xy)/o.z;
+float glow=exp(-d*d*2.2)*0.11*o.w/3.5;
+float ring=smoothstep(0.05,0.0,abs(fract(d*1.4-t*0.22)-0.5)-0.45)*smoothstep(1.05,0.15,d)*0.035;
+col+=vec3(0.0,0.5,0.45)*(glow+ring)+vec3(0.35,0.95,0.85)*exp(-d*d*80.0)*0.22;}
+col*=1.0-length(uv-0.5)*0.5;
+gl_FragColor=vec4(col,1.0);}`;
+// The water is rendered at half resolution into a texture, then stretched to the screen: a quarter of the pixel work
+const BLIT_VS=`attribute vec2 a_pos;varying vec2 v_uv;void main(){v_uv=a_pos*0.5+0.5;gl_Position=vec4(a_pos,0.0,1.0);}`;
+const BLIT_FS=`precision mediump float;uniform sampler2D u_tex;uniform float u_alpha;varying vec2 v_uv;void main(){gl_FragColor=vec4(texture2D(u_tex,v_uv).rgb,u_alpha);}`;
+
+// Food: bioluminescent algae that sways and twinkles
+const FOOD_VS=`attribute vec2 a_pos;attribute float a_seed;uniform vec2 u_res;uniform float u_time;uniform float u_scale;varying float v_seed;varying float v_tw;
+void main(){vec2 p=a_pos+vec2(sin(u_time*1.3+a_seed*6.0),cos(u_time*1.1+a_seed*4.0))*1.2;vec2 clip=(p/u_res)*2.0-1.0;clip.y=-clip.y;gl_Position=vec4(clip,0.0,1.0);
+v_seed=a_seed;v_tw=0.65+0.35*sin(u_time*(1.5+fract(a_seed*7.3))+a_seed*20.0);gl_PointSize=(6.0+fract(a_seed*3.7)*3.0)*u_scale;}`;
+const FOOD_FS=HP+HSV_GLSL+`varying float v_seed;varying float v_tw;
+void main(){vec2 p=gl_PointCoord-0.5;float d=length(p)*2.0;if(d>1.0)discard;
+float core=exp(-d*d*10.0);float halo=exp(-d*d*3.0)*0.45;vec3 col=hsv(0.36+fract(v_seed*5.1)*0.12,0.7,1.0);
+gl_FragColor=vec4(mix(col,vec3(0.85,1.0,0.9),core*0.5),(core+halo)*v_tw);}`;
+
+// Creatures: a teardrop cell pointed along its heading, drawn from its genes.
+// Speed = tail length, aggression = spines and a redder rim, perception = glowing eye-spots,
+// efficiency = translucent body. Hungry cells dim and flicker; well-fed cells glow.
+const ORG_VS=`attribute vec2 a_pos;attribute vec3 a_look;attribute vec4 a_genes;attribute vec3 a_state;uniform vec2 u_res;uniform float u_time;
+varying float v_head;varying float v_hue;varying vec4 v_genes;varying vec3 v_state;
+void main(){vec2 clip=(a_pos/u_res)*2.0-1.0;clip.y=-clip.y;gl_Position=vec4(clip,0.0,1.0);
+float beat=1.0+0.07*sin(u_time*(2.5+(1.0-a_state.x)*3.0)+a_state.y*6.2832);
+gl_PointSize=a_look.y*beat;v_head=a_look.x;v_hue=a_look.z;v_genes=a_genes;v_state=a_state;}`;
+const ORG_FS=HP+HSV_GLSL+`uniform float u_time;uniform float u_simple;varying float v_head;varying float v_hue;varying vec4 v_genes;varying vec3 v_state;
+vec4 over(vec4 acc,vec3 c,float a){a=clamp(a,0.0,1.0);return vec4(c*a+acc.rgb*(1.0-a),a+acc.a*(1.0-a));}
+void main(){if(u_simple>0.5){float dd=length(gl_PointCoord-0.5)*2.0;if(dd>1.0)discard;float cr=exp(-dd*2.0)*0.6+(1.0-dd*dd)*0.4;gl_FragColor=vec4(hsv(v_hue,0.85,0.7+cr*0.3)*cr,cr*0.7+0.3);return;}
+vec2 p=gl_PointCoord-0.5;p.y=-p.y;float cs=cos(v_head),sn=sin(v_head);vec2 q=vec2(cs*p.x+sn*p.y,-sn*p.x+cs*p.y)*2.0;
+float spd=v_genes.x,agg=v_genes.y,eff=v_genes.z,per=v_genes.w,fed=v_state.x,seed=v_state.y,mv=v_state.z;
+float R=0.46;float stretch=1.0+mv*0.22;vec2 b=vec2(q.x/stretch,q.y/(1.0-mv*0.1));
+float taper=1.0+clamp(-b.x/R,0.0,1.0)*0.6;float d=length(vec2(b.x,b.y*taper))-R;
+float bright=0.35+0.65*fed;if(fed<0.3)bright*=0.75+0.25*sin(u_time*18.0+seed*50.0);
+vec3 base=hsv(v_hue,0.78,1.0);
+vec4 acc=vec4(0.0);
+acc=over(acc,base,exp(-max(d,0.0)*9.0)*0.22*fed*step(0.0,d));
+float tailLen=0.1+spd*0.48;float tx=-(q.x+R*stretch*0.85);
+if(tx>0.0&&tx<tailLen){float k=tx/tailLen;float wig=sin(tx*16.0-u_time*(6.0+spd*10.0))*0.07*k;float w=0.17*(1.0-k)+0.02;acc=over(acc,base*1.1,smoothstep(w,w*0.3,abs(q.y-wig))*(1.0-k*0.7)*0.9);}
+float r=length(q);float ang=atan(q.y,q.x);
+if(agg>0.3){float n=5.0+floor(agg*6.0);float spike=pow(abs(cos(ang*n*0.5)),10.0);float len=(agg-0.3)*0.42;float front=smoothstep(-0.35,0.1,q.x);
+float sp=smoothstep(0.03,0.0,r-(R*0.95+len*spike))*step(R*0.85,r)*spike*front;acc=over(acc,mix(base,vec3(1.0,0.3,0.25),0.6),sp*0.9);}
+float inside=smoothstep(0.035,-0.035,d);vec3 body=mix(base*0.55,base*0.95,smoothstep(-R,0.0,d));
+acc=over(acc,body,inside*mix(0.92,0.35,eff));
+float rim=smoothstep(0.07,0.0,abs(d+0.035))*inside;acc=over(acc,mix(base*1.25,vec3(1.0,0.35,0.3),agg*0.55),rim);
+float nd=length(q-vec2(-0.1,0.0))-R*(0.3+0.12*fed);acc=over(acc,base*0.22,smoothstep(0.03,-0.03,nd)*0.85*inside);
+if(per>0.25){float er=0.045+per*0.06;vec2 e1=q-vec2(R*0.55,R*0.36),e2=q-vec2(R*0.55,-R*0.36);float e=max(smoothstep(er,er*0.3,length(e1)),smoothstep(er,er*0.3,length(e2)));
+acc=over(acc,mix(vec3(1.0),vec3(0.75,1.0,1.0),0.5),e*(per-0.1));}
+if(acc.a<0.02)discard;gl_FragColor=vec4(acc.rgb/acc.a*bright,acc.a);}`;
+
+const bgProg=buildProgram(BG_VS,BG_FS),blitProg=buildProgram(BLIT_VS,BLIT_FS),foodProg=buildProgram(FOOD_VS,FOOD_FS),orgProg=buildProgram(ORG_VS,ORG_FS);
+const blitLoc={pos:gl.getAttribLocation(blitProg,'a_pos'),tex:gl.getUniformLocation(blitProg,'u_tex'),alpha:gl.getUniformLocation(blitProg,'u_alpha')};
+let bgTex=null,bgFbo=null,bgW=0,bgH=0;
+function ensureBgTarget(){const w=Math.max(1,Math.ceil(W/2)),h=Math.max(1,Math.ceil(H/2));if(bgTex&&w===bgW&&h===bgH)return;bgW=w;bgH=h;
+  if(!bgTex){bgTex=gl.createTexture();bgFbo=gl.createFramebuffer();}
+  gl.bindTexture(gl.TEXTURE_2D,bgTex);gl.texImage2D(gl.TEXTURE_2D,0,gl.RGBA,w,h,0,gl.RGBA,gl.UNSIGNED_BYTE,null);
+  gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MIN_FILTER,gl.LINEAR);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MAG_FILTER,gl.LINEAR);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_S,gl.CLAMP_TO_EDGE);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_T,gl.CLAMP_TO_EDGE);
+  gl.bindFramebuffer(gl.FRAMEBUFFER,bgFbo);gl.framebufferTexture2D(gl.FRAMEBUFFER,gl.COLOR_ATTACHMENT0,gl.TEXTURE_2D,bgTex,0);gl.bindFramebuffer(gl.FRAMEBUFFER,null);}
+const bgLoc={pos:gl.getAttribLocation(bgProg,'a_pos'),res:gl.getUniformLocation(bgProg,'u_res'),scale:gl.getUniformLocation(bgProg,'u_scale'),time:gl.getUniformLocation(bgProg,'u_time'),oases:gl.getUniformLocation(bgProg,'u_oases'),nOases:gl.getUniformLocation(bgProg,'u_nOases'),fx:gl.getUniformLocation(bgProg,'u_fx')};
+const foodLoc={pos:gl.getAttribLocation(foodProg,'a_pos'),seed:gl.getAttribLocation(foodProg,'a_seed'),res:gl.getUniformLocation(foodProg,'u_res'),time:gl.getUniformLocation(foodProg,'u_time'),scale:gl.getUniformLocation(foodProg,'u_scale')};
+const orgLoc={pos:gl.getAttribLocation(orgProg,'a_pos'),look:gl.getAttribLocation(orgProg,'a_look'),genes:gl.getAttribLocation(orgProg,'a_genes'),state:gl.getAttribLocation(orgProg,'a_state'),res:gl.getUniformLocation(orgProg,'u_res'),time:gl.getUniformLocation(orgProg,'u_time'),simple:gl.getUniformLocation(orgProg,'u_simple')};
+const foodBuf=gl.createBuffer(),orgBuf=gl.createBuffer();
+const ORG_STRIDE=12;
+const oasisUniform=new Float32Array(32);
 
 const SPECIES_HUES=[0.0,0.08,0.15,0.30,0.45,0.55,0.65,0.75,0.83,0.92,0.18,0.38];
 const SPECIES_NAMES=['Red','Orange','Gold','Green','Teal','Cyan','Blue','Indigo','Purple','Magenta','Lime','Emerald'];
@@ -341,7 +427,7 @@ chkSameSpecies:$('chkSameSpecies'),chkFoodChain:$('chkFoodChain'),sEatRatio:$('s
 sHunt:$('sHunt'),sFlee:$('sFlee'),sFlock:$('sFlock'),sFoodDrive:$('sFoodDrive'),sSeparation:$('sSeparation'),
 chkMutation:$('chkMutation'),sMutRate:$('sMutRate'),sMutStr:$('sMutStr'),sTraitCost:$('sTraitCost'),vTraitCost:$('vTraitCost'),seedInput:$('seedInput'),
 chkEvoSpeed:$('chkEvoSpeed'),chkEvoAggro:$('chkEvoAggro'),chkEvoEfficiency:$('chkEvoEfficiency'),chkEvoPerception:$('chkEvoPerception'),
-chkGlow:$('chkGlow'),chkDeathFX:$('chkDeathFX'),chkShowOases:$('chkShowOases'),
+chkGlow:$('chkGlow'),chkDetail:$('chkDetail'),chkWater:$('chkWater'),chkDeathFX:$('chkDeathFX'),chkShowOases:$('chkShowOases'),
 sFoodGlow:$('sFoodGlow'),sTrail:$('sTrail'),
 vOrganisms:$('vOrganisms'),vFood:$('vFood'),vFoodRate:$('vFoodRate'),vSpeed:$('vSpeed'),
 vSpecies:$('vSpecies'),vStartSize:$('vStartSize'),vMaxSize:$('vMaxSize'),vOrgSpeed:$('vOrgSpeed'),vLifespan:$('vLifespan'),
@@ -383,7 +469,13 @@ const dfxX=new Float32Array(MAX_DFX),dfxY=new Float32Array(MAX_DFX);
 const dfxVX=new Float32Array(MAX_DFX),dfxVY=new Float32Array(MAX_DFX);
 const dfxHue=new Float32Array(MAX_DFX),dfxLife=new Float32Array(MAX_DFX),dfxSize=new Float32Array(MAX_DFX);
 
-function spawnDeathFX(x,y,hue,count,strength){if(!ui.chkDeathFX.checked)return;for(let i=0;i<count;i++){const idx=dfxCount%MAX_DFX;dfxCount=Math.min(dfxCount+1,MAX_DFX);dfxX[idx]=x;dfxY[idx]=y;const a=Math.random()*TAU,spd=1+Math.random()*strength*2;dfxVX[idx]=Math.cos(a)*spd;dfxVY[idx]=Math.sin(a)*spd;dfxHue[idx]=hue;dfxLife[idx]=0.6+Math.random()*0.4;dfxSize[idx]=1.5+Math.random()*2*strength;}}
+// Visual effects use Math.random so they never disturb the seeded simulation
+let dfxNext=0;
+function dfxSlot(){const idx=dfxNext;dfxNext=(dfxNext+1)%MAX_DFX;dfxCount=Math.min(dfxCount+1,MAX_DFX);return idx;}
+// A kill: the prey dissolves into motes drawn toward the predator (tx,ty)
+function spawnDeathFX(x,y,hue,count,strength,tx,ty){if(!ui.chkDeathFX.checked)return;let ux=0,uy=0;if(tx!==undefined){const dx=tx-x,dy=ty-y,dl=Math.sqrt(dx*dx+dy*dy)+0.01;ux=dx/dl;uy=dy/dl;}for(let i=0;i<count;i++){const idx=dfxSlot();dfxX[idx]=x;dfxY[idx]=y;const a=Math.random()*TAU,spd=0.6+Math.random()*strength*1.5,pull=tx!==undefined?1.2+Math.random()*1.5:0;dfxVX[idx]=Math.cos(a)*spd+ux*pull;dfxVY[idx]=Math.sin(a)*spd+uy*pull;dfxHue[idx]=hue;dfxLife[idx]=0.6+Math.random()*0.4;dfxSize[idx]=1.5+Math.random()*2*strength;}}
+// A birth: a soft ring of motes where the parent divided
+function spawnBirthFX(x,y,hue,size){if(!ui.chkDeathFX.checked)return;const n=6;for(let i=0;i<n;i++){const idx=dfxSlot();const a=i/n*TAU+Math.random()*0.4;dfxX[idx]=x;dfxY[idx]=y;dfxVX[idx]=Math.cos(a)*0.9;dfxVY[idx]=Math.sin(a)*0.9;dfxHue[idx]=hue;dfxLife[idx]=0.5;dfxSize[idx]=1.2+size*0.25;}}
 
 const MAX_OASES=8;let oases=[];
 function initOases(){oases=[];const n=+ui.sOases.value;for(let i=0;i<n;i++)oases.push({x:rand()*W,y:rand()*H,radius:80+rand()*120,strength:2+rand()*3});}
@@ -469,7 +561,7 @@ function updateRecTimer(){
 
 // All configurable slider/checkbox IDs
 const SETTING_SLIDERS=['sOrganisms','sFood','sFoodRate','sSpeed','sSpecies','sStartSize','sMaxSize','sOrgSpeed','sLifespan','sReproSize','sOffspring','sOases','sEatRatio','sEatGain','sHunt','sFlee','sFlock','sFoodDrive','sSeparation','sMutRate','sMutStr','sTraitCost','sFoodGlow','sTrail'];
-const SETTING_CHECKS=['chkSameSpecies','chkFoodChain','chkMutation','chkEvoSpeed','chkEvoAggro','chkEvoEfficiency','chkEvoPerception','chkGlow','chkDeathFX','chkShowOases'];
+const SETTING_CHECKS=['chkSameSpecies','chkFoodChain','chkMutation','chkEvoSpeed','chkEvoAggro','chkEvoEfficiency','chkEvoPerception','chkGlow','chkDetail','chkWater','chkDeathFX','chkShowOases'];
 
 function captureSettings(){
   const s={_format:'primordial-settings',_version:3,_date:new Date().toISOString(),_preset:$('selPreset').value,sliders:{},checks:{}};
@@ -895,7 +987,7 @@ function initWorld(){
   for(let i=0;i<orgCount;i++){ox[i]=rand()*W;oy[i]=rand()*H;ovx[i]=(rand()-0.5)*2;ovy[i]=(rand()-0.5)*2;ospecies[i]=i%nSp;osize[i]=sz0+(rand()-0.5)*1.5;oenergy[i]=osize[i]*2;oage[i]=rand()*5;oalive[i]=1;okills[i]=0;ogen[i]=0;gSpeed[i]=0.4+rand()*0.2;gAggro[i]=0.4+rand()*0.2;gEfficiency[i]=0.4+rand()*0.2;gPerception[i]=0.4+rand()*0.2;}
   foodCount=nFood;
   for(let i=0;i<foodCount;i++){fx[i]=rand()*W;fy[i]=rand()*H;falive[i]=1;fglow[i]=rand()*TAU;}
-  dfxCount=0;generation=0;simTime=0;
+  dfxCount=0;dfxNext=0;generation=0;simTime=0;
   popHistory=[];for(let s=0;s<nSp;s++)popHistory.push([]);
   initGrids();initOases();
   let html='';for(let i=0;i<nSp;i++){const c=speciesColor(i);html+=`<div class="sp-chip"><div class="sp-dot" style="background:${c.css}"></div><span id="spC${i}">0</span></div>`;}
@@ -909,7 +1001,8 @@ function reproduce(pi){
   const nOff=+ui.sOffspring.value,sz0=+ui.sStartSize.value;
   const mutOn=ui.chkMutation.checked,mutRate=+ui.sMutRate.value,mutStr=+ui.sMutStr.value;
   const now=performance.now();if(now-lastPopSound>50){playPop(600+Math.random()*400,0.3);lastPopSound=now;}
-  for(let c=0;c<nOff;c++){const idx=allocOrg();if(idx<0)return;ogen[idx]=Math.min(65535,ogen[pi]+1);if(ogen[idx]>generation)generation=ogen[idx];ox[idx]=ox[pi]+(rand()-0.5)*20;oy[idx]=oy[pi]+(rand()-0.5)*20;ovx[idx]=(rand()-0.5)*3;ovy[idx]=(rand()-0.5)*3;ospecies[idx]=ospecies[pi];osize[idx]=sz0;oenergy[idx]=sz0*2;oage[idx]=0;oalive[idx]=1;okills[idx]=0;gSpeed[idx]=gSpeed[pi];gAggro[idx]=gAggro[pi];gEfficiency[idx]=gEfficiency[pi];gPerception[idx]=gPerception[pi];if(mutOn){if(ui.chkEvoSpeed.checked&&rand()<mutRate)gSpeed[idx]=clamp(gSpeed[idx]+(rand()-0.5)*mutStr,0.05,1);if(ui.chkEvoAggro.checked&&rand()<mutRate)gAggro[idx]=clamp(gAggro[idx]+(rand()-0.5)*mutStr,0.05,1);if(ui.chkEvoEfficiency.checked&&rand()<mutRate)gEfficiency[idx]=clamp(gEfficiency[idx]+(rand()-0.5)*mutStr,0.05,1);if(ui.chkEvoPerception.checked&&rand()<mutRate)gPerception[idx]=clamp(gPerception[idx]+(rand()-0.5)*mutStr,0.05,1);}}}
+  const splitA=rand()*TAU;spawnBirthFX(ox[pi],oy[pi],SPECIES_HUES[ospecies[pi]%SPECIES_HUES.length],osize[pi]);
+  for(let c=0;c<nOff;c++){const idx=allocOrg();if(idx<0)return;const ca=splitA+c*TAU/nOff,cc=Math.cos(ca),cs=Math.sin(ca);ogen[idx]=Math.min(65535,ogen[pi]+1);if(ogen[idx]>generation)generation=ogen[idx];ox[idx]=ox[pi]+cc*(osize[pi]+2);oy[idx]=oy[pi]+cs*(osize[pi]+2);ovx[idx]=cc*1.5;ovy[idx]=cs*1.5;ospecies[idx]=ospecies[pi];osize[idx]=sz0;oenergy[idx]=sz0*2;oage[idx]=0;oalive[idx]=1;okills[idx]=0;gSpeed[idx]=gSpeed[pi];gAggro[idx]=gAggro[pi];gEfficiency[idx]=gEfficiency[pi];gPerception[idx]=gPerception[pi];if(mutOn){if(ui.chkEvoSpeed.checked&&rand()<mutRate)gSpeed[idx]=clamp(gSpeed[idx]+(rand()-0.5)*mutStr,0.05,1);if(ui.chkEvoAggro.checked&&rand()<mutRate)gAggro[idx]=clamp(gAggro[idx]+(rand()-0.5)*mutStr,0.05,1);if(ui.chkEvoEfficiency.checked&&rand()<mutRate)gEfficiency[idx]=clamp(gEfficiency[idx]+(rand()-0.5)*mutStr,0.05,1);if(ui.chkEvoPerception.checked&&rand()<mutRate)gPerception[idx]=clamp(gPerception[idx]+(rand()-0.5)*mutStr,0.05,1);}}}
 
 function canEatInChain(predSp,preySp,nSp){return((predSp+1)%nSp)===preySp;}
 
@@ -930,7 +1023,7 @@ function simulate(dt){
       for(let k=0;k<cnt;k++){const j=gridEntries[base+k];if(j===i)continue;const ddx=ox[j]-ox[i],ddy=oy[j]-oy[i],d2=ddx*ddx+ddy*ddy,d=Math.sqrt(d2)+0.1,cR=mySz+osize[j],inP=d<CELL*myPerc;
         if(ospecies[j]===mySp){if(d<CELL*1.5){flX+=ddx;flY+=ddy;flN++;}if(d<cR*0.8){const sf=sep*2/(d+1);ax-=ddx/d*sf;ay-=ddy/d*sf;}}
         else{let canEat=false,isPrey=false;if(foodChain){canEat=canEatInChain(mySp,ospecies[j],nSp);isPrey=canEatInChain(ospecies[j],mySp,nSp);}else{canEat=mySz>osize[j]*eatR;isPrey=osize[j]>mySz*eatR;}
-          if(canEat&&inP){const hf=hunt*myAggro*0.5/(d+5);ax+=ddx/d*hf;ay+=ddy/d*hf;if(d<cR*0.6){oalive[j]=0;oenergy[i]+=osize[j]*eatG;okills[i]++;spawnDeathFX(ox[j],oy[j],SPECIES_HUES[ospecies[j]%SPECIES_HUES.length],4+osize[j]*0.5|0,osize[j]/maxSz);const now=performance.now();if(now-lastThudSound>80){playThud(osize[j]/maxSz);lastThudSound=now;}}}
+          if(canEat&&inP){const hf=hunt*myAggro*0.5/(d+5);ax+=ddx/d*hf;ay+=ddy/d*hf;if(d<cR*0.6){oalive[j]=0;oenergy[i]+=osize[j]*eatG;okills[i]++;spawnDeathFX(ox[j],oy[j],SPECIES_HUES[ospecies[j]%SPECIES_HUES.length],4+osize[j]*0.5|0,osize[j]/maxSz,ox[i],oy[i]);const now=performance.now();if(now-lastThudSound>80){playThud(osize[j]/maxSz);lastThudSound=now;}}}
           else if(isPrey&&inP){const ff=flee*1.2/(d+3);ax-=ddx/d*ff;ay-=ddy/d*ff;}
           else{if(d<cR*1.2){const sf=sep*0.5/(d+2);ax-=ddx/d*sf;ay-=ddy/d*sf;}}}}}
     if(flN>0){flX/=flN;flY/=flN;const fd=Math.sqrt(flX*flX+flY*flY)+0.1;ax+=flX/fd*flock*0.15;ay+=flY/fd*flock*0.15;}
@@ -952,8 +1045,6 @@ function simulate(dt){
 }
 
 // Oasis overlay
-const oasisCanvas=document.createElement('canvas');oasisCanvas.style.cssText='position:fixed;inset:0;width:100%;height:100%;display:block;z-index:0;pointer-events:none';document.body.insertBefore(oasisCanvas,document.getElementById('tooltip'));const oasisCtx=oasisCanvas.getContext('2d');
-function drawOases(){oasisCanvas.width=W;oasisCanvas.height=H;oasisCtx.clearRect(0,0,W,H);if(!ui.chkShowOases.checked)return;oasisCtx.globalAlpha=0.12;for(const o of oases){oasisCtx.beginPath();oasisCtx.arc(o.x,o.y,o.radius,0,TAU);oasisCtx.fillStyle='#00e5c8';oasisCtx.fill();}oasisCtx.globalAlpha=1;}
 
 function updatePopGraph(dt){popTick+=dt;if(popTick<0.25)return;popTick=0;const nSp=+ui.sSpecies.value,counts=new Array(nSp).fill(0);for(let i=0;i<orgCount;i++)if(oalive[i])counts[ospecies[i]]++;for(let s=0;s<nSp;s++){if(!popHistory[s])popHistory[s]=[];popHistory[s].push(counts[s]);if(popHistory[s].length>POP_LEN)popHistory[s].shift();}const w=328,h=80;popCtx.fillStyle='rgba(0,0,0,0.6)';popCtx.fillRect(0,0,w,h);let mx=10;for(let s=0;s<nSp;s++)for(const v of popHistory[s])if(v>mx)mx=v;for(let s=0;s<nSp;s++){const hist=popHistory[s];if(!hist||hist.length<2)continue;popCtx.strokeStyle=speciesColor(s).css;popCtx.lineWidth=1.5;popCtx.globalAlpha=0.8;popCtx.beginPath();for(let x=0;x<hist.length;x++){const px=x/POP_LEN*w,py=h-(hist[x]/mx)*(h-4)-2;x===0?popCtx.moveTo(px,py):popCtx.lineTo(px,py);}popCtx.stroke();popCtx.globalAlpha=1;}for(let s=0;s<nSp;s++){const el=$('spC'+s);if(el)el.textContent=counts[s];}}
 
@@ -964,34 +1055,73 @@ function updateTooltip(){hoveredOrg=findOrgAtMouse();if(hoveredOrg<0){ui.tooltip
 
 // GL Buffers
 const RMAX=MAX_ORG+MAX_FOOD+MAX_DFX;
-let glPos=new Float32Array(RMAX*2),glHue=new Float32Array(RMAX),glAlpha=new Float32Array(RMAX),glSize=new Float32Array(RMAX);
+let glPos=new Float32Array(MAX_DFX*2),glHue=new Float32Array(MAX_DFX),glAlpha=new Float32Array(MAX_DFX),glSize=new Float32Array(MAX_DFX);
+const foodData=new Float32Array(MAX_FOOD*3),orgData=new Float32Array(MAX_ORG*ORG_STRIDE);
+let visTime=0;
 
 // Main loop
-let frameCount=0,heatTick=0,tooltipTick=0;
-const SIM_STEP=1/60,MAX_STEPS_PER_FRAME=2;let stepAcc=0;
-function frame(now){
-  requestAnimationFrame(frame);const rawDt=Math.min(0.05,(now-lastT)/1000);lastT=now;
-  if(!running){updateTooltip();return;}
-  // Fixed timestep: the simulation advances in identical 1/60s steps regardless of frame rate, so a seed replays exactly
-  stepAcc+=rawDt;let steps=0;while(stepAcc>=SIM_STEP&&steps<MAX_STEPS_PER_FRAME){spawnFood(SIM_STEP*(+ui.sSpeed.value));simulate(SIM_STEP);checkExperiment();stepAcc-=SIM_STEP;steps++;}if(steps===MAX_STEPS_PER_FRAME)stepAcc=0;
-  if(++heatTick>=4){drawOases();heatTick=0;}
-  updatePopGraph(rawDt);if(++tooltipTick>=3){updateTooltip();tooltipTick=0;}
-  const mins=simTime/60|0,secs=simTime%60|0;ui.timeDisplay.textContent=(mins<10?'0':'')+mins+':'+(secs<10?'0':'')+secs;
+let frameCount=0,tooltipTick=0;
+
+// Draw order: water (with springs) → algae → life/death motes → creatures
+function renderWorld(){
   const trail=+ui.sTrail.value;
-  if(trail>0.01){gl.useProgram(fadeProg);gl.bindBuffer(gl.ARRAY_BUFFER,quadBuf);gl.enableVertexAttribArray(aFadePos);gl.vertexAttribPointer(aFadePos,2,gl.FLOAT,false,0,0);gl.uniform4f(uFadeColor,0.02,0.04,0.08,1-trail);gl.blendFunc(gl.SRC_ALPHA,gl.ONE_MINUS_SRC_ALPHA);gl.drawArrays(gl.TRIANGLE_STRIP,0,4);gl.disableVertexAttribArray(aFadePos);}
-  else{gl.clearColor(0.02,0.04,0.08,1);gl.clear(gl.COLOR_BUFFER_BIT);}
-  let wi=0;const fGlow=+ui.sFoodGlow.value;
-  for(let i=0;i<foodCount;i++){if(!falive[i])continue;fglow[i]+=rawDt*3;glPos[wi*2]=fx[i];glPos[wi*2+1]=fy[i];glHue[wi]=0.22+Math.sin(fglow[i])*0.05;glAlpha[wi]=0.5+Math.sin(fglow[i]*1.3)*0.2;glSize[wi]=(2.5+Math.sin(fglow[i]*0.8)*0.5)*fGlow;wi++;}
-  for(let i=0;i<dfxCount;i++){if(dfxLife[i]<=0)continue;glPos[wi*2]=dfxX[i];glPos[wi*2+1]=dfxY[i];glHue[wi]=dfxHue[i];glAlpha[wi]=dfxLife[i]*0.8;glSize[wi]=dfxSize[i]*dfxLife[i];wi++;}
-  const mxSz=+ui.sMaxSize.value;
-  for(let i=0;i<orgCount;i++){if(!oalive[i])continue;glPos[wi*2]=ox[i];glPos[wi*2+1]=oy[i];glHue[wi]=SPECIES_HUES[ospecies[i]%SPECIES_HUES.length];glAlpha[wi]=0.6+(osize[i]/mxSz)*0.4;let sz=Math.max(1.5,osize[i]*1.2);if(i===hoveredOrg)sz*=1.8;glSize[wi]=sz;wi++;}
-  gl.blendFunc(gl.SRC_ALPHA,ui.chkGlow.checked?gl.ONE:gl.ONE_MINUS_SRC_ALPHA);
-  gl.useProgram(prog);gl.uniform2f(uRes,W,H);
+  // Water. With trails on, it is laid down translucently so earlier frames fade instead of clearing.
+  ensureBgTarget();gl.bindFramebuffer(gl.FRAMEBUFFER,bgFbo);gl.viewport(0,0,bgW,bgH);gl.disable(gl.BLEND);
+  gl.useProgram(bgProg);gl.uniform2f(bgLoc.res,W,H);gl.uniform1f(bgLoc.scale,W/bgW);gl.uniform1f(bgLoc.time,visTime);gl.uniform1f(bgLoc.fx,ui.chkWater.checked?1:0);
+  const nO=ui.chkShowOases.checked?Math.min(8,oases.length):0;
+  for(let k=0;k<nO;k++){const o=oases[k];oasisUniform[k*4]=o.x;oasisUniform[k*4+1]=o.y;oasisUniform[k*4+2]=o.radius;oasisUniform[k*4+3]=o.strength;}
+  gl.uniform4fv(bgLoc.oases,oasisUniform);gl.uniform1i(bgLoc.nOases,nO);
+  gl.bindBuffer(gl.ARRAY_BUFFER,quadBuf);gl.enableVertexAttribArray(bgLoc.pos);gl.vertexAttribPointer(bgLoc.pos,2,gl.FLOAT,false,0,0);
+  gl.drawArrays(gl.TRIANGLE_STRIP,0,4);gl.disableVertexAttribArray(bgLoc.pos);
+  gl.bindFramebuffer(gl.FRAMEBUFFER,null);gl.viewport(0,0,W,H);
+  gl.useProgram(blitProg);gl.activeTexture(gl.TEXTURE0);gl.bindTexture(gl.TEXTURE_2D,bgTex);gl.uniform1i(blitLoc.tex,0);gl.uniform1f(blitLoc.alpha,trail>0.01?1-trail:1);
+  gl.enableVertexAttribArray(blitLoc.pos);gl.vertexAttribPointer(blitLoc.pos,2,gl.FLOAT,false,0,0);
+  if(trail>0.01){gl.enable(gl.BLEND);gl.blendFunc(gl.SRC_ALPHA,gl.ONE_MINUS_SRC_ALPHA);}
+  gl.drawArrays(gl.TRIANGLE_STRIP,0,4);gl.disableVertexAttribArray(blitLoc.pos);gl.enable(gl.BLEND);
+  // Algae
+  let nf=0;for(let i=0;i<foodCount;i++){if(!falive[i])continue;foodData[nf*3]=fx[i];foodData[nf*3+1]=fy[i];foodData[nf*3+2]=fglow[i];nf++;}
+  gl.useProgram(foodProg);gl.uniform2f(foodLoc.res,W,H);gl.uniform1f(foodLoc.time,visTime);gl.uniform1f(foodLoc.scale,+ui.sFoodGlow.value);
+  gl.bindBuffer(gl.ARRAY_BUFFER,foodBuf);gl.bufferData(gl.ARRAY_BUFFER,foodData.subarray(0,nf*3),gl.DYNAMIC_DRAW);
+  gl.enableVertexAttribArray(foodLoc.pos);gl.vertexAttribPointer(foodLoc.pos,2,gl.FLOAT,false,12,0);
+  gl.enableVertexAttribArray(foodLoc.seed);gl.vertexAttribPointer(foodLoc.seed,1,gl.FLOAT,false,12,8);
+  gl.blendFunc(gl.SRC_ALPHA,gl.ONE);gl.drawArrays(gl.POINTS,0,nf);
+  gl.disableVertexAttribArray(foodLoc.pos);gl.disableVertexAttribArray(foodLoc.seed);
+  // Motes from kills and births
+  let wi=0;for(let i=0;i<dfxCount;i++){if(dfxLife[i]<=0)continue;glPos[wi*2]=dfxX[i];glPos[wi*2+1]=dfxY[i];glHue[wi]=dfxHue[i];glAlpha[wi]=dfxLife[i]*0.8;glSize[wi]=dfxSize[i]*dfxLife[i];wi++;}
+  if(wi>0){gl.useProgram(prog);gl.uniform2f(uRes,W,H);
   gl.bindBuffer(gl.ARRAY_BUFFER,posBuf);gl.bufferData(gl.ARRAY_BUFFER,glPos.subarray(0,wi*2),gl.DYNAMIC_DRAW);gl.enableVertexAttribArray(aPos);gl.vertexAttribPointer(aPos,2,gl.FLOAT,false,0,0);
   gl.bindBuffer(gl.ARRAY_BUFFER,hueBuf);gl.bufferData(gl.ARRAY_BUFFER,glHue.subarray(0,wi),gl.DYNAMIC_DRAW);gl.enableVertexAttribArray(aHue);gl.vertexAttribPointer(aHue,1,gl.FLOAT,false,0,0);
   gl.bindBuffer(gl.ARRAY_BUFFER,alphaBuf);gl.bufferData(gl.ARRAY_BUFFER,glAlpha.subarray(0,wi),gl.DYNAMIC_DRAW);gl.enableVertexAttribArray(aAlpha);gl.vertexAttribPointer(aAlpha,1,gl.FLOAT,false,0,0);
   gl.bindBuffer(gl.ARRAY_BUFFER,sizeBuf);gl.bufferData(gl.ARRAY_BUFFER,glSize.subarray(0,wi),gl.DYNAMIC_DRAW);gl.enableVertexAttribArray(aSize);gl.vertexAttribPointer(aSize,1,gl.FLOAT,false,0,0);
   gl.drawArrays(gl.POINTS,0,wi);
+  gl.disableVertexAttribArray(aPos);gl.disableVertexAttribArray(aHue);gl.disableVertexAttribArray(aAlpha);gl.disableVertexAttribArray(aSize);}
+  // Creatures
+  const maxV=Math.max(0.1,(+ui.sOrgSpeed.value)*3),detail=ui.chkDetail.checked;let n=0;
+  for(let i=0;i<orgCount;i++){if(!oalive[i])continue;const o=n*ORG_STRIDE;const vx=ovx[i],vy=ovy[i],v=Math.sqrt(vx*vx+vy*vy);
+    orgData[o]=ox[i];orgData[o+1]=oy[i];
+    orgData[o+2]=Math.atan2(-vy,vx);orgData[o+3]=(detail?Math.max(7,osize[i]*3.8):Math.max(1.5,osize[i]*1.2))*(i===hoveredOrg?1.5:1);orgData[o+4]=SPECIES_HUES[ospecies[i]%SPECIES_HUES.length];
+    orgData[o+5]=gSpeed[i];orgData[o+6]=gAggro[i];orgData[o+7]=gEfficiency[i];orgData[o+8]=gPerception[i];
+    orgData[o+9]=Math.min(1,oenergy[i]/12);orgData[o+10]=(i*0.618034)%1;orgData[o+11]=Math.min(1,v/maxV);n++;}
+  gl.useProgram(orgProg);gl.uniform2f(orgLoc.res,W,H);gl.uniform1f(orgLoc.time,visTime);gl.uniform1f(orgLoc.simple,detail?0:1);
+  gl.bindBuffer(gl.ARRAY_BUFFER,orgBuf);gl.bufferData(gl.ARRAY_BUFFER,orgData.subarray(0,n*ORG_STRIDE),gl.DYNAMIC_DRAW);
+  const st=ORG_STRIDE*4;
+  gl.enableVertexAttribArray(orgLoc.pos);gl.vertexAttribPointer(orgLoc.pos,2,gl.FLOAT,false,st,0);
+  gl.enableVertexAttribArray(orgLoc.look);gl.vertexAttribPointer(orgLoc.look,3,gl.FLOAT,false,st,8);
+  gl.enableVertexAttribArray(orgLoc.genes);gl.vertexAttribPointer(orgLoc.genes,4,gl.FLOAT,false,st,20);
+  gl.enableVertexAttribArray(orgLoc.state);gl.vertexAttribPointer(orgLoc.state,3,gl.FLOAT,false,st,36);
+  gl.blendFunc(gl.SRC_ALPHA,ui.chkGlow.checked?gl.ONE:gl.ONE_MINUS_SRC_ALPHA);gl.drawArrays(gl.POINTS,0,n);
+  gl.disableVertexAttribArray(orgLoc.pos);gl.disableVertexAttribArray(orgLoc.look);gl.disableVertexAttribArray(orgLoc.genes);gl.disableVertexAttribArray(orgLoc.state);
+}
+const SIM_STEP=1/60,MAX_STEPS_PER_FRAME=2;let stepAcc=0;
+function frame(now){
+  requestAnimationFrame(frame);const rawDt=Math.min(0.05,(now-lastT)/1000);lastT=now;
+  // Fixed timestep: the simulation advances in identical 1/60s steps regardless of frame rate, so a seed replays exactly
+  visTime+=rawDt;
+  if(running){stepAcc+=rawDt;let steps=0;while(stepAcc>=SIM_STEP&&steps<MAX_STEPS_PER_FRAME){spawnFood(SIM_STEP*(+ui.sSpeed.value));simulate(SIM_STEP);checkExperiment();stepAcc-=SIM_STEP;steps++;}if(steps===MAX_STEPS_PER_FRAME)stepAcc=0;
+  updatePopGraph(rawDt);}
+  if(++tooltipTick>=3){updateTooltip();tooltipTick=0;}
+  const mins=simTime/60|0,secs=simTime%60|0;ui.timeDisplay.textContent=(mins<10?'0':'')+mins+':'+(secs<10?'0':'')+secs;
+  renderWorld();
   fpsT+=rawDt;fpsN++;if(fpsT>=0.4){ui.sFps.textContent=(fpsN/fpsT|0);fpsT=0;fpsN=0;}
   let alive=0;for(let i=0;i<orgCount;i++)if(oalive[i])alive++;
   let fAlive=0;for(let i=0;i<foodCount;i++)if(falive[i])fAlive++;
