@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Primordial — Genesis Engine v5 · Sentinel Edition</title>
+<title>Primordial — Genesis Engine v4 · Sentinel Edition</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
 <style>
@@ -88,12 +88,6 @@ button.btn.active{background:rgba(74,158,255,0.2);border-color:var(--accent);col
 .species-legend{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px}
 .sp-chip{display:flex;align-items:center;gap:5px;padding:4px 8px;border-radius:8px;background:rgba(255,255,255,0.03);font-family:var(--font-mono);font-size:0.68rem;color:var(--muted)}
 .sp-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
-.sp-chip .sp-n{color:var(--text)}
-#treeCanvas{width:100%;height:380px;border-radius:10px;background:rgba(0,0,0,0.3);border:1px solid rgba(255,255,255,0.06);display:block;cursor:pointer}
-.tree-stats{font-family:var(--font-mono);font-size:0.68rem;color:var(--muted);margin-bottom:8px}
-.tree-stats b{color:var(--accent);font-weight:500}
-.tree-info{font-family:var(--font-mono);font-size:0.66rem;color:var(--muted);line-height:1.55;margin-top:8px;min-height:4.7em}
-.tree-info b{font-weight:600}
 #popGraph{width:100%;height:80px;border-radius:10px;background:rgba(0,0,0,0.3);border:1px solid rgba(255,255,255,0.06);margin-bottom:12px}
 .badge a{color:var(--accent);text-decoration:none}.badge a:hover{text-decoration:underline}
 .badge{position:fixed;bottom:12px;right:12px;z-index:8;padding:8px 14px;border-radius:12px;background:rgba(8,14,28,0.75);border:1px solid rgba(255,255,255,0.06);backdrop-filter:blur(12px);font-family:var(--font-mono);font-size:0.68rem;color:var(--muted)}
@@ -127,10 +121,10 @@ button.btn.recording{background:rgba(255,50,50,0.25)!important;border-color:rgba
 <div class="hint" id="hint">
   <div class="hint-card">
     <h2>Primordial — Life Evolves from Simple Rules</h2>
-    <p>Organisms eat, grow, hunt, flee, reproduce, mutate, die, and branch into new species<br/>
+    <p>Organisms eat, grow, hunt, flee, reproduce, mutate, and die<br/>
     AI Lab Partner observes, experiments, and writes research reports<br/>
     Click = food · Right-click = spawn · Hover = inspect · Space = pause<br/>
-    Keys: 1-4 = speed · S = sound · L = AI Lab · T = family tree</p>
+    Keys: 1-4 = speed · S = sound · L = AI Lab</p>
   </div>
 </div>
 
@@ -140,7 +134,7 @@ button.btn.recording{background:rgba(255,50,50,0.25)!important;border-color:rgba
 <div class="panel" id="panel">
   <div class="panel-header">
     <div class="panel-title">Primordial</div>
-    <div class="panel-subtitle">Genesis Engine · Sentinel Edition · v5.0</div>
+    <div class="panel-subtitle">Genesis Engine · Sentinel Edition · v4.0</div>
     <button class="panel-close" id="panelClose" title="Collapse panel">&#10005;</button>
   </div>
   <div class="tabs">
@@ -148,7 +142,6 @@ button.btn.recording{background:rgba(255,50,50,0.25)!important;border-color:rgba
     <button class="tab" data-tab="species">Species</button>
     <button class="tab" data-tab="rules">Rules</button>
     <button class="tab" data-tab="evo">Evolve</button>
-    <button class="tab" data-tab="tree">Tree</button>
     <button class="tab" data-tab="viz">Visual</button>
   </div>
   <div class="tab-body">
@@ -169,7 +162,6 @@ button.btn.recording{background:rgba(255,50,50,0.25)!important;border-color:rgba
           <option value="superorganism">Superorganism</option>
           <option value="foodchain">Food Chain Cycle</option>
           <option value="extinction">Extinction Event</option>
-          <option value="origin">Origin of Species (one ancestor)</option>
           <option value="custom">Custom</option>
         </select>
       </div>
@@ -187,7 +179,7 @@ button.btn.recording{background:rgba(255,50,50,0.25)!important;border-color:rgba
       <div id="shareStatus" style="font-family:var(--font-mono);font-size:0.65rem;color:var(--muted);margin-bottom:8px;word-break:break-all"></div>
       <div class="ctrl"><div class="ctrl-label"><span>Organisms</span><strong id="vOrganisms">5000</strong></div><input type="range" id="sOrganisms" min="500" max="50000" step="500" value="5000"/></div>
       <div class="ctrl"><div class="ctrl-label"><span>Food Pellets</span><strong id="vFood">2000</strong></div><input type="range" id="sFood" min="100" max="10000" step="100" value="2000"/></div>
-      <div class="ctrl"><div class="ctrl-label"><span>Food Spawn Rate</span><strong id="vFoodRate">15</strong></div><input type="range" id="sFoodRate" min="1" max="200" step="1" value="15"/></div>
+      <div class="ctrl"><div class="ctrl-label"><span>Food Spawn Rate</span><strong id="vFoodRate">15</strong></div><input type="range" id="sFoodRate" min="1" max="80" step="1" value="15"/></div>
       <div class="ctrl"><div class="ctrl-label"><span>Simulation Speed</span><strong id="vSpeed">1.00</strong></div><input type="range" id="sSpeed" min="0.1" max="5.0" step="0.05" value="1.00"/></div>
       <div class="section-label">Population Over Time</div>
       <canvas id="popGraph" width="328" height="80"></canvas>
@@ -195,7 +187,7 @@ button.btn.recording{background:rgba(255,50,50,0.25)!important;border-color:rgba
       <div class="species-legend" id="speciesLegend"></div>
     </div>
     <div class="tab-page" id="tab-species">
-      <div class="ctrl"><div class="ctrl-label"><span>Starting Species</span><strong id="vSpecies">5</strong></div><input type="range" id="sSpecies" min="1" max="12" step="1" value="5"/></div>
+      <div class="ctrl"><div class="ctrl-label"><span>Number of Species</span><strong id="vSpecies">5</strong></div><input type="range" id="sSpecies" min="2" max="12" step="1" value="5"/></div>
       <div class="ctrl"><div class="ctrl-label"><span>Starting Size</span><strong id="vStartSize">3.0</strong></div><input type="range" id="sStartSize" min="1.0" max="8.0" step="0.5" value="3.0"/></div>
       <div class="ctrl"><div class="ctrl-label"><span>Max Size</span><strong id="vMaxSize">18</strong></div><input type="range" id="sMaxSize" min="8" max="40" step="1" value="18"/></div>
       <div class="ctrl"><div class="ctrl-label"><span>Organism Speed</span><strong id="vOrgSpeed">1.2</strong></div><input type="range" id="sOrgSpeed" min="0.3" max="4.0" step="0.1" value="1.2"/></div>
@@ -231,16 +223,6 @@ button.btn.recording{background:rgba(255,50,50,0.25)!important;border-color:rgba
       <div class="toggle-row"><span>Aggression Gene</span><input type="checkbox" id="chkEvoAggro" checked/></div>
       <div class="toggle-row"><span>Efficiency Gene (metabolism)</span><input type="checkbox" id="chkEvoEfficiency" checked/></div>
       <div class="toggle-row"><span>Perception Gene (sight range)</span><input type="checkbox" id="chkEvoPerception" checked/></div>
-      <div class="section-label">Speciation</div>
-      <div class="toggle-row"><span>New Species Can Form</span><input type="checkbox" id="chkSpeciation" checked/></div>
-      <div class="ctrl"><div class="ctrl-label"><span>Split Distance</span><strong id="vSplit">0.30</strong></div><input type="range" id="sSplit" min="0.10" max="0.80" step="0.02" value="0.30"/></div>
-      <div class="hint-text" style="font-size:0.68rem;color:var(--muted);margin:-4px 0 10px">How far a lineage's genes must drift from its species' founder to split off. It becomes a species of its own, with its own name and its own predators, once it has 10 members.</div>
-      <div class="toggle-row"><span>Sexual Reproduction (mix genes with a nearby mate)</span><input type="checkbox" id="chkSexual"/></div>
-    </div>
-    <div class="tab-page" id="tab-tree">
-      <div class="tree-stats" id="treeStats"></div>
-      <canvas id="treeCanvas"></canvas>
-      <div class="tree-info" id="treeInfo"></div>
     </div>
     <div class="tab-page" id="tab-viz">
       <div class="toggle-row"><span>Additive Glow</span><input type="checkbox" id="chkGlow" checked/></div>
@@ -248,7 +230,6 @@ button.btn.recording{background:rgba(255,50,50,0.25)!important;border-color:rgba
       <div class="toggle-row"><span>Detailed Creatures</span><input type="checkbox" id="chkDetail" checked/></div>
       <div class="toggle-row"><span>Birth &amp; Death Effects</span><input type="checkbox" id="chkDeathFX" checked/></div>
       <div class="toggle-row"><span>Show Oasis Springs</span><input type="checkbox" id="chkShowOases" checked/></div>
-      <div class="toggle-row"><span>Lineage Trails</span><input type="checkbox" id="chkLineage" checked/></div>
       <div class="ctrl"><div class="ctrl-label"><span>Food Glow</span><strong id="vFoodGlow">1.0</strong></div><input type="range" id="sFoodGlow" min="0.2" max="2.0" step="0.1" value="1.0"/></div>
       <div class="ctrl"><div class="ctrl-label"><span>Trail Length</span><strong id="vTrail">Off</strong></div><input type="range" id="sTrail" min="0" max="0.95" step="0.01" value="0"/></div>
     </div>
@@ -258,7 +239,6 @@ button.btn.recording{background:rgba(255,50,50,0.25)!important;border-color:rgba
     <div class="stat-chip">Alive <span class="sv" id="sAlive">0</span></div>
     <div class="stat-chip">Food <span class="sv" id="sFoodCount">0</span></div>
     <div class="stat-chip">Gen <span class="sv" id="sGen">0</span></div>
-    <div class="stat-chip">Species <span class="sv" id="sSpCount">0</span></div>
   </div>
 </div>
 
@@ -320,7 +300,7 @@ Configure your AI provider in the settings above, then try asking me to analyze 
   </div>
 </div>
 
-<div class="badge">Primordial v5 · Sentinel AI Systems × Claude Sentinel · SIDLF · <a href="v4/" title="Play v4 from September 2026, before species could evolve">v4</a> · <a href="classic/" title="Play the original v3 from March 2026">Original v3</a></div>
+<div class="badge">Primordial v4 · Sentinel AI Systems × Claude Sentinel · SIDLF · <a href="../classic/" title="Play the original v3 from March 2026">Original v3</a></div>
 <div class="rec-dot" id="recDot">REC <span id="recTime">0:00</span></div>
 
 <script>
@@ -391,14 +371,14 @@ gl_FragColor=vec4(mix(col,vec3(0.85,1.0,0.9),core*0.5),(core+halo)*v_tw);}`;
 // Creatures: a teardrop cell pointed along its heading, drawn from its genes.
 // Speed = tail length, aggression = spines and a redder rim, perception = glowing eye-spots,
 // efficiency = translucent body. Hungry cells dim and flicker; well-fed cells glow.
-const ORG_VS=`attribute vec2 a_pos;attribute vec3 a_look;attribute vec4 a_genes;attribute vec4 a_state;uniform vec2 u_res;uniform float u_time;
-varying float v_head;varying float v_hue;varying vec4 v_genes;varying vec4 v_state;
+const ORG_VS=`attribute vec2 a_pos;attribute vec3 a_look;attribute vec4 a_genes;attribute vec3 a_state;uniform vec2 u_res;uniform float u_time;
+varying float v_head;varying float v_hue;varying vec4 v_genes;varying vec3 v_state;
 void main(){vec2 clip=(a_pos/u_res)*2.0-1.0;clip.y=-clip.y;gl_Position=vec4(clip,0.0,1.0);
 float beat=1.0+0.07*sin(u_time*(2.5+(1.0-a_state.x)*3.0)+a_state.y*6.2832);
 gl_PointSize=a_look.y*beat;v_head=a_look.x;v_hue=a_look.z;v_genes=a_genes;v_state=a_state;}`;
-const ORG_FS=HP+HSV_GLSL+`uniform float u_time;uniform float u_simple;varying float v_head;varying float v_hue;varying vec4 v_genes;varying vec4 v_state;
+const ORG_FS=HP+HSV_GLSL+`uniform float u_time;uniform float u_simple;varying float v_head;varying float v_hue;varying vec4 v_genes;varying vec3 v_state;
 vec4 over(vec4 acc,vec3 c,float a){a=clamp(a,0.0,1.0);return vec4(c*a+acc.rgb*(1.0-a),a+acc.a*(1.0-a));}
-void main(){if(u_simple>0.5){float dd=length(gl_PointCoord-0.5)*2.0;if(dd>1.0)discard;float cr=exp(-dd*2.0)*0.6+(1.0-dd*dd)*0.4;gl_FragColor=vec4(hsv(v_hue,0.85,0.7+cr*0.3)*cr,(cr*0.7+0.3)*v_state.w);return;}
+void main(){if(u_simple>0.5){float dd=length(gl_PointCoord-0.5)*2.0;if(dd>1.0)discard;float cr=exp(-dd*2.0)*0.6+(1.0-dd*dd)*0.4;gl_FragColor=vec4(hsv(v_hue,0.85,0.7+cr*0.3)*cr,cr*0.7+0.3);return;}
 vec2 p=gl_PointCoord-0.5;p.y=-p.y;float cs=cos(v_head),sn=sin(v_head);vec2 q=vec2(cs*p.x+sn*p.y,-sn*p.x+cs*p.y)*2.0;
 float spd=v_genes.x,agg=v_genes.y,eff=v_genes.z,per=v_genes.w,fed=v_state.x,seed=v_state.y,mv=v_state.z;
 float R=0.46;float stretch=1.0+mv*0.22;vec2 b=vec2(q.x/stretch,q.y/(1.0-mv*0.1));
@@ -418,12 +398,9 @@ float rim=smoothstep(0.07,0.0,abs(d+0.035))*inside;acc=over(acc,mix(base*1.25,ve
 float nd=length(q-vec2(-0.1,0.0))-R*(0.3+0.12*fed);acc=over(acc,base*0.22,smoothstep(0.03,-0.03,nd)*0.85*inside);
 if(per>0.25){float er=0.045+per*0.06;vec2 e1=q-vec2(R*0.55,R*0.36),e2=q-vec2(R*0.55,-R*0.36);float e=max(smoothstep(er,er*0.3,length(e1)),smoothstep(er,er*0.3,length(e2)));
 acc=over(acc,mix(vec3(1.0),vec3(0.75,1.0,1.0),0.5),e*(per-0.1));}
-if(acc.a<0.02)discard;gl_FragColor=vec4(acc.rgb/acc.a*bright,acc.a*v_state.w);}`;
+if(acc.a<0.02)discard;gl_FragColor=vec4(acc.rgb/acc.a*bright,acc.a);}`;
 
-// Lineage trails: faint threads following where each species lives
-const LINE_VS=`attribute vec2 a_pos;attribute vec4 a_col;uniform vec2 u_res;varying vec4 v_col;void main(){vec2 clip=(a_pos/u_res)*2.0-1.0;clip.y=-clip.y;gl_Position=vec4(clip,0.0,1.0);v_col=a_col;}`;
-const LINE_FS=`precision mediump float;varying vec4 v_col;void main(){gl_FragColor=v_col;}`;
-const bgProg=buildProgram(BG_VS,BG_FS),lineProg=buildProgram(LINE_VS,LINE_FS),blitProg=buildProgram(BLIT_VS,BLIT_FS),foodProg=buildProgram(FOOD_VS,FOOD_FS),orgProg=buildProgram(ORG_VS,ORG_FS);
+const bgProg=buildProgram(BG_VS,BG_FS),blitProg=buildProgram(BLIT_VS,BLIT_FS),foodProg=buildProgram(FOOD_VS,FOOD_FS),orgProg=buildProgram(ORG_VS,ORG_FS);
 const blitLoc={pos:gl.getAttribLocation(blitProg,'a_pos'),tex:gl.getUniformLocation(blitProg,'u_tex'),alpha:gl.getUniformLocation(blitProg,'u_alpha')};
 let bgTex=null,bgFbo=null,bgW=0,bgH=0;
 function ensureBgTarget(){const w=Math.max(1,Math.ceil(W/2)),h=Math.max(1,Math.ceil(H/2));if(bgTex&&w===bgW&&h===bgH)return;bgW=w;bgH=h;
@@ -434,15 +411,13 @@ function ensureBgTarget(){const w=Math.max(1,Math.ceil(W/2)),h=Math.max(1,Math.c
 const bgLoc={pos:gl.getAttribLocation(bgProg,'a_pos'),res:gl.getUniformLocation(bgProg,'u_res'),scale:gl.getUniformLocation(bgProg,'u_scale'),time:gl.getUniformLocation(bgProg,'u_time'),oases:gl.getUniformLocation(bgProg,'u_oases'),nOases:gl.getUniformLocation(bgProg,'u_nOases'),fx:gl.getUniformLocation(bgProg,'u_fx')};
 const foodLoc={pos:gl.getAttribLocation(foodProg,'a_pos'),seed:gl.getAttribLocation(foodProg,'a_seed'),res:gl.getUniformLocation(foodProg,'u_res'),time:gl.getUniformLocation(foodProg,'u_time'),scale:gl.getUniformLocation(foodProg,'u_scale')};
 const orgLoc={pos:gl.getAttribLocation(orgProg,'a_pos'),look:gl.getAttribLocation(orgProg,'a_look'),genes:gl.getAttribLocation(orgProg,'a_genes'),state:gl.getAttribLocation(orgProg,'a_state'),res:gl.getUniformLocation(orgProg,'u_res'),time:gl.getUniformLocation(orgProg,'u_time'),simple:gl.getUniformLocation(orgProg,'u_simple')};
-const lineLoc={pos:gl.getAttribLocation(lineProg,'a_pos'),col:gl.getAttribLocation(lineProg,'a_col'),res:gl.getUniformLocation(lineProg,'u_res')};
-const foodBuf=gl.createBuffer(),orgBuf=gl.createBuffer(),lineBuf=gl.createBuffer();
-const ORG_STRIDE=13;
+const foodBuf=gl.createBuffer(),orgBuf=gl.createBuffer();
+const ORG_STRIDE=12;
 const oasisUniform=new Float32Array(32);
 
 const SPECIES_HUES=[0.0,0.08,0.15,0.30,0.45,0.55,0.65,0.75,0.83,0.92,0.18,0.38];
 const SPECIES_NAMES=['Red','Orange','Gold','Green','Teal','Cyan','Blue','Indigo','Purple','Magenta','Lime','Emerald'];
-function hsvRgb(h,s,v){const f=n=>{const k=(n+h*6)%6;return v-v*s*Math.max(0,Math.min(k,4-k,1));};return[f(5),f(3),f(1)];}
-function hsvCss(h,s,v){const c=hsvRgb(h,s,v);return`rgb(${c[0]*255|0},${c[1]*255|0},${c[2]*255|0})`;}
+function speciesColor(idx){const h=SPECIES_HUES[idx%SPECIES_HUES.length],s=0.85,v=0.9,hi=Math.floor(h*6)%6,f=h*6-Math.floor(h*6),p=v*(1-s),q=v*(1-f*s),t=v*(1-(1-f)*s);let r,g,b;switch(hi){case 0:r=v;g=t;b=p;break;case 1:r=q;g=v;b=p;break;case 2:r=p;g=v;b=t;break;case 3:r=p;g=q;b=v;break;case 4:r=t;g=p;b=v;break;default:r=v;g=p;b=q;}return{h,r,g,b,css:`rgb(${r*255|0},${g*255|0},${b*255|0})`};}
 
 // ═══════════════════════════════════════════════
 // UI REFERENCES
@@ -456,7 +431,6 @@ sReproSize:$('sReproSize'),sOffspring:$('sOffspring'),sOases:$('sOases'),
 chkSameSpecies:$('chkSameSpecies'),chkFoodChain:$('chkFoodChain'),sEatRatio:$('sEatRatio'),sEatGain:$('sEatGain'),
 sHunt:$('sHunt'),sFlee:$('sFlee'),sFlock:$('sFlock'),sFoodDrive:$('sFoodDrive'),sSeparation:$('sSeparation'),
 chkMutation:$('chkMutation'),sMutRate:$('sMutRate'),sMutStr:$('sMutStr'),sTraitCost:$('sTraitCost'),vTraitCost:$('vTraitCost'),seedInput:$('seedInput'),
-chkSpeciation:$('chkSpeciation'),chkSexual:$('chkSexual'),sSplit:$('sSplit'),vSplit:$('vSplit'),chkLineage:$('chkLineage'),sSpCount:$('sSpCount'),treeStats:$('treeStats'),treeInfo:$('treeInfo'),
 chkEvoSpeed:$('chkEvoSpeed'),chkEvoAggro:$('chkEvoAggro'),chkEvoEfficiency:$('chkEvoEfficiency'),chkEvoPerception:$('chkEvoPerception'),
 chkGlow:$('chkGlow'),chkDetail:$('chkDetail'),chkWater:$('chkWater'),chkDeathFX:$('chkDeathFX'),chkShowOases:$('chkShowOases'),
 sFoodGlow:$('sFoodGlow'),sTrail:$('sTrail'),
@@ -481,9 +455,7 @@ const MAX_ORG=60000;let orgCount=0;
 const ox=new Float32Array(MAX_ORG),oy=new Float32Array(MAX_ORG);
 const ovx=new Float32Array(MAX_ORG),ovy=new Float32Array(MAX_ORG);
 const osize=new Float32Array(MAX_ORG),oenergy=new Float32Array(MAX_ORG);
-const oclade=new Uint16Array(MAX_ORG),oage=new Float32Array(MAX_ORG);
-const omate=new Int32Array(MAX_ORG); // nearest same-species neighbor this step, for sexual reproduction
-const okin=new Uint16Array(MAX_ORG); // each organism's kin (see cladeKin), refreshed every step
+const ospecies=new Uint8Array(MAX_ORG),oage=new Float32Array(MAX_ORG);
 const oalive=new Uint8Array(MAX_ORG),okills=new Uint16Array(MAX_ORG);
 const gSpeed=new Float32Array(MAX_ORG),gAggro=new Float32Array(MAX_ORG);
 const gEfficiency=new Float32Array(MAX_ORG),gPerception=new Float32Array(MAX_ORG);
@@ -492,85 +464,6 @@ const ogen=new Uint16Array(MAX_ORG);
 let orgHint=0,foodHint=0;
 function allocOrg(){for(let i=orgHint;i<orgCount;i++)if(!oalive[i]){orgHint=i+1;return i;}if(orgCount<MAX_ORG){orgHint=orgCount+1;return orgCount++;}orgHint=orgCount;return -1;}
 function allocFood(){for(let i=foodHint;i<foodCount;i++)if(!falive[i]){foodHint=i+1;return i;}if(foodCount<MAX_FOOD){foodHint=foodCount+1;return foodCount++;}foodHint=foodCount;return -1;}
-
-// ═══════════════════════════════════════════════
-// LINEAGES & SPECIATION (Phase 3)
-// ═══════════════════════════════════════════════
-// Every organism belongs to a clade (a species that is also a lineage). The starting species are the roots.
-// When a newborn's genes have drifted farther than the split distance from its species' founding genome, it joins
-// a sister species already founded in that direction, or founds a new one. A new species is named once it reaches
-// ESTABLISH_POP members; offshoots that die out before then never make it onto the tree.
-const MAX_CLADES=65535,ESTABLISH_POP=10,TRAIL_LEN=240,CENSUS_DT=0.5,TGW=16,TGH=9;
-const cladeHue=new Float32Array(MAX_CLADES),cladeRoot=new Uint8Array(MAX_CLADES),spotMask=new Uint8Array(MAX_CLADES);
-// Kin: the species an organism recognizes as its own. A new offshoot stays kin with the species it came from
-// (flocking with it, never eaten by it) until it has ESTABLISH_POP members; then it is a species of its own.
-const cladeKin=new Uint16Array(MAX_CLADES);
-let clades=[],liveClades=[],namedClades=[],extinctLog=[],censusN=0,nextCensus=0,spotClade=-1,treeDirty=true,graphDirty=true;
-function newClade(parent,root,hue,g,x,y){
-  if(clades.length>=MAX_CLADES)return -1;
-  const id=clades.length;x=(x%W+W)%W;y=(y%H+H)%H;
-  const c={id,parent,root,hue,css:hsvCss(hue,0.8,0.95),rgb:hsvRgb(hue,0.7,1),name:null,born:simTime,died:null,ref:g,kids:[],pop:0,peak:0,established:false,
-    sum:[0,0,0,0],sz:0,en:0,grid:null,hx:x,hy:y,trail:[x,y,1],hist:null,histStart:0};
-  clades.push(c);liveClades.push(c);cladeHue[id]=hue;cladeRoot[id]=root;cladeKin[id]=parent>=0?cladeKin[parent]:id;spotMask[id]=parent>=0?spotMask[parent]:0;
-  if(parent>=0)clades[parent].kids.push(id);
-  return id;
-}
-function establish(c,name){c.established=true;c.name=name;c.hist=[];c.histStart=censusN;c.grid=new Float32Array(TGW*TGH*3);namedClades.push(c);cladeKin[c.id]=c.id;treeDirty=true;
-  for(const d of liveClades)if(!d.established){const a=namedAncestor(d.parent);cladeKin[d.id]=a?a.id:d.id;}}
-// Names and hues come from a hash of the world seed, so a replayed seed grows the same species with the same names
-function hash32(a,b){let h=Math.imul(a^0x9E3779B9,0x85EBCA6B)^Math.imul((b+0x632BE5AB)|0,0xC2B2AE35);h^=h>>>16;h=Math.imul(h,0x7FEB352D);h^=h>>>15;h=Math.imul(h,0x846CA68B);h^=h>>>16;return h>>>0;}
-const NAME_A=['Vel','Ora','Kas','Tir','Mor','Zen','Lum','Ser','Ald','Cor','Pyr','Thal','Nyx','Syl','Eru','Iso','Kel','Nov','Rho','Vas','Hal','Mir','Tor','Xan'];
-const NAME_B=['a','i','o','e','u','ae','io','',''];
-const NAME_C=['ris','nth','lix','dra','mon','vus','tar','lis','phe','rax','nia','dor','ven','sia','tum','lon','cea','rin','zia','mus'];
-const ROMAN=['','',' II',' III',' IV',' V',' VI',' VII',' VIII',' IX',' X'];
-function cladeName(id){const h=hash32(worldSeed,id);const base=NAME_A[h%NAME_A.length]+NAME_B[(h>>>8)%NAME_B.length]+NAME_C[(h>>>16)%NAME_C.length];
-  let k=1;for(const c of namedClades)if(c.name===base||c.name.startsWith(base+' '))k++;return k>1?base+(ROMAN[k]||' '+k):base;}
-function childHue(parentHue,id){const h=hash32(worldSeed^0x5BD1E995,id);const off=(0.05+(h%1000)/1000*0.06)*((h>>>12)&1?1:-1);return((parentHue+off)%1+1)%1;}
-function genomeDist(i,r){const a=gSpeed[i]-r[0],b=gAggro[i]-r[1],c=gEfficiency[i]-r[2],d=gPerception[i]-r[3];return Math.sqrt(a*a+b*b+c*c+d*d);}
-function speciate(idx,pc,T){
-  const c=clades[pc];if(genomeDist(idx,c.ref)<=T)return pc;
-  let best=-1,bd=T;
-  for(const k of c.kids){const kc=clades[k];if(kc.died!==null)continue;const dk=genomeDist(idx,kc.ref);if(dk<=bd){bd=dk;best=k;}}
-  if(best>=0)return best;
-  const id=newClade(pc,c.root,childHue(c.hue,clades.length),[gSpeed[idx],gAggro[idx],gEfficiency[idx],gPerception[idx]],ox[idx],oy[idx]);
-  return id<0?pc:id;
-}
-function namedAncestor(id){while(id>=0&&!clades[id].established)id=clades[id].parent;return id>=0?clades[id]:null;}
-function cladeLabel(id){const c=clades[id];if(c.established)return c.name;const a=namedAncestor(c.parent);return(a?a.name:'Unknown')+' offshoot';}
-// Census: every half second of simulated time, count each species, track its genes and where it lives,
-// and note births of named species and extinctions
-function census(){
-  for(const c of liveClades){c.pop=0;c.sum[0]=c.sum[1]=c.sum[2]=c.sum[3]=0;c.sz=0;c.en=0;if(c.grid)c.grid.fill(0);}
-  const gx=TGW/W,gy=TGH/H;
-  for(let i=0;i<orgCount;i++){if(!oalive[i])continue;const c=clades[oclade[i]];c.pop++;c.sum[0]+=gSpeed[i];c.sum[1]+=gAggro[i];c.sum[2]+=gEfficiency[i];c.sum[3]+=gPerception[i];c.sz+=osize[i];c.en+=oenergy[i];
-    if(c.grid){const k=(Math.min(TGW-1,Math.max(0,ox[i]*gx|0))+Math.min(TGH-1,Math.max(0,oy[i]*gy|0))*TGW)*3;c.grid[k]++;c.grid[k+1]+=ox[i];c.grid[k+2]+=oy[i];}}
-  censusN++;const next=[];
-  for(const c of liveClades){
-    if(c.pop===0){c.died=simTime;c.trail=null;c.grid=null;if(c.established){extinctLog.push(c.id);c.hist.push(0);if(c.hist.length>POP_LEN){c.hist.shift();c.histStart++;}treeDirty=true;}continue;}
-    next.push(c);if(c.pop>c.peak)c.peak=c.pop;
-    if(!c.established&&c.pop>=ESTABLISH_POP)establish(c,cladeName(c.id));
-    if(c.grid&&c.trail)trailStep(c);
-    if(c.hist){c.hist.push(c.pop);if(c.hist.length>POP_LEN){c.hist.shift();c.histStart++;}}
-  }
-  liveClades=next;
-  for(const c of next)if(c.kids.length)c.kids=c.kids.filter(k=>clades[k].died===null);
-  if(spotClade>=0)updateSpotMask();
-  graphDirty=true;
-}
-// Heartland: the densest neighborhood of a species. Its trail is a smoothed path of where that heartland has been;
-// a jump to a distant place (the main population now lives elsewhere) breaks the thread instead of drawing across the world.
-function trailStep(c){
-  const g=c.grid;let best=0,bk=0;for(let k=0;k<TGW*TGH;k++)if(g[k*3]>best){best=g[k*3];bk=k;}
-  const bx=bk%TGW,by=bk/TGW|0;let n=0,sx=0,sy=0;
-  for(let dy=-1;dy<=1;dy++)for(let dx=-1;dx<=1;dx++){const x=bx+dx,y=by+dy;if(x<0||y<0||x>=TGW||y>=TGH)continue;const k=(y*TGW+x)*3;n+=g[k];sx+=g[k+1];sy+=g[k+2];}
-  if(!n)return;const hx=sx/n,hy=sy/n,share=n/c.pop,t=c.trail;
-  if(Math.hypot(hx-c.hx,hy-c.hy)>Math.min(W,H)*0.3){c.hx=hx;c.hy=hy;t.push(NaN,NaN,0);}
-  else{c.hx+=(hx-c.hx)*0.06;c.hy+=(hy-c.hy)*0.06;}
-  const L=t.length;if(L>=3&&!isNaN(t[L-3])&&Math.hypot(c.hx-t[L-3],c.hy-t[L-2])<8){t[L-1]=share;return;}
-  t.push(c.hx,c.hy,share);if(t.length>TRAIL_LEN*3)t.splice(0,3);
-}
-function updateSpotMask(){spotMask.fill(0,0,clades.length);if(spotClade<0)return;for(const c of clades){let p=c.id;while(p>=0&&p!==spotClade)p=clades[p].parent;if(p===spotClade)spotMask[c.id]=1;}}
-function setSpot(id){spotClade=(id===spotClade)?-1:id;updateSpotMask();treeDirty=true;}
 
 const MAX_FOOD=15000;let foodCount=0;
 const fx=new Float32Array(MAX_FOOD),fy=new Float32Array(MAX_FOOD);
@@ -598,7 +491,7 @@ function initGrids(){gridW=Math.ceil(W/CELL)+1;gridH=Math.ceil(H/CELL)+1;const n
 function buildGrid(){gridCounts.fill(0);for(let i=0;i<orgCount;i++){if(!oalive[i])continue;const c=Math.min(gridW-1,Math.max(0,ox[i]/CELL|0))+Math.min(gridH-1,Math.max(0,oy[i]/CELL|0))*gridW;const k=gridCounts[c];if(k<GMAX){gridEntries[c*GMAX+k]=i;gridCounts[c]=k+1;}}}
 function buildFoodGrid(){fgridCounts.fill(0);for(let i=0;i<foodCount;i++){if(!falive[i])continue;const c=Math.min(gridW-1,Math.max(0,fx[i]/CELL|0))+Math.min(gridH-1,Math.max(0,fy[i]/CELL|0))*gridW;const k=fgridCounts[c];if(k<FGMAX){fgridEntries[c*FGMAX+k]=i;fgridCounts[c]=k+1;}}}
 
-const POP_LEN=200;const popCtx=ui.popGraph.getContext('2d');
+const POP_LEN=200;let popHistory=[];const popCtx=ui.popGraph.getContext('2d');let popTick=0;
 
 function clamp(v,lo,hi){return v<lo?lo:v>hi?hi:v;}
 // Seeded RNG (mulberry32): every world is reproducible from its seed
@@ -672,11 +565,11 @@ function updateRecTimer(){
 // ═══════════════════════════════════════════════
 
 // All configurable slider/checkbox IDs
-const SETTING_SLIDERS=['sOrganisms','sFood','sFoodRate','sSpeed','sSpecies','sStartSize','sMaxSize','sOrgSpeed','sLifespan','sReproSize','sOffspring','sOases','sEatRatio','sEatGain','sHunt','sFlee','sFlock','sFoodDrive','sSeparation','sMutRate','sMutStr','sTraitCost','sSplit','sFoodGlow','sTrail'];
-const SETTING_CHECKS=['chkSameSpecies','chkFoodChain','chkMutation','chkEvoSpeed','chkEvoAggro','chkEvoEfficiency','chkEvoPerception','chkSpeciation','chkSexual','chkGlow','chkDetail','chkWater','chkDeathFX','chkShowOases','chkLineage'];
+const SETTING_SLIDERS=['sOrganisms','sFood','sFoodRate','sSpeed','sSpecies','sStartSize','sMaxSize','sOrgSpeed','sLifespan','sReproSize','sOffspring','sOases','sEatRatio','sEatGain','sHunt','sFlee','sFlock','sFoodDrive','sSeparation','sMutRate','sMutStr','sTraitCost','sFoodGlow','sTrail'];
+const SETTING_CHECKS=['chkSameSpecies','chkFoodChain','chkMutation','chkEvoSpeed','chkEvoAggro','chkEvoEfficiency','chkEvoPerception','chkGlow','chkDetail','chkWater','chkDeathFX','chkShowOases'];
 
 function captureSettings(){
-  const s={_format:'primordial-settings',_version:4,_date:new Date().toISOString(),_preset:$('selPreset').value,sliders:{},checks:{}};
+  const s={_format:'primordial-settings',_version:3,_date:new Date().toISOString(),_preset:$('selPreset').value,sliders:{},checks:{}};
   for(const id of SETTING_SLIDERS){const el=$(id);if(el)s.sliders[id]=el.value;}
   for(const id of SETTING_CHECKS){const el=$(id);if(el)s.checks[id]=el.checked;}
   s.seed=worldSeed;
@@ -771,41 +664,45 @@ const PRESETS={
   superorganism:{org:6000,food:2500,rate:18,species:4,speed:0.9,startSize:2.5,maxSize:14,orgSpeed:1.0,lifespan:35,reproSize:10,offspring:2,oases:4,hunt:0.5,flee:1.5,flock:2.0,foodDrive:1.0,sep:0.8,eatRatio:1.35,eatGain:0.45,chain:false,mutation:true,mutRate:0.10,mutStr:0.12},
   foodchain:{org:4500,food:2200,rate:18,species:3,speed:1.0,startSize:3.0,maxSize:16,orgSpeed:1.2,lifespan:35,reproSize:11,offspring:2,oases:4,hunt:1.0,flee:1.6,flock:0.5,foodDrive:1.2,sep:0.5,eatRatio:1.3,eatGain:0.5,chain:true,mutation:true,mutRate:0.12,mutStr:0.15},
   extinction:{org:8000,food:4000,rate:2,species:8,speed:1.0,startSize:3.5,maxSize:18,orgSpeed:1.1,lifespan:40,reproSize:13,offspring:2,oases:2,hunt:1.0,flee:1.5,flock:0.6,foodDrive:1.5,sep:0.5,eatRatio:1.3,eatGain:0.5,chain:false,mutation:true,mutRate:0.12,mutStr:0.18},
-  // One ancestor and plenty of food. Predators need twice their prey's size, so young species aren't eaten
-  // out of existence by their ancestors (at 1.3x, the ancestor dominates and new species stay tiny).
-  origin:{org:1000,food:8000,rate:180,species:1,speed:1.0,startSize:3.0,maxSize:18,orgSpeed:1.2,lifespan:40,reproSize:8,offspring:2,oases:5,hunt:0.8,flee:1.5,flock:0.5,foodDrive:1.2,sep:0.6,eatRatio:2.0,eatGain:0.5,chain:false,mutation:true,mutRate:0.3,mutStr:0.3,speciation:true,split:0.30},
 };
-function applyPreset(name){const p=PRESETS[name];if(!p)return;ui.sOrganisms.value=p.org;ui.sFood.value=p.food;ui.sFoodRate.value=p.rate;ui.sSpecies.value=p.species;ui.sSpeed.value=p.speed;ui.sStartSize.value=p.startSize;ui.sMaxSize.value=p.maxSize;ui.sOrgSpeed.value=p.orgSpeed;ui.sLifespan.value=p.lifespan;ui.sReproSize.value=p.reproSize;ui.sOffspring.value=p.offspring;ui.sOases.value=p.oases;ui.sHunt.value=p.hunt;ui.sFlee.value=p.flee;ui.sFlock.value=p.flock;ui.sFoodDrive.value=p.foodDrive;ui.sSeparation.value=p.sep;ui.sEatRatio.value=p.eatRatio;ui.sEatGain.value=p.eatGain;ui.chkFoodChain.checked=p.chain;ui.chkMutation.checked=p.mutation;ui.sMutRate.value=p.mutRate;ui.sMutStr.value=p.mutStr;if(p.speciation!==undefined)ui.chkSpeciation.checked=p.speciation;if(p.split!==undefined)ui.sSplit.value=p.split;updateLabels();}
+function applyPreset(name){const p=PRESETS[name];if(!p)return;ui.sOrganisms.value=p.org;ui.sFood.value=p.food;ui.sFoodRate.value=p.rate;ui.sSpecies.value=p.species;ui.sSpeed.value=p.speed;ui.sStartSize.value=p.startSize;ui.sMaxSize.value=p.maxSize;ui.sOrgSpeed.value=p.orgSpeed;ui.sLifespan.value=p.lifespan;ui.sReproSize.value=p.reproSize;ui.sOffspring.value=p.offspring;ui.sOases.value=p.oases;ui.sHunt.value=p.hunt;ui.sFlee.value=p.flee;ui.sFlock.value=p.flock;ui.sFoodDrive.value=p.foodDrive;ui.sSeparation.value=p.sep;ui.sEatRatio.value=p.eatRatio;ui.sEatGain.value=p.eatGain;ui.chkFoodChain.checked=p.chain;ui.chkMutation.checked=p.mutation;ui.sMutRate.value=p.mutRate;ui.sMutStr.value=p.mutStr;updateLabels();}
 
 // ═══════════════════════════════════════════════
 // SIMULATION STATE SNAPSHOT SYSTEM
 // ═══════════════════════════════════════════════
 function getSimSnapshot(){
-  let totalAlive=0,totalFood=0,genSum=0,offshoots=0;const maxKiller={idx:-1,kills:0};
+  const nSp=+ui.sSpecies.value;
+  const counts=new Array(nSp).fill(0);
+  const avgSize=new Array(nSp).fill(0);
+  const avgEnergy=new Array(nSp).fill(0);
+  const avgGenes={speed:new Array(nSp).fill(0),aggro:new Array(nSp).fill(0),efficiency:new Array(nSp).fill(0),perception:new Array(nSp).fill(0)};
+  const maxKiller={idx:-1,kills:0,species:-1};
+  let totalAlive=0,totalFood=0,genSum=0;
   for(let i=0;i<orgCount;i++){
     if(!oalive[i])continue;
-    totalAlive++;genSum+=ogen[i];
-    if(okills[i]>maxKiller.kills){maxKiller.idx=i;maxKiller.kills=okills[i];}
+    const sp=ospecies[i];counts[sp]++;totalAlive++;genSum+=ogen[i];
+    avgSize[sp]+=osize[i];avgEnergy[sp]+=oenergy[i];
+    avgGenes.speed[sp]+=gSpeed[i];avgGenes.aggro[sp]+=gAggro[i];
+    avgGenes.efficiency[sp]+=gEfficiency[i];avgGenes.perception[sp]+=gPerception[i];
+    if(okills[i]>maxKiller.kills){maxKiller.idx=i;maxKiller.kills=okills[i];maxKiller.species=sp;}
   }
   for(let i=0;i<foodCount;i++)if(falive[i])totalFood++;
-  // Species figures come from the latest census (at most half a second old)
-  const living=liveClades.filter(c=>c.established).sort((a,b)=>b.pop-a.pop);
-  for(const c of liveClades)if(!c.established)offshoots+=c.pop;
-  const pct=(v,n)=>(v/n*100).toFixed(0);
-  const speciesData=living.slice(0,12).map(c=>{const n=c.pop||1,a=c.parent>=0?namedAncestor(c.parent):null;
-    return{name:c.name,splitFrom:a?a.name:null,originalLineage:SPECIES_NAMES[c.root%12],population:c.pop,ageSeconds:+(simTime-c.born).toFixed(0),avgSize:(c.sz/n).toFixed(1),avgEnergy:(c.en/n).toFixed(1),
-      genes:{speed:pct(c.sum[0],n),aggro:pct(c.sum[1],n),efficiency:pct(c.sum[2],n),perception:pct(c.sum[3],n)}};});
+  const speciesData=[];
+  for(let s=0;s<nSp;s++){
+    const n=counts[s]||1;
+    speciesData.push({name:SPECIES_NAMES[s%12],population:counts[s],avgSize:(avgSize[s]/n).toFixed(1),avgEnergy:(avgEnergy[s]/n).toFixed(1),
+      genes:{speed:(avgGenes.speed[s]/n*100).toFixed(0),aggro:(avgGenes.aggro[s]/n*100).toFixed(0),efficiency:(avgGenes.efficiency[s]/n*100).toFixed(0),perception:(avgGenes.perception[s]/n*100).toFixed(0)}
+    });
+  }
   return{
-    simTime:simTime.toFixed(1),generation,avgGeneration:(genSum/Math.max(1,totalAlive)).toFixed(1),seed:worldSeed,totalAlive,totalFood,
-    startingSpecies:+ui.sSpecies.value,livingSpecies:living.length,speciesEverNamed:namedClades.length,organismsInUnnamedOffshoots:offshoots,
+    simTime:simTime.toFixed(1),generation,avgGeneration:(genSum/Math.max(1,totalAlive)).toFixed(1),seed:worldSeed,totalAlive,totalFood,speciesCount:nSp,
     species:speciesData,
     settings:{organisms:ui.sOrganisms.value,food:ui.sFood.value,foodRate:ui.sFoodRate.value,speed:ui.sSpeed.value,
       hunt:ui.sHunt.value,flee:ui.sFlee.value,flock:ui.sFlock.value,foodDrive:ui.sFoodDrive.value,
       eatRatio:ui.sEatRatio.value,mutRate:ui.sMutRate.value,mutStr:ui.sMutStr.value,traitCost:ui.sTraitCost.value,
-      speciation:ui.chkSpeciation.checked,splitDistance:ui.sSplit.value,sexualReproduction:ui.chkSexual.checked,
       foodChain:ui.chkFoodChain.checked,mutation:ui.chkMutation.checked},
-    topPredator:maxKiller.kills>0?{species:cladeLabel(oclade[maxKiller.idx]),kills:maxKiller.kills,size:osize[maxKiller.idx]?.toFixed(1)}:null,
-    extinctions:extinctLog.slice(-10).map(id=>clades[id].name)
+    topPredator:maxKiller.kills>0?{species:SPECIES_NAMES[maxKiller.species%12],kills:maxKiller.kills,size:osize[maxKiller.idx]?.toFixed(1)}:null,
+    extinctions:speciesData.filter(s=>s.population===0).map(s=>s.name)
   };
 }
 
@@ -887,7 +784,7 @@ ANALYSIS: (why these changes occurred based on the simulation mechanics)
 CONCLUSION: (was the hypothesis supported?)
 NEXT EXPERIMENT: (suggest one follow-up experiment with specific slider values)
 
-Keep it concise but insightful. Use the species names given, not indices. Species that evolved during the run have generated names.`;
+Keep it concise but insightful. Use species names (Red, Orange, Gold, etc.) not indices.`;
 
   await callAI(prompt,'report');
   experiment=null;
@@ -1023,9 +920,8 @@ async function callAI(userPrompt,msgClass='assistant'){
 Current simulation state:
 - Time: ${snapshot.simTime}s | Deepest generation: ${snapshot.generation} | Average generation: ${snapshot.avgGeneration} | Seed: ${snapshot.seed}
 - Alive: ${snapshot.totalAlive} | Food: ${snapshot.totalFood}
-- Living species: ${snapshot.livingSpecies} (started with ${snapshot.startingSpecies}; ${snapshot.speciesEverNamed} named so far; ${snapshot.organismsInUnnamedOffshoots} organisms in new offshoots not yet large enough to name)
-- Species (largest first): ${JSON.stringify(snapshot.species)}
-- Recent extinctions: ${snapshot.extinctions.length?snapshot.extinctions.join(', '):'None yet'}
+- Species: ${JSON.stringify(snapshot.species)}
+- Extinctions: ${snapshot.extinctions.length?snapshot.extinctions.join(', '):'None yet'}
 - Top predator: ${snapshot.topPredator?snapshot.topPredator.species+' ('+snapshot.topPredator.kills+' kills, size '+snapshot.topPredator.size+')':'None yet'}
 - Settings: ${JSON.stringify(snapshot.settings)}
 
@@ -1033,14 +929,12 @@ You can suggest experiments. When you do, output a JSON block in this exact form
 \`\`\`experiment
 {"hypothesis":"...","changes":{"sHunt":"2.0","sFlee":"0.5"},"checkboxes":{"chkFoodChain":true},"duration":30}
 \`\`\`
-Valid slider IDs: sOrganisms, sFood, sFoodRate, sSpeed, sSpecies, sStartSize, sMaxSize, sOrgSpeed, sLifespan, sReproSize, sOffspring, sOases, sEatRatio, sEatGain, sHunt, sFlee, sFlock, sFoodDrive, sSeparation, sMutRate, sMutStr, sTraitCost, sSplit
-Valid checkbox IDs: chkSameSpecies, chkFoodChain, chkMutation, chkEvoSpeed, chkEvoAggro, chkEvoEfficiency, chkEvoPerception, chkSpeciation, chkSexual
+Valid slider IDs: sOrganisms, sFood, sFoodRate, sSpeed, sSpecies, sStartSize, sMaxSize, sOrgSpeed, sLifespan, sReproSize, sOffspring, sOases, sEatRatio, sEatGain, sHunt, sFlee, sFlock, sFoodDrive, sSeparation, sMutRate, sMutStr, sTraitCost
+Valid checkbox IDs: chkSameSpecies, chkFoodChain, chkMutation, chkEvoSpeed, chkEvoAggro, chkEvoEfficiency, chkEvoPerception
 
 Trait costs: with sTraitCost above 0, high speed, perception and aggression genes raise metabolic cost (speed quadratically) and high efficiency lowers top speed, so each gene is a trade-off rather than a free upgrade.
 
-Speciation: species are lineages. The starting species have color names (Red, Orange, Gold, ...). When a newborn's genes drift farther than the split distance (sSplit) from its species' founding genome, it founds a new lineage with a hue close to its ancestor's. Until that lineage has 10 members it still counts as its parent species; then it gets a generated name and becomes a species of its own. Different species can hunt each other by size, so a new species competes with its own ancestors. With sexual reproduction on, a parent mixes genes with a nearby mate of its own species.
-
-Be concise, scientific, and insightful. Use the species names given. When analyzing, reference specific gene values and population numbers.`;
+Be concise, scientific, and insightful. Use species color names (Red, Orange, Gold, Green, Teal, Cyan, Blue, Indigo, Purple, Magenta). When analyzing, reference specific gene values and population numbers.`;
 
   aiConversation.push({role:'user',content:userPrompt});
 
@@ -1095,15 +989,14 @@ function initWorld(){
   seedRandom(readSeedInput());orgHint=0;foodHint=0;foodAccum=0;stepAcc=0;
   const nOrg=+ui.sOrganisms.value,nFood=+ui.sFood.value,nSp=+ui.sSpecies.value,sz0=+ui.sStartSize.value;
   orgCount=nOrg;
-  clades=[];liveClades=[];namedClades=[];extinctLog=[];censusN=0;spotClade=-1;treeDirty=true;graphDirty=true;simTime=0;
-  // The starting species are the roots of the family tree, each founded on the average starting genome
-  for(let s=0;s<nSp;s++){const id=newClade(-1,s,SPECIES_HUES[s%12],[0.5,0.5,0.5,0.5],W/2,H/2);const c=clades[id];c.trail=[];establish(c,SPECIES_NAMES[s%12]);c.histStart=1;}
-  for(let i=0;i<orgCount;i++){ox[i]=rand()*W;oy[i]=rand()*H;ovx[i]=(rand()-0.5)*2;ovy[i]=(rand()-0.5)*2;oclade[i]=i%nSp;osize[i]=sz0+(rand()-0.5)*1.5;oenergy[i]=osize[i]*2;oage[i]=rand()*5;oalive[i]=1;okills[i]=0;ogen[i]=0;gSpeed[i]=0.4+rand()*0.2;gAggro[i]=0.4+rand()*0.2;gEfficiency[i]=0.4+rand()*0.2;gPerception[i]=0.4+rand()*0.2;}
+  for(let i=0;i<orgCount;i++){ox[i]=rand()*W;oy[i]=rand()*H;ovx[i]=(rand()-0.5)*2;ovy[i]=(rand()-0.5)*2;ospecies[i]=i%nSp;osize[i]=sz0+(rand()-0.5)*1.5;oenergy[i]=osize[i]*2;oage[i]=rand()*5;oalive[i]=1;okills[i]=0;ogen[i]=0;gSpeed[i]=0.4+rand()*0.2;gAggro[i]=0.4+rand()*0.2;gEfficiency[i]=0.4+rand()*0.2;gPerception[i]=0.4+rand()*0.2;}
   foodCount=nFood;
   for(let i=0;i<foodCount;i++){fx[i]=rand()*W;fy[i]=rand()*H;falive[i]=1;fglow[i]=rand()*TAU;}
   dfxCount=0;dfxNext=0;generation=0;simTime=0;
+  popHistory=[];for(let s=0;s<nSp;s++)popHistory.push([]);
   initGrids();initOases();
-  census();nextCensus=CENSUS_DT;
+  let html='';for(let i=0;i<nSp;i++){const c=speciesColor(i);html+=`<div class="sp-chip"><div class="sp-dot" style="background:${c.css}"></div><span id="spC${i}">0</span></div>`;}
+  ui.speciesLegend.innerHTML=html;
 }
 
 let foodAccum=0;
@@ -1111,48 +1004,33 @@ function spawnFood(dt){foodAccum+=(+ui.sFoodRate.value)*dt;let n=foodAccum|0;foo
 
 function reproduce(pi){
   const nOff=+ui.sOffspring.value,sz0=+ui.sStartSize.value;
-  const mutOn=ui.chkMutation.checked,mutRate=+ui.sMutRate.value,mutStr=+ui.sMutStr.value,splitT=ui.chkSpeciation.checked?+ui.sSplit.value:Infinity;
-  const eS=ui.chkEvoSpeed.checked,eA=ui.chkEvoAggro.checked,eE=ui.chkEvoEfficiency.checked,eP=ui.chkEvoPerception.checked;
-  // Sexual reproduction: a parent with a mate of its own species nearby mixes genes with it; alone, it divides as before
-  const pc=oclade[pi],m=ui.chkSexual.checked?omate[pi]:-1,mate=(m>=0&&oalive[m]&&oclade[m]===pc)?m:-1;
+  const mutOn=ui.chkMutation.checked,mutRate=+ui.sMutRate.value,mutStr=+ui.sMutStr.value;
   const now=performance.now();if(now-lastPopSound>50){playPop(600+Math.random()*400,0.3);lastPopSound=now;}
-  const splitA=rand()*TAU;spawnBirthFX(ox[pi],oy[pi],cladeHue[pc],osize[pi]);
-  for(let c=0;c<nOff;c++){const idx=allocOrg();if(idx<0)return;const ca=splitA+c*TAU/nOff,cc=Math.cos(ca),cs=Math.sin(ca);
-    ogen[idx]=Math.min(65535,Math.max(ogen[pi],mate>=0?ogen[mate]:0)+1);if(ogen[idx]>generation)generation=ogen[idx];
-    ox[idx]=ox[pi]+cc*(osize[pi]+2);oy[idx]=oy[pi]+cs*(osize[pi]+2);ovx[idx]=cc*1.5;ovy[idx]=cs*1.5;osize[idx]=sz0;oenergy[idx]=sz0*2;oage[idx]=0;oalive[idx]=1;okills[idx]=0;
-    gSpeed[idx]=gSpeed[pi];gAggro[idx]=gAggro[pi];gEfficiency[idx]=gEfficiency[pi];gPerception[idx]=gPerception[pi];
-    if(mate>=0){if(rand()<0.5)gSpeed[idx]=gSpeed[mate];if(rand()<0.5)gAggro[idx]=gAggro[mate];if(rand()<0.5)gEfficiency[idx]=gEfficiency[mate];if(rand()<0.5)gPerception[idx]=gPerception[mate];}
-    if(mutOn){if(eS&&rand()<mutRate)gSpeed[idx]=clamp(gSpeed[idx]+(rand()-0.5)*mutStr,0.05,1);if(eA&&rand()<mutRate)gAggro[idx]=clamp(gAggro[idx]+(rand()-0.5)*mutStr,0.05,1);if(eE&&rand()<mutRate)gEfficiency[idx]=clamp(gEfficiency[idx]+(rand()-0.5)*mutStr,0.05,1);if(eP&&rand()<mutRate)gPerception[idx]=clamp(gPerception[idx]+(rand()-0.5)*mutStr,0.05,1);}
-    oclade[idx]=speciate(idx,pc,splitT);}}
+  const splitA=rand()*TAU;spawnBirthFX(ox[pi],oy[pi],SPECIES_HUES[ospecies[pi]%SPECIES_HUES.length],osize[pi]);
+  for(let c=0;c<nOff;c++){const idx=allocOrg();if(idx<0)return;const ca=splitA+c*TAU/nOff,cc=Math.cos(ca),cs=Math.sin(ca);ogen[idx]=Math.min(65535,ogen[pi]+1);if(ogen[idx]>generation)generation=ogen[idx];ox[idx]=ox[pi]+cc*(osize[pi]+2);oy[idx]=oy[pi]+cs*(osize[pi]+2);ovx[idx]=cc*1.5;ovy[idx]=cs*1.5;ospecies[idx]=ospecies[pi];osize[idx]=sz0;oenergy[idx]=sz0*2;oage[idx]=0;oalive[idx]=1;okills[idx]=0;gSpeed[idx]=gSpeed[pi];gAggro[idx]=gAggro[pi];gEfficiency[idx]=gEfficiency[pi];gPerception[idx]=gPerception[pi];if(mutOn){if(ui.chkEvoSpeed.checked&&rand()<mutRate)gSpeed[idx]=clamp(gSpeed[idx]+(rand()-0.5)*mutStr,0.05,1);if(ui.chkEvoAggro.checked&&rand()<mutRate)gAggro[idx]=clamp(gAggro[idx]+(rand()-0.5)*mutStr,0.05,1);if(ui.chkEvoEfficiency.checked&&rand()<mutRate)gEfficiency[idx]=clamp(gEfficiency[idx]+(rand()-0.5)*mutStr,0.05,1);if(ui.chkEvoPerception.checked&&rand()<mutRate)gPerception[idx]=clamp(gPerception[idx]+(rand()-0.5)*mutStr,0.05,1);}}}
 
 function canEatInChain(predSp,preySp,nSp){return((predSp+1)%nSp)===preySp;}
 
 function simulate(dt){
   const spd=+ui.sSpeed.value,orgSpd=+ui.sOrgSpeed.value,maxSz=+ui.sMaxSize.value,life=+ui.sLifespan.value;
   const reproSz=+ui.sReproSize.value,eatR=+ui.sEatRatio.value,eatG=+ui.sEatGain.value,sameSafe=ui.chkSameSpecies.checked;
-  const nSp=+ui.sSpecies.value,foodChain=ui.chkFoodChain.checked&&nSp>1;
+  const foodChain=ui.chkFoodChain.checked,nSp=+ui.sSpecies.value;
   const hunt=+ui.sHunt.value,flee=+ui.sFlee.value,flock=+ui.sFlock.value,foodD=+ui.sFoodDrive.value,sep=+ui.sSeparation.value;
   const sDt=dt*spd;if(sDt<0.0001)return;simTime+=sDt;orgHint=0;const tc=+ui.sTraitCost.value;
   if(soundOn&&ambOsc){let alive=0;for(let i=0;i<orgCount;i++)if(oalive[i])alive++;ambOsc.frequency.setTargetAtTime(40+(alive/Math.max(1,+ui.sOrganisms.value))*80,audioCtx.currentTime,0.5);}
-  buildGrid();buildFoodGrid();const repro=[];for(let i=0;i<orgCount;i++)okin[i]=cladeKin[oclade[i]];
+  buildGrid();buildFoodGrid();const repro=[];
   for(let i=0;i<orgCount;i++){
     if(!oalive[i])continue;let ax=0,ay=0;
     const cx=Math.min(gridW-1,Math.max(0,ox[i]/CELL|0)),cy=Math.min(gridH-1,Math.max(0,oy[i]/CELL|0));
-    const myC=oclade[i],myK=okin[i],mySz=osize[i],myAggro=0.5+gAggro[i],myPerc=0.5+gPerception[i]*1.5;
-    let flX=0,flY=0,flN=0,mateJ=-1,mateD=CELL*1.5;const scanR=foodChain?2:1;
-    // Kin flock together and are never prey (unless Same Species Protected is off). Prey eaten earlier this step is
-    // still in the grid until the next rebuild, so it is checked for life before it can be eaten again.
+    const mySp=ospecies[i],mySz=osize[i],myAggro=0.5+gAggro[i],myPerc=0.5+gPerception[i]*1.5;
+    let flX=0,flY=0,flN=0;const scanR=foodChain?2:1;
     for(let dy=-scanR;dy<=scanR;dy++)for(let dx=-scanR;dx<=scanR;dx++){const nx=cx+dx,ny=cy+dy;if(nx<0||nx>=gridW||ny<0||ny>=gridH)continue;const ci=ny*gridW+nx,cnt=gridCounts[ci],base=ci*GMAX;
       for(let k=0;k<cnt;k++){const j=gridEntries[base+k];if(j===i)continue;const ddx=ox[j]-ox[i],ddy=oy[j]-oy[i],d2=ddx*ddx+ddy*ddy,d=Math.sqrt(d2)+0.1,cR=mySz+osize[j],inP=d<CELL*myPerc;
-        const same=okin[j]===myK;let canEat=false,isPrey=false;
-        if(same){if(d<CELL*1.5){flX+=ddx;flY+=ddy;flN++;if(d<mateD&&oclade[j]===myC){mateD=d;mateJ=j;}}if(d<cR*0.8){const sf=sep*2/(d+1);ax-=ddx/d*sf;ay-=ddy/d*sf;}
-          if(sameSafe)continue;canEat=mySz>osize[j]*eatR;isPrey=osize[j]>mySz*eatR;}
-        else if(foodChain){canEat=canEatInChain(cladeRoot[myC],cladeRoot[oclade[j]],nSp);isPrey=canEatInChain(cladeRoot[oclade[j]],cladeRoot[myC],nSp);}
-        else{canEat=mySz>osize[j]*eatR;isPrey=osize[j]>mySz*eatR;}
-        if(canEat&&inP){const hf=hunt*myAggro*0.5/(d+5);ax+=ddx/d*hf;ay+=ddy/d*hf;if(d<cR*0.6&&oalive[j]){oalive[j]=0;oenergy[i]+=osize[j]*eatG;okills[i]++;spawnDeathFX(ox[j],oy[j],cladeHue[oclade[j]],4+osize[j]*0.5|0,osize[j]/maxSz,ox[i],oy[i]);const now=performance.now();if(now-lastThudSound>80){playThud(osize[j]/maxSz);lastThudSound=now;}}}
-        else if(isPrey&&inP){const ff=flee*1.2/(d+3);ax-=ddx/d*ff;ay-=ddy/d*ff;}
-        else if(!same&&d<cR*1.2){const sf=sep*0.5/(d+2);ax-=ddx/d*sf;ay-=ddy/d*sf;}}}
-    omate[i]=mateJ;
+        if(ospecies[j]===mySp){if(d<CELL*1.5){flX+=ddx;flY+=ddy;flN++;}if(d<cR*0.8){const sf=sep*2/(d+1);ax-=ddx/d*sf;ay-=ddy/d*sf;}}
+        else{let canEat=false,isPrey=false;if(foodChain){canEat=canEatInChain(mySp,ospecies[j],nSp);isPrey=canEatInChain(ospecies[j],mySp,nSp);}else{canEat=mySz>osize[j]*eatR;isPrey=osize[j]>mySz*eatR;}
+          if(canEat&&inP){const hf=hunt*myAggro*0.5/(d+5);ax+=ddx/d*hf;ay+=ddy/d*hf;if(d<cR*0.6){oalive[j]=0;oenergy[i]+=osize[j]*eatG;okills[i]++;spawnDeathFX(ox[j],oy[j],SPECIES_HUES[ospecies[j]%SPECIES_HUES.length],4+osize[j]*0.5|0,osize[j]/maxSz,ox[i],oy[i]);const now=performance.now();if(now-lastThudSound>80){playThud(osize[j]/maxSz);lastThudSound=now;}}}
+          else if(isPrey&&inP){const ff=flee*1.2/(d+3);ax-=ddx/d*ff;ay-=ddy/d*ff;}
+          else{if(d<cR*1.2){const sf=sep*0.5/(d+2);ax-=ddx/d*sf;ay-=ddy/d*sf;}}}}}
     if(flN>0){flX/=flN;flY/=flN;const fd=Math.sqrt(flX*flX+flY*flY)+0.1;ax+=flX/fd*flock*0.15;ay+=flY/fd*flock*0.15;}
     let nfD=999999,nfI=-1;const fScan=Math.min(3,1+gPerception[i]*2|0);
     for(let dy2=-fScan;dy2<=fScan;dy2++)for(let dx2=-fScan;dx2<=fScan;dx2++){const nx=cx+dx2,ny=cy+dy2;if(nx<0||nx>=gridW||ny<0||ny>=gridH)continue;const ci=ny*gridW+nx,cnt=fgridCounts[ci],base=ci*FGMAX;for(let k=0;k<cnt;k++){const fi=fgridEntries[base+k];if(!falive[fi])continue;const fdx=fx[fi]-ox[i],fdy=fy[fi]-oy[i],fd2=fdx*fdx+fdy*fdy;if(fd2<nfD){nfD=fd2;nfI=fi;}}}
@@ -1164,134 +1042,32 @@ function simulate(dt){
     // Trait costs: fast, far-seeing, aggressive bodies burn more energy (centered so a 50% genome costs the same as before).
     // Speed cost is quadratic, like drag.
     const geneLoad=1.8*(gSpeed[i]*gSpeed[i]-0.25)+0.6*(gPerception[i]-0.5)+0.3*(gAggro[i]-0.5);const metaCost=0.3*(1.2-gEfficiency[i]*0.5)*Math.max(0.2,1+tc*geneLoad);oenergy[i]-=sDt*metaCost;osize[i]=clamp(Math.sqrt(Math.max(0.5,oenergy[i]))*1.5,1,maxSz);oage[i]+=sDt;
-    if(oenergy[i]<=0||oage[i]>life){if(oenergy[i]<=0)spawnDeathFX(ox[i],oy[i],cladeHue[myC],2,0.3);oalive[i]=0;continue;}
+    if(oenergy[i]<=0||oage[i]>life){if(oenergy[i]<=0)spawnDeathFX(ox[i],oy[i],SPECIES_HUES[mySp%SPECIES_HUES.length],2,0.3);oalive[i]=0;continue;}
     if(osize[i]>=reproSz&&oenergy[i]>reproSz*2.5){oenergy[i]*=0.4;osize[i]=clamp(Math.sqrt(Math.max(0.5,oenergy[i]))*1.5,1,maxSz);repro.push(i);}
   }
   for(const r of repro)if(oalive[r])reproduce(r); // a parent eaten later in this step doesn't give birth
   for(let i=0;i<dfxCount;i++){dfxLife[i]-=sDt*2;if(dfxLife[i]<=0)continue;dfxX[i]+=dfxVX[i];dfxY[i]+=dfxVY[i];dfxVX[i]*=0.95;dfxVY[i]*=0.95;}
-  if(simTime>=nextCensus){census();nextCensus=simTime+CENSUS_DT;}
 }
 
 // Oasis overlay
 
-// One line per named species over the last POP_LEN censuses (100 s of simulated time)
-function drawPopGraph(){
-  const w=328,h=80,lo=censusN-POP_LEN;popCtx.fillStyle='rgba(0,0,0,0.6)';popCtx.fillRect(0,0,w,h);
-  let mx=10;const vis=[];
-  for(const c of namedClades){if(!c.hist||!c.hist.length||c.histStart+c.hist.length-1<lo)continue;vis.push(c);for(const v of c.hist)if(v>mx)mx=v;}
-  for(const c of vis){const hs=c.hist;if(hs.length<2)continue;popCtx.strokeStyle=c.css;popCtx.lineWidth=1.5;popCtx.globalAlpha=c.died===null?0.85:0.4;popCtx.beginPath();let first=true;
-    for(let k=0;k<hs.length;k++){const t=c.histStart+k;if(t<lo)continue;const px=(t-lo)/POP_LEN*w,py=h-(hs[k]/mx)*(h-4)-2;if(first){popCtx.moveTo(px,py);first=false;}else popCtx.lineTo(px,py);}
-    popCtx.stroke();}
-  popCtx.globalAlpha=1;
-}
-function updateLegend(){
-  const living=liveClades.filter(c=>c.established).sort((a,b)=>b.pop-a.pop);let html='';
-  for(const c of living.slice(0,12))html+=`<div class="sp-chip"><div class="sp-dot" style="background:${c.css}"></div>${c.name} <span class="sp-n">${c.pop}</span></div>`;
-  if(living.length>12)html+=`<div class="sp-chip">+${living.length-12} more</div>`;
-  ui.speciesLegend.innerHTML=html;ui.sSpCount.textContent=living.length;
-}
-function fmtTime(t){const m=t/60|0,s=t%60|0;return m+':'+(s<10?'0':'')+s;}
-
-// Family tree: every named species is a line from the moment it split off to now (or to its extinction),
-// hung from the species it split from. Line thickness follows population.
-const treeCanvas=$('treeCanvas'),treeCtx=treeCanvas.getContext('2d');
-let treeRows=[],treeHover=-1,treeGeom={top:8,rowH:10},treeRedrawT=0,treeHidden=0,treeCssH=380;
-function buildTreeRows(maxRows){
-  const kids=new Map(),roots=[];
-  for(const c of namedClades){const p=c.parent>=0?namedAncestor(c.parent):null;c.dparent=p?p.id:-1;if(p){if(!kids.has(p.id))kids.set(p.id,[]);kids.get(p.id).push(c);}else roots.push(c);}
-  // Which branches still have living members
-  const alive=new Map();const liveOf=c=>{if(alive.has(c.id))return alive.get(c.id);let a=c.died===null;for(const k of kids.get(c.id)||[])if(liveOf(k))a=true;alive.set(c.id,a);return a;};
-  for(const c of namedClades)liveOf(c);
-  // Too many rows: hide whole dead branches, those that died out longest ago first
-  const hidden=new Set();let rows=namedClades.length;treeHidden=0;
-  if(rows>maxRows){const lastDeath=c=>{let t=c.died||0;for(const k of kids.get(c.id)||[])t=Math.max(t,lastDeath(k));return t;};const size=c=>{let n=1;for(const k of kids.get(c.id)||[])n+=size(k);return n;};
-    const deadTops=namedClades.filter(c=>!alive.get(c.id)&&(c.dparent<0||alive.get(c.dparent))).map(c=>({c,t:lastDeath(c),n:size(c)})).sort((a,b)=>a.t-b.t);
-    for(const d of deadTops){if(rows<=maxRows)break;hidden.add(d.c.id);rows-=d.n;treeHidden+=d.n;}}
-  const out=[];const byBorn=(a,b)=>a.born-b.born||a.id-b.id;
-  const walk=(c,depth)=>{if(hidden.has(c.id))return;out.push({c,depth});for(const k of (kids.get(c.id)||[]).sort(byBorn))walk(k,depth+1);};
-  for(const r of roots.sort(byBorn))walk(r,0);
-  return out;
-}
-function drawTree(){
-  const dpr=window.devicePixelRatio||1,cw=treeCanvas.clientWidth||328,ch=treeCanvas.clientHeight||380;
-  if(treeCanvas.width!==Math.round(cw*dpr)||treeCanvas.height!==Math.round(ch*dpr)){treeCanvas.width=Math.round(cw*dpr);treeCanvas.height=Math.round(ch*dpr);}
-  const g=treeCtx;g.setTransform(dpr,0,0,dpr,0,0);g.clearRect(0,0,cw,ch);
-  const rows=buildTreeRows(60);treeRows=rows;
-  const wantH=Math.max(380,Math.min(820,rows.length*10+24));if(wantH!==treeCssH){treeCssH=wantH;treeCanvas.style.height=wantH+'px';treeDirty=true;return;}
-  const x0=8,labelW=96,pw=Math.max(40,cw-x0-labelW),now=Math.max(1,simTime),top=8,rowH=Math.max(3,Math.min(16,(ch-top-16)/Math.max(1,rows.length)));
-  treeGeom={top,rowH};const X=t=>x0+t/now*pw,Y=k=>top+k*rowH+rowH/2;
-  // minute gridlines
-  g.strokeStyle='rgba(255,255,255,0.05)';g.lineWidth=1;g.fillStyle='rgba(122,139,168,0.6)';g.font='9px "JetBrains Mono",monospace';
-  const step=now>600?300:now>240?120:60;for(let t=step;t<now;t+=step){const x=X(t)|0;g.beginPath();g.moveTo(x+0.5,top);g.lineTo(x+0.5,ch-12);g.stroke();g.fillText(fmtTime(t),x-10,ch-2);}
-  const rowOf=new Map();rows.forEach((r,k)=>rowOf.set(r.c.id,k));
-  let maxPop=1;for(const r of rows)if(r.c.died===null&&r.c.pop>maxPop)maxPop=r.c.pop;
-  const topPops=rows.filter(r=>r.c.died===null).map(r=>r.c.pop).sort((a,b)=>b-a),labelMin=rowH>=7?0:(topPops[14]||0);
-  rows.forEach((r,k)=>{if(r.c.id===spotClade||r.c.id===treeHover){g.fillStyle=r.c.id===spotClade?'rgba(0,229,200,0.10)':'rgba(255,255,255,0.05)';g.fillRect(0,Y(k)-rowH/2,cw,rowH);}});
-  // branch connectors
-  for(const r of rows){const pk=rowOf.get(r.c.dparent);if(pk===undefined)continue;const k=rowOf.get(r.c.id),x=X(r.c.born);
-    g.strokeStyle=r.c.css;g.globalAlpha=0.45;g.lineWidth=1;g.beginPath();g.moveTo(x,Y(pk));g.lineTo(x,Y(k));g.stroke();}
-  // species lines and labels
-  rows.forEach((r,k)=>{const c=r.c,live=c.died===null,y=Y(k),xa=X(c.born),xb=X(live?now:c.died);
-    g.globalAlpha=live?0.95:0.4;g.strokeStyle=c.css;g.lineWidth=live?Math.min(rowH*0.8,1.5+3*Math.sqrt(c.pop/maxPop)):1;g.lineCap='round';
-    g.beginPath();g.moveTo(xa,y);g.lineTo(Math.max(xa+1,xb),y);g.stroke();
-    if(!live){g.beginPath();g.arc(xb,y,1.8,0,TAU);g.fillStyle=c.css;g.fill();}
-    if(rowH>=8||(live&&c.pop>=labelMin)){g.globalAlpha=live?1:0.5;g.fillStyle=live?c.css:'rgba(160,170,190,1)';g.font=(rowH>=11?'10px':'8px')+' "JetBrains Mono",monospace';
-      g.fillText(live?c.name+' '+c.pop:c.name,live?x0+pw+5:xb+4,y+3);}});
-  g.globalAlpha=1;
-  const living=liveClades.filter(c=>c.established).length,extinct=namedClades.length-living;
-  ui.treeStats.innerHTML=`<b>${living}</b> living species · <b>${namedClades.length}</b> named so far · <b>${extinct}</b> extinct`+(treeHidden?` · ${treeHidden} long-extinct hidden`:'');
-  if(treeHover<0)showTreeInfo(-1);
-}
-function showTreeInfo(id){
-  if(id<0){ui.treeInfo.innerHTML=spotClade>=0?`Spotlight on <b style="color:${clades[spotClade].css}">${clades[spotClade].name}</b> and its descendants. Click it again, or press Esc, to clear.`
-    :'Each line is a species, from when it split off to now or to its extinction. Hover a line for details; click it to spotlight that family in the world.';return;}
-  const c=clades[id],a=c.parent>=0?namedAncestor(c.parent):null,live=c.died===null,n=c.pop||1;
-  const gs=live?[c.sum[0]/n,c.sum[1]/n,c.sum[2]/n,c.sum[3]/n]:c.ref;const p=v=>(v*100|0)+'%';
-  ui.treeInfo.innerHTML=`<b style="color:${c.css}">${c.name}</b> · `+(a?`split from ${a.name} at ${fmtTime(c.born)}`:'starting species')+'<br>'+
-    (live?`Living, ${c.pop} now (peak ${c.peak})`:`Extinct at ${fmtTime(c.died)} (peak ${c.peak})`)+'<br>'+
-    `${live?'Genes now':'Founding genes'}: Spd ${p(gs[0])} Agg ${p(gs[1])} Eff ${p(gs[2])} Per ${p(gs[3])}`;
-}
-function treeRowAt(e){const r=treeCanvas.getBoundingClientRect(),k=Math.floor((e.clientY-r.top-treeGeom.top)/treeGeom.rowH);return k>=0&&k<treeRows.length?treeRows[k].c.id:-1;}
-treeCanvas.addEventListener('mousemove',e=>{const id=treeRowAt(e);if(id!==treeHover){treeHover=id;showTreeInfo(id);treeDirty=true;}});
-treeCanvas.addEventListener('mouseleave',()=>{treeHover=-1;showTreeInfo(-1);treeDirty=true;});
-treeCanvas.addEventListener('click',e=>{const id=treeRowAt(e);if(id>=0)setSpot(id);showTreeInfo(id);});
-function treeVisible(){return !ui.panel.classList.contains('collapsed')&&$('tab-tree').classList.contains('active');}
+function updatePopGraph(dt){popTick+=dt;if(popTick<0.25)return;popTick=0;const nSp=+ui.sSpecies.value,counts=new Array(nSp).fill(0);for(let i=0;i<orgCount;i++)if(oalive[i])counts[ospecies[i]]++;for(let s=0;s<nSp;s++){if(!popHistory[s])popHistory[s]=[];popHistory[s].push(counts[s]);if(popHistory[s].length>POP_LEN)popHistory[s].shift();}const w=328,h=80;popCtx.fillStyle='rgba(0,0,0,0.6)';popCtx.fillRect(0,0,w,h);let mx=10;for(let s=0;s<nSp;s++)for(const v of popHistory[s])if(v>mx)mx=v;for(let s=0;s<nSp;s++){const hist=popHistory[s];if(!hist||hist.length<2)continue;popCtx.strokeStyle=speciesColor(s).css;popCtx.lineWidth=1.5;popCtx.globalAlpha=0.8;popCtx.beginPath();for(let x=0;x<hist.length;x++){const px=x/POP_LEN*w,py=h-(hist[x]/mx)*(h-4)-2;x===0?popCtx.moveTo(px,py):popCtx.lineTo(px,py);}popCtx.stroke();popCtx.globalAlpha=1;}for(let s=0;s<nSp;s++){const el=$('spC'+s);if(el)el.textContent=counts[s];}}
 
 // Tooltip
 let mouseX=0,mouseY=0,hoveredOrg=-1;
 function findOrgAtMouse(){let best=-1,bestD=400;const cx=Math.min(gridW-1,Math.max(0,mouseX/CELL|0)),cy=Math.min(gridH-1,Math.max(0,mouseY/CELL|0));for(let dy=-1;dy<=1;dy++)for(let dx=-1;dx<=1;dx++){const nx=cx+dx,ny=cy+dy;if(nx<0||nx>=gridW||ny<0||ny>=gridH)continue;const ci=ny*gridW+nx,cnt=gridCounts[ci],base=ci*GMAX;for(let k=0;k<cnt;k++){const j=gridEntries[base+k];if(!oalive[j])continue;const ddx=ox[j]-mouseX,ddy=oy[j]-mouseY,d2=ddx*ddx+ddy*ddy;if(d2<bestD){bestD=d2;best=j;}}}return best;}
-function updateTooltip(){hoveredOrg=findOrgAtMouse();if(hoveredOrg<0){ui.tooltip.classList.remove('show');return;}const i=hoveredOrg;const ci=oclade[i],cp=clades[ci].parent>=0?namedAncestor(clades[ci].parent):null;ui.tooltip.innerHTML=`<b style="color:${clades[ci].css}">${cladeLabel(ci)} #${i}</b>${cp&&clades[ci].established?` <span style="color:var(--muted)">from ${cp.name}</span>`:''}<br>Size: ${osize[i].toFixed(1)} · Energy: ${oenergy[i].toFixed(1)}<br>Age: ${oage[i].toFixed(1)}s · Kills: ${okills[i]} · Gen: ${ogen[i]}<br><span style="color:var(--accent2)">Spd:</span>${(gSpeed[i]*100|0)}% <span style="color:var(--warm)">Agg:</span>${(gAggro[i]*100|0)}% <span style="color:var(--accent)">Eff:</span>${(gEfficiency[i]*100|0)}% <span style="color:var(--accent3)">Per:</span>${(gPerception[i]*100|0)}%`;ui.tooltip.style.left=Math.min(W-230,mouseX+15)+'px';ui.tooltip.style.top=Math.min(H-100,mouseY+15)+'px';ui.tooltip.classList.add('show');}
+function updateTooltip(){hoveredOrg=findOrgAtMouse();if(hoveredOrg<0){ui.tooltip.classList.remove('show');return;}const i=hoveredOrg;ui.tooltip.innerHTML=`<b style="color:${speciesColor(ospecies[i]).css}">${SPECIES_NAMES[ospecies[i]%12]} #${i}</b><br>Size: ${osize[i].toFixed(1)} · Energy: ${oenergy[i].toFixed(1)}<br>Age: ${oage[i].toFixed(1)}s · Kills: ${okills[i]} · Gen: ${ogen[i]}<br><span style="color:var(--accent2)">Spd:</span>${(gSpeed[i]*100|0)}% <span style="color:var(--warm)">Agg:</span>${(gAggro[i]*100|0)}% <span style="color:var(--accent)">Eff:</span>${(gEfficiency[i]*100|0)}% <span style="color:var(--accent3)">Per:</span>${(gPerception[i]*100|0)}%`;ui.tooltip.style.left=Math.min(W-230,mouseX+15)+'px';ui.tooltip.style.top=Math.min(H-100,mouseY+15)+'px';ui.tooltip.classList.add('show');}
 
 // GL Buffers
 const RMAX=MAX_ORG+MAX_FOOD+MAX_DFX;
 let glPos=new Float32Array(MAX_DFX*2),glHue=new Float32Array(MAX_DFX),glAlpha=new Float32Array(MAX_DFX),glSize=new Float32Array(MAX_DFX);
-const foodData=new Float32Array(MAX_FOOD*3),orgData=new Float32Array(MAX_ORG*ORG_STRIDE);let lineData=new Float32Array(6*2*2048);
+const foodData=new Float32Array(MAX_FOOD*3),orgData=new Float32Array(MAX_ORG*ORG_STRIDE);
 let visTime=0;
 
 // Main loop
 let frameCount=0,tooltipTick=0;
 
-// Lineage trails: a faint thread along each named species' heartland path. Newest segments are brightest.
-function drawTrails(){
-  if(!ui.chkLineage.checked)return;let n=0;
-  for(const c of liveClades){if(!c.established||!c.trail)continue;const t=c.trail,m=t.length/3;if(m<2)continue;
-    const base=spotClade<0?0.3:spotMask[c.id]?0.95:0.04,col=c.rgb;
-    if((n+m*2)*6>lineData.length){const grown=new Float32Array(Math.max(lineData.length*2,(n+m*2)*6));grown.set(lineData);lineData=grown;}
-    for(let k=1;k<m;k++){const ax=t[k*3-3],ay=t[k*3-2],bx=t[k*3],by=t[k*3+1];if(isNaN(ax)||isNaN(bx))continue;
-      const fa=(k-1)/(m-1),fb=k/(m-1);
-      // older segments fade; so does a family spread thin, whose heartland holds few of its members
-      const aa=base*Math.pow(fa,1.5)*clamp((t[k*3-1]-0.15)*3,0,1),ab=base*Math.pow(fb,1.5)*clamp((t[k*3+2]-0.15)*3,0,1);if(aa<0.01&&ab<0.01)continue;let o=n*6;
-      lineData[o]=ax;lineData[o+1]=ay;lineData[o+2]=col[0];lineData[o+3]=col[1];lineData[o+4]=col[2];lineData[o+5]=aa;
-      lineData[o+6]=bx;lineData[o+7]=by;lineData[o+8]=col[0];lineData[o+9]=col[1];lineData[o+10]=col[2];lineData[o+11]=ab;n+=2;}}
-  if(!n)return;
-  gl.useProgram(lineProg);gl.uniform2f(lineLoc.res,W,H);gl.bindBuffer(gl.ARRAY_BUFFER,lineBuf);gl.bufferData(gl.ARRAY_BUFFER,lineData.subarray(0,n*6),gl.DYNAMIC_DRAW);
-  gl.enableVertexAttribArray(lineLoc.pos);gl.vertexAttribPointer(lineLoc.pos,2,gl.FLOAT,false,24,0);
-  gl.enableVertexAttribArray(lineLoc.col);gl.vertexAttribPointer(lineLoc.col,4,gl.FLOAT,false,24,8);
-  gl.blendFunc(gl.SRC_ALPHA,gl.ONE);gl.drawArrays(gl.LINES,0,n);
-  gl.disableVertexAttribArray(lineLoc.pos);gl.disableVertexAttribArray(lineLoc.col);
-}
-
-// Draw order: water (with springs) → algae → lineage trails → life/death motes → creatures
+// Draw order: water (with springs) → algae → life/death motes → creatures
 function renderWorld(){
   const trail=+ui.sTrail.value;
   // Water. With trails on, it is laid down translucently so earlier frames fade instead of clearing.
@@ -1315,7 +1091,6 @@ function renderWorld(){
   gl.enableVertexAttribArray(foodLoc.seed);gl.vertexAttribPointer(foodLoc.seed,1,gl.FLOAT,false,12,8);
   gl.blendFunc(gl.SRC_ALPHA,gl.ONE);gl.drawArrays(gl.POINTS,0,nf);
   gl.disableVertexAttribArray(foodLoc.pos);gl.disableVertexAttribArray(foodLoc.seed);
-  drawTrails();
   // Motes from kills and births
   let wi=0;for(let i=0;i<dfxCount;i++){if(dfxLife[i]<=0)continue;glPos[wi*2]=dfxX[i];glPos[wi*2+1]=dfxY[i];glHue[wi]=dfxHue[i];glAlpha[wi]=dfxLife[i]*0.8;glSize[wi]=dfxSize[i]*dfxLife[i];wi++;}
   if(wi>0){gl.useProgram(prog);gl.uniform2f(uRes,W,H);
@@ -1329,16 +1104,16 @@ function renderWorld(){
   const maxV=Math.max(0.1,(+ui.sOrgSpeed.value)*3),detail=ui.chkDetail.checked;let n=0;
   for(let i=0;i<orgCount;i++){if(!oalive[i])continue;const o=n*ORG_STRIDE;const vx=ovx[i],vy=ovy[i],v=Math.sqrt(vx*vx+vy*vy);
     orgData[o]=ox[i];orgData[o+1]=oy[i];
-    orgData[o+2]=Math.atan2(-vy,vx);orgData[o+3]=(detail?Math.max(7,osize[i]*3.8):Math.max(1.5,osize[i]*1.2))*(i===hoveredOrg?1.5:1);orgData[o+4]=cladeHue[oclade[i]];
+    orgData[o+2]=Math.atan2(-vy,vx);orgData[o+3]=(detail?Math.max(7,osize[i]*3.8):Math.max(1.5,osize[i]*1.2))*(i===hoveredOrg?1.5:1);orgData[o+4]=SPECIES_HUES[ospecies[i]%SPECIES_HUES.length];
     orgData[o+5]=gSpeed[i];orgData[o+6]=gAggro[i];orgData[o+7]=gEfficiency[i];orgData[o+8]=gPerception[i];
-    orgData[o+9]=Math.min(1,oenergy[i]/12);orgData[o+10]=(i*0.618034)%1;orgData[o+11]=Math.min(1,v/maxV);orgData[o+12]=spotClade<0||spotMask[oclade[i]]?1:0.14;n++;}
+    orgData[o+9]=Math.min(1,oenergy[i]/12);orgData[o+10]=(i*0.618034)%1;orgData[o+11]=Math.min(1,v/maxV);n++;}
   gl.useProgram(orgProg);gl.uniform2f(orgLoc.res,W,H);gl.uniform1f(orgLoc.time,visTime);gl.uniform1f(orgLoc.simple,detail?0:1);
   gl.bindBuffer(gl.ARRAY_BUFFER,orgBuf);gl.bufferData(gl.ARRAY_BUFFER,orgData.subarray(0,n*ORG_STRIDE),gl.DYNAMIC_DRAW);
   const st=ORG_STRIDE*4;
   gl.enableVertexAttribArray(orgLoc.pos);gl.vertexAttribPointer(orgLoc.pos,2,gl.FLOAT,false,st,0);
   gl.enableVertexAttribArray(orgLoc.look);gl.vertexAttribPointer(orgLoc.look,3,gl.FLOAT,false,st,8);
   gl.enableVertexAttribArray(orgLoc.genes);gl.vertexAttribPointer(orgLoc.genes,4,gl.FLOAT,false,st,20);
-  gl.enableVertexAttribArray(orgLoc.state);gl.vertexAttribPointer(orgLoc.state,4,gl.FLOAT,false,st,36);
+  gl.enableVertexAttribArray(orgLoc.state);gl.vertexAttribPointer(orgLoc.state,3,gl.FLOAT,false,st,36);
   gl.blendFunc(gl.SRC_ALPHA,ui.chkGlow.checked?gl.ONE:gl.ONE_MINUS_SRC_ALPHA);gl.drawArrays(gl.POINTS,0,n);
   gl.disableVertexAttribArray(orgLoc.pos);gl.disableVertexAttribArray(orgLoc.look);gl.disableVertexAttribArray(orgLoc.genes);gl.disableVertexAttribArray(orgLoc.state);
 }
@@ -1347,9 +1122,8 @@ function frame(now){
   requestAnimationFrame(frame);const rawDt=Math.min(0.05,(now-lastT)/1000);lastT=now;
   // Fixed timestep: the simulation advances in identical 1/60s steps regardless of frame rate, so a seed replays exactly
   visTime+=rawDt;
-  if(running){stepAcc+=rawDt;let steps=0;while(stepAcc>=SIM_STEP&&steps<MAX_STEPS_PER_FRAME){spawnFood(SIM_STEP*(+ui.sSpeed.value));simulate(SIM_STEP);checkExperiment();stepAcc-=SIM_STEP;steps++;}if(steps===MAX_STEPS_PER_FRAME)stepAcc=0;}
-  if(graphDirty){drawPopGraph();updateLegend();graphDirty=false;}
-  treeRedrawT+=rawDt;if(treeVisible()&&(treeDirty||treeRedrawT>0.5)){drawTree();treeDirty=false;treeRedrawT=0;}
+  if(running){stepAcc+=rawDt;let steps=0;while(stepAcc>=SIM_STEP&&steps<MAX_STEPS_PER_FRAME){spawnFood(SIM_STEP*(+ui.sSpeed.value));simulate(SIM_STEP);checkExperiment();stepAcc-=SIM_STEP;steps++;}if(steps===MAX_STEPS_PER_FRAME)stepAcc=0;
+  updatePopGraph(rawDt);}
   if(++tooltipTick>=3){updateTooltip();tooltipTick=0;}
   const mins=simTime/60|0,secs=simTime%60|0;ui.timeDisplay.textContent=(mins<10?'0':'')+mins+':'+(secs<10?'0':'')+secs;
   renderWorld();
@@ -1360,7 +1134,7 @@ function frame(now){
   updateLabels();frameCount++;
 }
 
-function updateLabels(){ui.vTraitCost.textContent=(+ui.sTraitCost.value).toFixed(1);ui.vOrganisms.textContent=ui.sOrganisms.value;ui.vFood.textContent=ui.sFood.value;ui.vFoodRate.textContent=ui.sFoodRate.value+'/s';ui.vSpeed.textContent=(+ui.sSpeed.value).toFixed(2);ui.vSpecies.textContent=ui.sSpecies.value;ui.vStartSize.textContent=(+ui.sStartSize.value).toFixed(1);ui.vMaxSize.textContent=ui.sMaxSize.value;ui.vOrgSpeed.textContent=(+ui.sOrgSpeed.value).toFixed(1);ui.vLifespan.textContent=ui.sLifespan.value+'s';ui.vReproSize.textContent=ui.sReproSize.value;ui.vOffspring.textContent=ui.sOffspring.value;ui.vOases.textContent=ui.sOases.value;ui.vEatRatio.textContent=(+ui.sEatRatio.value).toFixed(2)+'x';ui.vEatGain.textContent=(+ui.sEatGain.value).toFixed(2);ui.vHunt.textContent=(+ui.sHunt.value).toFixed(1);ui.vFlee.textContent=(+ui.sFlee.value).toFixed(1);ui.vFlock.textContent=(+ui.sFlock.value).toFixed(2);ui.vFoodDrive.textContent=(+ui.sFoodDrive.value).toFixed(1);ui.vSeparation.textContent=(+ui.sSeparation.value).toFixed(2);ui.vMutRate.textContent=(+ui.sMutRate.value).toFixed(2);ui.vMutStr.textContent=(+ui.sMutStr.value).toFixed(2);ui.vSplit.textContent=(+ui.sSplit.value).toFixed(2);ui.vFoodGlow.textContent=(+ui.sFoodGlow.value).toFixed(1);const tv=+ui.sTrail.value;ui.vTrail.textContent=tv<0.05?'Off':tv<0.3?'Short':tv<0.6?'Medium':'Long';ui.btnPause.textContent=running?'Pause':'Play';ui.btnPause.classList.toggle('active',!running);}
+function updateLabels(){ui.vTraitCost.textContent=(+ui.sTraitCost.value).toFixed(1);ui.vOrganisms.textContent=ui.sOrganisms.value;ui.vFood.textContent=ui.sFood.value;ui.vFoodRate.textContent=ui.sFoodRate.value+'/s';ui.vSpeed.textContent=(+ui.sSpeed.value).toFixed(2);ui.vSpecies.textContent=ui.sSpecies.value;ui.vStartSize.textContent=(+ui.sStartSize.value).toFixed(1);ui.vMaxSize.textContent=ui.sMaxSize.value;ui.vOrgSpeed.textContent=(+ui.sOrgSpeed.value).toFixed(1);ui.vLifespan.textContent=ui.sLifespan.value+'s';ui.vReproSize.textContent=ui.sReproSize.value;ui.vOffspring.textContent=ui.sOffspring.value;ui.vOases.textContent=ui.sOases.value;ui.vEatRatio.textContent=(+ui.sEatRatio.value).toFixed(2)+'x';ui.vEatGain.textContent=(+ui.sEatGain.value).toFixed(2);ui.vHunt.textContent=(+ui.sHunt.value).toFixed(1);ui.vFlee.textContent=(+ui.sFlee.value).toFixed(1);ui.vFlock.textContent=(+ui.sFlock.value).toFixed(2);ui.vFoodDrive.textContent=(+ui.sFoodDrive.value).toFixed(1);ui.vSeparation.textContent=(+ui.sSeparation.value).toFixed(2);ui.vMutRate.textContent=(+ui.sMutRate.value).toFixed(2);ui.vMutStr.textContent=(+ui.sMutStr.value).toFixed(2);ui.vFoodGlow.textContent=(+ui.sFoodGlow.value).toFixed(1);const tv=+ui.sTrail.value;ui.vTrail.textContent=tv<0.05?'Off':tv<0.3?'Short':tv<0.6?'Medium':'Long';ui.btnPause.textContent=running?'Pause':'Play';ui.btnPause.classList.toggle('active',!running);}
 
 function resize(){W=window.innerWidth;H=window.innerHeight;canvas.width=W;canvas.height=H;gl.viewport(0,0,W,H);gl.useProgram(prog);gl.uniform2f(uRes,W,H);gl.clearColor(0.02,0.04,0.08,1);gl.clear(gl.COLOR_BUFFER_BIT);}
 window.addEventListener('resize',()=>{resize();initGrids();});
@@ -1397,12 +1171,7 @@ $('importFile').addEventListener('change',(e)=>{if(e.target.files[0])importSetti
 
 canvas.addEventListener('mousemove',(e)=>{mouseX=e.clientX;mouseY=e.clientY;});
 canvas.addEventListener('click',(e)=>{interact();foodHint=0;for(let s=0;s<8;s++){const idx=allocFood();if(idx<0)break;fx[idx]=e.clientX+(Math.random()-0.5)*30;fy[idx]=e.clientY+(Math.random()-0.5)*30;falive[idx]=1;fglow[idx]=Math.random()*TAU;}});
-canvas.addEventListener('contextmenu',(e)=>{e.preventDefault();interact();const sz0=+ui.sStartSize.value;
-  let pool=liveClades.filter(c=>c.established);if(!pool.length)pool=liveClades;
-  let c,g;if(pool.length){c=pool[Math.random()*pool.length|0];const n=c.pop||1;g=c.pop?[c.sum[0]/n,c.sum[1]/n,c.sum[2]/n,c.sum[3]/n]:c.ref;}
-  else{const root=Math.random()*(+ui.sSpecies.value)|0;g=[0.5,0.5,0.5,0.5];c=clades[newClade(-1,root,SPECIES_HUES[root%12],g,e.clientX,e.clientY)];if(!c)return;establish(c,cladeName(c.id));c.histStart=censusN+1;} // everything had died: a new arrival
-  orgHint=0;for(let s=0;s<5;s++){const idx=allocOrg();if(idx<0)break;ogen[idx]=0;ox[idx]=e.clientX+(Math.random()-0.5)*25;oy[idx]=e.clientY+(Math.random()-0.5)*25;ovx[idx]=(Math.random()-0.5)*2;ovy[idx]=(Math.random()-0.5)*2;oclade[idx]=c.id;osize[idx]=sz0;oenergy[idx]=sz0*2;oage[idx]=0;oalive[idx]=1;okills[idx]=0;
-    gSpeed[idx]=clamp(g[0]+(Math.random()-0.5)*0.1,0.05,1);gAggro[idx]=clamp(g[1]+(Math.random()-0.5)*0.1,0.05,1);gEfficiency[idx]=clamp(g[2]+(Math.random()-0.5)*0.1,0.05,1);gPerception[idx]=clamp(g[3]+(Math.random()-0.5)*0.1,0.05,1);}});
+canvas.addEventListener('contextmenu',(e)=>{e.preventDefault();interact();const nSp=+ui.sSpecies.value,sz0=+ui.sStartSize.value,sp=Math.random()*nSp|0;orgHint=0;for(let s=0;s<5;s++){const idx=allocOrg();if(idx<0)break;ogen[idx]=0;ox[idx]=e.clientX+(Math.random()-0.5)*25;oy[idx]=e.clientY+(Math.random()-0.5)*25;ovx[idx]=(Math.random()-0.5)*2;ovy[idx]=(Math.random()-0.5)*2;ospecies[idx]=sp;osize[idx]=sz0;oenergy[idx]=sz0*2;oage[idx]=0;oalive[idx]=1;okills[idx]=0;gSpeed[idx]=0.3+Math.random()*0.4;gAggro[idx]=0.3+Math.random()*0.4;gEfficiency[idx]=0.3+Math.random()*0.4;gPerception[idx]=0.3+Math.random()*0.4;}});
 
 window.addEventListener('keydown',(e)=>{
   if(e.target.tagName==='INPUT'||e.target.tagName==='SELECT'||e.target.tagName==='TEXTAREA')return;
@@ -1413,8 +1182,6 @@ window.addEventListener('keydown',(e)=>{
   else if(e.key==='3'){ui.sSpeed.value='2.0';updateLabels();}
   else if(e.key==='4'){ui.sSpeed.value='5.0';updateLabels();}
   else if(e.key==='s'||e.key==='S'){toggleSound();}
-  else if(e.key==='t'||e.key==='T'){ui.panel.classList.remove('collapsed');ui.panelToggle.classList.add('hidden');document.querySelector('.tab[data-tab="tree"]').click();}
-  else if(e.key==='Escape'&&spotClade>=0){setSpot(spotClade);}
   else if(e.key==='l'||e.key==='L'){
     if(ui.aiPanel.classList.contains('collapsed')){ui.aiPanel.classList.remove('collapsed');ui.aiToggle.classList.add('hidden');}
     else{ui.aiPanel.classList.add('collapsed');ui.aiToggle.classList.remove('hidden');}

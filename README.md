@@ -8,7 +8,9 @@ A real-time WebGL particle ecosystem where organisms eat, hunt, flee, flock, rep
 
 **[Launch Primordial](https://jkh2.github.io/Primordial-Sim/)** · Single-file HTML · Zero install · GitHub Pages
 
-**Versions:** the live site runs **v4** (living visuals, seeds and replay, trait costs). The original **v3** from March 12, 2026 is preserved exactly as first built: play it at **[/classic](https://jkh2.github.io/Primordial-Sim/classic/)**, or see its source on the [`v3-original`](https://github.com/jkh2/Primordial-Sim/tree/v3-original) branch.
+**Versions:** the live site runs **v5** (species that evolve on their own, a live family tree, optional mating). Earlier versions stay playable:
+- **v4** (September 29, 2026: living visuals, seeds and replay, trait costs) at **[/v4](https://jkh2.github.io/Primordial-Sim/v4/)**. Its exact source is on the [`v4-release`](https://github.com/jkh2/Primordial-Sim/tree/v4-release) branch; the `/v4` copy only changes the "Original v3" link so it still works from the subfolder.
+- The original **v3** from March 12, 2026, preserved exactly as first built, at **[/classic](https://jkh2.github.io/Primordial-Sim/classic/)**, with its source on the [`v3-original`](https://github.com/jkh2/Primordial-Sim/tree/v3-original) branch.
 
 ---
 
