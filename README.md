@@ -8,6 +8,8 @@ A real-time WebGL particle ecosystem where organisms eat, hunt, flee, flock, rep
 
 **[Launch Primordial](https://jkh2.github.io/Primordial-Sim/)** · Single-file HTML · Zero install · GitHub Pages
 
+**Versions:** the live site runs **v4** (living visuals, seeds and replay, trait costs). The original **v3** from March 12, 2026 is preserved exactly as first built: play it at **[/classic](https://jkh2.github.io/Primordial-Sim/classic/)**, or see its source on the [`v3-original`](https://github.com/jkh2/Primordial-Sim/tree/v3-original) branch.
+
 ---
 
 ## Who Built This
@@ -39,6 +41,8 @@ The AI Lab Partner watches it all happen, analyzes the data, designs and runs ex
 **Predator-prey food chains** — An optional Rock-Paper-Scissors mode creates circular predation: each species hunts the next one in sequence, wrapping around. This prevents any single species from dominating and produces classic Lotka-Volterra population oscillations visible in the real-time population graph.
 
 **Interactive sandbox** — Left-click drops a cluster of food pellets. Right-click spawns a group of organisms. Hover over any organism to inspect its species, size, energy, age, kill count, and all four gene values. Keyboard shortcuts control time: Space pauses, 1-4 set speed from slow-motion to 5x turbo. Six tuned scenario presets offer distinct experiences from peaceful aquariums to extinction events.
+
+**Living visuals** — Organisms are drawn as teardrop cells pointed the way they swim, with a membrane rim and a nucleus. Their genes are visible: a longer tail means a faster swimmer, spines and a redder rim mean aggression, glowing eye-spots mean sharp perception, and a translucent body means an efficient metabolism. Cells pulse like a heartbeat, stretch when they move fast, and dim and flicker when starving. The world is primordial water with drifting caustic light and plankton, food is swaying bioluminescent algae, and oases are glowing springs. Kills pull the prey's motes toward the predator; births split like dividing cells. On slower machines, turn off Water Effects or Detailed Creatures in the Visual tab.
 
 **Ambient sound design** — An optional Web Audio layer provides a low drone that shifts pitch with total population (rising hum = thriving world, falling = collapse), soft pops on reproduction events, and bass thuds when large predators make kills.
 
@@ -149,7 +153,7 @@ The AI Lab Partner operates through four integrated systems:
 - **Species** — species count, sizes, speed, lifespan, reproduction thresholds, food oases
 - **Rules** — predation settings, food chain toggle, behavioral drive sliders (hunt, flee, flock, food attraction, separation)
 - **Evolve** — mutation on/off, mutation rate and strength, trait cost, per-trait evolution toggles (speed, aggression, efficiency, perception)
-- **Visual** — additive glow, death particles, oasis indicators, food glow intensity, trail length
+- **Visual** — additive glow, detailed creatures, water effects, birth and death effects, oasis springs, algae glow, trail length
 
 ### AI Lab Panel (Right Panel)
 
