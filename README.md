@@ -38,6 +38,8 @@ The AI Lab Partner watches it all happen, analyzes the data, designs and runs ex
 
 **Genetic evolution** — Every organism carries four heritable genes: Speed (movement multiplier), Aggression (hunt drive intensity), Efficiency (metabolic cost reduction), and Perception (sight range for food and threats). When an organism reproduces, each gene has a configurable probability of mutating by a random amount. Over hundreds of generations, species diverge — some lineages become fast grazers, others become slow efficient apex predators, others develop wide perception ranges to find scarce food. Natural selection is the only force shaping this. No fitness function, no selection pressure beyond survival itself.
 
+**Species that arise on their own** — Species are lineages, not fixed colors. When a newborn's genes drift far enough from its species' founding genome (the **Split Distance**), it founds a new lineage with a hue close to its ancestor's. Once that lineage has 10 members it becomes a species of its own, with a generated name and its own predators, and it competes with the species it came from. The **Tree** tab draws the family tree live: every species is a line from the moment it split off to now or to its extinction, and clicking one spotlights that family in the world. Faint lineage trails show where each family has lived. An optional sexual reproduction mode mixes genes with a nearby mate of the same lineage.
+
 **Predator-prey food chains** — An optional Rock-Paper-Scissors mode creates circular predation: each species hunts the next one in sequence, wrapping around. This prevents any single species from dominating and produces classic Lotka-Volterra population oscillations visible in the real-time population graph.
 
 **Interactive sandbox** — Left-click drops a cluster of food pellets. Right-click spawns a group of organisms. Hover over any organism to inspect its species, size, energy, age, kill count, and all four gene values. Keyboard shortcuts control time: Space pauses, 1-4 set speed from slow-motion to 5x turbo. Six tuned scenario presets offer distinct experiences from peaceful aquariums to extinction events.
@@ -134,6 +136,7 @@ The AI Lab Partner operates through four integrated systems:
 | Superorganism | 6,000 | 2,500 | 4 | Max flocking — species move as tight swarms like slime molds |
 | Food Chain Cycle | 4,500 | 2,200 | 3 | Rock-paper-scissors predation, classic oscillating population waves |
 | Extinction Event | 8,000 | 4,000 | 8 | Abundant start, food dries up, slow die-off reveals which traits survive |
+| Origin of Species | 1,000 | 8,000 | 1 | One ancestor, plenty of food, strong mutation: watch it branch into dozens of species on the family tree |
 
 ### Controls
 
@@ -146,14 +149,17 @@ The AI Lab Partner operates through four integrated systems:
 | 1 / 2 / 3 / 4 | Speed: 0.5x / 1x / 2x / 5x |
 | S | Toggle sound |
 | L | Toggle AI Lab Partner panel |
+| T | Open the family tree |
+| Esc | Clear a family spotlight |
 
 ### UI Tabs (Left Panel)
 
 - **World** — organism count, food settings, speed, population graph, species census
-- **Species** — species count, sizes, speed, lifespan, reproduction thresholds, food oases
+- **Species** — starting species count, sizes, speed, lifespan, reproduction thresholds, food oases
 - **Rules** — predation settings, food chain toggle, behavioral drive sliders (hunt, flee, flock, food attraction, separation)
-- **Evolve** — mutation on/off, mutation rate and strength, trait cost, per-trait evolution toggles (speed, aggression, efficiency, perception)
-- **Visual** — additive glow, detailed creatures, water effects, birth and death effects, oasis springs, algae glow, trail length
+- **Evolve** — mutation on/off, mutation rate and strength, trait cost, per-trait evolution toggles (speed, aggression, efficiency, perception), speciation on/off, split distance, sexual reproduction
+- **Tree** — the live family tree of every named species; hover for details, click to spotlight a family
+- **Visual** — additive glow, detailed creatures, water effects, birth and death effects, oasis springs, lineage trails, algae glow, trail length
 
 ### AI Lab Panel (Right Panel)
 
@@ -170,6 +176,14 @@ Every world is built from a numeric seed shown in the World tab. **Reset World**
 ### Trait Costs
 
 Genes are not free. With **Trait Cost** above 0, speed (quadratically, like drag), perception and aggression raise an organism's metabolic cost, and high efficiency lowers its top speed. Setting it to 0 restores the original cost-free genes. The **Gen** counter shows the deepest generation alive in the lineage, and the tooltip shows each organism's generation.
+
+### Speciation and the Family Tree
+
+Every organism belongs to a lineage. The starting species are the roots of the tree, founded on the average starting genome. At each birth, the newborn's four genes are compared with its species' founding genes. If it has drifted farther than the **Split Distance**, it joins a sister lineage that already split off in that direction, or founds a new one.
+
+A new lineage still counts as its parent species until it has 10 members. Until then it flocks with its parent species and is never eaten by it. After that it gets a name and becomes a species of its own, and different species can hunt each other by size. Names and hues come from the world seed, so a replayed seed grows the same species with the same names.
+
+What we found tuning it: with the default 1.3x size advantage to eat, the ancestor species eats young species' babies faster than they can grow, so new species appear but stay tiny. With a 2x size advantage (the Origin of Species preset), a single ancestor branched into about 20 living species within five simulated minutes and about 40 within ten, some with over a hundred members. In some runs the ancestor itself died out.
 
 ## Deployment
 
