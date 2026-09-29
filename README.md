@@ -46,9 +46,9 @@ The AI Lab Partner watches it all happen, analyzes the data, designs and runs ex
 
 | Provider | Endpoint | Default Model |
 |----------|----------|---------------|
-| **OpenAI** | api.openai.com | gpt-4o |
-| **Anthropic** | api.anthropic.com | claude-sonnet-4-20250514 |
-| **xAI** | api.x.ai | grok-3-mini |
+| **OpenAI** | api.openai.com | gpt-6-astra |
+| **Anthropic** | api.anthropic.com | claude-sonnet-5-5 |
+| **xAI** | api.x.ai | grok-4.3 |
 | **Custom / Local** | Any OpenAI-compatible URL | Your local model |
 
 The Custom/Local option supports LM Studio, Ollama, vLLM, text-generation-webui, or any server exposing an OpenAI-compatible chat completions endpoint. No API key required for local models.
@@ -148,7 +148,7 @@ The AI Lab Partner operates through four integrated systems:
 - **World** — organism count, food settings, speed, population graph, species census
 - **Species** — species count, sizes, speed, lifespan, reproduction thresholds, food oases
 - **Rules** — predation settings, food chain toggle, behavioral drive sliders (hunt, flee, flock, food attraction, separation)
-- **Evolve** — mutation on/off, mutation rate and strength, per-trait evolution toggles (speed, aggression, efficiency, perception)
+- **Evolve** — mutation on/off, mutation rate and strength, trait cost, per-trait evolution toggles (speed, aggression, efficiency, perception)
 - **Visual** — additive glow, death particles, oasis indicators, food glow intensity, trail length
 
 ### AI Lab Panel (Right Panel)
@@ -158,6 +158,14 @@ The AI Lab Partner operates through four integrated systems:
 - **Quick Actions** — one-click analysis, experiment design, species comparison, prediction, and full report
 - **Experiment Status** — pulsing indicator showing experiment progress and countdown
 - **Auto-Experiment** — AI-designed experiments execute automatically with before/after data capture
+
+### Seeds and Replay
+
+Every world is built from a numeric seed shown in the World tab. **Reset World** draws a new seed; **Replay** restarts the current seed. The simulation advances in fixed 1/60-second steps, so the same seed, settings and window size replay the same run exactly (clicking to add food or organisms changes the run from that point). Share links and exported `.primordial` files include the seed.
+
+### Trait Costs
+
+Genes are not free. With **Trait Cost** above 0, speed (quadratically, like drag), perception and aggression raise an organism's metabolic cost, and high efficiency lowers its top speed. Setting it to 0 restores the original cost-free genes. The **Gen** counter shows the deepest generation alive in the lineage, and the tooltip shows each organism's generation.
 
 ## Deployment
 

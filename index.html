@@ -98,6 +98,8 @@ button.btn.active{background:rgba(74,158,255,0.2);border-color:var(--accent);col
 #tooltip{position:fixed;z-index:20;pointer-events:none;padding:10px 14px;border-radius:12px;background:rgba(8,14,28,0.92);border:1px solid rgba(100,160,255,0.15);backdrop-filter:blur(16px);font-family:var(--font-mono);font-size:0.72rem;color:var(--text);line-height:1.6;opacity:0;transition:opacity 0.15s;max-width:220px;box-shadow:0 8px 30px rgba(0,0,0,0.4)}
 #tooltip.show{opacity:1}
 .time-display{position:fixed;top:12px;left:50%;transform:translateX(-50%);z-index:8;padding:8px 14px;border-radius:12px;background:rgba(8,14,28,0.75);border:1px solid rgba(255,255,255,0.06);backdrop-filter:blur(12px);font-family:var(--font-mono);font-size:0.78rem;color:var(--accent);letter-spacing:0.03em}
+.seed-input{flex:1;min-width:0;padding:7px 10px;border-radius:10px;border:1px solid rgba(255,255,255,0.06);background:rgba(255,255,255,0.04);color:var(--text);font-family:var(--font-mono);font-size:0.78rem;outline:none}
+.seed-input:focus{border-color:rgba(0,229,200,0.4)}
 select.sel{padding:7px 10px;border-radius:10px;border:1px solid rgba(255,255,255,0.06);background:rgba(255,255,255,0.04);color:var(--text);font-family:var(--font-display);font-size:0.78rem;cursor:pointer;appearance:none;transition:all 0.2s}
 select.sel:hover{border-color:rgba(74,158,255,0.2)}
 /* Recording indicator */
@@ -162,6 +164,11 @@ button.btn.recording{background:rgba(255,50,50,0.25)!important;border-color:rgba
           <option value="custom">Custom</option>
         </select>
       </div>
+      <div class="section-label">World Seed</div>
+      <div class="btn-row">
+        <input class="sel seed-input" id="seedInput" type="text" inputmode="numeric" spellcheck="false" title="Same seed + same settings + same window size = the same run"/>
+        <button class="btn" id="btnReplay" title="Restart this exact world from its seed">Replay</button>
+      </div>
       <div class="btn-row">
         <button class="btn" id="btnShareLink" title="Copy shareable URL">Share Link</button>
         <button class="btn" id="btnExport" title="Download .primordial file">Export</button>
@@ -207,6 +214,9 @@ button.btn.recording{background:rgba(255,50,50,0.25)!important;border-color:rgba
       <div class="toggle-row"><span>Enable Mutation</span><input type="checkbox" id="chkMutation" checked/></div>
       <div class="ctrl"><div class="ctrl-label"><span>Mutation Rate</span><strong id="vMutRate">0.15</strong></div><input type="range" id="sMutRate" min="0" max="0.5" step="0.01" value="0.15"/></div>
       <div class="ctrl"><div class="ctrl-label"><span>Mutation Strength</span><strong id="vMutStr">0.20</strong></div><input type="range" id="sMutStr" min="0.01" max="0.5" step="0.01" value="0.20"/></div>
+      <div class="section-label">Trait Costs</div>
+      <div class="ctrl"><div class="ctrl-label"><span>Trait Cost</span><strong id="vTraitCost">2.0</strong></div><input type="range" id="sTraitCost" min="0" max="3" step="0.1" value="2.0"/></div>
+      <div class="hint-text" style="font-size:0.68rem;color:var(--muted);margin:-4px 0 10px">Speed, perception and aggression burn extra energy; efficiency slows you down. 0 = traits are free.</div>
       <div class="section-label">Traits That Evolve</div>
       <div class="toggle-row"><span>Speed Gene</span><input type="checkbox" id="chkEvoSpeed" checked/></div>
       <div class="toggle-row"><span>Aggression Gene</span><input type="checkbox" id="chkEvoAggro" checked/></div>
@@ -329,7 +339,7 @@ sSpecies:$('sSpecies'),sStartSize:$('sStartSize'),sMaxSize:$('sMaxSize'),sOrgSpe
 sReproSize:$('sReproSize'),sOffspring:$('sOffspring'),sOases:$('sOases'),
 chkSameSpecies:$('chkSameSpecies'),chkFoodChain:$('chkFoodChain'),sEatRatio:$('sEatRatio'),sEatGain:$('sEatGain'),
 sHunt:$('sHunt'),sFlee:$('sFlee'),sFlock:$('sFlock'),sFoodDrive:$('sFoodDrive'),sSeparation:$('sSeparation'),
-chkMutation:$('chkMutation'),sMutRate:$('sMutRate'),sMutStr:$('sMutStr'),
+chkMutation:$('chkMutation'),sMutRate:$('sMutRate'),sMutStr:$('sMutStr'),sTraitCost:$('sTraitCost'),vTraitCost:$('vTraitCost'),seedInput:$('seedInput'),
 chkEvoSpeed:$('chkEvoSpeed'),chkEvoAggro:$('chkEvoAggro'),chkEvoEfficiency:$('chkEvoEfficiency'),chkEvoPerception:$('chkEvoPerception'),
 chkGlow:$('chkGlow'),chkDeathFX:$('chkDeathFX'),chkShowOases:$('chkShowOases'),
 sFoodGlow:$('sFoodGlow'),sTrail:$('sTrail'),
@@ -358,6 +368,11 @@ const ospecies=new Uint8Array(MAX_ORG),oage=new Float32Array(MAX_ORG);
 const oalive=new Uint8Array(MAX_ORG),okills=new Uint16Array(MAX_ORG);
 const gSpeed=new Float32Array(MAX_ORG),gAggro=new Float32Array(MAX_ORG);
 const gEfficiency=new Float32Array(MAX_ORG),gPerception=new Float32Array(MAX_ORG);
+const ogen=new Uint16Array(MAX_ORG);
+// Free-slot search resumes where the last one stopped (reset each step) instead of rescanning from 0
+let orgHint=0,foodHint=0;
+function allocOrg(){for(let i=orgHint;i<orgCount;i++)if(!oalive[i]){orgHint=i+1;return i;}if(orgCount<MAX_ORG){orgHint=orgCount+1;return orgCount++;}orgHint=orgCount;return -1;}
+function allocFood(){for(let i=foodHint;i<foodCount;i++)if(!falive[i]){foodHint=i+1;return i;}if(foodCount<MAX_FOOD){foodHint=foodCount+1;return foodCount++;}foodHint=foodCount;return -1;}
 
 const MAX_FOOD=15000;let foodCount=0;
 const fx=new Float32Array(MAX_FOOD),fy=new Float32Array(MAX_FOOD);
@@ -371,10 +386,10 @@ const dfxHue=new Float32Array(MAX_DFX),dfxLife=new Float32Array(MAX_DFX),dfxSize
 function spawnDeathFX(x,y,hue,count,strength){if(!ui.chkDeathFX.checked)return;for(let i=0;i<count;i++){const idx=dfxCount%MAX_DFX;dfxCount=Math.min(dfxCount+1,MAX_DFX);dfxX[idx]=x;dfxY[idx]=y;const a=Math.random()*TAU,spd=1+Math.random()*strength*2;dfxVX[idx]=Math.cos(a)*spd;dfxVY[idx]=Math.sin(a)*spd;dfxHue[idx]=hue;dfxLife[idx]=0.6+Math.random()*0.4;dfxSize[idx]=1.5+Math.random()*2*strength;}}
 
 const MAX_OASES=8;let oases=[];
-function initOases(){oases=[];const n=+ui.sOases.value;for(let i=0;i<n;i++)oases.push({x:Math.random()*W,y:Math.random()*H,radius:80+Math.random()*120,strength:2+Math.random()*3});}
+function initOases(){oases=[];const n=+ui.sOases.value;for(let i=0;i<n;i++)oases.push({x:rand()*W,y:rand()*H,radius:80+rand()*120,strength:2+rand()*3});}
 
-const CELL=40;let gridW=0,gridH=0,gridCounts,gridEntries;const GMAX=64;
-let fgridCounts,fgridEntries;const FGMAX=32;
+const CELL=40;let gridW=0,gridH=0,gridCounts,gridEntries;const GMAX=128;
+let fgridCounts,fgridEntries;const FGMAX=64;
 function initGrids(){gridW=Math.ceil(W/CELL)+1;gridH=Math.ceil(H/CELL)+1;const n=gridW*gridH;gridCounts=new Uint16Array(n);gridEntries=new Int32Array(n*GMAX);fgridCounts=new Uint16Array(n);fgridEntries=new Int32Array(n*FGMAX);}
 function buildGrid(){gridCounts.fill(0);for(let i=0;i<orgCount;i++){if(!oalive[i])continue;const c=Math.min(gridW-1,Math.max(0,ox[i]/CELL|0))+Math.min(gridH-1,Math.max(0,oy[i]/CELL|0))*gridW;const k=gridCounts[c];if(k<GMAX){gridEntries[c*GMAX+k]=i;gridCounts[c]=k+1;}}}
 function buildFoodGrid(){fgridCounts.fill(0);for(let i=0;i<foodCount;i++){if(!falive[i])continue;const c=Math.min(gridW-1,Math.max(0,fx[i]/CELL|0))+Math.min(gridH-1,Math.max(0,fy[i]/CELL|0))*gridW;const k=fgridCounts[c];if(k<FGMAX){fgridEntries[c*FGMAX+k]=i;fgridCounts[c]=k+1;}}}
@@ -382,7 +397,12 @@ function buildFoodGrid(){fgridCounts.fill(0);for(let i=0;i<foodCount;i++){if(!fa
 const POP_LEN=200;let popHistory=[];const popCtx=ui.popGraph.getContext('2d');let popTick=0;
 
 function clamp(v,lo,hi){return v<lo?lo:v>hi?hi:v;}
-const rand=(()=>{let s=Date.now()>>>0;return()=>{s+=0x6D2B79F5;let r=Math.imul(s^(s>>>15),s|1);r^=r+Math.imul(r^(r>>>7),r|61);return((r^(r>>>14))>>>0)/4294967296;};})();
+// Seeded RNG (mulberry32): every world is reproducible from its seed
+let rngState=0,worldSeed=0;
+function seedRandom(seed){worldSeed=seed>>>0;rngState=worldSeed;}
+function newSeed(){return (Math.random()*4294967296)>>>0;}
+function rand(){rngState=(rngState+0x6D2B79F5)|0;let r=Math.imul(rngState^(rngState>>>15),rngState|1);r^=r+Math.imul(r^(r>>>7),r|61);return((r^(r>>>14))>>>0)/4294967296;}
+function readSeedInput(){const v=parseInt(ui.seedInput.value,10);if(Number.isFinite(v)&&v>=0)return v>>>0;const s=newSeed();ui.seedInput.value=String(s);return s;}
 
 // Audio (same as v2)
 let audioCtx=null,masterGain=null,soundOn=false,ambOsc=null,ambGain=null;
@@ -448,13 +468,14 @@ function updateRecTimer(){
 // ═══════════════════════════════════════════════
 
 // All configurable slider/checkbox IDs
-const SETTING_SLIDERS=['sOrganisms','sFood','sFoodRate','sSpeed','sSpecies','sStartSize','sMaxSize','sOrgSpeed','sLifespan','sReproSize','sOffspring','sOases','sEatRatio','sEatGain','sHunt','sFlee','sFlock','sFoodDrive','sSeparation','sMutRate','sMutStr','sFoodGlow','sTrail'];
+const SETTING_SLIDERS=['sOrganisms','sFood','sFoodRate','sSpeed','sSpecies','sStartSize','sMaxSize','sOrgSpeed','sLifespan','sReproSize','sOffspring','sOases','sEatRatio','sEatGain','sHunt','sFlee','sFlock','sFoodDrive','sSeparation','sMutRate','sMutStr','sTraitCost','sFoodGlow','sTrail'];
 const SETTING_CHECKS=['chkSameSpecies','chkFoodChain','chkMutation','chkEvoSpeed','chkEvoAggro','chkEvoEfficiency','chkEvoPerception','chkGlow','chkDeathFX','chkShowOases'];
 
 function captureSettings(){
   const s={_format:'primordial-settings',_version:3,_date:new Date().toISOString(),_preset:$('selPreset').value,sliders:{},checks:{}};
   for(const id of SETTING_SLIDERS){const el=$(id);if(el)s.sliders[id]=el.value;}
   for(const id of SETTING_CHECKS){const el=$(id);if(el)s.checks[id]=el.checked;}
+  s.seed=worldSeed;
   return s;
 }
 
@@ -462,6 +483,7 @@ function applySettings(s){
   if(!s||!s.sliders)return false;
   for(const[id,val]of Object.entries(s.sliders)){const el=$(id);if(el)el.value=val;}
   for(const[id,val]of Object.entries(s.checks)){const el=$(id);if(el)el.checked=val;}
+  if(Number.isFinite(+s.seed))ui.seedInput.value=String(+s.seed>>>0);
   if(s._preset&&s._preset!=='custom')$('selPreset').value=s._preset;
   else $('selPreset').value='custom';
   updateLabels();
@@ -558,10 +580,10 @@ function getSimSnapshot(){
   const avgEnergy=new Array(nSp).fill(0);
   const avgGenes={speed:new Array(nSp).fill(0),aggro:new Array(nSp).fill(0),efficiency:new Array(nSp).fill(0),perception:new Array(nSp).fill(0)};
   const maxKiller={idx:-1,kills:0,species:-1};
-  let totalAlive=0,totalFood=0;
+  let totalAlive=0,totalFood=0,genSum=0;
   for(let i=0;i<orgCount;i++){
     if(!oalive[i])continue;
-    const sp=ospecies[i];counts[sp]++;totalAlive++;
+    const sp=ospecies[i];counts[sp]++;totalAlive++;genSum+=ogen[i];
     avgSize[sp]+=osize[i];avgEnergy[sp]+=oenergy[i];
     avgGenes.speed[sp]+=gSpeed[i];avgGenes.aggro[sp]+=gAggro[i];
     avgGenes.efficiency[sp]+=gEfficiency[i];avgGenes.perception[sp]+=gPerception[i];
@@ -576,11 +598,11 @@ function getSimSnapshot(){
     });
   }
   return{
-    simTime:simTime.toFixed(1),generation,totalAlive,totalFood,speciesCount:nSp,
+    simTime:simTime.toFixed(1),generation,avgGeneration:(genSum/Math.max(1,totalAlive)).toFixed(1),seed:worldSeed,totalAlive,totalFood,speciesCount:nSp,
     species:speciesData,
     settings:{organisms:ui.sOrganisms.value,food:ui.sFood.value,foodRate:ui.sFoodRate.value,speed:ui.sSpeed.value,
       hunt:ui.sHunt.value,flee:ui.sFlee.value,flock:ui.sFlock.value,foodDrive:ui.sFoodDrive.value,
-      eatRatio:ui.sEatRatio.value,mutRate:ui.sMutRate.value,mutStr:ui.sMutStr.value,
+      eatRatio:ui.sEatRatio.value,mutRate:ui.sMutRate.value,mutStr:ui.sMutStr.value,traitCost:ui.sTraitCost.value,
       foodChain:ui.chkFoodChain.checked,mutation:ui.chkMutation.checked},
     topPredator:maxKiller.kills>0?{species:SPECIES_NAMES[maxKiller.species%12],kills:maxKiller.kills,size:osize[maxKiller.idx]?.toFixed(1)}:null,
     extinctions:speciesData.filter(s=>s.population===0).map(s=>s.name)
@@ -678,12 +700,14 @@ Keep it concise but insightful. Use species names (Red, Orange, Gold, etc.) not 
 // API key stored in localStorage only — never transmitted except to chosen provider
 
 const AI_DEFAULTS={
-  openai:{url:'https://api.openai.com/v1/chat/completions',model:'gpt-4o'},
-  anthropic:{url:'https://api.anthropic.com/v1/messages',model:'claude-sonnet-4-20250514'},
-  xai:{url:'https://api.x.ai/v1/chat/completions',model:'grok-3-mini'},
+  openai:{url:'https://api.openai.com/v1/chat/completions',model:'gpt-6-astra'},
+  anthropic:{url:'https://api.anthropic.com/v1/messages',model:'claude-sonnet-5-5'},
+  xai:{url:'https://api.x.ai/v1/chat/completions',model:'grok-4.3'},
   custom:{url:'http://localhost:1234/v1/chat/completions',model:'local-model'}
 };
 
+// Old defaults saved in a browser are upgraded to the current ones
+const LEGACY_MODELS=['gpt-4o','claude-sonnet-4-20250514','grok-3-mini'];
 let aiConfig={provider:'openai',apiKey:'',model:'',customUrl:''};
 
 function loadAiSettings(){
@@ -693,7 +717,7 @@ function loadAiSettings(){
       const s=JSON.parse(saved);
       aiConfig.provider=s.provider||'openai';
       aiConfig.apiKey=s.apiKey||'';
-      aiConfig.model=s.model||'';
+      aiConfig.model=LEGACY_MODELS.includes(s.model)?'':(s.model||'');
       aiConfig.customUrl=s.customUrl||'';
     }
   }catch(e){}
@@ -753,7 +777,7 @@ async function callProviderAPI(messages,systemPrompt){
     const resp=await fetch(AI_DEFAULTS.anthropic.url,{
       method:'POST',
       headers:{'Content-Type':'application/json','x-api-key':apiKey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
-      body:JSON.stringify({model,max_tokens:1000,system:systemPrompt,messages})
+      body:JSON.stringify({model,max_tokens:2000,system:systemPrompt,messages})
     });
     if(!resp.ok){const e=await resp.text();throw new Error(`Anthropic ${resp.status}: ${e.slice(0,200)}`);}
     const data=await resp.json();
@@ -764,7 +788,9 @@ async function callProviderAPI(messages,systemPrompt){
     if(provider==='custom')url=aiConfig.customUrl||AI_DEFAULTS.custom.url;
     const headers={'Content-Type':'application/json'};
     if(apiKey)headers['Authorization']='Bearer '+apiKey;
-    const body={model,max_tokens:1000,messages:[{role:'system',content:systemPrompt},...messages]};
+    const body={model,messages:[{role:'system',content:systemPrompt},...messages]};
+    // OpenAI's current models take max_completion_tokens; xAI and local servers take max_tokens
+    if(provider==='openai')body.max_completion_tokens=2000;else body.max_tokens=2000;
     const resp=await fetch(url,{method:'POST',headers,body:JSON.stringify(body)});
     if(!resp.ok){const e=await resp.text();throw new Error(`${provider} ${resp.status}: ${e.slice(0,200)}`);}
     const data=await resp.json();
@@ -795,7 +821,7 @@ async function callAI(userPrompt,msgClass='assistant'){
   const systemPrompt=`You are the AI Lab Partner for Primordial, a WebGL particle ecosystem simulator. You observe a live simulation where organisms eat, hunt, flee, flock, reproduce, mutate, and evolve.
 
 Current simulation state:
-- Time: ${snapshot.simTime}s | Generation: ${snapshot.generation}
+- Time: ${snapshot.simTime}s | Deepest generation: ${snapshot.generation} | Average generation: ${snapshot.avgGeneration} | Seed: ${snapshot.seed}
 - Alive: ${snapshot.totalAlive} | Food: ${snapshot.totalFood}
 - Species: ${JSON.stringify(snapshot.species)}
 - Extinctions: ${snapshot.extinctions.length?snapshot.extinctions.join(', '):'None yet'}
@@ -806,8 +832,10 @@ You can suggest experiments. When you do, output a JSON block in this exact form
 \`\`\`experiment
 {"hypothesis":"...","changes":{"sHunt":"2.0","sFlee":"0.5"},"checkboxes":{"chkFoodChain":true},"duration":30}
 \`\`\`
-Valid slider IDs: sOrganisms, sFood, sFoodRate, sSpeed, sSpecies, sStartSize, sMaxSize, sOrgSpeed, sLifespan, sReproSize, sOffspring, sOases, sEatRatio, sEatGain, sHunt, sFlee, sFlock, sFoodDrive, sSeparation, sMutRate, sMutStr
+Valid slider IDs: sOrganisms, sFood, sFoodRate, sSpeed, sSpecies, sStartSize, sMaxSize, sOrgSpeed, sLifespan, sReproSize, sOffspring, sOases, sEatRatio, sEatGain, sHunt, sFlee, sFlock, sFoodDrive, sSeparation, sMutRate, sMutStr, sTraitCost
 Valid checkbox IDs: chkSameSpecies, chkFoodChain, chkMutation, chkEvoSpeed, chkEvoAggro, chkEvoEfficiency, chkEvoPerception
+
+Trait costs: with sTraitCost above 0, high speed, perception and aggression genes raise metabolic cost (speed quadratically) and high efficiency lowers top speed, so each gene is a trade-off rather than a free upgrade.
 
 Be concise, scientific, and insightful. Use species color names (Red, Orange, Gold, Green, Teal, Cyan, Blue, Indigo, Purple, Magenta). When analyzing, reference specific gene values and population numbers.`;
 
@@ -861,9 +889,10 @@ ui.aiInput.addEventListener('keydown',(e)=>{if(e.key==='Enter'&&!e.shiftKey){e.p
 // WORLD INIT & SIMULATION (same as v2)
 // ═══════════════════════════════════════════════
 function initWorld(){
+  seedRandom(readSeedInput());orgHint=0;foodHint=0;foodAccum=0;stepAcc=0;
   const nOrg=+ui.sOrganisms.value,nFood=+ui.sFood.value,nSp=+ui.sSpecies.value,sz0=+ui.sStartSize.value;
   orgCount=nOrg;
-  for(let i=0;i<orgCount;i++){ox[i]=rand()*W;oy[i]=rand()*H;ovx[i]=(rand()-0.5)*2;ovy[i]=(rand()-0.5)*2;ospecies[i]=i%nSp;osize[i]=sz0+(rand()-0.5)*1.5;oenergy[i]=osize[i]*2;oage[i]=rand()*5;oalive[i]=1;okills[i]=0;gSpeed[i]=0.4+rand()*0.2;gAggro[i]=0.4+rand()*0.2;gEfficiency[i]=0.4+rand()*0.2;gPerception[i]=0.4+rand()*0.2;}
+  for(let i=0;i<orgCount;i++){ox[i]=rand()*W;oy[i]=rand()*H;ovx[i]=(rand()-0.5)*2;ovy[i]=(rand()-0.5)*2;ospecies[i]=i%nSp;osize[i]=sz0+(rand()-0.5)*1.5;oenergy[i]=osize[i]*2;oage[i]=rand()*5;oalive[i]=1;okills[i]=0;ogen[i]=0;gSpeed[i]=0.4+rand()*0.2;gAggro[i]=0.4+rand()*0.2;gEfficiency[i]=0.4+rand()*0.2;gPerception[i]=0.4+rand()*0.2;}
   foodCount=nFood;
   for(let i=0;i<foodCount;i++){fx[i]=rand()*W;fy[i]=rand()*H;falive[i]=1;fglow[i]=rand()*TAU;}
   dfxCount=0;generation=0;simTime=0;
@@ -874,13 +903,13 @@ function initWorld(){
 }
 
 let foodAccum=0;
-function spawnFood(dt){foodAccum+=(+ui.sFoodRate.value)*dt;let n=foodAccum|0;foodAccum-=n;while(n-->0){let idx=-1;for(let i=0;i<foodCount;i++){if(!falive[i]){idx=i;break;}}if(idx<0&&foodCount<MAX_FOOD)idx=foodCount++;if(idx<0)return;if(oases.length>0&&rand()<0.6){const o=oases[rand()*oases.length|0];const a=rand()*TAU,r=rand()*o.radius;fx[idx]=((o.x+Math.cos(a)*r)%W+W)%W;fy[idx]=((o.y+Math.sin(a)*r)%H+H)%H;}else{fx[idx]=rand()*W;fy[idx]=rand()*H;}falive[idx]=1;fglow[idx]=rand()*TAU;}}
+function spawnFood(dt){foodAccum+=(+ui.sFoodRate.value)*dt;let n=foodAccum|0;foodAccum-=n;foodHint=0;while(n-->0){const idx=allocFood();if(idx<0)return;if(oases.length>0&&rand()<0.6){const o=oases[rand()*oases.length|0];const a=rand()*TAU,r=rand()*o.radius;fx[idx]=((o.x+Math.cos(a)*r)%W+W)%W;fy[idx]=((o.y+Math.sin(a)*r)%H+H)%H;}else{fx[idx]=rand()*W;fy[idx]=rand()*H;}falive[idx]=1;fglow[idx]=rand()*TAU;}}
 
 function reproduce(pi){
   const nOff=+ui.sOffspring.value,sz0=+ui.sStartSize.value;
   const mutOn=ui.chkMutation.checked,mutRate=+ui.sMutRate.value,mutStr=+ui.sMutStr.value;
-  const now=performance.now();if(now-lastPopSound>50){playPop(600+rand()*400,0.3);lastPopSound=now;}
-  for(let c=0;c<nOff;c++){let idx=-1;for(let i=0;i<orgCount;i++){if(!oalive[i]){idx=i;break;}}if(idx<0&&orgCount<MAX_ORG)idx=orgCount++;if(idx<0)return;ox[idx]=ox[pi]+(rand()-0.5)*20;oy[idx]=oy[pi]+(rand()-0.5)*20;ovx[idx]=(rand()-0.5)*3;ovy[idx]=(rand()-0.5)*3;ospecies[idx]=ospecies[pi];osize[idx]=sz0;oenergy[idx]=sz0*2;oage[idx]=0;oalive[idx]=1;okills[idx]=0;gSpeed[idx]=gSpeed[pi];gAggro[idx]=gAggro[pi];gEfficiency[idx]=gEfficiency[pi];gPerception[idx]=gPerception[pi];if(mutOn){if(ui.chkEvoSpeed.checked&&rand()<mutRate)gSpeed[idx]=clamp(gSpeed[idx]+(rand()-0.5)*mutStr,0.05,1);if(ui.chkEvoAggro.checked&&rand()<mutRate)gAggro[idx]=clamp(gAggro[idx]+(rand()-0.5)*mutStr,0.05,1);if(ui.chkEvoEfficiency.checked&&rand()<mutRate)gEfficiency[idx]=clamp(gEfficiency[idx]+(rand()-0.5)*mutStr,0.05,1);if(ui.chkEvoPerception.checked&&rand()<mutRate)gPerception[idx]=clamp(gPerception[idx]+(rand()-0.5)*mutStr,0.05,1);}}generation++;}
+  const now=performance.now();if(now-lastPopSound>50){playPop(600+Math.random()*400,0.3);lastPopSound=now;}
+  for(let c=0;c<nOff;c++){const idx=allocOrg();if(idx<0)return;ogen[idx]=Math.min(65535,ogen[pi]+1);if(ogen[idx]>generation)generation=ogen[idx];ox[idx]=ox[pi]+(rand()-0.5)*20;oy[idx]=oy[pi]+(rand()-0.5)*20;ovx[idx]=(rand()-0.5)*3;ovy[idx]=(rand()-0.5)*3;ospecies[idx]=ospecies[pi];osize[idx]=sz0;oenergy[idx]=sz0*2;oage[idx]=0;oalive[idx]=1;okills[idx]=0;gSpeed[idx]=gSpeed[pi];gAggro[idx]=gAggro[pi];gEfficiency[idx]=gEfficiency[pi];gPerception[idx]=gPerception[pi];if(mutOn){if(ui.chkEvoSpeed.checked&&rand()<mutRate)gSpeed[idx]=clamp(gSpeed[idx]+(rand()-0.5)*mutStr,0.05,1);if(ui.chkEvoAggro.checked&&rand()<mutRate)gAggro[idx]=clamp(gAggro[idx]+(rand()-0.5)*mutStr,0.05,1);if(ui.chkEvoEfficiency.checked&&rand()<mutRate)gEfficiency[idx]=clamp(gEfficiency[idx]+(rand()-0.5)*mutStr,0.05,1);if(ui.chkEvoPerception.checked&&rand()<mutRate)gPerception[idx]=clamp(gPerception[idx]+(rand()-0.5)*mutStr,0.05,1);}}}
 
 function canEatInChain(predSp,preySp,nSp){return((predSp+1)%nSp)===preySp;}
 
@@ -889,7 +918,7 @@ function simulate(dt){
   const reproSz=+ui.sReproSize.value,eatR=+ui.sEatRatio.value,eatG=+ui.sEatGain.value,sameSafe=ui.chkSameSpecies.checked;
   const foodChain=ui.chkFoodChain.checked,nSp=+ui.sSpecies.value;
   const hunt=+ui.sHunt.value,flee=+ui.sFlee.value,flock=+ui.sFlock.value,foodD=+ui.sFoodDrive.value,sep=+ui.sSeparation.value;
-  const sDt=dt*spd;if(sDt<0.0001)return;simTime+=sDt;
+  const sDt=dt*spd;if(sDt<0.0001)return;simTime+=sDt;orgHint=0;const tc=+ui.sTraitCost.value;
   if(soundOn&&ambOsc){let alive=0;for(let i=0;i<orgCount;i++)if(oalive[i])alive++;ambOsc.frequency.setTargetAtTime(40+(alive/Math.max(1,+ui.sOrganisms.value))*80,audioCtx.currentTime,0.5);}
   buildGrid();buildFoodGrid();const repro=[];
   for(let i=0;i<orgCount;i++){
@@ -908,15 +937,17 @@ function simulate(dt){
     let nfD=999999,nfI=-1;const fScan=Math.min(3,1+gPerception[i]*2|0);
     for(let dy2=-fScan;dy2<=fScan;dy2++)for(let dx2=-fScan;dx2<=fScan;dx2++){const nx=cx+dx2,ny=cy+dy2;if(nx<0||nx>=gridW||ny<0||ny>=gridH)continue;const ci=ny*gridW+nx,cnt=fgridCounts[ci],base=ci*FGMAX;for(let k=0;k<cnt;k++){const fi=fgridEntries[base+k];if(!falive[fi])continue;const fdx=fx[fi]-ox[i],fdy=fy[fi]-oy[i],fd2=fdx*fdx+fdy*fdy;if(fd2<nfD){nfD=fd2;nfI=fi;}}}
     if(nfI>=0){const fdx=fx[nfI]-ox[i],fdy=fy[nfI]-oy[i],fd=Math.sqrt(nfD)+0.1;if(fd<mySz+3){falive[nfI]=0;oenergy[i]+=3;}else{ax+=fdx/fd*foodD*0.3;ay+=fdy/fd*foodD*0.3;}}
-    const wt=performance.now()*0.001+i*0.7;ax+=Math.sin(wt*1.3+oy[i]*0.01)*0.15;ay+=Math.cos(wt*0.9+ox[i]*0.01)*0.15;
-    const spdGene=0.6+gSpeed[i]*0.8,sS=orgSpd*spdGene*(1/(1+mySz*0.04));
+    const wt=simTime+i*0.7;ax+=Math.sin(wt*1.3+oy[i]*0.01)*0.15;ay+=Math.cos(wt*0.9+ox[i]*0.01)*0.15;
+    const spdGene=(0.6+gSpeed[i]*0.8)*(1-tc*0.3*(gEfficiency[i]-0.5)),sS=orgSpd*spdGene*(1/(1+mySz*0.04));
     ovx[i]=(ovx[i]+ax*sDt*60)*0.95;ovy[i]=(ovy[i]+ay*sDt*60)*0.95;const vel=Math.sqrt(ovx[i]*ovx[i]+ovy[i]*ovy[i]),mv=sS*3;if(vel>mv){ovx[i]=ovx[i]/vel*mv;ovy[i]=ovy[i]/vel*mv;}
     ox[i]+=ovx[i]*sS;oy[i]+=ovy[i]*sS;if(ox[i]<0)ox[i]+=W;else if(ox[i]>W)ox[i]-=W;if(oy[i]<0)oy[i]+=H;else if(oy[i]>H)oy[i]-=H;
-    const metaCost=0.3*(1.2-gEfficiency[i]*0.5);oenergy[i]-=sDt*metaCost;osize[i]=clamp(Math.sqrt(Math.max(0.5,oenergy[i]))*1.5,1,maxSz);oage[i]+=sDt;
+    // Trait costs: fast, far-seeing, aggressive bodies burn more energy (centered so a 50% genome costs the same as before).
+    // Speed cost is quadratic, like drag.
+    const geneLoad=1.8*(gSpeed[i]*gSpeed[i]-0.25)+0.6*(gPerception[i]-0.5)+0.3*(gAggro[i]-0.5);const metaCost=0.3*(1.2-gEfficiency[i]*0.5)*Math.max(0.2,1+tc*geneLoad);oenergy[i]-=sDt*metaCost;osize[i]=clamp(Math.sqrt(Math.max(0.5,oenergy[i]))*1.5,1,maxSz);oage[i]+=sDt;
     if(oenergy[i]<=0||oage[i]>life){if(oenergy[i]<=0)spawnDeathFX(ox[i],oy[i],SPECIES_HUES[mySp%SPECIES_HUES.length],2,0.3);oalive[i]=0;continue;}
     if(osize[i]>=reproSz&&oenergy[i]>reproSz*2.5){oenergy[i]*=0.4;osize[i]=clamp(Math.sqrt(Math.max(0.5,oenergy[i]))*1.5,1,maxSz);repro.push(i);}
   }
-  for(const r of repro)reproduce(r);
+  for(const r of repro)if(oalive[r])reproduce(r); // a parent eaten later in this step doesn't give birth
   for(let i=0;i<dfxCount;i++){dfxLife[i]-=sDt*2;if(dfxLife[i]<=0)continue;dfxX[i]+=dfxVX[i];dfxY[i]+=dfxVY[i];dfxVX[i]*=0.95;dfxVY[i]*=0.95;}
 }
 
@@ -929,7 +960,7 @@ function updatePopGraph(dt){popTick+=dt;if(popTick<0.25)return;popTick=0;const n
 // Tooltip
 let mouseX=0,mouseY=0,hoveredOrg=-1;
 function findOrgAtMouse(){let best=-1,bestD=400;const cx=Math.min(gridW-1,Math.max(0,mouseX/CELL|0)),cy=Math.min(gridH-1,Math.max(0,mouseY/CELL|0));for(let dy=-1;dy<=1;dy++)for(let dx=-1;dx<=1;dx++){const nx=cx+dx,ny=cy+dy;if(nx<0||nx>=gridW||ny<0||ny>=gridH)continue;const ci=ny*gridW+nx,cnt=gridCounts[ci],base=ci*GMAX;for(let k=0;k<cnt;k++){const j=gridEntries[base+k];if(!oalive[j])continue;const ddx=ox[j]-mouseX,ddy=oy[j]-mouseY,d2=ddx*ddx+ddy*ddy;if(d2<bestD){bestD=d2;best=j;}}}return best;}
-function updateTooltip(){hoveredOrg=findOrgAtMouse();if(hoveredOrg<0){ui.tooltip.classList.remove('show');return;}const i=hoveredOrg;ui.tooltip.innerHTML=`<b style="color:${speciesColor(ospecies[i]).css}">${SPECIES_NAMES[ospecies[i]%12]} #${i}</b><br>Size: ${osize[i].toFixed(1)} · Energy: ${oenergy[i].toFixed(1)}<br>Age: ${oage[i].toFixed(1)}s · Kills: ${okills[i]}<br><span style="color:var(--accent2)">Spd:</span>${(gSpeed[i]*100|0)}% <span style="color:var(--warm)">Agg:</span>${(gAggro[i]*100|0)}% <span style="color:var(--accent)">Eff:</span>${(gEfficiency[i]*100|0)}% <span style="color:var(--accent3)">Per:</span>${(gPerception[i]*100|0)}%`;ui.tooltip.style.left=Math.min(W-230,mouseX+15)+'px';ui.tooltip.style.top=Math.min(H-100,mouseY+15)+'px';ui.tooltip.classList.add('show');}
+function updateTooltip(){hoveredOrg=findOrgAtMouse();if(hoveredOrg<0){ui.tooltip.classList.remove('show');return;}const i=hoveredOrg;ui.tooltip.innerHTML=`<b style="color:${speciesColor(ospecies[i]).css}">${SPECIES_NAMES[ospecies[i]%12]} #${i}</b><br>Size: ${osize[i].toFixed(1)} · Energy: ${oenergy[i].toFixed(1)}<br>Age: ${oage[i].toFixed(1)}s · Kills: ${okills[i]} · Gen: ${ogen[i]}<br><span style="color:var(--accent2)">Spd:</span>${(gSpeed[i]*100|0)}% <span style="color:var(--warm)">Agg:</span>${(gAggro[i]*100|0)}% <span style="color:var(--accent)">Eff:</span>${(gEfficiency[i]*100|0)}% <span style="color:var(--accent3)">Per:</span>${(gPerception[i]*100|0)}%`;ui.tooltip.style.left=Math.min(W-230,mouseX+15)+'px';ui.tooltip.style.top=Math.min(H-100,mouseY+15)+'px';ui.tooltip.classList.add('show');}
 
 // GL Buffers
 const RMAX=MAX_ORG+MAX_FOOD+MAX_DFX;
@@ -937,10 +968,12 @@ let glPos=new Float32Array(RMAX*2),glHue=new Float32Array(RMAX),glAlpha=new Floa
 
 // Main loop
 let frameCount=0,heatTick=0,tooltipTick=0;
+const SIM_STEP=1/60,MAX_STEPS_PER_FRAME=2;let stepAcc=0;
 function frame(now){
   requestAnimationFrame(frame);const rawDt=Math.min(0.05,(now-lastT)/1000);lastT=now;
   if(!running){updateTooltip();return;}
-  spawnFood(rawDt);simulate(rawDt);checkExperiment();
+  // Fixed timestep: the simulation advances in identical 1/60s steps regardless of frame rate, so a seed replays exactly
+  stepAcc+=rawDt;let steps=0;while(stepAcc>=SIM_STEP&&steps<MAX_STEPS_PER_FRAME){spawnFood(SIM_STEP*(+ui.sSpeed.value));simulate(SIM_STEP);checkExperiment();stepAcc-=SIM_STEP;steps++;}if(steps===MAX_STEPS_PER_FRAME)stepAcc=0;
   if(++heatTick>=4){drawOases();heatTick=0;}
   updatePopGraph(rawDt);if(++tooltipTick>=3){updateTooltip();tooltipTick=0;}
   const mins=simTime/60|0,secs=simTime%60|0;ui.timeDisplay.textContent=(mins<10?'0':'')+mins+':'+(secs<10?'0':'')+secs;
@@ -966,7 +999,7 @@ function frame(now){
   updateLabels();frameCount++;
 }
 
-function updateLabels(){ui.vOrganisms.textContent=ui.sOrganisms.value;ui.vFood.textContent=ui.sFood.value;ui.vFoodRate.textContent=ui.sFoodRate.value+'/s';ui.vSpeed.textContent=(+ui.sSpeed.value).toFixed(2);ui.vSpecies.textContent=ui.sSpecies.value;ui.vStartSize.textContent=(+ui.sStartSize.value).toFixed(1);ui.vMaxSize.textContent=ui.sMaxSize.value;ui.vOrgSpeed.textContent=(+ui.sOrgSpeed.value).toFixed(1);ui.vLifespan.textContent=ui.sLifespan.value+'s';ui.vReproSize.textContent=ui.sReproSize.value;ui.vOffspring.textContent=ui.sOffspring.value;ui.vOases.textContent=ui.sOases.value;ui.vEatRatio.textContent=(+ui.sEatRatio.value).toFixed(2)+'x';ui.vEatGain.textContent=(+ui.sEatGain.value).toFixed(2);ui.vHunt.textContent=(+ui.sHunt.value).toFixed(1);ui.vFlee.textContent=(+ui.sFlee.value).toFixed(1);ui.vFlock.textContent=(+ui.sFlock.value).toFixed(2);ui.vFoodDrive.textContent=(+ui.sFoodDrive.value).toFixed(1);ui.vSeparation.textContent=(+ui.sSeparation.value).toFixed(2);ui.vMutRate.textContent=(+ui.sMutRate.value).toFixed(2);ui.vMutStr.textContent=(+ui.sMutStr.value).toFixed(2);ui.vFoodGlow.textContent=(+ui.sFoodGlow.value).toFixed(1);const tv=+ui.sTrail.value;ui.vTrail.textContent=tv<0.05?'Off':tv<0.3?'Short':tv<0.6?'Medium':'Long';ui.btnPause.textContent=running?'Pause':'Play';ui.btnPause.classList.toggle('active',!running);}
+function updateLabels(){ui.vTraitCost.textContent=(+ui.sTraitCost.value).toFixed(1);ui.vOrganisms.textContent=ui.sOrganisms.value;ui.vFood.textContent=ui.sFood.value;ui.vFoodRate.textContent=ui.sFoodRate.value+'/s';ui.vSpeed.textContent=(+ui.sSpeed.value).toFixed(2);ui.vSpecies.textContent=ui.sSpecies.value;ui.vStartSize.textContent=(+ui.sStartSize.value).toFixed(1);ui.vMaxSize.textContent=ui.sMaxSize.value;ui.vOrgSpeed.textContent=(+ui.sOrgSpeed.value).toFixed(1);ui.vLifespan.textContent=ui.sLifespan.value+'s';ui.vReproSize.textContent=ui.sReproSize.value;ui.vOffspring.textContent=ui.sOffspring.value;ui.vOases.textContent=ui.sOases.value;ui.vEatRatio.textContent=(+ui.sEatRatio.value).toFixed(2)+'x';ui.vEatGain.textContent=(+ui.sEatGain.value).toFixed(2);ui.vHunt.textContent=(+ui.sHunt.value).toFixed(1);ui.vFlee.textContent=(+ui.sFlee.value).toFixed(1);ui.vFlock.textContent=(+ui.sFlock.value).toFixed(2);ui.vFoodDrive.textContent=(+ui.sFoodDrive.value).toFixed(1);ui.vSeparation.textContent=(+ui.sSeparation.value).toFixed(2);ui.vMutRate.textContent=(+ui.sMutRate.value).toFixed(2);ui.vMutStr.textContent=(+ui.sMutStr.value).toFixed(2);ui.vFoodGlow.textContent=(+ui.sFoodGlow.value).toFixed(1);const tv=+ui.sTrail.value;ui.vTrail.textContent=tv<0.05?'Off':tv<0.3?'Short':tv<0.6?'Medium':'Long';ui.btnPause.textContent=running?'Pause':'Play';ui.btnPause.classList.toggle('active',!running);}
 
 function resize(){W=window.innerWidth;H=window.innerHeight;canvas.width=W;canvas.height=H;gl.viewport(0,0,W,H);gl.useProgram(prog);gl.uniform2f(uRes,W,H);gl.clearColor(0.02,0.04,0.08,1);gl.clear(gl.COLOR_BUFFER_BIT);}
 window.addEventListener('resize',()=>{resize();initGrids();});
@@ -983,7 +1016,9 @@ ui.aiClose.addEventListener('click',()=>{ui.aiPanel.classList.add('collapsed');u
 ui.aiToggle.addEventListener('click',()=>{interact();ui.aiPanel.classList.remove('collapsed');ui.aiToggle.classList.add('hidden');});
 
 ui.btnPause.addEventListener('click',()=>{interact();running=!running;updateLabels();});
-ui.btnReset.addEventListener('click',()=>{interact();resize();initWorld();});
+ui.btnReset.addEventListener('click',()=>{interact();ui.seedInput.value=String(newSeed());resize();initWorld();});
+$('btnReplay').addEventListener('click',()=>{interact();resize();initWorld();});
+ui.seedInput.addEventListener('keydown',(e)=>{if(e.key==='Enter'){resize();initWorld();}});
 ui.btnSound.addEventListener('click',()=>{interact();toggleSound();});
 ui.btnRecord.addEventListener('click',()=>{interact();startRecording();});
 ui.btnFullscreen.addEventListener('click',()=>{interact();if(!document.fullscreenElement)document.documentElement.requestFullscreen?.();else document.exitFullscreen?.();});
@@ -1000,8 +1035,8 @@ $('btnImport').addEventListener('click',()=>{interact();$('importFile').click();
 $('importFile').addEventListener('change',(e)=>{if(e.target.files[0])importSettings(e.target.files[0]);e.target.value='';});
 
 canvas.addEventListener('mousemove',(e)=>{mouseX=e.clientX;mouseY=e.clientY;});
-canvas.addEventListener('click',(e)=>{interact();for(let s=0;s<8;s++){let idx=-1;for(let i=0;i<foodCount;i++){if(!falive[i]){idx=i;break;}}if(idx<0&&foodCount<MAX_FOOD)idx=foodCount++;if(idx<0)break;fx[idx]=e.clientX+(Math.random()-0.5)*30;fy[idx]=e.clientY+(Math.random()-0.5)*30;falive[idx]=1;fglow[idx]=Math.random()*TAU;}});
-canvas.addEventListener('contextmenu',(e)=>{e.preventDefault();interact();const nSp=+ui.sSpecies.value,sz0=+ui.sStartSize.value,sp=Math.random()*nSp|0;for(let s=0;s<5;s++){let idx=-1;for(let i=0;i<orgCount;i++){if(!oalive[i]){idx=i;break;}}if(idx<0&&orgCount<MAX_ORG)idx=orgCount++;if(idx<0)break;ox[idx]=e.clientX+(Math.random()-0.5)*25;oy[idx]=e.clientY+(Math.random()-0.5)*25;ovx[idx]=(Math.random()-0.5)*2;ovy[idx]=(Math.random()-0.5)*2;ospecies[idx]=sp;osize[idx]=sz0;oenergy[idx]=sz0*2;oage[idx]=0;oalive[idx]=1;okills[idx]=0;gSpeed[idx]=0.3+Math.random()*0.4;gAggro[idx]=0.3+Math.random()*0.4;gEfficiency[idx]=0.3+Math.random()*0.4;gPerception[idx]=0.3+Math.random()*0.4;}});
+canvas.addEventListener('click',(e)=>{interact();foodHint=0;for(let s=0;s<8;s++){const idx=allocFood();if(idx<0)break;fx[idx]=e.clientX+(Math.random()-0.5)*30;fy[idx]=e.clientY+(Math.random()-0.5)*30;falive[idx]=1;fglow[idx]=Math.random()*TAU;}});
+canvas.addEventListener('contextmenu',(e)=>{e.preventDefault();interact();const nSp=+ui.sSpecies.value,sz0=+ui.sStartSize.value,sp=Math.random()*nSp|0;orgHint=0;for(let s=0;s<5;s++){const idx=allocOrg();if(idx<0)break;ogen[idx]=0;ox[idx]=e.clientX+(Math.random()-0.5)*25;oy[idx]=e.clientY+(Math.random()-0.5)*25;ovx[idx]=(Math.random()-0.5)*2;ovy[idx]=(Math.random()-0.5)*2;ospecies[idx]=sp;osize[idx]=sz0;oenergy[idx]=sz0*2;oage[idx]=0;oalive[idx]=1;okills[idx]=0;gSpeed[idx]=0.3+Math.random()*0.4;gAggro[idx]=0.3+Math.random()*0.4;gEfficiency[idx]=0.3+Math.random()*0.4;gPerception[idx]=0.3+Math.random()*0.4;}});
 
 window.addEventListener('keydown',(e)=>{
   if(e.target.tagName==='INPUT'||e.target.tagName==='SELECT'||e.target.tagName==='TEXTAREA')return;
