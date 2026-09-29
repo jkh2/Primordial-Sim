@@ -257,7 +257,7 @@ Learn more about the SIDLF framework and human-AI symbiosis at [jameskeithharwoo
 
 ## License
 
-**PolyForm Noncommercial License 1.0.0** — See [LICENSE](LICENSE) for full terms.
+**Sentinel AI Systems Non-Commercial License v1.0** — See [LICENSE](LICENSE) for full terms.
 
 **Free for:** personal use, entertainment, education, academic research, classroom instruction, and learning from the code.
 
