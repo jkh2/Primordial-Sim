@@ -6,7 +6,7 @@
 
 A real-time WebGL ecosystem where living cells eat, hunt, flee, flock, reproduce, mutate, and split into new species that nobody designed, with a multi-provider AI Lab Partner that observes, experiments, and writes research reports on the living world. All from simple rules, all in your browser.
 
-**[Launch Primordial](https://jkh2.github.io/Primordial-Sim/)** · Version 5.1 · Single-file HTML · Zero install · GitHub Pages
+**[Launch Primordial](https://jkh2.github.io/Primordial-Sim/)** · Version 5.2 · Single-file HTML · Zero install · GitHub Pages
 
 **New here?** Choose the **Origin of Species** preset in the World tab and press **T**. Everything starts as one red species; within a few minutes the family tree fills with species that split off on their own.
 
@@ -27,6 +27,11 @@ We believe this is how humans and AI should work together: as partners with comp
 ---
 
 ## What's New in v5
+
+**v5.2, October 2, 2026: death feeds the pond**
+
+- **Dead bodies become algae.** An organism that dies of old age, or is eaten, leaves a fading body that breaks down into algae over four seconds, so its energy goes back into the pond instead of vanishing. Before, old age carried away about 70% of all the energy that entered the default world. The new Dead Bodies Become Algae slider in the Rules tab sets how much comes back (90% by default; 0% is the old behavior).
+- **A pond that stays alive.** The default world used to starve down to about 20 organisms. With decay and a food rate of 25 (up from 15), it holds roughly 120 to 300. Stable Eden now gets 35 food per second and holds about 300 organisms across several species. Every preset now holds a living population; Battle Royale still ends with a few survivors, and Extinction Event now dies off slowly instead of all at once.
 
 **v5.1, October 2, 2026: parents grow up, softer glow**
 
@@ -69,7 +74,7 @@ The AI Lab Partner watches it all happen, analyzes the data, designs and runs ex
 
 ## What It Does
 
-**Ecosystem mechanics** — Organisms eat algae scattered across the map, with fertile oases that concentrate food in places. Energy drives growth: size is the square root of energy, so bigger organisms need proportionally more food. When one organism is sufficiently larger than an organism of another species (1.3x by default, set by Size Advantage to Eat), it can eat it and take its energy. Same-species organisms are protected from each other by default, which encourages territories. A parent gives each newborn the energy it starts life with, up to 60% of its own in all, then rests for 3 seconds before it can breed again.
+**Ecosystem mechanics** — Organisms eat algae scattered across the map, with fertile oases that concentrate food in places. Energy drives growth: size is the square root of energy, so bigger organisms need proportionally more food. When one organism is sufficiently larger than an organism of another species (1.3x by default, set by Size Advantage to Eat), it can eat it and take its energy. Same-species organisms are protected from each other by default, which encourages territories. A parent gives each newborn the energy it starts life with, up to 60% of its own in all, then rests for 3 seconds before it can breed again. When an organism dies of old age or is eaten, the energy left in its body breaks down into algae where it died, so death feeds the pond.
 
 **Genetic evolution with trade-offs** — Every organism carries four heritable genes: Speed, Aggression, Efficiency (metabolism), and Perception (sight range). At each birth, each gene may mutate by a random amount. Genes are not free: with Trait Cost above 0, speed, perception and aggression raise an organism's energy bill and high efficiency lowers its top speed, so lineages settle on trade-offs instead of maxing everything. Natural selection is the only force shaping this. There is no fitness function, only survival.
 
@@ -144,10 +149,11 @@ The world advances in fixed steps of 1/60 of a simulated second, up to two steps
 2. **Build spatial grids**: organisms and food are sorted into their grid cells
 3. **Sense and steer**: each organism scans the nearby grid cells (wider in food chain mode) and adds up five forces: hunt (toward smaller edible prey), flee (away from larger predators), flock (toward its own species), food attraction (toward the nearest algae), and separation (away from crowding). It also checks whether it can eat something, notes the nearest possible mate, and adds a little wander
 4. **Move**: forces are scaled by the speed gene and a size penalty (bigger is slightly slower), velocity is clamped, and position wraps around the edges
-5. **Metabolism**: energy is spent according to size, the efficiency gene and the trait costs; size follows energy; organisms die of starvation or old age
+5. **Metabolism**: energy is spent according to size, the efficiency gene and the trait costs; size follows energy; organisms die of starvation or old age, and a body that dies with energy left begins to decay
 6. **Reproduce**: an organism big enough to reproduce gives each newborn the energy it starts with, then rests for 3 seconds before it can breed again. In sexual mode each gene comes from one parent or the mate, then genes may mutate. The newborn is one generation past its parent, and if its genes have drifted beyond the Split Distance from its species' founder, it starts a new branch
-7. **Census**: twice per simulated second, species populations, names, extinctions, trails, the graph and the family tree are updated
-8. **Experiments**: if an AI experiment is running, its timer is checked and the end-state snapshot captured when it finishes
+7. **Decay**: dead bodies release their remaining energy as algae around where they died, spread over four seconds
+8. **Census**: twice per simulated second, species populations, names, extinctions, trails, the graph and the family tree are updated
+9. **Experiments**: if an AI experiment is running, its timer is checked and the end-state snapshot captured when it finishes
 
 Each displayed frame then draws the water, algae, lineage trails, effects and creatures.
 
@@ -193,7 +199,7 @@ The AI Lab Partner operates through four integrated systems:
 
 - **World**: pause, reset, sound, video recording, fullscreen, scenario presets, the world seed with Replay, Share Link, Export and Import, organism and food amounts, simulation speed, the population graph, and the species census
 - **Species**: number of starting species, starting and maximum size, organism speed, lifespan, size to reproduce, offspring count, food oases
-- **Rules**: same-species protection, the food chain mode, size advantage to eat, energy from eating, and the five behavior drives (hunt, flee, flock, food attraction, separation)
+- **Rules**: same-species protection, the food chain mode, size advantage to eat, energy from eating, how much of a dead body becomes algae, and the five behavior drives (hunt, flee, flock, food attraction, separation)
 - **Evolve**: mutation on or off, mutation rate and strength, trait cost, which genes can evolve, whether new species can form, the split distance, and sexual reproduction
 - **Tree**: the live family tree of every named species; hover for details, click to spotlight a family
 - **Visual**: glow and glow strength, water effects, detailed creatures, birth and death effects, oasis springs, lineage trails, food glow, trail length
@@ -246,9 +252,9 @@ Any modern browser with WebGL: Chrome, Firefox, Safari, Edge. No plugins, no ext
 
 ## Where It's Going
 
-- **Next: the Lab Partner as a working scientist.** Proper tool calls instead of parsing text, time-series records so reports cite trends, experiments repeated across several seeds against an unchanged control, a lab notebook that persists between sessions, charts in its reports, and an Alliance mode where Claude, Grok and Gemini each interpret the same result.
-- **Then: richer life and world.** Small evolved brains as an optional replacement for the five fixed drives, seasons, terrain and currents, disease, parental care as a gene that can evolve, and a WebGPU engine for 100,000 or more organisms where the browser supports it.
-- **Then: a world worth sharing.** A camera that follows one creature through its life, zoom and pan, a narrated documentary mode, and the Wellspring at the heart of the world.
+- **Next: the Lab Partner as a working scientist.** Proper tool calls instead of parsing text, time-series records so reports cite trends, experiments repeated across several seeds against an unchanged control, a lab notebook that persists between sessions, charts in its reports, and an Alliance mode where Claude, Grok and Gemini each interpret the same result, plus a pond news feed and hall of fame for new species, extinctions and records.
+- **Then: richer life and world.** Small evolved brains as an optional replacement for the five fixed drives, plant-eaters and meat-eaters with bodies that show their diet, day and night, seasons, terrain and currents, disease, parental care as a gene that can evolve, life stages, mate choice, scent trails, colonies, and a WebGPU engine for 100,000 or more organisms where the browser supports it.
+- **Then: a world worth sharing.** A camera that follows one creature through its life, zoom and pan, dragging to stir a current, a narrated documentary mode, and the Wellspring at the heart of the world.
 - **Someday: a 3D world** people can step into with VR headsets, right in the browser.
 
 ## About the Partnership
