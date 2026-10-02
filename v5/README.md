@@ -1,12 +1,14 @@
+> **Archived README for v5, the public version from September 29 to October 2, 2026 (before death fed the pond).** This is how the README read while v5 was the public version. Play v5 at [/v5](https://jkh2.github.io/Primordial-Sim/v5/). The current README is [here](../README.md). Only the image and file links below were changed so they work from this folder; the untouched original is on the [`v5-release`](https://github.com/jkh2/Primordial-Sim/tree/v5-release) branch.
+
 # Primordial-Sim
 
-![Primordial-Sim Banner](banner.png)
+![Primordial-Sim Banner](../banner.png)
 
 ### Emergent Artificial Life Engine
 
 A real-time WebGL ecosystem where living cells eat, hunt, flee, flock, reproduce, mutate, and split into new species that nobody designed, with a multi-provider AI Lab Partner that observes, experiments, and writes research reports on the living world. All from simple rules, all in your browser.
 
-**[Launch Primordial](https://jkh2.github.io/Primordial-Sim/)** · Version 5.2 · Single-file HTML · Zero install · GitHub Pages
+**[Launch Primordial](https://jkh2.github.io/Primordial-Sim/)** · Version 5 · Single-file HTML · Zero install · GitHub Pages
 
 **New here?** Choose the **Origin of Species** preset in the World tab and press **T**. Everything starts as one red species; within a few minutes the family tree fills with species that split off on their own.
 
@@ -24,18 +26,9 @@ We believe this is how humans and AI should work together: as partners with comp
 
 ---
 
+---
+
 ## What's New in v5
-
-**v5.2, October 2, 2026: death feeds the pond**
-
-- **Dead bodies become algae.** An organism that dies of old age, or is eaten, leaves a fading body that breaks down into algae over four seconds, so its energy goes back into the pond instead of vanishing. Before, old age carried away about 70% of all the energy that entered the default world. The new Dead Bodies Become Algae slider in the Rules tab sets how much comes back (90% by default; 0% is the old behavior).
-- **A pond that stays alive.** The default world used to starve down to about 20 organisms. With decay and a food rate of 25 (up from 15), it holds roughly 120 to 300. Stable Eden now gets 35 food per second and holds about 300 organisms across several species. Every preset now holds a living population; Battle Royale still ends with a few survivors, and Extinction Event now dies off slowly instead of all at once.
-
-**v5.1, October 2, 2026: parents grow up, softer glow**
-
-- **Parents keep their strength.** Giving birth no longer costs a parent 60% of its energy. It gives each newborn only the energy that newborn starts life with, then rests for 3 seconds before it can breed again, so parents stay close to full size.
-- **Breed at full size.** Reproduce at Size now goes as high as Max Size and reads "Full size" when it gets there. Bigger bodies need far more food, so full-size breeding works best in food-rich worlds like Origin of Species.
-- **Softer glow.** A new Glow Strength slider in the Visual tab sets how much light overlapping cells add together. It starts at 50%, which keeps crowds from washing out to white; 100% is the old look.
 
 **v5, September 29, 2026: real evolution**
 
@@ -59,21 +52,20 @@ We believe this is how humans and AI should work together: as partners with comp
 
 | Version | Play it | Its README | Exact source |
 |---------|---------|------------|--------------|
-| v5 (September 29, 2026) | [/v5](https://jkh2.github.io/Primordial-Sim/v5/) | [v5/README.md](v5/README.md) | [`v5-release`](https://github.com/jkh2/Primordial-Sim/tree/v5-release) branch |
-| v4 (September 29, 2026) | [/v4](https://jkh2.github.io/Primordial-Sim/v4/) | [v4/README.md](v4/README.md) | [`v4-release`](https://github.com/jkh2/Primordial-Sim/tree/v4-release) branch |
-| v3, the original (March 12, 2026) | [/classic](https://jkh2.github.io/Primordial-Sim/classic/) | [classic/README.md](classic/README.md) | [`v3-original`](https://github.com/jkh2/Primordial-Sim/tree/v3-original) branch |
+| v4 (September 29, 2026) | [/v4](https://jkh2.github.io/Primordial-Sim/v4/) | [v4/README.md](../v4/README.md) | [`v4-release`](https://github.com/jkh2/Primordial-Sim/tree/v4-release) branch |
+| v3, the original (March 12, 2026) | [/classic](https://jkh2.github.io/Primordial-Sim/classic/) | [classic/README.md](../classic/README.md) | [`v3-original`](https://github.com/jkh2/Primordial-Sim/tree/v3-original) branch |
 
 ## What It Is
 
-Primordial is a continuous-space ecosystem simulator running on WebGL with an integrated AI research partner. Every creature on screen is a living cell with a position, velocity, energy, age, generation, a species it belongs to, and four genetic traits that mutate across generations. Organisms eat food to gain energy, grow larger, hunt smaller organisms of other species, flee from predators, flock with their own kind to form territories, reproduce when they reach a threshold size, and die of starvation or old age. Their bodies then break down into algae that feeds the living. When a family's genes drift far enough, it becomes a new species.
+Primordial is a continuous-space ecosystem simulator running on WebGL with an integrated AI research partner. Every creature on screen is a living cell with a position, velocity, energy, age, generation, a species it belongs to, and four genetic traits that mutate across generations. Organisms eat food to gain energy, grow larger, hunt smaller organisms of other species, flee from predators, flock with their own kind to form territories, reproduce when they reach a threshold size, and die of starvation or old age. When a family's genes drift far enough, it becomes a new species.
 
-No behavior is scripted. Territories, migration, population cycles, predator-prey dynamics, the recycling of the dead into new food, evolutionary trade-offs, and the branching of new species all emerge from five simple behavioral drives and the physics of survival.
+No behavior is scripted. Territories, migration, population cycles, predator-prey dynamics, evolutionary trade-offs, and the branching of new species all emerge from five simple behavioral drives and the physics of survival.
 
 The AI Lab Partner watches it all happen, analyzes the data, designs and runs experiments by adjusting simulation parameters, and writes structured research reports on the results, using whichever AI provider you choose.
 
 ## What It Does
 
-**Ecosystem mechanics** — Organisms eat algae scattered across the map, with fertile oases that concentrate food in places. Energy drives growth: size is the square root of energy, so bigger organisms need proportionally more food. When one organism is sufficiently larger than an organism of another species (1.3x by default, set by Size Advantage to Eat), it can eat it, gaining energy in proportion to the prey's size (set by Energy from Eating). Same-species organisms are protected from each other by default, which encourages territories. A parent gives each newborn the energy it starts life with, up to 60% of its own in all, then rests for 3 seconds before it can breed again. When an organism dies of old age or is eaten, the energy left in its body, after whatever a predator took, breaks down into algae where it died, so death feeds the pond.
+**Ecosystem mechanics** — Organisms eat algae scattered across the map, with fertile oases that concentrate food in places. Energy drives growth: size is the square root of energy, so bigger organisms need proportionally more food. When one organism is sufficiently larger than an organism of another species (1.3x by default, set by Size Advantage to Eat), it can eat it and take its energy. Same-species organisms are protected from each other by default, which encourages territories. A parent that reproduces splits its energy with its offspring.
 
 **Genetic evolution with trade-offs** — Every organism carries four heritable genes: Speed, Aggression, Efficiency (metabolism), and Perception (sight range). At each birth, each gene may mutate by a random amount. Genes are not free: with Trait Cost above 0, speed, perception and aggression raise an organism's energy bill and high efficiency lowers its top speed, so lineages settle on trade-offs instead of maxing everything. Natural selection is the only force shaping this. There is no fitness function, only survival.
 
@@ -83,7 +75,7 @@ The AI Lab Partner watches it all happen, analyzes the data, designs and runs ex
 
 **Interactive sandbox** — Left-click drops a cluster of food. Right-click brings in a small group of a living species (or a new arrival if everything has died out). Hover over any organism to see its species and where that species came from, its size, energy, age, kills, generation, and all four genes. Space pauses, and 1 to 4 set the speed from slow motion to 5x. Seven tuned presets range from a peaceful aquarium to extinction events and the Origin of Species. You can record video of a run, go fullscreen, share your settings as a link, or export them to a file.
 
-**Living visuals** — Organisms are drawn as teardrop cells pointed the way they swim, with a membrane rim and a nucleus. Their genes are visible: a longer tail means a faster swimmer, spines and a redder rim mean aggression, glowing eye-spots mean sharp perception, and a translucent body means an efficient metabolism. Cells pulse like a heartbeat, stretch when they move fast, and dim and flicker when starving. The world is primordial water with drifting caustic light and plankton, food is swaying bioluminescent algae, and oases are glowing springs with rising bubbles. Kills pull the prey's motes toward the predator, births split like dividing cells, and dead bodies linger as faint, see-through cells that shrink and fade while algae sprouts around them. Glow Strength sets how brightly crowds of cells light each other up. On slower machines, turn off Water Effects or Detailed Creatures in the Visual tab.
+**Living visuals** — Organisms are drawn as teardrop cells pointed the way they swim, with a membrane rim and a nucleus. Their genes are visible: a longer tail means a faster swimmer, spines and a redder rim mean aggression, glowing eye-spots mean sharp perception, and a translucent body means an efficient metabolism. Cells pulse like a heartbeat, stretch when they move fast, and dim and flicker when starving. The world is primordial water with drifting caustic light and plankton, food is swaying bioluminescent algae, and oases are glowing springs with rising bubbles. Kills pull the prey's motes toward the predator; births split like dividing cells. On slower machines, turn off Water Effects or Detailed Creatures in the Visual tab.
 
 **Ambient sound design** — An optional Web Audio layer provides a low drone that shifts pitch with total population (rising hum = thriving world, falling = collapse), soft pops on reproduction events, and bass thuds when large predators make kills.
 
@@ -113,7 +105,7 @@ The AI sees the full simulation state with every message. When it proposes an ex
 
 ## Why It's Useful
 
-**Education** — Primordial makes abstract ecological and evolutionary concepts tangible. Natural selection, predator-prey dynamics, carrying capacity, competitive exclusion, nutrient recycling, genetic drift, and the tragedy of the commons all emerge visibly without any scripting. Students and curious minds can watch these processes happen in real time and manipulate the parameters to test hypotheses. The AI Lab Partner adds guided inquiry — ask it to explain what's happening and it translates simulation data into ecological insight.
+**Education** — Primordial makes abstract ecological and evolutionary concepts tangible. Natural selection, predator-prey dynamics, carrying capacity, competitive exclusion, genetic drift, and the tragedy of the commons all emerge visibly without any scripting. Students and curious minds can watch these processes happen in real time and manipulate the parameters to test hypotheses. The AI Lab Partner adds guided inquiry — ask it to explain what's happening and it translates simulation data into ecological insight.
 
 **Research intuition** — For anyone working in ecology, evolutionary biology, agent-based modeling, or complex systems, Primordial provides a fast interactive sandbox for building intuition about how parameter changes cascade through an ecosystem. Crank the mutation rate and watch speciation happen. Restrict food supply and observe which traits survive the bottleneck. Let the AI design experiments you wouldn't have thought of.
 
@@ -131,8 +123,8 @@ The AI sees the full simulation state with every message. When it proposes an ex
 
 Primordial is a single self-contained HTML file with no dependencies, no build step, and no backend. It runs entirely client-side using:
 
-- **WebGL shaders** for drawing: the water background, swaying algae, lineage trails, birth and death effects, decaying bodies, and every creature's body are drawn on the GPU, with each organism's genes and condition passed in so its shape shows what it is
-- **Structure of Arrays (SoA)** for organism data: parallel typed arrays for position, velocity, size, energy, species, generation, age, rest time after giving birth, genes and alive-state, supporting up to 60,000 organisms with cache-friendly memory access
+- **WebGL shaders** for drawing: the water background, swaying algae, lineage trails, birth and death effects, and every creature's body are drawn on the GPU, with each organism's genes and condition passed in so its shape shows what it is
+- **Structure of Arrays (SoA)** for organism data: parallel typed arrays for position, velocity, size, energy, species, generation, age, genes and alive-state, supporting up to 60,000 organisms with cache-friendly memory access
 - **Spatial hash grid** for neighbor lookups: a 40px grid (up to 128 organisms per cell) means each organism only checks the organisms in nearby cells instead of every other organism
 - **Separate food grid** for efficient food-seeking, with a wider search for organisms with high perception
 - **Seeded random numbers and fixed time steps** so the same seed and settings replay the same run
@@ -148,11 +140,10 @@ The world advances in fixed steps of 1/60 of a simulated second, up to two steps
 2. **Build spatial grids**: organisms and food are sorted into their grid cells
 3. **Sense and steer**: each organism scans the nearby grid cells (wider in food chain mode) and adds up five forces: hunt (toward smaller edible prey), flee (away from larger predators), flock (toward its own species), food attraction (toward the nearest algae), and separation (away from crowding). It also checks whether it can eat something, notes the nearest possible mate, and adds a little wander
 4. **Move**: forces are scaled by the speed gene and a size penalty (bigger is slightly slower), velocity is clamped, and position wraps around the edges
-5. **Metabolism**: energy is spent according to size, the efficiency gene and the trait costs; size follows energy; organisms die of starvation or old age, and a body that dies with energy left begins to decay
-6. **Reproduce**: an organism big enough to reproduce gives each newborn the energy it starts with, then rests for 3 seconds before it can breed again. In sexual mode each gene comes from one parent or the mate, then genes may mutate. The newborn is one generation past its parent, and if its genes have drifted beyond the Split Distance from its species' founder, it starts a new branch
-7. **Decay**: dead bodies release their remaining energy as algae around where they died, spread over four seconds
-8. **Census**: twice per simulated second, species populations, names, extinctions, trails, the graph and the family tree are updated
-9. **Experiments**: if an AI experiment is running, its timer is checked and the end-state snapshot captured when it finishes
+5. **Metabolism**: energy is spent according to size, the efficiency gene and the trait costs; size follows energy; organisms die of starvation or old age
+6. **Reproduce**: an organism big enough to reproduce splits its energy with its offspring. In sexual mode each gene comes from one parent or the mate, then genes may mutate. The newborn is one generation past its parent, and if its genes have drifted beyond the Split Distance from its species' founder, it starts a new branch
+7. **Census**: twice per simulated second, species populations, names, extinctions, trails, the graph and the family tree are updated
+8. **Experiments**: if an AI experiment is running, its timer is checked and the end-state snapshot captured when it finishes
 
 Each displayed frame then draws the water, algae, lineage trails, effects and creatures.
 
@@ -198,10 +189,10 @@ The AI Lab Partner operates through four integrated systems:
 
 - **World**: pause, reset, sound, video recording, fullscreen, scenario presets, the world seed with Replay, Share Link, Export and Import, organism and food amounts, simulation speed, the population graph, and the species census
 - **Species**: number of starting species, starting and maximum size, organism speed, lifespan, size to reproduce, offspring count, food oases
-- **Rules**: same-species protection, the food chain mode, size advantage to eat, energy from eating, how much of a dead body becomes algae, and the five behavior drives (hunt, flee, flock, food attraction, separation)
+- **Rules**: same-species protection, the food chain mode, size advantage to eat, energy from eating, and the five behavior drives (hunt, flee, flock, food attraction, separation)
 - **Evolve**: mutation on or off, mutation rate and strength, trait cost, which genes can evolve, whether new species can form, the split distance, and sexual reproduction
 - **Tree**: the live family tree of every named species; hover for details, click to spotlight a family
-- **Visual**: glow and glow strength, water effects, detailed creatures, birth and death effects, oasis springs, lineage trails, food glow, trail length
+- **Visual**: additive glow, water effects, detailed creatures, birth and death effects, oasis springs, lineage trails, food glow, trail length
 
 The stats bar under the tabs shows frames per second, organisms alive, food, the highest generation reached, and the number of living species.
 
@@ -220,10 +211,6 @@ Every world is built from a numeric seed shown in the World tab. **Reset World**
 ### Trait Costs
 
 Genes are not free. With **Trait Cost** above 0, speed (quadratically, like drag), perception and aggression raise an organism's metabolic cost, and high efficiency lowers its top speed. Setting it to 0 restores the original cost-free genes. The **Gen** counter shows the highest generation reached so far, and the tooltip shows each organism's generation.
-
-### The Energy Cycle
-
-Energy enters the pond only as algae (Food Spawn Rate; each piece is worth 3 energy) and leaves only through metabolism and through the part of each dead body that doesn't come back. An organism's size is 1.5 times the square root of its energy, so size 12 takes 64 energy and size 18 takes 144. Birth moves energy from parent to young without losing any. When an organism dies of old age or is eaten, the energy left in its body (after whatever a predator took) breaks down into algae around where it died over four seconds. **Dead Bodies Become Algae** sets how much returns, 90% by default, and the rest is lost. A starved organism has nothing left to give. Before decay was added, old age carried about 70% of the default world's energy out of the pond, which is why it used to starve down to about 20 organisms.
 
 ### Speciation and the Family Tree
 
@@ -255,9 +242,9 @@ Any modern browser with WebGL: Chrome, Firefox, Safari, Edge. No plugins, no ext
 
 ## Where It's Going
 
-- **Next: the Lab Partner as a working scientist.** Proper tool calls instead of parsing text, time-series records so reports cite trends, experiments repeated across several seeds against an unchanged control, a lab notebook that persists between sessions, charts in its reports, and an Alliance mode where Claude, Grok and Gemini each interpret the same result, plus a pond news feed and hall of fame for new species, extinctions and records.
-- **Then: richer life and world.** Small evolved brains as an optional replacement for the five fixed drives, plant-eaters and meat-eaters with bodies that show their diet, day and night, seasons, terrain and currents, disease, parental care as a gene that can evolve, life stages, mate choice, scent trails, colonies, and a WebGPU engine for 100,000 or more organisms where the browser supports it.
-- **Then: a world worth sharing.** A camera that follows one creature through its life, zoom and pan, dragging to stir a current, a narrated documentary mode, and the Wellspring at the heart of the world.
+- **Next: the Lab Partner as a working scientist.** Proper tool calls instead of parsing text, time-series records so reports cite trends, experiments repeated across several seeds against an unchanged control, a lab notebook that persists between sessions, charts in its reports, and an Alliance mode where Claude, Grok and Gemini each interpret the same result.
+- **Then: richer life and world.** Small evolved brains as an optional replacement for the five fixed drives, seasons, terrain and currents, disease, parental care as a gene that can evolve, and a WebGPU engine for 100,000 or more organisms where the browser supports it.
+- **Then: a world worth sharing.** A camera that follows one creature through its life, zoom and pan, a narrated documentary mode, and the Wellspring at the heart of the world.
 - **Someday: a 3D world** people can step into with VR headsets, right in the browser.
 
 ## About the Partnership
@@ -272,7 +259,7 @@ Learn more about the SIDLF framework and human-AI symbiosis at [jameskeithharwoo
 
 ## License
 
-**Sentinel AI Systems Non-Commercial License v1.0** — See [LICENSE](LICENSE) for full terms.
+**Sentinel AI Systems Non-Commercial License v1.0** — See [LICENSE](../LICENSE) for full terms.
 
 **Free for:** personal use, entertainment, education, academic research, classroom instruction, and learning from the code.
 
@@ -280,4 +267,4 @@ Learn more about the SIDLF framework and human-AI symbiosis at [jameskeithharwoo
 
 We built this openly so people can learn from it, enjoy it, and be inspired by it. We ask that if you profit from it, you include us in that conversation.
 
-See [IP-DECLARATION.md](IP-DECLARATION.md) for the formal intellectual property declaration and prior art documentation.
+See [IP-DECLARATION.md](../IP-DECLARATION.md) for the formal intellectual property declaration and prior art documentation.
