@@ -211,8 +211,8 @@ The AI Lab Partner operates through four integrated systems:
 
 ### UI Tabs (Left Panel)
 
-- **World**: pause, reset, sound, video recording, fullscreen, scenario presets, the world seed with Replay, Share Link, Export and Import, organism and food amounts, simulation speed, the population graph, and the species census
-- **Species**: number of starting species, starting and maximum size, organism speed, lifespan, size to reproduce, offspring count, food oases
+- **World**: pause, reset, sound, video recording, fullscreen, scenario presets, the world seed with Replay, Share Link, Export and Import, organism and food amounts, food oases, simulation speed, the population graph, and the species census
+- **Species**: number of starting species, starting and maximum size, organism speed, lifespan, size to reproduce, offspring count
 - **Rules**: same-species protection, the food chain mode, size advantage to eat, energy from eating, how much of a dead body becomes algae, and the five behavior drives (hunt, flee, flock, food attraction, separation)
 - **Evolve**: mutation on or off, mutation rate and strength, trait cost, which genes can evolve, whether new species can form, the split distance, and sexual reproduction
 - **Tree**: the live family tree of every named species; hover for details, click to spotlight a family
