@@ -323,7 +323,7 @@ Configure your AI provider in the settings above, then try asking me to analyze 
   </div>
 </div>
 
-<div class="badge">Primordial v5.2 · Sentinel AI Systems × Claude Sentinel · SIDLF · <a href="v5/" title="Play v5 from September 29, 2026, before dead bodies fed the pond">v5</a> · <a href="v4/" title="Play v4 from September 2026, before species could evolve">v4</a> · <a href="classic/" title="Play the original v3 from March 2026">Original v3</a></div>
+<div class="badge">Primordial v5.2.1 · Sentinel AI Systems × Claude Sentinel · SIDLF · <a href="v5/" title="Play v5 from September 29, 2026, before dead bodies fed the pond">v5</a> · <a href="v4/" title="Play v4 from September 2026, before species could evolve">v4</a> · <a href="classic/" title="Play the original v3 from March 2026">Original v3</a></div>
 <div class="rec-dot" id="recDot">REC <span id="recTime">0:00</span></div>
 
 <script>
@@ -582,13 +582,19 @@ const falive=new Uint8Array(MAX_FOOD),fglow=new Float32Array(MAX_FOOD);
 
 // Death feeds the pond: a body that dies with energy left sinks and breaks down into algae over DECAY_TIME seconds.
 // Dead Bodies Become Algae sets how much of that energy comes back; the rest is lost. A starved body has nothing left.
-const MAX_HUSK=4000,DECAY_TIME=4;let huskCount=0,decayCarry=0; // decayCarry: crumbs under one pellet, kept so no energy is rounded away
-const hx=new Float32Array(MAX_HUSK),hy=new Float32Array(MAX_HUSK),hLeft=new Float32Array(MAX_HUSK),hFull=new Float32Array(MAX_HUSK),hAcc=new Float32Array(MAX_HUSK),hHue=new Float32Array(MAX_HUSK),hSize=new Float32Array(MAX_HUSK),hHead=new Float32Array(MAX_HUSK);
-function addHusk(x,y,energy,hue,size,head){const e=energy*(+ui.sDecay.value);if(e<=0)return;if(e<3||huskCount>=MAX_HUSK){decayCarry+=e;return;}const k=huskCount++;hx[k]=x;hy[k]=y;hLeft[k]=e;hFull[k]=e;hAcc[k]=0;hHue[k]=hue;hSize[k]=size;hHead[k]=head;}
+const MAX_HUSK=4000,DECAY_TIME=4;let huskCount=0,decayCarry=0; // decayCarry: crumbs under one pellet (always less than 3), kept so no energy is rounded away
+const hx=new Float32Array(MAX_HUSK),hy=new Float32Array(MAX_HUSK),hLeft=new Float32Array(MAX_HUSK),hFull=new Float32Array(MAX_HUSK),hAcc=new Float32Array(MAX_HUSK),hHue=new Float32Array(MAX_HUSK),hSize=new Float32Array(MAX_HUSK),hHead=new Float32Array(MAX_HUSK),hClade=new Uint16Array(MAX_HUSK);
+function addHusk(x,y,energy,clade,size,head){const e=energy*(+ui.sDecay.value);if(e<=0)return;
+  // A body too small to leave a whole pellet, or one that dies while MAX_HUSK bodies are already breaking down, returns its energy on the spot
+  if(e<3||huskCount>=MAX_HUSK){spillAlgae(x,y,e,size);return;}
+  const k=huskCount++;hx[k]=x;hy[k]=y;hLeft[k]=e;hFull[k]=e;hAcc[k]=0;hHue[k]=cladeHue[clade];hSize[k]=size;hHead[k]=head;hClade[k]=clade;}
 function dropAlgae(x,y,size){const idx=allocFood();if(idx<0)return false;const a=rand()*TAU,r=rand()*(size+6);fx[idx]=((x+Math.cos(a)*r)%W+W)%W;fy[idx]=((y+Math.sin(a)*r)%H+H)%H;falive[idx]=1;fglow[idx]=rand()*TAU;return true;}
+// Drops e energy as algae right here: whole pellets now, and the crumb left over joins decayCarry, which tips into one more pellet
+// here once it reaches 3. Crumbs never pile up, so they can't all land in one spot later. If the pond is full of algae, the rest is lost.
+function spillAlgae(x,y,e,size){while(e>=3){e-=3;if(!dropAlgae(x,y,size))return;}decayCarry+=e;if(decayCarry>=3){decayCarry-=3;dropAlgae(x,y,size);}}
 function decayHusks(sDt){foodHint=0;for(let k=huskCount-1;k>=0;k--){hAcc[k]+=sDt*hFull[k]/DECAY_TIME;
   while(hAcc[k]>=3&&hLeft[k]>=3){hAcc[k]-=3;hLeft[k]-=3;if(!dropAlgae(hx[k],hy[k],hSize[k])){hLeft[k]=0;break;}}
-  if(hLeft[k]<3){decayCarry+=hLeft[k];while(decayCarry>=3&&dropAlgae(hx[k],hy[k],hSize[k]))decayCarry-=3;const last=--huskCount;hx[k]=hx[last];hy[k]=hy[last];hLeft[k]=hLeft[last];hFull[k]=hFull[last];hAcc[k]=hAcc[last];hHue[k]=hHue[last];hSize[k]=hSize[last];hHead[k]=hHead[last];}}}
+  if(hLeft[k]<3){spillAlgae(hx[k],hy[k],hLeft[k],hSize[k]);const last=--huskCount;hx[k]=hx[last];hy[k]=hy[last];hLeft[k]=hLeft[last];hFull[k]=hFull[last];hAcc[k]=hAcc[last];hHue[k]=hHue[last];hSize[k]=hSize[last];hHead[k]=hHead[last];hClade[k]=hClade[last];}}}
 const MAX_DFX=2000;let dfxCount=0;
 const dfxX=new Float32Array(MAX_DFX),dfxY=new Float32Array(MAX_DFX);
 const dfxVX=new Float32Array(MAX_DFX),dfxVY=new Float32Array(MAX_DFX);
@@ -688,8 +694,13 @@ function updateRecTimer(){
 const SETTING_SLIDERS=['sOrganisms','sFood','sFoodRate','sSpeed','sSpecies','sStartSize','sMaxSize','sOrgSpeed','sLifespan','sReproSize','sOffspring','sOases','sEatRatio','sEatGain','sDecay','sHunt','sFlee','sFlock','sFoodDrive','sSeparation','sMutRate','sMutStr','sTraitCost','sSplit','sFoodGlow','sGlow','sTrail'];
 const SETTING_CHECKS=['chkSameSpecies','chkFoodChain','chkMutation','chkEvoSpeed','chkEvoAggro','chkEvoEfficiency','chkEvoPerception','chkSpeciation','chkSexual','chkGlow','chkDetail','chkWater','chkDeathFX','chkShowOases','chkLineage'];
 
+// The engine version that made a saved world. A seed replays exactly only in the version that made it (older versions stay playable
+// from the badge links), so loading settings from another version says so. Keep this in step with the badge.
+const APP_VERSION='5.2.1';
+function versionNote(s){return s._app===APP_VERSION?'':' Made in '+(s._app?'v'+s._app:'an earlier version')+', so the run may differ; older versions are linked in the corner badge.';}
+
 function captureSettings(){
-  const s={_format:'primordial-settings',_version:4,_date:new Date().toISOString(),_preset:$('selPreset').value,sliders:{},checks:{}};
+  const s={_format:'primordial-settings',_version:4,_app:APP_VERSION,_date:new Date().toISOString(),_preset:$('selPreset').value,sliders:{},checks:{}};
   for(const id of SETTING_SLIDERS){const el=$(id);if(el)s.sliders[id]=el.value;}
   for(const id of SETTING_CHECKS){const el=$(id);if(el)s.checks[id]=el.checked;}
   s.seed=worldSeed;
@@ -728,7 +739,7 @@ function loadSettingsFromURL(){
   if(!code)return false;
   try{
     const s=JSON.parse(atob(decodeURIComponent(code)));
-    if(applySettings(s)){resize();initWorld();return true;}
+    if(applySettings(s)){resize();initWorld();$('shareStatus').textContent=versionNote(s).trim();return true;}
   }catch(e){console.warn('Failed to load settings from URL:',e);}
   return false;
 }
@@ -763,9 +774,9 @@ function importSettings(file){
       }
       if(applySettings(s)){
         resize();initWorld();
-        $('shareStatus').textContent='Settings loaded! (v'+(s._version||'?')+', '+(s._preset||'custom')+')';
+        $('shareStatus').textContent='Settings loaded! ('+(s._preset||'custom')+')'+versionNote(s);
         $('shareStatus').style.color='var(--accent2)';
-        setTimeout(()=>{$('shareStatus').textContent='';},4000);
+        setTimeout(()=>{$('shareStatus').textContent='';},s._app===APP_VERSION?4000:10000);
       }
     }catch(err){
       $('shareStatus').textContent='Error reading file: '+err.message;
@@ -1051,6 +1062,8 @@ Valid checkbox IDs: chkSameSpecies, chkFoodChain, chkMutation, chkEvoSpeed, chkE
 
 Trait costs: with sTraitCost above 0, high speed, perception and aggression genes raise metabolic cost (speed quadratically) and high efficiency lowers top speed, so each gene is a trade-off rather than a free upgrade.
 
+Energy: each algae pellet is worth 3 energy, and an organism's size is 1.5 times the square root of its energy. A parent that reaches sReproSize (capped at sMaxSize, so a value at or above sMaxSize means breeding at full size) gives each newborn its starting energy, then rests 3 seconds before it can breed again. When an organism dies of old age or is eaten, the energy left in its body (after the predator's share, which is prey size times sEatGain) breaks down into algae where it died over 4 seconds. sDecay (0 to 1) is the fraction that comes back; at 0, dead bodies feed nothing. A starved organism leaves nothing.
+
 Speciation: species are lineages. The starting species have color names (Red, Orange, Gold, ...). When a newborn's genes drift farther than the split distance (sSplit) from its species' founding genome, it founds a new lineage with a hue close to its ancestor's. Until that lineage has 10 members it still counts as its parent species; then it gets a generated name and becomes a species of its own. Different species can hunt each other by size, so a new species competes with its own ancestors. With sexual reproduction on, a parent mixes genes with a nearby mate of its own species.
 
 Be concise, scientific, and insightful. Use the species names given. When analyzing, reference specific gene values and population numbers.`;
@@ -1166,7 +1179,7 @@ function simulate(dt){
           if(sameSafe)continue;canEat=mySz>osize[j]*eatR;isPrey=osize[j]>mySz*eatR;}
         else if(foodChain){canEat=canEatInChain(cladeRoot[myC],cladeRoot[oclade[j]],nSp);isPrey=canEatInChain(cladeRoot[oclade[j]],cladeRoot[myC],nSp);}
         else{canEat=mySz>osize[j]*eatR;isPrey=osize[j]>mySz*eatR;}
-        if(canEat&&inP){const hf=hunt*myAggro*0.5/(d+5);ax+=ddx/d*hf;ay+=ddy/d*hf;if(d<cR*0.6&&oalive[j]){oalive[j]=0;const gain=osize[j]*eatG;addHusk(ox[j],oy[j],oenergy[j]-gain,cladeHue[oclade[j]],osize[j],Math.atan2(-ovy[j],ovx[j]));oenergy[i]+=gain;okills[i]++;spawnDeathFX(ox[j],oy[j],cladeHue[oclade[j]],4+osize[j]*0.5|0,osize[j]/maxSz,ox[i],oy[i]);const now=performance.now();if(now-lastThudSound>80){playThud(osize[j]/maxSz);lastThudSound=now;}}}
+        if(canEat&&inP){const hf=hunt*myAggro*0.5/(d+5);ax+=ddx/d*hf;ay+=ddy/d*hf;if(d<cR*0.6&&oalive[j]){oalive[j]=0;const gain=osize[j]*eatG;addHusk(ox[j],oy[j],oenergy[j]-gain,oclade[j],osize[j],Math.atan2(-ovy[j],ovx[j]));oenergy[i]+=gain;okills[i]++;spawnDeathFX(ox[j],oy[j],cladeHue[oclade[j]],4+osize[j]*0.5|0,osize[j]/maxSz,ox[i],oy[i]);const now=performance.now();if(now-lastThudSound>80){playThud(osize[j]/maxSz);lastThudSound=now;}}}
         else if(isPrey&&inP){const ff=flee*1.2/(d+3);ax-=ddx/d*ff;ay-=ddy/d*ff;}
         else if(!same&&d<cR*1.2){const sf=sep*0.5/(d+2);ax-=ddx/d*sf;ay-=ddy/d*sf;}}}
     omate[i]=mateJ;
@@ -1181,7 +1194,7 @@ function simulate(dt){
     // Trait costs: fast, far-seeing, aggressive bodies burn more energy (centered so a 50% genome costs the same as before).
     // Speed cost is quadratic, like drag.
     const geneLoad=1.8*(gSpeed[i]*gSpeed[i]-0.25)+0.6*(gPerception[i]-0.5)+0.3*(gAggro[i]-0.5);const metaCost=0.3*(1.2-gEfficiency[i]*0.5)*Math.max(0.2,1+tc*geneLoad);oenergy[i]-=sDt*metaCost;osize[i]=clamp(Math.sqrt(Math.max(0.5,oenergy[i]))*1.5,1,maxSz);oage[i]+=sDt;
-    if(oenergy[i]<=0||oage[i]>life){if(oenergy[i]<=0)spawnDeathFX(ox[i],oy[i],cladeHue[myC],2,0.3);else addHusk(ox[i],oy[i],oenergy[i],cladeHue[myC],mySz,Math.atan2(-ovy[i],ovx[i]));oalive[i]=0;continue;}
+    if(oenergy[i]<=0||oage[i]>life){if(oenergy[i]<=0)spawnDeathFX(ox[i],oy[i],cladeHue[myC],2,0.3);else addHusk(ox[i],oy[i],oenergy[i],myC,mySz,Math.atan2(-ovy[i],ovx[i]));oalive[i]=0;continue;}
     if(orest[i]>0)orest[i]-=sDt;else if(osize[i]>=reproSz&&oenergy[i]>reproSz*2.5)repro.push(i);
   }
   for(const r of repro)if(oalive[r])reproduce(r); // a parent eaten later in this step doesn't give birth
@@ -1353,7 +1366,7 @@ function renderWorld(){
   // Dead bodies: still, dim, see-through cells that shrink and fade as they break down into algae
   if(ui.chkDeathFX.checked)for(let k=0;k<huskCount;k++){const o=n*ORG_STRIDE,f=hLeft[k]/hFull[k];
     orgData[o]=hx[k];orgData[o+1]=hy[k];orgData[o+2]=hHead[k];orgData[o+3]=(detail?Math.max(7,hSize[k]*3.8):Math.max(1.5,hSize[k]*1.2))*(0.6+0.4*f);orgData[o+4]=hHue[k];
-    orgData[o+5]=0;orgData[o+6]=0;orgData[o+7]=1;orgData[o+8]=0;orgData[o+9]=0.3;orgData[o+10]=0;orgData[o+11]=0;orgData[o+12]=0.6*f;n++;}
+    orgData[o+5]=0;orgData[o+6]=0;orgData[o+7]=1;orgData[o+8]=0;orgData[o+9]=0.3;orgData[o+10]=0;orgData[o+11]=0;orgData[o+12]=0.6*f*(spotClade<0||spotMask[hClade[k]]?1:0.14);n++;}
   gl.useProgram(orgProg);gl.uniform2f(orgLoc.res,W,H);gl.uniform1f(orgLoc.time,visTime);gl.uniform1f(orgLoc.simple,detail?0:1);gl.uniform1f(orgLoc.glow,ui.chkGlow.checked?+ui.sGlow.value:0);
   gl.bindBuffer(gl.ARRAY_BUFFER,orgBuf);gl.bufferData(gl.ARRAY_BUFFER,orgData.subarray(0,n*ORG_STRIDE),gl.DYNAMIC_DRAW);
   const st=ORG_STRIDE*4;

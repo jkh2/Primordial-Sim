@@ -6,7 +6,7 @@
 
 A real-time WebGL ecosystem where living cells eat, hunt, flee, flock, reproduce, mutate, and split into new species that nobody designed, with a multi-provider AI Lab Partner that observes, experiments, and writes research reports on the living world. All from simple rules, all in your browser.
 
-**[Launch Primordial](https://jkh2.github.io/Primordial-Sim/)** · Version 5.2 · Single-file HTML · Zero install · GitHub Pages
+**[Launch Primordial](https://jkh2.github.io/Primordial-Sim/)** · Version 5.2.1 · Single-file HTML · Zero install · GitHub Pages
 
 **New here?** Choose the **Origin of Species** preset in the World tab and press **T**. Everything starts as one red species; within a few minutes the family tree fills with species that split off on their own.
 
@@ -26,9 +26,16 @@ We believe this is how humans and AI should work together: as partners with comp
 
 ## What's New in v5
 
+**v5.2.1, October 2, 2026: fixes from a second look**
+
+- **No more algae bursts.** A body too small to leave a whole piece of algae used to have its energy saved up and released all at once, wherever the next body finished breaking down. In the first seconds of a crowded world that dropped more than a thousand pieces of algae in one spot (over 4,500 in Battle Royale). Every body's energy now comes back where it died.
+- **The spotlight dims dead bodies too.** With a species in the spotlight, the fading bodies of other species now dim along with the living ones.
+- **The Lab Partner knows the energy rules.** It now knows what Dead Bodies Become Algae does, how a parent shares energy at birth, and that Reproduce at Size stops at Max Size.
+- **Share links say which version made them.** A seed replays exactly only in the version that made it. Links and exported files now record their version, and loading one from another version says so.
+
 **v5.2, October 2, 2026: death feeds the pond**
 
-- **Dead bodies become algae.** An organism that dies of old age, or is eaten, leaves a fading body that breaks down into algae over four seconds, so its energy goes back into the pond instead of vanishing. Before, old age carried away about 70% of all the energy that entered the default world. The new Dead Bodies Become Algae slider in the Rules tab sets how much comes back (90% by default; 0% is the old behavior).
+- **Dead bodies become algae.** An organism that dies of old age, or is eaten, leaves a fading body that breaks down into algae over four seconds, so its energy goes back into the pond instead of vanishing. Before, old age carried most of the default world's energy out of the pond: about half of everything its algae brought in under v5, and about 70% under v5.1, where parents stay bigger. The new Dead Bodies Become Algae slider in the Rules tab sets how much comes back (90% by default; 0% is the old behavior).
 - **A pond that stays alive.** The default world used to starve down to about 20 organisms. With decay and a food rate of 25 (up from 15), it holds roughly 120 to 300. Stable Eden now gets 35 food per second and holds about 300 organisms across several species. Every preset now holds a living population; Battle Royale still ends with a few survivors, and Extinction Event now dies off slowly instead of all at once.
 
 **v5.1, October 2, 2026: parents grow up, softer glow**
@@ -215,7 +222,7 @@ The stats bar under the tabs shows frames per second, organisms alive, food, the
 
 ### Seeds and Replay
 
-Every world is built from a numeric seed shown in the World tab. **Reset World** draws a new seed; **Replay** restarts the current seed. The simulation advances in fixed 1/60-second steps, so the same seed, settings and window size replay the same run exactly (clicking to add food or organisms changes the run from that point). Share links and exported `.primordial` files include the seed.
+Every world is built from a numeric seed shown in the World tab. **Reset World** draws a new seed; **Replay** restarts the current seed. The simulation advances in fixed 1/60-second steps, so the same seed, settings and window size replay the same run exactly (clicking to add food or organisms changes the run from that point). Share links and exported `.primordial` files include the seed. A run replays exactly only in the version of Primordial that made it, since each release changes the rules a little. From v5.2.1 on, links and files record their version, and opening one in a different version tells you so; every earlier version stays playable from the links in the corner badge.
 
 ### Trait Costs
 
@@ -223,7 +230,7 @@ Genes are not free. With **Trait Cost** above 0, speed (quadratically, like drag
 
 ### The Energy Cycle
 
-Energy enters the pond only as algae (Food Spawn Rate; each piece is worth 3 energy) and leaves only through metabolism and through the part of each dead body that doesn't come back. An organism's size is 1.5 times the square root of its energy, so size 12 takes 64 energy and size 18 takes 144. Birth moves energy from parent to young without losing any. When an organism dies of old age or is eaten, the energy left in its body (after whatever a predator took) breaks down into algae around where it died over four seconds. **Dead Bodies Become Algae** sets how much returns, 90% by default, and the rest is lost. A starved organism has nothing left to give. Before decay was added, old age carried about 70% of the default world's energy out of the pond, which is why it used to starve down to about 20 organisms.
+Energy enters the pond as algae (the starting food, the Food Spawn Rate and any food you click in; each piece is worth 3 energy) and in the bodies of the organisms a world starts with or that you add. It leaves only through metabolism and through the part of each dead body that doesn't come back. An organism's size is 1.5 times the square root of its energy, so size 12 takes 64 energy and size 18 takes 144. Birth moves energy from parent to young without losing any. When an organism dies of old age or is eaten, the energy left in its body (after whatever a predator took) breaks down into algae around where it died over four seconds; a body too small to make a whole piece of algae gives its energy back on the spot. **Dead Bodies Become Algae** sets how much returns, 90% by default, and the rest is lost. A starved organism has nothing left to give. Before decay was added, old age carried most of the default world's energy out of the pond (about half in v5 and about 70% in v5.1), which is why it used to starve down to about 20 organisms.
 
 ### Speciation and the Family Tree
 
