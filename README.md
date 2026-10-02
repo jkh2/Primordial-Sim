@@ -26,11 +26,10 @@ We believe this is how humans and AI should work together: as partners with comp
 
 ## What's New in v5
 
-**v5.3, October 2, 2026: a free Lab Partner for everyone**
+**v5.3, October 2, 2026: a free Lab Partner**
 
-- **No account needed.** The Lab Partner can now run a small open model (Qwen3) right in your browser, for free, with no key and no account. Nothing you ask leaves your computer. The first time, it downloads about 1 GB, which your browser keeps for next time. It needs a browser with WebGPU, such as a recent Chrome, Edge or Safari, and it's the default for anyone who hasn't set up another provider.
-- **OpenRouter's free models.** For computers that can't run the in-browser model, the Lab Partner can also use OpenRouter's free models with a free OpenRouter key (no credit card; about 50 questions a day).
-- **Secure by default.** Visits that arrive over plain HTTP now switch to HTTPS, which the in-browser model and Share Link need.
+- **No paid account needed.** The Lab Partner now starts on OpenRouter's free models, which come from several AI labs. All it takes is a free OpenRouter key: no credit card, about 50 questions a day. OpenAI, Anthropic, xAI and local models still work as before, and returning visitors keep the provider they saved.
+- **Secure by default.** Visits that arrive over plain HTTP now switch to HTTPS, which Share Link needs to copy to the clipboard.
 
 **v5.2.1, October 2, 2026: fixes from a second look**
 
@@ -104,16 +103,13 @@ The AI Lab Partner watches it all happen, analyzes the data, designs and runs ex
 
 | Provider | Endpoint | Default Model |
 |----------|----------|---------------|
-| **Free, in your browser** | Runs on your own GPU (WebGPU), no key | Qwen3-1.7B |
-| **OpenRouter free models** | openrouter.ai, free key | openrouter/free |
+| **OpenRouter free models** (default) | openrouter.ai, free key | openrouter/free |
 | **OpenAI** | api.openai.com | gpt-6-astra |
 | **Anthropic** | api.anthropic.com | claude-sonnet-5-5 |
 | **xAI** | api.x.ai | grok-4.3 |
 | **Custom / Local** | Any OpenAI-compatible URL | Your local model |
 
-The free option runs the open Qwen3-1.7B model on your own computer through [WebLLM](https://github.com/mlc-ai/web-llm), so it needs no key or account, and the simulation data and your questions never leave your machine. The first time, it asks before downloading the model (about 1 GB) from Hugging Face; your browser caches it for later visits. The WebLLM library is pinned to one version and checked against its fingerprint before it runs. It needs WebGPU (a recent Chrome, Edge or Safari on a computer), and as a small model it gives simpler answers than the large paid models. With a strong graphics card you can type `Qwen3-4B-q4f16_1-MLC` in the Model box for better answers (about 2.3 GB); on a weak one, `Qwen3-0.6B-q4f16_1-MLC` (about 0.5 GB).
-
-OpenRouter's free models need a free key from [openrouter.ai/keys](https://openrouter.ai/keys) (no credit card) and allow about 50 questions a day.
+For a free Lab Partner, create a free key at [openrouter.ai/keys](https://openrouter.ai/keys) (no credit card) and paste it into AI Provider Settings. The `openrouter/free` model picks one of OpenRouter's free models for each question, and free use allows about 50 questions a day. Free models can be slower or busier than paid ones, and their providers may log prompts, so use a paid provider for anything private.
 
 The Custom/Local option supports LM Studio, Ollama, vLLM, text-generation-webui, or any server exposing an OpenAI-compatible chat completions endpoint. No API key required for local models.
 
@@ -179,7 +175,7 @@ Each displayed frame then draws the water, algae, lineage trails, effects and cr
 
 The AI Lab Partner operates through four integrated systems:
 
-**Multi-Provider Adapter** — A unified API layer that translates between provider-specific formats. Anthropic uses the Messages API with system prompts as a separate parameter and returns content blocks. OpenAI, xAI, OpenRouter and local models use the chat completions format with system messages in the messages array, and the free in-browser model runs through WebLLM's version of the same interface, seeing only the latest exchanges because of its smaller context window. The adapter handles these differences transparently — the rest of the system just calls `callProviderAPI()` and gets text back regardless of which provider is active. Provider selection, API keys, model names, and custom endpoint URLs are configured in-app and persisted in localStorage.
+**Multi-Provider Adapter** — A unified API layer that translates between provider-specific formats. Anthropic uses the Messages API with system prompts as a separate parameter and returns content blocks. OpenAI, xAI, OpenRouter and local models use the chat completions format with system messages in the messages array. The adapter handles these differences transparently — the rest of the system just calls `callProviderAPI()` and gets text back regardless of which provider is active. Provider selection, API keys, model names, and custom endpoint URLs are configured in-app and persisted in localStorage.
 
 **State Snapshot Engine** — Captures the full simulation state on demand: how many species are alive and how many have ever been named, the largest living species with their population, age, average size and energy, all four gene averages, and which species each one split from, plus recent extinctions, top predator statistics, food supply, the highest and average generation, the world seed, current parameter settings, and elapsed simulation time. This structured data becomes the context for every AI interaction.
 
@@ -260,7 +256,7 @@ Primordial is a single `index.html` file. To deploy:
 2. Enable GitHub Pages (Settings → Pages → Source: main branch)
 3. Visit `https://jkh2.github.io/Primordial-Sim/`
 
-Or just open the HTML file directly in any modern browser. No server, no build, no dependencies. The AI Lab Partner requires internet access for API calls (or a local model server, or, for the free in-browser model, just its one-time download) but the simulation itself runs fully offline.
+Or just open the HTML file directly in any modern browser. No server, no build, no dependencies. The AI Lab Partner requires internet access for API calls (or a local model server) but the simulation itself runs fully offline.
 
 ## Performance
 
@@ -270,7 +266,7 @@ The spatial hash grid is the key performance enabler. Without it, 50,000 organis
 
 ## Browser Support
 
-Any modern browser with WebGL: Chrome, Firefox, Safari, Edge. No plugins, no extensions, no WebGL2 required. The free in-browser Lab Partner also needs WebGPU, which recent Chrome, Edge and Safari have on computers; on other browsers, use one of the other providers.
+Any modern browser with WebGL: Chrome, Firefox, Safari, Edge. No plugins, no extensions, no WebGL2 required.
 
 ## Where It's Going
 

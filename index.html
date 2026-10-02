@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8"/>
-<script>/* The site's domain serves HTTPS, but some links still arrive over plain HTTP. The free in-browser Lab Partner (WebGPU) and Share Link (clipboard) need a secure page. */
+<script>/* The site's domain serves HTTPS, but the launch link still arrives over plain HTTP, where Share Link can't copy to the clipboard and the page (which holds visitors' API keys) could be altered in transit. */
 if(location.protocol==='http:'&&/(^|\.)jameskeithharwood\.com$/.test(location.hostname))location.replace('https:'+location.href.slice(5));</script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Primordial — Genesis Engine v5 · Sentinel Edition</title>
@@ -284,8 +284,7 @@ button.btn.recording{background:rgba(255,50,50,0.25)!important;border-color:rgba
     <div id="aiSettingsBody">
       <div style="margin-bottom:8px">
         <select class="sel" id="aiProvider" style="width:100%;margin-bottom:6px">
-          <option value="browser">Free: runs in your browser (no key)</option>
-          <option value="openrouter">OpenRouter free models (free key)</option>
+          <option value="openrouter">Free: OpenRouter free models (free key)</option>
           <option value="openai">OpenAI (GPT)</option>
           <option value="anthropic">Anthropic (Claude)</option>
           <option value="xai">xAI (Grok)</option>
@@ -293,7 +292,7 @@ button.btn.recording{background:rgba(255,50,50,0.25)!important;border-color:rgba
         </select>
       </div>
       <div id="aiProviderNote" style="font-size:0.68rem;line-height:1.45;color:var(--muted);margin-bottom:6px"></div>
-      <div id="aiKeyRow" style="margin-bottom:6px">
+      <div style="margin-bottom:6px">
         <input class="ai-input" id="aiApiKey" type="password" placeholder="API Key" style="width:100%;font-size:0.72rem"/>
       </div>
       <div style="margin-bottom:6px">
@@ -312,7 +311,7 @@ button.btn.recording{background:rgba(255,50,50,0.25)!important;border-color:rgba
   <div class="ai-chat" id="aiChat">
     <div class="ai-msg assistant">Welcome to the Primordial Research Lab. I can observe the simulation, design experiments, run them automatically, and write reports on the results.
 
-Ask me anything, or use the quick actions below. With no AI account, I run for free right here in your browser: the first time, I download a small open model of about 1 GB, and nothing you ask leaves your computer. For deeper answers, connect OpenAI, Anthropic, xAI, OpenRouter's free models or a local model in the settings above.</div>
+To get started for free, create a free key at openrouter.ai/keys (no credit card) and paste it into the settings above; I'll use OpenRouter's free models. You can also connect OpenAI, Anthropic, xAI or a local model. Then ask me anything, or use the quick actions below.</div>
   </div>
   <div class="exp-status" id="expStatus"><div class="exp-dot"></div><span id="expStatusText">Running experiment...</span></div>
   <div class="ai-actions">
@@ -701,7 +700,7 @@ const SETTING_CHECKS=['chkSameSpecies','chkFoodChain','chkMutation','chkEvoSpeed
 
 // The version of the simulation's rules that made a saved world. A seed replays exactly only under the rules that made it (older
 // versions stay playable from the badge links), so loading settings from other rules says so. Bump it whenever a release changes
-// how a seed plays out; releases that leave the world alone (v5.3 only added the free Lab Partner) keep it.
+// how a seed plays out; releases that leave the world alone (v5.3 only changed the Lab Partner) keep it.
 const APP_VERSION='5.2.1';
 function versionNote(s){return s._app===APP_VERSION?'':' Made in '+(s._app?'v'+s._app:'an earlier version')+', so the run may differ; older versions are linked in the corner badge.';}
 
@@ -930,7 +929,6 @@ Keep it concise but insightful. Use the species names given, not indices. Specie
 // API key stored in localStorage only — never transmitted except to chosen provider
 
 const AI_DEFAULTS={
-  browser:{model:'Qwen3-1.7B-q4f16_1-MLC'},
   openrouter:{url:'https://openrouter.ai/api/v1/chat/completions',model:'openrouter/free'},
   openai:{url:'https://api.openai.com/v1/chat/completions',model:'gpt-6-astra'},
   anthropic:{url:'https://api.anthropic.com/v1/messages',model:'claude-sonnet-5-5'},
@@ -940,17 +938,15 @@ const AI_DEFAULTS={
 
 // Old defaults saved in a browser are upgraded to the current ones
 const LEGACY_MODELS=['gpt-4o','claude-sonnet-4-20250514','grok-3-mini'];
-// Visitors with no saved settings start on the free in-browser model, so the Lab Partner works without any account
-let aiConfig={provider:'browser',apiKey:'',model:'',customUrl:''};
-const AI_NAMES={browser:'Free in-browser model',openrouter:'OpenRouter',openai:'OpenAI',anthropic:'Anthropic',xai:'xAI Grok',custom:'Custom/Local'};
+// Visitors with no saved settings start on OpenRouter's free models, so the Lab Partner needs only a free key, not a paid account
+let aiConfig={provider:'openrouter',apiKey:'',model:'',customUrl:''};
+const AI_NAMES={openrouter:'OpenRouter (free)',openai:'OpenAI',anthropic:'Anthropic',xai:'xAI Grok',custom:'Custom/Local'};
 const AI_NOTES={
-  browser:'Runs a small open model (Qwen3) on your own computer with WebGPU. No key, no account, and nothing you ask leaves your computer. The first time, it downloads about 1 GB, which your browser keeps for next time. Needs a recent Chrome, Edge or Safari. Answers are simpler than the big paid models.',
-  openrouter:'Free models from several labs through one free OpenRouter key (no credit card): create one at openrouter.ai/keys. Free use is limited to about 50 questions a day.',
+  openrouter:'Free models from several AI labs through one free OpenRouter key, with no credit card: sign up at openrouter.ai, create a key at openrouter.ai/keys, paste it here and press Save. Free use allows about 50 questions a day.',
   custom:'Any OpenAI-compatible server, such as Ollama or LM Studio running on your computer. No key needed for local models.'
 };
 function updateProviderUI(p){
   $('aiCustomUrlRow').style.display=p==='custom'?'block':'none';
-  $('aiKeyRow').style.display=p==='browser'?'none':'block';
   $('aiProviderNote').textContent=AI_NOTES[p]||'';
   $('aiProviderNote').style.display=AI_NOTES[p]?'block':'none';
 }
@@ -1012,8 +1008,7 @@ async function callProviderAPI(messages,systemPrompt){
   const apiKey=aiConfig.apiKey;
   const model=aiConfig.model||AI_DEFAULTS[provider]?.model||'gpt-4o';
 
-  if(provider==='browser')return callBrowserModel(messages,systemPrompt,model);
-  if(!apiKey&&provider==='openrouter')throw new Error('OpenRouter needs a free key. Create one at openrouter.ai/keys and paste it into AI Provider Settings, or choose the free in-browser model.');
+  if(!apiKey&&provider==='openrouter')throw new Error("The free Lab Partner needs a free OpenRouter key (no credit card). Create one at openrouter.ai/keys, paste it into AI Provider Settings above, and press Save.");
   if(!apiKey&&provider!=='custom'){throw new Error('No API key configured. Open AI settings to add your key.');}
 
   if(provider==='anthropic'){
@@ -1042,71 +1037,6 @@ async function callProviderAPI(messages,systemPrompt){
   }
 }
 
-// ── Free Lab Partner: a small open model running on the visitor's own GPU through WebLLM (WebGPU) ──
-// No AI service sees the conversation. The WebLLM library is pinned to one version and checked against its SHA-384
-// fingerprint before it runs (the page holds visitors' API keys, so it never runs unchecked code). The model comes from
-// Hugging Face; the browser caches both, so later visits load from disk.
-const WEBLLM_VERSION='0.2.85',WEBLLM_SRI='sha384-rfElDdXnNkSgbLTTGiKHTrsetCVAYzzLZBD96/rZdD9XYvryEyShqz3ph8j+x7HH';
-const WEBLLM_URLS=['https://cdn.jsdelivr.net/npm/@mlc-ai/web-llm@'+WEBLLM_VERSION+'/lib/index.js','https://unpkg.com/@mlc-ai/web-llm@'+WEBLLM_VERSION+'/lib/index.js'];
-const BROWSER_MODEL_SIZE={'Qwen3-0.6B-q4f16_1-MLC':'about 0.5 GB','Qwen3-1.7B-q4f16_1-MLC':'about 1 GB','Qwen3-4B-q4f16_1-MLC':'about 2.3 GB'};
-let webllmLib=null,webllmEngine=null,webllmModel='',webllmLoading=null;
-
-async function loadWebLLMLib(){
-  if(webllmLib)return webllmLib;
-  let lastErr=null;
-  for(const url of WEBLLM_URLS){
-    try{
-      const resp=await fetch(url);if(!resp.ok)throw new Error('HTTP '+resp.status);
-      const buf=await resp.arrayBuffer();
-      const hash='sha384-'+btoa(String.fromCharCode(...new Uint8Array(await crypto.subtle.digest('SHA-384',buf))));
-      if(hash!==WEBLLM_SRI)throw new Error('the download did not match its expected fingerprint');
-      const blobUrl=URL.createObjectURL(new Blob([buf],{type:'text/javascript'}));
-      try{webllmLib=await import(blobUrl);}finally{URL.revokeObjectURL(blobUrl);}
-      return webllmLib;
-    }catch(e){lastErr=e;}
-  }
-  throw new Error('Could not load the free model\'s library ('+(lastErr?lastErr.message:'unknown error')+'). Check your connection and try again.');
-}
-
-async function loadBrowserEngine(model){
-  if(!window.isSecureContext)throw new Error('The free model only runs on a secure page. Open https://'+location.host+location.pathname+' and try again.');
-  if(!navigator.gpu)throw new Error("This browser doesn't support WebGPU, which the free model needs. Try a recent Chrome or Edge on a computer, or choose OpenRouter's free models in AI Provider Settings.");
-  const adapter=await navigator.gpu.requestAdapter();
-  if(!adapter)throw new Error("WebGPU is turned off or unavailable on this computer, so the free model can't run here. Choose OpenRouter's free models in AI Provider Settings instead.");
-  const lib=await loadWebLLMLib();
-  if(!lib.prebuiltAppConfig.model_list.some(m=>m.model_id===model))throw new Error('"'+model+'" is not one of the free in-browser models. Clear the Model box to use the default.');
-  const cached=await lib.hasModelInCache(model).catch(()=>false);
-  if(!cached&&!confirm('The free Lab Partner runs on your own computer. It needs to download an AI model ('+(BROWSER_MODEL_SIZE[model]||'one to several GB')+') once; your browser keeps it for next time.\n\nDownload it now?'))
-    throw new Error('Download cancelled. Ask again when you are ready, or choose another provider in AI Provider Settings.');
-  if(webllmEngine){const old=webllmEngine;webllmEngine=null;webllmModel='';await old.unload().catch(()=>{});}
-  const msg=addAiMsg('system',(cached?'Loading':'Downloading')+' the free model...');
-  try{
-    webllmEngine=await lib.CreateMLCEngine(model,{initProgressCallback:r=>{msg.textContent=(cached?'Loading':'Downloading')+' the free model: '+Math.round((r.progress||0)*100)+'%';}});
-  }catch(e){
-    const em=String(e&&e.message||e);msg.textContent='The free model did not load.';
-    if(/fetch|network|cache|request failed|\b(404|429|5\d\d)\b/i.test(em))throw new Error('The free model could not download ('+em+'). Check your connection and try again; the parts already downloaded are kept.');
-    throw new Error('The free model could not start ('+em+'). Your graphics card may not have enough memory; try "Qwen3-0.6B-q4f16_1-MLC" in the Model box, or choose another provider.');}
-  webllmModel=model;
-  msg.textContent='Free model ready. It runs on your computer, so nothing you ask leaves it.';
-  return webllmEngine;
-}
-
-async function callBrowserModel(messages,systemPrompt,model){
-  if(!(webllmEngine&&webllmModel===model)){
-    if(!webllmLoading)webllmLoading=loadBrowserEngine(model).finally(()=>{webllmLoading=null;});
-    await webllmLoading;
-  }
-  // A small model has a 4,096-token window and the system prompt carries the whole snapshot, so it sees only the
-  // latest exchanges, with long earlier replies shortened
-  const recent=messages.slice(-4).map((m,k,a)=>({role:m.role,content:k<a.length-1&&m.content.length>1200?m.content.slice(0,1200)+' ...':m.content}));
-  while(recent.length>1&&recent[0].role!=='user')recent.shift();
-  const req={messages:[{role:'system',content:systemPrompt},...recent],max_tokens:800,temperature:0.7};
-  if(/^Qwen3/.test(model))req.extra_body={enable_thinking:false}; // answer directly instead of thinking out loud first
-  const reply=await webllmEngine.chat.completions.create(req);
-  const text=(reply.choices?.[0]?.message?.content||'').replace(/<think>[\s\S]*?<\/think>\s*/g,'').trim();
-  return text||'No response.';
-}
-
 // ═══════════════════════════════════════════════
 // AI COMMUNICATION (uses provider adapter)
 // ═══════════════════════════════════════════════
@@ -1119,7 +1049,6 @@ function addAiMsg(role,text){
   div.textContent=text;
   ui.aiChat.appendChild(div);
   ui.aiChat.scrollTop=ui.aiChat.scrollHeight;
-  return div;
 }
 
 async function callAI(userPrompt,msgClass='assistant'){
