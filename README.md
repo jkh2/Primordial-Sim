@@ -6,7 +6,7 @@
 
 A real-time WebGL ecosystem where living cells eat, hunt, flee, flock, reproduce, mutate, and split into new species that nobody designed, with a multi-provider AI Lab Partner that observes, experiments, and writes research reports on the living world. All from simple rules, all in your browser.
 
-**[Launch Primordial](https://jkh2.github.io/Primordial-Sim/)** · Version 5.2.1 · Single-file HTML · Zero install · GitHub Pages
+**[Launch Primordial](https://jkh2.github.io/Primordial-Sim/)** · Version 5.3 · Single-file HTML · Zero install · GitHub Pages
 
 **New here?** Choose the **Origin of Species** preset in the World tab and press **T**. Everything starts as one red species; within a few minutes the family tree fills with species that split off on their own.
 
@@ -25,6 +25,11 @@ We believe this is how humans and AI should work together: as partners with comp
 ---
 
 ## What's New in v5
+
+**v5.3, October 2, 2026: a free Lab Partner**
+
+- **No paid account needed.** The Lab Partner now starts on OpenRouter's free models, which come from several AI labs. All it takes is a free OpenRouter key: no credit card, about 50 questions a day. OpenAI, Anthropic, xAI and local models still work as before, and returning visitors keep the provider they saved.
+- **Secure by default.** Visits that arrive over plain HTTP now switch to HTTPS, which Share Link needs to copy to the clipboard.
 
 **v5.2.1, October 2, 2026: fixes from a second look**
 
@@ -98,10 +103,13 @@ The AI Lab Partner watches it all happen, analyzes the data, designs and runs ex
 
 | Provider | Endpoint | Default Model |
 |----------|----------|---------------|
+| **OpenRouter free models** (default) | openrouter.ai, free key | openrouter/free |
 | **OpenAI** | api.openai.com | gpt-6-astra |
 | **Anthropic** | api.anthropic.com | claude-sonnet-5-5 |
 | **xAI** | api.x.ai | grok-4.3 |
 | **Custom / Local** | Any OpenAI-compatible URL | Your local model |
+
+For a free Lab Partner, create a free key at [openrouter.ai/keys](https://openrouter.ai/keys) (no credit card) and paste it into AI Provider Settings. The `openrouter/free` model picks one of OpenRouter's free models for each question, and free use allows about 50 questions a day. Free models can be slower or busier than paid ones, and their providers may log prompts, so use a paid provider for anything private.
 
 The Custom/Local option supports LM Studio, Ollama, vLLM, text-generation-webui, or any server exposing an OpenAI-compatible chat completions endpoint. No API key required for local models.
 
@@ -167,7 +175,7 @@ Each displayed frame then draws the water, algae, lineage trails, effects and cr
 
 The AI Lab Partner operates through four integrated systems:
 
-**Multi-Provider Adapter** — A unified API layer that translates between provider-specific formats. Anthropic uses the Messages API with system prompts as a separate parameter and returns content blocks. OpenAI, xAI, and local models use the chat completions format with system messages in the messages array. The adapter handles these differences transparently — the rest of the system just calls `callProviderAPI()` and gets text back regardless of which provider is active. Provider selection, API keys, model names, and custom endpoint URLs are configured in-app and persisted in localStorage.
+**Multi-Provider Adapter** — A unified API layer that translates between provider-specific formats. Anthropic uses the Messages API with system prompts as a separate parameter and returns content blocks. OpenAI, xAI, OpenRouter and local models use the chat completions format with system messages in the messages array. The adapter handles these differences transparently — the rest of the system just calls `callProviderAPI()` and gets text back regardless of which provider is active. Provider selection, API keys, model names, and custom endpoint URLs are configured in-app and persisted in localStorage.
 
 **State Snapshot Engine** — Captures the full simulation state on demand: how many species are alive and how many have ever been named, the largest living species with their population, age, average size and energy, all four gene averages, and which species each one split from, plus recent extinctions, top predator statistics, food supply, the highest and average generation, the world seed, current parameter settings, and elapsed simulation time. This structured data becomes the context for every AI interaction.
 

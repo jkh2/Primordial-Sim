@@ -2,6 +2,8 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8"/>
+<script>/* The site's domain serves HTTPS, but the launch link still arrives over plain HTTP, where Share Link can't copy to the clipboard and the page (which holds visitors' API keys) could be altered in transit. */
+if(location.protocol==='http:'&&/(^|\.)jameskeithharwood\.com$/.test(location.hostname))location.replace('https:'+location.href.slice(5));</script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Primordial — Genesis Engine v5 · Sentinel Edition</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
@@ -140,7 +142,7 @@ button.btn.recording{background:rgba(255,50,50,0.25)!important;border-color:rgba
 <div class="panel" id="panel">
   <div class="panel-header">
     <div class="panel-title">Primordial</div>
-    <div class="panel-subtitle">Genesis Engine · Sentinel Edition · v5.2.1</div>
+    <div class="panel-subtitle">Genesis Engine · Sentinel Edition · v5.3</div>
     <button class="panel-close" id="panelClose" title="Collapse panel">&#10005;</button>
   </div>
   <div class="tabs">
@@ -282,17 +284,19 @@ button.btn.recording{background:rgba(255,50,50,0.25)!important;border-color:rgba
     <div id="aiSettingsBody">
       <div style="margin-bottom:8px">
         <select class="sel" id="aiProvider" style="width:100%;margin-bottom:6px">
+          <option value="openrouter">Free: OpenRouter free models (free key)</option>
           <option value="openai">OpenAI (GPT)</option>
           <option value="anthropic">Anthropic (Claude)</option>
           <option value="xai">xAI (Grok)</option>
           <option value="custom">Custom / Local (OpenAI-compatible)</option>
         </select>
       </div>
+      <div id="aiProviderNote" style="font-size:0.68rem;line-height:1.45;color:var(--muted);margin-bottom:6px"></div>
       <div style="margin-bottom:6px">
         <input class="ai-input" id="aiApiKey" type="password" placeholder="API Key" style="width:100%;font-size:0.72rem"/>
       </div>
       <div style="margin-bottom:6px">
-        <input class="ai-input" id="aiModel" placeholder="Model (e.g. gpt-4o, claude-sonnet-4-20250514)" style="width:100%;font-size:0.72rem"/>
+        <input class="ai-input" id="aiModel" placeholder="Model (leave empty for the default)" style="width:100%;font-size:0.72rem"/>
       </div>
       <div id="aiCustomUrlRow" style="margin-bottom:6px;display:none">
         <input class="ai-input" id="aiCustomUrl" placeholder="Endpoint URL (e.g. http://localhost:1234/v1/chat/completions)" style="width:100%;font-size:0.72rem"/>
@@ -307,7 +311,7 @@ button.btn.recording{background:rgba(255,50,50,0.25)!important;border-color:rgba
   <div class="ai-chat" id="aiChat">
     <div class="ai-msg assistant">Welcome to the Primordial Research Lab. I can observe the simulation, design experiments, run them automatically, and write reports on the results.
 
-Configure your AI provider in the settings above, then try asking me to analyze the current state, propose an experiment, or explain what's happening. You can also use the quick actions below.</div>
+To get started for free, create a free key at openrouter.ai/keys (no credit card) and paste it into the settings above; I'll use OpenRouter's free models. You can also connect OpenAI, Anthropic, xAI or a local model. Then ask me anything, or use the quick actions below.</div>
   </div>
   <div class="exp-status" id="expStatus"><div class="exp-dot"></div><span id="expStatusText">Running experiment...</span></div>
   <div class="ai-actions">
@@ -323,7 +327,7 @@ Configure your AI provider in the settings above, then try asking me to analyze 
   </div>
 </div>
 
-<div class="badge">Primordial v5.2.1 · Sentinel AI Systems × Claude Sentinel · SIDLF · <a href="v5/" title="Play v5 from September 29, 2026, before dead bodies fed the pond">v5</a> · <a href="v4/" title="Play v4 from September 2026, before species could evolve">v4</a> · <a href="classic/" title="Play the original v3 from March 2026">Original v3</a></div>
+<div class="badge">Primordial v5.3 · Sentinel AI Systems × Claude Sentinel · SIDLF · <a href="v5/" title="Play v5 from September 29, 2026, before dead bodies fed the pond">v5</a> · <a href="v4/" title="Play v4 from September 2026, before species could evolve">v4</a> · <a href="classic/" title="Play the original v3 from March 2026">Original v3</a></div>
 <div class="rec-dot" id="recDot">REC <span id="recTime">0:00</span></div>
 
 <script>
@@ -694,8 +698,9 @@ function updateRecTimer(){
 const SETTING_SLIDERS=['sOrganisms','sFood','sFoodRate','sSpeed','sSpecies','sStartSize','sMaxSize','sOrgSpeed','sLifespan','sReproSize','sOffspring','sOases','sEatRatio','sEatGain','sDecay','sHunt','sFlee','sFlock','sFoodDrive','sSeparation','sMutRate','sMutStr','sTraitCost','sSplit','sFoodGlow','sGlow','sTrail'];
 const SETTING_CHECKS=['chkSameSpecies','chkFoodChain','chkMutation','chkEvoSpeed','chkEvoAggro','chkEvoEfficiency','chkEvoPerception','chkSpeciation','chkSexual','chkGlow','chkDetail','chkWater','chkDeathFX','chkShowOases','chkLineage'];
 
-// The engine version that made a saved world. A seed replays exactly only in the version that made it (older versions stay playable
-// from the badge links), so loading settings from another version says so. Keep this in step with the badge.
+// The version of the simulation's rules that made a saved world. A seed replays exactly only under the rules that made it (older
+// versions stay playable from the badge links), so loading settings from other rules says so. Bump it whenever a release changes
+// how a seed plays out; releases that leave the world alone (v5.3 only changed the Lab Partner) keep it.
 const APP_VERSION='5.2.1';
 function versionNote(s){return s._app===APP_VERSION?'':' Made in '+(s._app?'v'+s._app:'an earlier version')+', so the run may differ; older versions are linked in the corner badge.';}
 
@@ -924,6 +929,7 @@ Keep it concise but insightful. Use the species names given, not indices. Specie
 // API key stored in localStorage only — never transmitted except to chosen provider
 
 const AI_DEFAULTS={
+  openrouter:{url:'https://openrouter.ai/api/v1/chat/completions',model:'openrouter/free'},
   openai:{url:'https://api.openai.com/v1/chat/completions',model:'gpt-6-astra'},
   anthropic:{url:'https://api.anthropic.com/v1/messages',model:'claude-sonnet-5-5'},
   xai:{url:'https://api.x.ai/v1/chat/completions',model:'grok-4.3'},
@@ -932,14 +938,25 @@ const AI_DEFAULTS={
 
 // Old defaults saved in a browser are upgraded to the current ones
 const LEGACY_MODELS=['gpt-4o','claude-sonnet-4-20250514','grok-3-mini'];
-let aiConfig={provider:'openai',apiKey:'',model:'',customUrl:''};
+// Visitors with no saved settings start on OpenRouter's free models, so the Lab Partner needs only a free key, not a paid account
+let aiConfig={provider:'openrouter',apiKey:'',model:'',customUrl:''};
+const AI_NAMES={openrouter:'OpenRouter (free)',openai:'OpenAI',anthropic:'Anthropic',xai:'xAI Grok',custom:'Custom/Local'};
+const AI_NOTES={
+  openrouter:'Free models from several AI labs through one free OpenRouter key, with no credit card: sign up at openrouter.ai, create a key at openrouter.ai/keys, paste it here and press Save. Free use allows about 50 questions a day.',
+  custom:'Any OpenAI-compatible server, such as Ollama or LM Studio running on your computer. No key needed for local models.'
+};
+function updateProviderUI(p){
+  $('aiCustomUrlRow').style.display=p==='custom'?'block':'none';
+  $('aiProviderNote').textContent=AI_NOTES[p]||'';
+  $('aiProviderNote').style.display=AI_NOTES[p]?'block':'none';
+}
 
 function loadAiSettings(){
   try{
     const saved=localStorage.getItem('primordial-ai-config');
     if(saved){
       const s=JSON.parse(saved);
-      aiConfig.provider=s.provider||'openai';
+      aiConfig.provider=AI_NAMES[s.provider]?s.provider:'openai';
       aiConfig.apiKey=s.apiKey||'';
       aiConfig.model=LEGACY_MODELS.includes(s.model)?'':(s.model||'');
       aiConfig.customUrl=s.customUrl||'';
@@ -951,10 +968,8 @@ function loadAiSettings(){
   key.value=aiConfig.apiKey;
   model.value=aiConfig.model||AI_DEFAULTS[aiConfig.provider]?.model||'';
   curl.value=aiConfig.customUrl;
-  $('aiCustomUrlRow').style.display=aiConfig.provider==='custom'?'block':'none';
-  // Update subtitle
-  const names={openai:'OpenAI',anthropic:'Anthropic',xai:'xAI Grok',custom:'Custom/Local'};
-  document.querySelector('.ai-subtitle').textContent='Sentinel Research Assistant · '+(names[aiConfig.provider]||'AI');
+  updateProviderUI(aiConfig.provider);
+  document.querySelector('.ai-subtitle').textContent='Sentinel Research Assistant · '+(AI_NAMES[aiConfig.provider]||'AI');
 }
 
 function saveAiSettings(){
@@ -963,8 +978,7 @@ function saveAiSettings(){
   aiConfig.model=$('aiModel').value;
   aiConfig.customUrl=$('aiCustomUrl').value;
   try{localStorage.setItem('primordial-ai-config',JSON.stringify(aiConfig));}catch(e){}
-  const names={openai:'OpenAI',anthropic:'Anthropic',xai:'xAI Grok',custom:'Custom/Local'};
-  document.querySelector('.ai-subtitle').textContent='Sentinel Research Assistant · '+(names[aiConfig.provider]||'AI');
+  document.querySelector('.ai-subtitle').textContent='Sentinel Research Assistant · '+(AI_NAMES[aiConfig.provider]||'AI');
   $('aiSettingsStatus').textContent='Settings saved.';$('aiSettingsStatus').style.color='var(--accent2)';
   setTimeout(()=>{$('aiSettingsStatus').textContent='';},2000);
 }
@@ -982,7 +996,7 @@ async function testAiConnection(){
 
 $('aiProvider').addEventListener('change',()=>{
   const p=$('aiProvider').value;
-  $('aiCustomUrlRow').style.display=p==='custom'?'block':'none';
+  updateProviderUI(p);
   if(!$('aiModel').value||Object.values(AI_DEFAULTS).some(d=>d.model===$('aiModel').value)){
     $('aiModel').value=AI_DEFAULTS[p]?.model||'';
   }
@@ -994,6 +1008,7 @@ async function callProviderAPI(messages,systemPrompt){
   const apiKey=aiConfig.apiKey;
   const model=aiConfig.model||AI_DEFAULTS[provider]?.model||'gpt-4o';
 
+  if(!apiKey&&provider==='openrouter')throw new Error("The free Lab Partner needs a free OpenRouter key (no credit card). Create one at openrouter.ai/keys, paste it into AI Provider Settings above, and press Save.");
   if(!apiKey&&provider!=='custom'){throw new Error('No API key configured. Open AI settings to add your key.');}
 
   if(provider==='anthropic'){
