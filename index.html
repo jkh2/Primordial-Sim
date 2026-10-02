@@ -201,7 +201,7 @@ button.btn.recording{background:rgba(255,50,50,0.25)!important;border-color:rgba
       <div class="ctrl"><div class="ctrl-label"><span>Organism Speed</span><strong id="vOrgSpeed">1.2</strong></div><input type="range" id="sOrgSpeed" min="0.3" max="4.0" step="0.1" value="1.2"/></div>
       <div class="ctrl"><div class="ctrl-label"><span>Lifespan</span><strong id="vLifespan">30s</strong></div><input type="range" id="sLifespan" min="10" max="120" step="5" value="30"/></div>
       <div class="section-label">Reproduction</div>
-      <div class="ctrl"><div class="ctrl-label"><span>Reproduce at Size</span><strong id="vReproSize">12</strong></div><input type="range" id="sReproSize" min="5" max="30" step="1" value="12"/></div>
+      <div class="ctrl"><div class="ctrl-label"><span>Reproduce at Size</span><strong id="vReproSize">12</strong></div><input type="range" id="sReproSize" min="5" max="40" step="1" value="12"/></div>
       <div class="ctrl"><div class="ctrl-label"><span>Offspring Count</span><strong id="vOffspring">2</strong></div><input type="range" id="sOffspring" min="1" max="5" step="1" value="2"/></div>
       <div class="ctrl"><div class="ctrl-label"><span>Food Oases</span><strong id="vOases">4</strong></div><input type="range" id="sOases" min="0" max="8" step="1" value="4"/></div>
     </div>
@@ -243,7 +243,8 @@ button.btn.recording{background:rgba(255,50,50,0.25)!important;border-color:rgba
       <div class="tree-info" id="treeInfo"></div>
     </div>
     <div class="tab-page" id="tab-viz">
-      <div class="toggle-row"><span>Additive Glow</span><input type="checkbox" id="chkGlow" checked/></div>
+      <div class="toggle-row"><span>Glow</span><input type="checkbox" id="chkGlow" checked/></div>
+      <div class="ctrl"><div class="ctrl-label"><span>Glow Strength</span><strong id="vGlow">50%</strong></div><input type="range" id="sGlow" min="0.1" max="1" step="0.05" value="0.5"/></div>
       <div class="toggle-row"><span>Water Effects</span><input type="checkbox" id="chkWater" checked/></div>
       <div class="toggle-row"><span>Detailed Creatures</span><input type="checkbox" id="chkDetail" checked/></div>
       <div class="toggle-row"><span>Birth &amp; Death Effects</span><input type="checkbox" id="chkDeathFX" checked/></div>
@@ -320,7 +321,7 @@ Configure your AI provider in the settings above, then try asking me to analyze 
   </div>
 </div>
 
-<div class="badge">Primordial v5 · Sentinel AI Systems × Claude Sentinel · SIDLF · <a href="v4/" title="Play v4 from September 2026, before species could evolve">v4</a> · <a href="classic/" title="Play the original v3 from March 2026">Original v3</a></div>
+<div class="badge">Primordial v5.1 · Sentinel AI Systems × Claude Sentinel · SIDLF · <a href="v4/" title="Play v4 from September 2026, before species could evolve">v4</a> · <a href="classic/" title="Play the original v3 from March 2026">Original v3</a></div>
 <div class="rec-dot" id="recDot">REC <span id="recTime">0:00</span></div>
 
 <script>
@@ -396,9 +397,9 @@ varying float v_head;varying float v_hue;varying vec4 v_genes;varying vec4 v_sta
 void main(){vec2 clip=(a_pos/u_res)*2.0-1.0;clip.y=-clip.y;gl_Position=vec4(clip,0.0,1.0);
 float beat=1.0+0.07*sin(u_time*(2.5+(1.0-a_state.x)*3.0)+a_state.y*6.2832);
 gl_PointSize=a_look.y*beat;v_head=a_look.x;v_hue=a_look.z;v_genes=a_genes;v_state=a_state;}`;
-const ORG_FS=HP+HSV_GLSL+`uniform float u_time;uniform float u_simple;varying float v_head;varying float v_hue;varying vec4 v_genes;varying vec4 v_state;
+const ORG_FS=HP+HSV_GLSL+`uniform float u_time;uniform float u_simple;uniform float u_glow;varying float v_head;varying float v_hue;varying vec4 v_genes;varying vec4 v_state;
 vec4 over(vec4 acc,vec3 c,float a){a=clamp(a,0.0,1.0);return vec4(c*a+acc.rgb*(1.0-a),a+acc.a*(1.0-a));}
-void main(){if(u_simple>0.5){float dd=length(gl_PointCoord-0.5)*2.0;if(dd>1.0)discard;float cr=exp(-dd*2.0)*0.6+(1.0-dd*dd)*0.4;gl_FragColor=vec4(hsv(v_hue,0.85,0.7+cr*0.3)*cr,(cr*0.7+0.3)*v_state.w);return;}
+void main(){if(u_simple>0.5){float dd=length(gl_PointCoord-0.5)*2.0;if(dd>1.0)discard;float cr=exp(-dd*2.0)*0.6+(1.0-dd*dd)*0.4;float sa=(cr*0.7+0.3)*v_state.w;gl_FragColor=vec4(hsv(v_hue,0.85,0.7+cr*0.3)*cr*sa,sa*(1.0-u_glow));return;}
 vec2 p=gl_PointCoord-0.5;p.y=-p.y;float cs=cos(v_head),sn=sin(v_head);vec2 q=vec2(cs*p.x+sn*p.y,-sn*p.x+cs*p.y)*2.0;
 float spd=v_genes.x,agg=v_genes.y,eff=v_genes.z,per=v_genes.w,fed=v_state.x,seed=v_state.y,mv=v_state.z;
 float R=0.46;float stretch=1.0+mv*0.22;vec2 b=vec2(q.x/stretch,q.y/(1.0-mv*0.1));
@@ -418,7 +419,7 @@ float rim=smoothstep(0.07,0.0,abs(d+0.035))*inside;acc=over(acc,mix(base*1.25,ve
 float nd=length(q-vec2(-0.1,0.0))-R*(0.3+0.12*fed);acc=over(acc,base*0.22,smoothstep(0.03,-0.03,nd)*0.85*inside);
 if(per>0.25){float er=0.045+per*0.06;vec2 e1=q-vec2(R*0.55,R*0.36),e2=q-vec2(R*0.55,-R*0.36);float e=max(smoothstep(er,er*0.3,length(e1)),smoothstep(er,er*0.3,length(e2)));
 acc=over(acc,mix(vec3(1.0),vec3(0.75,1.0,1.0),0.5),e*(per-0.1));}
-if(acc.a<0.02)discard;gl_FragColor=vec4(acc.rgb/acc.a*bright,acc.a*v_state.w);}`;
+if(acc.a<0.02)discard;float a=acc.a*v_state.w;gl_FragColor=vec4(acc.rgb/acc.a*bright*a,a*(1.0-u_glow));}`;
 
 // Lineage trails: faint threads following where each species lives
 const LINE_VS=`attribute vec2 a_pos;attribute vec4 a_col;uniform vec2 u_res;varying vec4 v_col;void main(){vec2 clip=(a_pos/u_res)*2.0-1.0;clip.y=-clip.y;gl_Position=vec4(clip,0.0,1.0);v_col=a_col;}`;
@@ -433,7 +434,7 @@ function ensureBgTarget(){const w=Math.max(1,Math.ceil(W/2)),h=Math.max(1,Math.c
   gl.bindFramebuffer(gl.FRAMEBUFFER,bgFbo);gl.framebufferTexture2D(gl.FRAMEBUFFER,gl.COLOR_ATTACHMENT0,gl.TEXTURE_2D,bgTex,0);gl.bindFramebuffer(gl.FRAMEBUFFER,null);}
 const bgLoc={pos:gl.getAttribLocation(bgProg,'a_pos'),res:gl.getUniformLocation(bgProg,'u_res'),scale:gl.getUniformLocation(bgProg,'u_scale'),time:gl.getUniformLocation(bgProg,'u_time'),oases:gl.getUniformLocation(bgProg,'u_oases'),nOases:gl.getUniformLocation(bgProg,'u_nOases'),fx:gl.getUniformLocation(bgProg,'u_fx')};
 const foodLoc={pos:gl.getAttribLocation(foodProg,'a_pos'),seed:gl.getAttribLocation(foodProg,'a_seed'),res:gl.getUniformLocation(foodProg,'u_res'),time:gl.getUniformLocation(foodProg,'u_time'),scale:gl.getUniformLocation(foodProg,'u_scale')};
-const orgLoc={pos:gl.getAttribLocation(orgProg,'a_pos'),look:gl.getAttribLocation(orgProg,'a_look'),genes:gl.getAttribLocation(orgProg,'a_genes'),state:gl.getAttribLocation(orgProg,'a_state'),res:gl.getUniformLocation(orgProg,'u_res'),time:gl.getUniformLocation(orgProg,'u_time'),simple:gl.getUniformLocation(orgProg,'u_simple')};
+const orgLoc={pos:gl.getAttribLocation(orgProg,'a_pos'),look:gl.getAttribLocation(orgProg,'a_look'),genes:gl.getAttribLocation(orgProg,'a_genes'),state:gl.getAttribLocation(orgProg,'a_state'),res:gl.getUniformLocation(orgProg,'u_res'),time:gl.getUniformLocation(orgProg,'u_time'),simple:gl.getUniformLocation(orgProg,'u_simple'),glow:gl.getUniformLocation(orgProg,'u_glow')};
 const lineLoc={pos:gl.getAttribLocation(lineProg,'a_pos'),col:gl.getAttribLocation(lineProg,'a_col'),res:gl.getUniformLocation(lineProg,'u_res')};
 const foodBuf=gl.createBuffer(),orgBuf=gl.createBuffer(),lineBuf=gl.createBuffer();
 const ORG_STRIDE=13;
@@ -459,12 +460,12 @@ chkMutation:$('chkMutation'),sMutRate:$('sMutRate'),sMutStr:$('sMutStr'),sTraitC
 chkSpeciation:$('chkSpeciation'),chkSexual:$('chkSexual'),sSplit:$('sSplit'),vSplit:$('vSplit'),chkLineage:$('chkLineage'),sSpCount:$('sSpCount'),treeStats:$('treeStats'),treeInfo:$('treeInfo'),
 chkEvoSpeed:$('chkEvoSpeed'),chkEvoAggro:$('chkEvoAggro'),chkEvoEfficiency:$('chkEvoEfficiency'),chkEvoPerception:$('chkEvoPerception'),
 chkGlow:$('chkGlow'),chkDetail:$('chkDetail'),chkWater:$('chkWater'),chkDeathFX:$('chkDeathFX'),chkShowOases:$('chkShowOases'),
-sFoodGlow:$('sFoodGlow'),sTrail:$('sTrail'),
+sFoodGlow:$('sFoodGlow'),sGlow:$('sGlow'),sTrail:$('sTrail'),
 vOrganisms:$('vOrganisms'),vFood:$('vFood'),vFoodRate:$('vFoodRate'),vSpeed:$('vSpeed'),
 vSpecies:$('vSpecies'),vStartSize:$('vStartSize'),vMaxSize:$('vMaxSize'),vOrgSpeed:$('vOrgSpeed'),vLifespan:$('vLifespan'),
 vReproSize:$('vReproSize'),vOffspring:$('vOffspring'),vOases:$('vOases'),
 vEatRatio:$('vEatRatio'),vEatGain:$('vEatGain'),vHunt:$('vHunt'),vFlee:$('vFlee'),vFlock:$('vFlock'),vFoodDrive:$('vFoodDrive'),vSeparation:$('vSeparation'),
-vMutRate:$('vMutRate'),vMutStr:$('vMutStr'),vFoodGlow:$('vFoodGlow'),vTrail:$('vTrail'),
+vMutRate:$('vMutRate'),vMutStr:$('vMutStr'),vFoodGlow:$('vFoodGlow'),vGlow:$('vGlow'),vTrail:$('vTrail'),
 sFps:$('sFps'),sAlive:$('sAlive'),sFoodCount:$('sFoodCount'),sGen:$('sGen'),
 speciesLegend:$('speciesLegend'),popGraph:$('popGraph'),
 // AI panel
@@ -488,6 +489,7 @@ const oalive=new Uint8Array(MAX_ORG),okills=new Uint16Array(MAX_ORG);
 const gSpeed=new Float32Array(MAX_ORG),gAggro=new Float32Array(MAX_ORG);
 const gEfficiency=new Float32Array(MAX_ORG),gPerception=new Float32Array(MAX_ORG);
 const ogen=new Uint16Array(MAX_ORG);
+const orest=new Float32Array(MAX_ORG); // seconds a parent rests after giving birth before it can breed again
 // Free-slot search resumes where the last one stopped (reset each step) instead of rescanning from 0
 let orgHint=0,foodHint=0;
 function allocOrg(){for(let i=orgHint;i<orgCount;i++)if(!oalive[i]){orgHint=i+1;return i;}if(orgCount<MAX_ORG){orgHint=orgCount+1;return orgCount++;}orgHint=orgCount;return -1;}
@@ -672,7 +674,7 @@ function updateRecTimer(){
 // ═══════════════════════════════════════════════
 
 // All configurable slider/checkbox IDs
-const SETTING_SLIDERS=['sOrganisms','sFood','sFoodRate','sSpeed','sSpecies','sStartSize','sMaxSize','sOrgSpeed','sLifespan','sReproSize','sOffspring','sOases','sEatRatio','sEatGain','sHunt','sFlee','sFlock','sFoodDrive','sSeparation','sMutRate','sMutStr','sTraitCost','sSplit','sFoodGlow','sTrail'];
+const SETTING_SLIDERS=['sOrganisms','sFood','sFoodRate','sSpeed','sSpecies','sStartSize','sMaxSize','sOrgSpeed','sLifespan','sReproSize','sOffspring','sOases','sEatRatio','sEatGain','sHunt','sFlee','sFlock','sFoodDrive','sSeparation','sMutRate','sMutStr','sTraitCost','sSplit','sFoodGlow','sGlow','sTrail'];
 const SETTING_CHECKS=['chkSameSpecies','chkFoodChain','chkMutation','chkEvoSpeed','chkEvoAggro','chkEvoEfficiency','chkEvoPerception','chkSpeciation','chkSexual','chkGlow','chkDetail','chkWater','chkDeathFX','chkShowOases','chkLineage'];
 
 function captureSettings(){
@@ -1098,7 +1100,7 @@ function initWorld(){
   clades=[];liveClades=[];namedClades=[];extinctLog=[];censusN=0;spotClade=-1;treeDirty=true;graphDirty=true;simTime=0;
   // The starting species are the roots of the family tree, each founded on the average starting genome
   for(let s=0;s<nSp;s++){const id=newClade(-1,s,SPECIES_HUES[s%12],[0.5,0.5,0.5,0.5],W/2,H/2);const c=clades[id];c.trail=[];establish(c,SPECIES_NAMES[s%12]);c.histStart=1;}
-  for(let i=0;i<orgCount;i++){ox[i]=rand()*W;oy[i]=rand()*H;ovx[i]=(rand()-0.5)*2;ovy[i]=(rand()-0.5)*2;oclade[i]=i%nSp;osize[i]=sz0+(rand()-0.5)*1.5;oenergy[i]=osize[i]*2;oage[i]=rand()*5;oalive[i]=1;okills[i]=0;ogen[i]=0;gSpeed[i]=0.4+rand()*0.2;gAggro[i]=0.4+rand()*0.2;gEfficiency[i]=0.4+rand()*0.2;gPerception[i]=0.4+rand()*0.2;}
+  for(let i=0;i<orgCount;i++){ox[i]=rand()*W;oy[i]=rand()*H;ovx[i]=(rand()-0.5)*2;ovy[i]=(rand()-0.5)*2;oclade[i]=i%nSp;osize[i]=sz0+(rand()-0.5)*1.5;oenergy[i]=osize[i]*2;oage[i]=rand()*5;oalive[i]=1;okills[i]=0;ogen[i]=0;orest[i]=0;gSpeed[i]=0.4+rand()*0.2;gAggro[i]=0.4+rand()*0.2;gEfficiency[i]=0.4+rand()*0.2;gPerception[i]=0.4+rand()*0.2;}
   foodCount=nFood;
   for(let i=0;i<foodCount;i++){fx[i]=rand()*W;fy[i]=rand()*H;falive[i]=1;fglow[i]=rand()*TAU;}
   dfxCount=0;dfxNext=0;generation=0;simTime=0;
@@ -1109,6 +1111,7 @@ function initWorld(){
 let foodAccum=0;
 function spawnFood(dt){foodAccum+=(+ui.sFoodRate.value)*dt;let n=foodAccum|0;foodAccum-=n;foodHint=0;while(n-->0){const idx=allocFood();if(idx<0)return;if(oases.length>0&&rand()<0.6){const o=oases[rand()*oases.length|0];const a=rand()*TAU,r=rand()*o.radius;fx[idx]=((o.x+Math.cos(a)*r)%W+W)%W;fy[idx]=((o.y+Math.sin(a)*r)%H+H)%H;}else{fx[idx]=rand()*W;fy[idx]=rand()*H;}falive[idx]=1;fglow[idx]=rand()*TAU;}}
 
+const BIRTH_REST=3;
 function reproduce(pi){
   const nOff=+ui.sOffspring.value,sz0=+ui.sStartSize.value;
   const mutOn=ui.chkMutation.checked,mutRate=+ui.sMutRate.value,mutStr=+ui.sMutStr.value,splitT=ui.chkSpeciation.checked?+ui.sSplit.value:Infinity;
@@ -1117,9 +1120,12 @@ function reproduce(pi){
   const pc=oclade[pi],m=ui.chkSexual.checked?omate[pi]:-1,mate=(m>=0&&oalive[m]&&oclade[m]===pc)?m:-1;
   const now=performance.now();if(now-lastPopSound>50){playPop(600+Math.random()*400,0.3);lastPopSound=now;}
   const splitA=rand()*TAU;spawnBirthFX(ox[pi],oy[pi],cladeHue[pc],osize[pi]);
+  // Birth conserves energy: the parent gives each baby only the energy it is born with (at most 60% of its own in all),
+  // so it stays near full strength, then rests for BIRTH_REST seconds before it can breed again.
+  const e0=Math.min(sz0*2,oenergy[pi]*0.6/nOff);orest[pi]=BIRTH_REST;
   for(let c=0;c<nOff;c++){const idx=allocOrg();if(idx<0)return;const ca=splitA+c*TAU/nOff,cc=Math.cos(ca),cs=Math.sin(ca);
     ogen[idx]=Math.min(65535,Math.max(ogen[pi],mate>=0?ogen[mate]:0)+1);if(ogen[idx]>generation)generation=ogen[idx];
-    ox[idx]=ox[pi]+cc*(osize[pi]+2);oy[idx]=oy[pi]+cs*(osize[pi]+2);ovx[idx]=cc*1.5;ovy[idx]=cs*1.5;osize[idx]=sz0;oenergy[idx]=sz0*2;oage[idx]=0;oalive[idx]=1;okills[idx]=0;
+    ox[idx]=ox[pi]+cc*(osize[pi]+2);oy[idx]=oy[pi]+cs*(osize[pi]+2);ovx[idx]=cc*1.5;ovy[idx]=cs*1.5;osize[idx]=sz0;oenergy[idx]=e0;oenergy[pi]-=e0;oage[idx]=0;orest[idx]=0;oalive[idx]=1;okills[idx]=0;
     gSpeed[idx]=gSpeed[pi];gAggro[idx]=gAggro[pi];gEfficiency[idx]=gEfficiency[pi];gPerception[idx]=gPerception[pi];
     if(mate>=0){if(rand()<0.5)gSpeed[idx]=gSpeed[mate];if(rand()<0.5)gAggro[idx]=gAggro[mate];if(rand()<0.5)gEfficiency[idx]=gEfficiency[mate];if(rand()<0.5)gPerception[idx]=gPerception[mate];}
     if(mutOn){if(eS&&rand()<mutRate)gSpeed[idx]=clamp(gSpeed[idx]+(rand()-0.5)*mutStr,0.05,1);if(eA&&rand()<mutRate)gAggro[idx]=clamp(gAggro[idx]+(rand()-0.5)*mutStr,0.05,1);if(eE&&rand()<mutRate)gEfficiency[idx]=clamp(gEfficiency[idx]+(rand()-0.5)*mutStr,0.05,1);if(eP&&rand()<mutRate)gPerception[idx]=clamp(gPerception[idx]+(rand()-0.5)*mutStr,0.05,1);}
@@ -1129,7 +1135,7 @@ function canEatInChain(predSp,preySp,nSp){return((predSp+1)%nSp)===preySp;}
 
 function simulate(dt){
   const spd=+ui.sSpeed.value,orgSpd=+ui.sOrgSpeed.value,maxSz=+ui.sMaxSize.value,life=+ui.sLifespan.value;
-  const reproSz=+ui.sReproSize.value,eatR=+ui.sEatRatio.value,eatG=+ui.sEatGain.value,sameSafe=ui.chkSameSpecies.checked;
+  const reproSz=Math.min(+ui.sReproSize.value,maxSz),eatR=+ui.sEatRatio.value,eatG=+ui.sEatGain.value,sameSafe=ui.chkSameSpecies.checked;
   const nSp=+ui.sSpecies.value,foodChain=ui.chkFoodChain.checked&&nSp>1;
   const hunt=+ui.sHunt.value,flee=+ui.sFlee.value,flock=+ui.sFlock.value,foodD=+ui.sFoodDrive.value,sep=+ui.sSeparation.value;
   const sDt=dt*spd;if(sDt<0.0001)return;simTime+=sDt;orgHint=0;const tc=+ui.sTraitCost.value;
@@ -1165,7 +1171,7 @@ function simulate(dt){
     // Speed cost is quadratic, like drag.
     const geneLoad=1.8*(gSpeed[i]*gSpeed[i]-0.25)+0.6*(gPerception[i]-0.5)+0.3*(gAggro[i]-0.5);const metaCost=0.3*(1.2-gEfficiency[i]*0.5)*Math.max(0.2,1+tc*geneLoad);oenergy[i]-=sDt*metaCost;osize[i]=clamp(Math.sqrt(Math.max(0.5,oenergy[i]))*1.5,1,maxSz);oage[i]+=sDt;
     if(oenergy[i]<=0||oage[i]>life){if(oenergy[i]<=0)spawnDeathFX(ox[i],oy[i],cladeHue[myC],2,0.3);oalive[i]=0;continue;}
-    if(osize[i]>=reproSz&&oenergy[i]>reproSz*2.5){oenergy[i]*=0.4;osize[i]=clamp(Math.sqrt(Math.max(0.5,oenergy[i]))*1.5,1,maxSz);repro.push(i);}
+    if(orest[i]>0)orest[i]-=sDt;else if(osize[i]>=reproSz&&oenergy[i]>reproSz*2.5)repro.push(i);
   }
   for(const r of repro)if(oalive[r])reproduce(r); // a parent eaten later in this step doesn't give birth
   for(let i=0;i<dfxCount;i++){dfxLife[i]-=sDt*2;if(dfxLife[i]<=0)continue;dfxX[i]+=dfxVX[i];dfxY[i]+=dfxVY[i];dfxVX[i]*=0.95;dfxVY[i]*=0.95;}
@@ -1332,14 +1338,14 @@ function renderWorld(){
     orgData[o+2]=Math.atan2(-vy,vx);orgData[o+3]=(detail?Math.max(7,osize[i]*3.8):Math.max(1.5,osize[i]*1.2))*(i===hoveredOrg?1.5:1);orgData[o+4]=cladeHue[oclade[i]];
     orgData[o+5]=gSpeed[i];orgData[o+6]=gAggro[i];orgData[o+7]=gEfficiency[i];orgData[o+8]=gPerception[i];
     orgData[o+9]=Math.min(1,oenergy[i]/12);orgData[o+10]=(i*0.618034)%1;orgData[o+11]=Math.min(1,v/maxV);orgData[o+12]=spotClade<0||spotMask[oclade[i]]?1:0.14;n++;}
-  gl.useProgram(orgProg);gl.uniform2f(orgLoc.res,W,H);gl.uniform1f(orgLoc.time,visTime);gl.uniform1f(orgLoc.simple,detail?0:1);
+  gl.useProgram(orgProg);gl.uniform2f(orgLoc.res,W,H);gl.uniform1f(orgLoc.time,visTime);gl.uniform1f(orgLoc.simple,detail?0:1);gl.uniform1f(orgLoc.glow,ui.chkGlow.checked?+ui.sGlow.value:0);
   gl.bindBuffer(gl.ARRAY_BUFFER,orgBuf);gl.bufferData(gl.ARRAY_BUFFER,orgData.subarray(0,n*ORG_STRIDE),gl.DYNAMIC_DRAW);
   const st=ORG_STRIDE*4;
   gl.enableVertexAttribArray(orgLoc.pos);gl.vertexAttribPointer(orgLoc.pos,2,gl.FLOAT,false,st,0);
   gl.enableVertexAttribArray(orgLoc.look);gl.vertexAttribPointer(orgLoc.look,3,gl.FLOAT,false,st,8);
   gl.enableVertexAttribArray(orgLoc.genes);gl.vertexAttribPointer(orgLoc.genes,4,gl.FLOAT,false,st,20);
   gl.enableVertexAttribArray(orgLoc.state);gl.vertexAttribPointer(orgLoc.state,4,gl.FLOAT,false,st,36);
-  gl.blendFunc(gl.SRC_ALPHA,ui.chkGlow.checked?gl.ONE:gl.ONE_MINUS_SRC_ALPHA);gl.drawArrays(gl.POINTS,0,n);
+  gl.blendFunc(gl.ONE,gl.ONE_MINUS_SRC_ALPHA);gl.drawArrays(gl.POINTS,0,n);
   gl.disableVertexAttribArray(orgLoc.pos);gl.disableVertexAttribArray(orgLoc.look);gl.disableVertexAttribArray(orgLoc.genes);gl.disableVertexAttribArray(orgLoc.state);
 }
 const SIM_STEP=1/60,MAX_STEPS_PER_FRAME=2;let stepAcc=0;
@@ -1360,7 +1366,7 @@ function frame(now){
   updateLabels();frameCount++;
 }
 
-function updateLabels(){ui.vTraitCost.textContent=(+ui.sTraitCost.value).toFixed(1);ui.vOrganisms.textContent=ui.sOrganisms.value;ui.vFood.textContent=ui.sFood.value;ui.vFoodRate.textContent=ui.sFoodRate.value+'/s';ui.vSpeed.textContent=(+ui.sSpeed.value).toFixed(2);ui.vSpecies.textContent=ui.sSpecies.value;ui.vStartSize.textContent=(+ui.sStartSize.value).toFixed(1);ui.vMaxSize.textContent=ui.sMaxSize.value;ui.vOrgSpeed.textContent=(+ui.sOrgSpeed.value).toFixed(1);ui.vLifespan.textContent=ui.sLifespan.value+'s';ui.vReproSize.textContent=ui.sReproSize.value;ui.vOffspring.textContent=ui.sOffspring.value;ui.vOases.textContent=ui.sOases.value;ui.vEatRatio.textContent=(+ui.sEatRatio.value).toFixed(2)+'x';ui.vEatGain.textContent=(+ui.sEatGain.value).toFixed(2);ui.vHunt.textContent=(+ui.sHunt.value).toFixed(1);ui.vFlee.textContent=(+ui.sFlee.value).toFixed(1);ui.vFlock.textContent=(+ui.sFlock.value).toFixed(2);ui.vFoodDrive.textContent=(+ui.sFoodDrive.value).toFixed(1);ui.vSeparation.textContent=(+ui.sSeparation.value).toFixed(2);ui.vMutRate.textContent=(+ui.sMutRate.value).toFixed(2);ui.vMutStr.textContent=(+ui.sMutStr.value).toFixed(2);ui.vSplit.textContent=(+ui.sSplit.value).toFixed(2);ui.vFoodGlow.textContent=(+ui.sFoodGlow.value).toFixed(1);const tv=+ui.sTrail.value;ui.vTrail.textContent=tv<0.05?'Off':tv<0.3?'Short':tv<0.6?'Medium':'Long';ui.btnPause.textContent=running?'Pause':'Play';ui.btnPause.classList.toggle('active',!running);}
+function updateLabels(){ui.vTraitCost.textContent=(+ui.sTraitCost.value).toFixed(1);ui.vOrganisms.textContent=ui.sOrganisms.value;ui.vFood.textContent=ui.sFood.value;ui.vFoodRate.textContent=ui.sFoodRate.value+'/s';ui.vSpeed.textContent=(+ui.sSpeed.value).toFixed(2);ui.vSpecies.textContent=ui.sSpecies.value;ui.vStartSize.textContent=(+ui.sStartSize.value).toFixed(1);ui.vMaxSize.textContent=ui.sMaxSize.value;ui.vOrgSpeed.textContent=(+ui.sOrgSpeed.value).toFixed(1);ui.vLifespan.textContent=ui.sLifespan.value+'s';ui.vReproSize.textContent=+ui.sReproSize.value>=+ui.sMaxSize.value?'Full size':ui.sReproSize.value;ui.vOffspring.textContent=ui.sOffspring.value;ui.vOases.textContent=ui.sOases.value;ui.vEatRatio.textContent=(+ui.sEatRatio.value).toFixed(2)+'x';ui.vEatGain.textContent=(+ui.sEatGain.value).toFixed(2);ui.vHunt.textContent=(+ui.sHunt.value).toFixed(1);ui.vFlee.textContent=(+ui.sFlee.value).toFixed(1);ui.vFlock.textContent=(+ui.sFlock.value).toFixed(2);ui.vFoodDrive.textContent=(+ui.sFoodDrive.value).toFixed(1);ui.vSeparation.textContent=(+ui.sSeparation.value).toFixed(2);ui.vMutRate.textContent=(+ui.sMutRate.value).toFixed(2);ui.vMutStr.textContent=(+ui.sMutStr.value).toFixed(2);ui.vSplit.textContent=(+ui.sSplit.value).toFixed(2);ui.vFoodGlow.textContent=(+ui.sFoodGlow.value).toFixed(1);ui.vGlow.textContent=Math.round(+ui.sGlow.value*100)+'%';const tv=+ui.sTrail.value;ui.vTrail.textContent=tv<0.05?'Off':tv<0.3?'Short':tv<0.6?'Medium':'Long';ui.btnPause.textContent=running?'Pause':'Play';ui.btnPause.classList.toggle('active',!running);}
 
 function resize(){W=window.innerWidth;H=window.innerHeight;canvas.width=W;canvas.height=H;gl.viewport(0,0,W,H);gl.useProgram(prog);gl.uniform2f(uRes,W,H);gl.clearColor(0.02,0.04,0.08,1);gl.clear(gl.COLOR_BUFFER_BIT);}
 window.addEventListener('resize',()=>{resize();initGrids();});
@@ -1401,7 +1407,7 @@ canvas.addEventListener('contextmenu',(e)=>{e.preventDefault();interact();const 
   let pool=liveClades.filter(c=>c.established);if(!pool.length)pool=liveClades;
   let c,g;if(pool.length){c=pool[Math.random()*pool.length|0];const n=c.pop||1;g=c.pop?[c.sum[0]/n,c.sum[1]/n,c.sum[2]/n,c.sum[3]/n]:c.ref;}
   else{const root=Math.random()*(+ui.sSpecies.value)|0;g=[0.5,0.5,0.5,0.5];c=clades[newClade(-1,root,SPECIES_HUES[root%12],g,e.clientX,e.clientY)];if(!c)return;establish(c,cladeName(c.id));c.histStart=censusN+1;} // everything had died: a new arrival
-  orgHint=0;for(let s=0;s<5;s++){const idx=allocOrg();if(idx<0)break;ogen[idx]=0;ox[idx]=e.clientX+(Math.random()-0.5)*25;oy[idx]=e.clientY+(Math.random()-0.5)*25;ovx[idx]=(Math.random()-0.5)*2;ovy[idx]=(Math.random()-0.5)*2;oclade[idx]=c.id;osize[idx]=sz0;oenergy[idx]=sz0*2;oage[idx]=0;oalive[idx]=1;okills[idx]=0;
+  orgHint=0;for(let s=0;s<5;s++){const idx=allocOrg();if(idx<0)break;ogen[idx]=0;ox[idx]=e.clientX+(Math.random()-0.5)*25;oy[idx]=e.clientY+(Math.random()-0.5)*25;ovx[idx]=(Math.random()-0.5)*2;ovy[idx]=(Math.random()-0.5)*2;oclade[idx]=c.id;osize[idx]=sz0;oenergy[idx]=sz0*2;oage[idx]=0;orest[idx]=0;oalive[idx]=1;okills[idx]=0;
     gSpeed[idx]=clamp(g[0]+(Math.random()-0.5)*0.1,0.05,1);gAggro[idx]=clamp(g[1]+(Math.random()-0.5)*0.1,0.05,1);gEfficiency[idx]=clamp(g[2]+(Math.random()-0.5)*0.1,0.05,1);gPerception[idx]=clamp(g[3]+(Math.random()-0.5)*0.1,0.05,1);}});
 
 window.addEventListener('keydown',(e)=>{

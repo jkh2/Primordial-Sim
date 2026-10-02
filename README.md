@@ -6,7 +6,7 @@
 
 A real-time WebGL ecosystem where living cells eat, hunt, flee, flock, reproduce, mutate, and split into new species that nobody designed, with a multi-provider AI Lab Partner that observes, experiments, and writes research reports on the living world. All from simple rules, all in your browser.
 
-**[Launch Primordial](https://jkh2.github.io/Primordial-Sim/)** · Version 5 · Single-file HTML · Zero install · GitHub Pages
+**[Launch Primordial](https://jkh2.github.io/Primordial-Sim/)** · Version 5.1 · Single-file HTML · Zero install · GitHub Pages
 
 **New here?** Choose the **Origin of Species** preset in the World tab and press **T**. Everything starts as one red species; within a few minutes the family tree fills with species that split off on their own.
 
@@ -27,6 +27,12 @@ We believe this is how humans and AI should work together: as partners with comp
 ---
 
 ## What's New in v5
+
+**v5.1, October 2, 2026: parents grow up, softer glow**
+
+- **Parents keep their strength.** Giving birth no longer costs a parent 60% of its energy. It gives each newborn only the energy that newborn starts life with, then rests for 3 seconds before it can breed again, so parents stay close to full size.
+- **Breed at full size.** Reproduce at Size now goes as high as Max Size and reads "Full size" when it gets there. Bigger bodies need far more food, so full-size breeding works best in food-rich worlds like Origin of Species.
+- **Softer glow.** A new Glow Strength slider in the Visual tab sets how much light overlapping cells add together. It starts at 50%, which keeps crowds from washing out to white; 100% is the old look.
 
 **v5, September 29, 2026: real evolution**
 
@@ -63,7 +69,7 @@ The AI Lab Partner watches it all happen, analyzes the data, designs and runs ex
 
 ## What It Does
 
-**Ecosystem mechanics** — Organisms eat algae scattered across the map, with fertile oases that concentrate food in places. Energy drives growth: size is the square root of energy, so bigger organisms need proportionally more food. When one organism is sufficiently larger than an organism of another species (1.3x by default, set by Size Advantage to Eat), it can eat it and take its energy. Same-species organisms are protected from each other by default, which encourages territories. A parent that reproduces splits its energy with its offspring.
+**Ecosystem mechanics** — Organisms eat algae scattered across the map, with fertile oases that concentrate food in places. Energy drives growth: size is the square root of energy, so bigger organisms need proportionally more food. When one organism is sufficiently larger than an organism of another species (1.3x by default, set by Size Advantage to Eat), it can eat it and take its energy. Same-species organisms are protected from each other by default, which encourages territories. A parent gives each newborn the energy it starts life with, up to 60% of its own in all, then rests for 3 seconds before it can breed again.
 
 **Genetic evolution with trade-offs** — Every organism carries four heritable genes: Speed, Aggression, Efficiency (metabolism), and Perception (sight range). At each birth, each gene may mutate by a random amount. Genes are not free: with Trait Cost above 0, speed, perception and aggression raise an organism's energy bill and high efficiency lowers its top speed, so lineages settle on trade-offs instead of maxing everything. Natural selection is the only force shaping this. There is no fitness function, only survival.
 
@@ -139,7 +145,7 @@ The world advances in fixed steps of 1/60 of a simulated second, up to two steps
 3. **Sense and steer**: each organism scans the nearby grid cells (wider in food chain mode) and adds up five forces: hunt (toward smaller edible prey), flee (away from larger predators), flock (toward its own species), food attraction (toward the nearest algae), and separation (away from crowding). It also checks whether it can eat something, notes the nearest possible mate, and adds a little wander
 4. **Move**: forces are scaled by the speed gene and a size penalty (bigger is slightly slower), velocity is clamped, and position wraps around the edges
 5. **Metabolism**: energy is spent according to size, the efficiency gene and the trait costs; size follows energy; organisms die of starvation or old age
-6. **Reproduce**: an organism big enough to reproduce splits its energy with its offspring. In sexual mode each gene comes from one parent or the mate, then genes may mutate. The newborn is one generation past its parent, and if its genes have drifted beyond the Split Distance from its species' founder, it starts a new branch
+6. **Reproduce**: an organism big enough to reproduce gives each newborn the energy it starts with, then rests for 3 seconds before it can breed again. In sexual mode each gene comes from one parent or the mate, then genes may mutate. The newborn is one generation past its parent, and if its genes have drifted beyond the Split Distance from its species' founder, it starts a new branch
 7. **Census**: twice per simulated second, species populations, names, extinctions, trails, the graph and the family tree are updated
 8. **Experiments**: if an AI experiment is running, its timer is checked and the end-state snapshot captured when it finishes
 
@@ -190,7 +196,7 @@ The AI Lab Partner operates through four integrated systems:
 - **Rules**: same-species protection, the food chain mode, size advantage to eat, energy from eating, and the five behavior drives (hunt, flee, flock, food attraction, separation)
 - **Evolve**: mutation on or off, mutation rate and strength, trait cost, which genes can evolve, whether new species can form, the split distance, and sexual reproduction
 - **Tree**: the live family tree of every named species; hover for details, click to spotlight a family
-- **Visual**: additive glow, water effects, detailed creatures, birth and death effects, oasis springs, lineage trails, food glow, trail length
+- **Visual**: glow and glow strength, water effects, detailed creatures, birth and death effects, oasis springs, lineage trails, food glow, trail length
 
 The stats bar under the tabs shows frames per second, organisms alive, food, the highest generation reached, and the number of living species.
 
