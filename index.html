@@ -150,7 +150,7 @@ button.btn.recording{background:rgba(255,50,50,0.25)!important;border-color:rgba
 <div class="panel" id="panel">
   <div class="panel-header">
     <div class="panel-title">Primordial</div>
-    <div class="panel-subtitle">Genesis Engine · Sentinel Edition · v5.9</div>
+    <div class="panel-subtitle">Genesis Engine · Sentinel Edition · v5.9.1</div>
     <button class="panel-close" id="panelClose" title="Collapse panel">&#10005;</button>
   </div>
   <div class="tabs">
@@ -359,7 +359,7 @@ To get started for free, create a free key at openrouter.ai/keys (no credit card
   </div>
 </div>
 
-<div class="badge">Primordial v5.9 · Sentinel AI Systems × Claude Sentinel · SIDLF · <a href="v5.8/" title="Play v5.8 from October 3, 2026, before courtship and firefly males">v5.8</a> · <a href="v5.7/" title="Play v5.7 from October 3, 2026, before who guards and the Reproduction menu">v5.7</a> · <a href="v5.6/" title="Play v5.6.1 from October 3, 2026, before bite contests">v5.6.1</a> · <a href="v5.5/" title="Play v5.5 from October 3, 2026, before protective mothers">v5.5</a> · <a href="v5.4/" title="Play v5.4 from October 3, 2026, before males and females">v5.4</a> · <a href="v5.3/" title="Play v5.3 from October 2, 2026, before grazers and hunters">v5.3</a> · <a href="v5/" title="Play v5 from September 29, 2026, before dead bodies fed the pond">v5</a> · <a href="v4/" title="Play v4 from September 2026, before species could evolve">v4</a> · <a href="classic/" title="Play the original v3 from March 2026">Original v3</a></div>
+<div class="badge">Primordial v5.9.1 · Sentinel AI Systems × Claude Sentinel · SIDLF · <a href="v5.8/" title="Play v5.8 from October 3, 2026, before courtship and firefly males">v5.8</a> · <a href="v5.7/" title="Play v5.7 from October 3, 2026, before who guards and the Reproduction menu">v5.7</a> · <a href="v5.6/" title="Play v5.6.1 from October 3, 2026, before bite contests">v5.6.1</a> · <a href="v5.5/" title="Play v5.5 from October 3, 2026, before protective mothers">v5.5</a> · <a href="v5.4/" title="Play v5.4 from October 3, 2026, before males and females">v5.4</a> · <a href="v5.3/" title="Play v5.3 from October 2, 2026, before grazers and hunters">v5.3</a> · <a href="v5/" title="Play v5 from September 29, 2026, before dead bodies fed the pond">v5</a> · <a href="v4/" title="Play v4 from September 2026, before species could evolve">v4</a> · <a href="classic/" title="Play the original v3 from March 2026">Original v3</a></div>
 <div class="rec-dot" id="recDot">REC <span id="recTime">0:00</span></div>
 
 <script>
@@ -433,20 +433,20 @@ gl_FragColor=vec4(mix(col,vec3(0.85,1.0,0.9),core*0.5),(core+halo)*v_tw);}`;
 // with a red rim, and a 50/50 omnivore looks exactly like the creatures from before diets. With Males and Females on, males wear a pale ring;
 // a parent defending its young flares; a showy male flashes yellow-green from his rear like a firefly. Hungry cells dim and flicker; well-fed cells glow.
 const ORG_VS=`attribute vec2 a_pos;attribute vec4 a_look;attribute vec4 a_genes;attribute vec4 a_state;attribute float a_mark;attribute vec2 a_bite;attribute float a_flash;uniform vec2 u_res;uniform float u_time;
-varying float v_head;varying float v_hue;varying float v_diet;varying vec4 v_genes;varying vec4 v_state;varying float v_mark;varying vec2 v_bite;varying float v_flash;
+varying float v_head;varying float v_hue;varying float v_diet;varying vec4 v_genes;varying vec4 v_state;varying float v_mark;varying vec2 v_bite;varying float v_flash;varying float v_fs;
 void main(){vec2 clip=(a_pos/u_res)*2.0-1.0;clip.y=-clip.y;gl_Position=vec4(clip,0.0,1.0);
 float beat=1.0+0.07*sin(u_time*(2.5+(1.0-a_state.x)*3.0)+a_state.y*6.2832);
-gl_PointSize=a_look.y*beat;v_head=a_look.x;v_hue=a_look.z;v_diet=a_look.w;v_genes=a_genes;v_state=a_state;v_mark=a_mark;v_bite=a_bite;v_flash=a_flash;}`;
-const ORG_FS=HP+HSV_GLSL+`uniform float u_time;uniform float u_simple;uniform float u_glow;varying float v_head;varying float v_hue;varying float v_diet;varying vec4 v_genes;varying vec4 v_state;varying float v_mark;varying vec2 v_bite;varying float v_flash;
+float fs=1.0+1.6*a_flash;gl_PointSize=a_look.y*beat*fs;v_fs=fs;v_head=a_look.x;v_hue=a_look.z;v_diet=a_look.w;v_genes=a_genes;v_state=a_state;v_mark=a_mark;v_bite=a_bite;v_flash=a_flash;}`;
+const ORG_FS=HP+HSV_GLSL+`uniform float u_time;uniform float u_simple;uniform float u_glow;varying float v_head;varying float v_hue;varying float v_diet;varying vec4 v_genes;varying vec4 v_state;varying float v_mark;varying vec2 v_bite;varying float v_flash;varying float v_fs;
 const vec3 MALE_RING=vec3(0.9,0.95,1.0),FLARE=vec3(1.0,0.92,0.6),FIREFLY=vec3(0.78,1.0,0.32),PLATE=vec3(0.62,0.58,0.5),FANG=vec3(1.0,0.95,0.85);
 vec4 over(vec4 acc,vec3 c,float a){a=clamp(a,0.0,1.0);return vec4(c*a+acc.rgb*(1.0-a),a+acc.a*(1.0-a));}
 void main(){float v_male=mod(v_mark,2.0),v_flare=step(1.5,v_mark);
-if(u_simple>0.5){float dd=length(gl_PointCoord-0.5)*2.0;if(dd>1.0)discard;float cr=exp(-dd*2.0)*0.6+(1.0-dd*dd)*0.4;float sa=(cr*0.7+0.3)*v_state.w;vec3 col=hsv(v_hue,0.85,0.7+cr*0.3)*cr;
+if(u_simple>0.5){float dr=length(gl_PointCoord-0.5)*2.0,dd=dr*v_fs;float em=v_flash*v_state.w*exp(-dd*1.4)*2.4*(1.0-smoothstep(0.7,1.0,dr));if(dd>1.0){if(em<0.02)discard;gl_FragColor=vec4(FIREFLY*em,0.0);return;}float cr=exp(-dd*2.0)*0.6+(1.0-dd*dd)*0.4;float sa=(cr*0.7+0.3)*v_state.w;vec3 col=hsv(v_hue,0.85,0.7+cr*0.3)*cr;
 if(v_bite.x>0.04){float ar=smoothstep(0.62,0.8,dd)*v_bite.x*v_state.w;col=mix(col,PLATE*0.8,ar*0.85);sa=max(sa,ar*0.8);}
 if(v_male>0.5){float rg=smoothstep(0.2,0.05,abs(dd-0.75))*v_state.w;col=mix(col,MALE_RING,rg*0.8);sa=max(sa,rg*0.85);}
 if(v_flare>0.5){float fl=(0.6+0.4*sin(u_time*24.0))*v_state.w;col=mix(col,FLARE,fl*0.7);sa=max(sa,fl);}
-float em=v_flash*v_state.w*(exp(-dd*2.2)*1.6);gl_FragColor=vec4(col*sa+FIREFLY*em,sa*(1.0-u_glow));return;}
-vec2 p=gl_PointCoord-0.5;p.y=-p.y;float cs=cos(v_head),sn=sin(v_head);vec2 q=vec2(cs*p.x+sn*p.y,-sn*p.x+cs*p.y)*2.0;
+gl_FragColor=vec4(col*sa+FIREFLY*em+vec3(0.4)*max(em-1.2,0.0),sa*(1.0-u_glow));return;}
+vec2 p=gl_PointCoord-0.5;p.y=-p.y;float cs=cos(v_head),sn=sin(v_head);vec2 q=vec2(cs*p.x+sn*p.y,-sn*p.x+cs*p.y)*2.0*v_fs;
 float spd=v_genes.x,agg=v_genes.y,eff=v_genes.z,per=v_genes.w,fed=v_state.x,seed=v_state.y,mv=v_state.z;
 float tp=max(v_diet-0.5,0.0),tn=max(0.5-v_diet,0.0);
 float R=0.46;float stretch=1.0+mv*0.22;float elong=1.0+tp*0.5-tn*0.2,wide=1.0-tp*0.4+tn*0.1;vec2 b=vec2(q.x/(stretch*elong),q.y/((1.0-mv*0.1)*wide));
@@ -473,8 +473,8 @@ acc=over(acc,mix(vec3(0.95,0.25,0.2),FANG,clamp(u/L,0.0,1.0)),step(0.0,u)*step(u
 float nd=length(q-vec2(-0.1,0.0))-R*(0.3+0.12*fed);acc=over(acc,mix(base*0.22,vec3(0.25,0.7,0.2),tn*1.6),smoothstep(0.03,-0.03,nd)*0.85*inside);
 if(per>0.25){float er=0.045+per*0.06;vec2 e1=q-vec2(R*0.55,R*0.36),e2=q-vec2(R*0.55,-R*0.36);float e=max(smoothstep(er,er*0.3,length(e1)),smoothstep(er,er*0.3,length(e2)));
 acc=over(acc,mix(vec3(1.0),vec3(0.75,1.0,1.0),0.5),e*(per-0.1));}
-float em=0.0;if(v_flash>0.01){float xr=R*stretch*elong,ld=length(q+vec2(xr*0.62,0.0));em=v_flash*v_state.w*(smoothstep(0.24,0.0,ld)*1.8+exp(-ld*2.6)*0.8*(1.0-smoothstep(0.75,1.0,length(q))));} // a showy male's lantern glows at his rear, as a firefly's does
-if(acc.a<0.02&&em<0.02)discard;float a=acc.a*v_state.w;gl_FragColor=vec4(acc.rgb/max(acc.a,0.0001)*bright*a+FIREFLY*em+vec3(0.35)*max(em-1.2,0.0),a*(1.0-u_glow));}`;
+float em=0.0;if(v_flash>0.01){float xr=R*stretch*elong,ld=length(q+vec2(xr*0.62,0.0));em=v_flash*v_state.w*(smoothstep(0.26,0.0,ld)*2.2+exp(-ld*1.5)*1.1*(1.0-smoothstep(0.7,1.0,length(q)/v_fs)));} // a showy male's lantern glows at his rear, as a firefly's does
+if(acc.a<0.02&&em<0.02)discard;float a=acc.a*v_state.w;gl_FragColor=vec4(acc.rgb/max(acc.a,0.0001)*bright*a+FIREFLY*em+vec3(0.45)*max(em-1.0,0.0),a*(1.0-u_glow));}`;
 
 // Lineage trails: faint threads following where each species lives
 const LINE_VS=`attribute vec2 a_pos;attribute vec4 a_col;uniform vec2 u_res;varying vec4 v_col;void main(){vec2 clip=(a_pos/u_res)*2.0-1.0;clip.y=-clip.y;gl_Position=vec4(clip,0.0,1.0);v_col=a_col;}`;
@@ -592,12 +592,12 @@ const BITE_START=0.1,BITE_BLOCK=3,BITE_MAXBLOCK=0.9,BITE_FAIL=2,BITE_STUN=0.5,AR
 // without showing them, as with antlers.
 // Every grown male flashes, as every male firefly does; his lantern shines at FLASH_BASE plus the rest of the way times his display.
 // Both start between 0 and COURT_START, so they only grow where they pay.
-const COURT_START=0.1,FLASH_BASE=0.5,SHOW_BASE=0.2,SHOW_LOAD=0.15,SHOW_SPOT=1,RIVAL_COST=1,RIVAL_TIME=2,RIVAL_PUSH=2.5,BRAWN_MAX=0.5,BRAWN_LOAD=0.15;
+const COURT_START=0.1,FLASH_BASE=0.7,SHOW_BASE=0.2,SHOW_LOAD=0.15,SHOW_SPOT=1,RIVAL_COST=1,RIVAL_TIME=2,RIVAL_PUSH=2.5,BRAWN_MAX=0.5,BRAWN_LOAD=0.15;
 const gBrawn=new Float32Array(MAX_ORG),gShow=new Float32Array(MAX_ORG),orival=new Float32Array(MAX_ORG),oshow=new Float32Array(MAX_ORG);
 // How bright a showy male is at time t (0 to 1): 1 to 3 quick flashes every 1.5 to 3.5 seconds, a rhythm that comes from his
 // species (an offshoot flashes like its parent until it becomes a species of its own), each male at his own moment
 function flashLevel(i,t){const h=hash32(worldSeed^0xF1A5,cladeKin[oclade[i]]),per=1.5+(h%1000)/500,np=1+(h>>>10)%3,gap=0.3+((h>>>13)%100)/500;
-  const ph=(t+(oid[i]*0.618034%1)*per)%per,k=Math.floor(ph/gap);if(k>=np)return 0;const u=(ph-k*gap)/0.2;return u<1?Math.sin(u*Math.PI):0;}
+  const ph=(t+(oid[i]*0.618034%1)*per)%per,k=Math.floor(ph/gap);if(k>=np)return 0;const u=(ph-k*gap)/0.28;return u<1?Math.sqrt(Math.sin(u*Math.PI)):0;}
 function biteFail(a,j){oenergy[a]-=BITE_FAIL;odigest[a]=BITE_STUN;const dx=ox[a]-ox[j],dy=oy[a]-oy[j],d=Math.sqrt(dx*dx+dy*dy)+0.1;ovx[a]+=dx/d*2;ovy[a]+=dy/d*2;ovx[j]-=dx/d*2;ovy[j]-=dy/d*2;}
 let callPrev=new Int32Array(MAX_CALLING),callNow=new Int32Array(MAX_CALLING),nCallPrev=0,nCallNow=0;
 function sexRand(){let t=sexSeed=(sexSeed+0x6D2B79F5)|0;t=Math.imul(t^t>>>15,t|1);t^=t+Math.imul(t^t>>>7,t|61);return((t^t>>>14)>>>0)/4294967296;}
@@ -1253,7 +1253,7 @@ Males and females: the page's Reproduction menu sets chkSexual and chkSexes: Div
 
 Protective parents: with chkCare on, each organism carries a care gene from 0% to 100% (carePercent is a species' average; 50% gives the same litters as a world without care). Care trades number for strength: at 0% a litter holds twice as many babies, each with half the energy; at 100% half as many (at least one), each with up to twice the energy; the mother's gene sets the litter. After a birth a parent guards for up to 6 seconds (6 times its own care): it doesn't feed, hunt or breed, the babies swim toward it, and it moves between them and the nearest creature that could eat a newborn. When a hunter catches a baby within about 30 pixels of a guarding parent, the parent steps in with a chance equal to its care and, unless the hunter could eat it too, stuns it for a second and drives it off without its meal. A parent flares gold while it defends. Without males and females the parent that gave birth guards. With chkSexes on, whoGuards (selGuard) says who: mother (the default), father, both, or evolve. Only a grown father (at least sReproSize) stays to guard; a younger one leaves. A guarding father can't mate and doesn't look for a mate, so a father who leaves can sire more litters, while a mother who leaves can feed and breed again sooner. With evolve, each organism carries a who-guards gene (fatherSharePercent is a species' average, starting near 50%): at 0% only the mother guards, at 50% both do, at 100% only the father, and in between the less involved parent guards for part of its time.
 
-Courtship (needs chkSexes): with chkChoice on, a female ready to breed takes the best male in reach instead of the nearest: the biggest, and with chkShow on, the one with the brightest display (size times 0.2 plus display). With chkRivals on, two grown males of a species who touch while a female is in reach shove (away from females they leave each other alone): the stronger (size times 1 plus brawn) wins, the loser loses 1 energy (the winner a third of that) and is driven off for 2 seconds, when no female will take him. Each organism carries a brawn gene (brawnPercent): a male at full brawn can grow half again past the top size and fights harder, at a running cost. With chkShow on, each organism carries a display gene (displayPercent): every grown male flashes like a firefly in his species' own rhythm (1 to 3 flashes every 1.5 to 3.5 seconds; a new species gets its own), at half brightness with 0% display and full brightness with 100%. Displaying costs energy, and anyone sees a displaying male from up to twice as far: females can pick him from farther away, and hunters spot him sooner and go for him first. Females carry both genes without showing them. Brawn and display start between 0% and 10% in every world. Each species' avgMaleSize and avgFemaleSize show whether males grow bigger than females.
+Courtship (needs chkSexes): with chkChoice on, a female ready to breed takes the best male in reach instead of the nearest: the biggest, and with chkShow on, the one with the brightest display (size times 0.2 plus display). With chkRivals on, two grown males of a species who touch while a female is in reach shove (away from females they leave each other alone): the stronger (size times 1 plus brawn) wins, the loser loses 1 energy (the winner a third of that) and is driven off for 2 seconds, when no female will take him. Each organism carries a brawn gene (brawnPercent): a male at full brawn can grow half again past the top size and fights harder, at a running cost. With chkShow on, each organism carries a display gene (displayPercent): every grown male flashes like a firefly in his species' own rhythm (1 to 3 flashes every 1.5 to 3.5 seconds; a new species gets its own), at 70% brightness with 0% display and full brightness with 100%. Displaying costs energy, and anyone sees a displaying male from up to twice as far: females can pick him from farther away, and hunters spot him sooner and go for him first. Females carry both genes without showing them. Brawn and display start between 0% and 10% in every world. Each species' avgMaleSize and avgFemaleSize show whether males grow bigger than females.
 Bite contests: with chkBite on, each organism carries an armor gene and a jaws gene, both from 0% to 100% and between 0% and 10% at the start of every world (armorPercent and jawsPercent are a species' averages). When a creature catches prey whose armor is higher than its jaws, the bite fails with a chance of 3 times the difference (at most 90%): the attacker loses 2 energy, is stunned for half a second and pushed off, and the prey gets away. Armor slows the body (up to 25% at full armor), and both genes add to the trait costs, so they only spread where they pay. Armor shows as a plated grey rim, jaws as fangs at the front. The Armor and Jaws preset is Origin of Species with bite contests on.
 
 Be concise, scientific, and insightful. Use the species names given. When analyzing, reference specific gene values and population numbers.`;
