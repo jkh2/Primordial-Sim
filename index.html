@@ -150,7 +150,7 @@ button.btn.recording{background:rgba(255,50,50,0.25)!important;border-color:rgba
 <div class="panel" id="panel">
   <div class="panel-header">
     <div class="panel-title">Primordial</div>
-    <div class="panel-subtitle">Genesis Engine · Sentinel Edition · v5.10</div>
+    <div class="panel-subtitle">Genesis Engine · Sentinel Edition · v5.10.1</div>
     <button class="panel-close" id="panelClose" title="Collapse panel">&#10005;</button>
   </div>
   <div class="tabs">
@@ -361,7 +361,7 @@ To get started for free, create a free key at openrouter.ai/keys (no credit card
   </div>
 </div>
 
-<div class="badge">Primordial v5.10 · Sentinel AI Systems × Claude Sentinel · SIDLF · <a href="v5.9/" title="Play v5.9.2 from October 3, 2026, before smart guards">v5.9.2</a> · <a href="v5.8/" title="Play v5.8 from October 3, 2026, before courtship and firefly males">v5.8</a> · <a href="v5.7/" title="Play v5.7 from October 3, 2026, before who guards and the Reproduction menu">v5.7</a> · <a href="v5.6/" title="Play v5.6.1 from October 3, 2026, before bite contests">v5.6.1</a> · <a href="v5.5/" title="Play v5.5 from October 3, 2026, before protective mothers">v5.5</a> · <a href="v5.4/" title="Play v5.4 from October 3, 2026, before males and females">v5.4</a> · <a href="v5.3/" title="Play v5.3 from October 2, 2026, before grazers and hunters">v5.3</a> · <a href="v5/" title="Play v5 from September 29, 2026, before dead bodies fed the pond">v5</a> · <a href="v4/" title="Play v4 from September 2026, before species could evolve">v4</a> · <a href="classic/" title="Play the original v3 from March 2026">Original v3</a></div>
+<div class="badge">Primordial v5.10.1 · Sentinel AI Systems × Claude Sentinel · SIDLF · <a href="v5.9/" title="Play v5.9.2 from October 3, 2026, before smart guards">v5.9.2</a> · <a href="v5.8/" title="Play v5.8 from October 3, 2026, before courtship and firefly males">v5.8</a> · <a href="v5.7/" title="Play v5.7 from October 3, 2026, before who guards and the Reproduction menu">v5.7</a> · <a href="v5.6/" title="Play v5.6.1 from October 3, 2026, before bite contests">v5.6.1</a> · <a href="v5.5/" title="Play v5.5 from October 3, 2026, before protective mothers">v5.5</a> · <a href="v5.4/" title="Play v5.4 from October 3, 2026, before males and females">v5.4</a> · <a href="v5.3/" title="Play v5.3 from October 2, 2026, before grazers and hunters">v5.3</a> · <a href="v5/" title="Play v5 from September 29, 2026, before dead bodies fed the pond">v5</a> · <a href="v4/" title="Play v4 from September 2026, before species could evolve">v4</a> · <a href="classic/" title="Play the original v3 from March 2026">Original v3</a></div>
 <div class="rec-dot" id="recDot">REC <span id="recTime">0:00</span></div>
 
 <script>
@@ -889,11 +889,28 @@ function applySettings(s){
   return true;
 }
 
-// Tier 1: Share Link — encode settings in URL
+// Tier 1: Share Link. Since v5.10.1 the link names the preset, the seed and the version, plus only the settings that differ
+// from that preset (laid over the page's own defaults) or from the page's defaults, e.g. ?p=fireflies&n=12345&v=5.10&chkBite=1, so it stays short.
+// Old ?s= links (the whole settings file in base64) still load. A short link rebuilds its settings from today's presets,
+// so if a preset's values ever change, bump APP_VERSION and keep sameRules honest, as with any rule change.
+function readControls(){const s={sliders:{},checks:{}};for(const id of SETTING_SLIDERS){const el=$(id);if(el)s.sliders[id]=el.value;}for(const id of SETTING_CHECKS){const el=$(id);if(el)s.checks[id]=el.checked;}return s;}
+function writeControls(s){for(const[id,v]of Object.entries(s.sliders)){const el=$(id);if(el)el.value=v;}for(const[id,v]of Object.entries(s.checks)){const el=$(id);if(el)el.checked=v;}}
+function presetBase(name){const now=readControls();writeControls(PAGE_DEFAULTS);if(PRESETS[name])applyPreset(name);const b=readControls();writeControls(now);updateLabels();return b;}
+function shortLink(s){
+  // The base is the named preset, or the page's own defaults (d=1) when that needs fewer changes, as for a world that was
+  // never switched to a preset.
+  const p=PRESETS[s._preset]?s._preset:'custom',diff=b=>{const q=[];for(const id of SETTING_SLIDERS)if(s.sliders[id]!==undefined&&s.sliders[id]!==b.sliders[id])q.push(id+'='+encodeURIComponent(s.sliders[id]));for(const id of SETTING_CHECKS)if(s.checks[id]!==undefined&&s.checks[id]!==b.checks[id])q.push(id+'='+(s.checks[id]?1:0));return q;};
+  const fromP=diff(presetBase(p)),fromD=p==='custom'?fromP:diff(PAGE_DEFAULTS),useD=fromD.length<fromP.length;
+  return window.location.origin+window.location.pathname+'?'+['p='+p,...(useD?['d=1']:[]),'n='+(s.seed>>>0),'v='+APP_VERSION,...(useD?fromD:fromP)].join('&');
+}
+function fromShortLink(params){
+  const p=PRESETS[params.get('p')]?params.get('p'):'custom',b=params.get('d')==='1'?presetBase('custom'):presetBase(p),s={_app:params.get('v')||undefined,_preset:p,sliders:b.sliders,checks:b.checks,seed:params.get('n')};
+  for(const id of SETTING_SLIDERS)if(params.has(id))s.sliders[id]=params.get(id);
+  for(const id of SETTING_CHECKS)if(params.has(id))s.checks[id]=params.get(id)==='1';
+  return s;
+}
 function shareSettingsLink(){
-  const s=captureSettings();
-  const code=btoa(JSON.stringify(s));
-  const url=window.location.origin+window.location.pathname+'?s='+encodeURIComponent(code);
+  const url=shortLink(captureSettings());
   navigator.clipboard.writeText(url).then(()=>{
     $('shareStatus').textContent='Link copied to clipboard!';
     $('shareStatus').style.color='var(--accent2)';
@@ -907,9 +924,9 @@ function shareSettingsLink(){
 function loadSettingsFromURL(){
   const params=new URLSearchParams(window.location.search);
   const code=params.get('s');
-  if(!code)return false;
+  if(!code&&!params.has('p'))return false;
   try{
-    const s=JSON.parse(atob(decodeURIComponent(code)));
+    const s=code?JSON.parse(atob(decodeURIComponent(code))):fromShortLink(params);
     if(applySettings(s)){resize();initWorld();$('shareStatus').textContent=versionNote(s).trim();return true;}
   }catch(e){console.warn('Failed to load settings from URL:',e);}
   return false;
@@ -1750,6 +1767,7 @@ window.addEventListener('keydown',(e)=>{
 function adaptiveCount(){const touch=window.matchMedia?.('(pointer:coarse)')?.matches;if(touch)return Math.min(window.innerWidth,window.innerHeight)<700?2000:4000;if(window.innerWidth>1500)return 8000;if(window.innerWidth>1100)return 5000;return 3000;}
 
 // Boot
+const PAGE_DEFAULTS=readControls(); // the controls as the page ships them, before the screen-size organism count; short links build on these
 resize();ui.sOrganisms.value=String(adaptiveCount());loadAiSettings();initWorld();
 const loadedFromURL=loadSettingsFromURL();
 if(loadedFromURL){resize();initWorld();}

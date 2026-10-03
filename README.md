@@ -6,7 +6,7 @@
 
 A real-time WebGL ecosystem where living cells eat, hunt, flee, flock, reproduce, mutate, and split into new species that nobody designed, with a multi-provider AI Lab Partner that observes, experiments, and writes research reports on the living world. All from simple rules, all in your browser.
 
-**[Launch Primordial](https://jkh2.github.io/Primordial-Sim/)** · Version 5.10 · Single-file HTML · Zero install · GitHub Pages
+**[Launch Primordial](https://jkh2.github.io/Primordial-Sim/)** · Version 5.10.1 · Single-file HTML · Zero install · GitHub Pages
 
 **New here?** Choose the **Origin of Species** preset in the World tab and press **T**. Everything starts as one red species; within a few minutes the family tree fills with species that split off on their own.
 
@@ -25,6 +25,10 @@ We believe this is how humans and AI should work together: as partners with comp
 ---
 
 ## What's New in v5
+
+**v5.10.1, October 3, 2026: short share links**
+
+- **Links you can paste anywhere.** At James's request, **Share Link** now makes a link about 30 to 100 characters long instead of about 1,600. It names the scenario preset, the seed and the version, then lists only the settings you changed from that preset, for example `?p=fireflies&n=12345&v=5.10&chkBite=1`, so you can read what a link holds before you open it. Links made by earlier versions still open, and exported `.primordial` files are unchanged. Nothing else changed: every seed plays exactly as in v5.10, which stays on the [`v5.10-release`](https://github.com/jkh2/Primordial-Sim/tree/v5.10-release) branch.
 
 **v5.10, October 3, 2026: smart guards**
 
@@ -319,7 +323,7 @@ The stats bar under the tabs shows frames per second, organisms alive, food, the
 
 ### Seeds and Replay
 
-Every world is built from a numeric seed shown in the World tab. **Reset World** draws a new seed; **Replay** restarts the current seed. The simulation advances in fixed 1/60-second steps, so the same seed, settings and window size replay the same run exactly (clicking to add food or organisms changes the run from that point). Share links and exported `.primordial` files include the seed. A run replays exactly only in the version of Primordial that made it, since each release changes the rules a little. From v5.2.1 on, links and files record their version, and opening one in a different version tells you so; every earlier version stays playable from the links in the corner badge.
+Every world is built from a numeric seed shown in the World tab. **Reset World** draws a new seed; **Replay** restarts the current seed. The simulation advances in fixed 1/60-second steps, so the same seed, settings and window size replay the same run exactly (clicking to add food or organisms changes the run from that point). Share links and exported `.primordial` files include the seed. A share link holds the preset, the seed, the version and only the settings changed from the preset, so it stays short. A run replays exactly only in the version of Primordial that made it, since each release changes the rules a little. From v5.2.1 on, links and files record their version, and opening one in a different version tells you so; every earlier version stays playable from the links in the corner badge.
 
 ### Trait Costs
 
