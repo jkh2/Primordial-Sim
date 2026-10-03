@@ -526,7 +526,7 @@ const SEX_REST=0.35,SEX_DAD=0.5,SEX_SEEK=0.6,MAX_CALLING=256;
 // (CARE_CHARGE). When a hunter catches a baby within CARE_GUARD of her, she steps in as often as her care (a 60% mother 60% of
 // the time) and, unless the hunter could eat her too, stuns it for CARE_STUN seconds and pushes it off. Tuning found that a mother
 // who drained the attacker's energy starved the hunters once males and females were on, and one who was eaten in her baby's place
-// fed them so well that grazers died out.
+// let the grazers die out more often.
 // A litter holds 2^((0.5-care)*2) times as many babies, each with that much less energy.
 const gCare=new Float32Array(MAX_ORG),oid=new Uint32Array(MAX_ORG),omom=new Int32Array(MAX_ORG),omomId=new Uint32Array(MAX_ORG);
 const ocare=new Float32Array(MAX_ORG),oflare=new Float32Array(MAX_ORG);let nextOid=0;
