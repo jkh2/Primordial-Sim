@@ -1,12 +1,14 @@
+> **Archived README for v5.5, the public version on October 3, 2026 (before protective mothers).** This is how the README read while v5.5 was the public version. Play v5.5 at [/v5.5](https://jkh2.github.io/Primordial-Sim/v5.5/). The current README is [here](../README.md). Only the image and file links below were changed so they work from this folder; the untouched original is on the [`v5.5-release`](https://github.com/jkh2/Primordial-Sim/tree/v5.5-release) branch.
+
 # Primordial-Sim
 
-![Primordial-Sim Banner](banner.png)
+![Primordial-Sim Banner](../banner.png)
 
 ### Emergent Artificial Life Engine
 
 A real-time WebGL ecosystem where living cells eat, hunt, flee, flock, reproduce, mutate, and split into new species that nobody designed, with a multi-provider AI Lab Partner that observes, experiments, and writes research reports on the living world. All from simple rules, all in your browser.
 
-**[Launch Primordial](https://jkh2.github.io/Primordial-Sim/)** · Version 5.6 · Single-file HTML · Zero install · GitHub Pages
+**[Launch Primordial](https://jkh2.github.io/Primordial-Sim/)** · Version 5.3 · Single-file HTML · Zero install · GitHub Pages
 
 **New here?** Choose the **Origin of Species** preset in the World tab and press **T**. Everything starts as one red species; within a few minutes the family tree fills with species that split off on their own.
 
@@ -25,14 +27,6 @@ We believe this is how humans and AI should work together: as partners with comp
 ---
 
 ## What's New in v5
-
-**v5.6, October 3, 2026: protective mothers**
-
-- **Protective mothers.** A new **Protective Mothers** switch in the Evolve tab gives every creature a care gene. After giving birth, a caring mother stops feeding and guards her young for up to six seconds. Her babies swim after her like ducklings, and she moves between them and the nearest creature that could eat them. When a hunter catches one of her babies close to her, she drives it off without its meal as often as her care (a 60% mother steps in 60% of the time), unless the hunter is big enough to eat her too. A defending mother flares gold.
-- **Few and strong, or many and small.** Care also sets the litter. More care means fewer babies with more energy each; less care means more babies with less. At 50% a litter is the same as in a world without care. The care gene is inherited and mutates, so each species can find its own balance. Hover over a creature to see its care and whether it is guarding young or being guarded; the family tree shows each species' care too.
-- **Getting the balance right.** Our first mothers bit hard enough to drain a hunter's energy. Once Males and Females was on too, that starved the hunters: they died out on seven of the eight seeds we tried. So a mother now only stuns a hunter and pushes it away, and only as often as her care. We also tried letting a big hunter eat the mother in her baby's place, but then the grazers in Predators and Prey died out on two of nine seeds instead of one, so a mother simply can't stop a hunter big enough to eat her.
-- **What we saw.** Care has a price: a guarding mother doesn't feed. Crowded ponds held fewer creatures with care on: about 200 instead of 270 in the default world, and about half as many in Arms Race and Food Chain Cycle, on the seed we compared. In Predators and Prey with care, the hunters lasted the full ten minutes on all nine seeds we tried and the grazers on eight. In Males and Females with care, the grazers lasted on all nine and the hunters on six (eight of nine without care). In Origin of Species, care rose from 50% to about 58% over the first three and a half minutes on all three seeds we tried, while the hunters multiplied, then fell back to between 44% and 50% once the hunters had eaten nearly everything else. In the other worlds care stayed between about 40% and 55% over five to ten minutes: it evolves slowly.
-- **Off plays exactly like v5.5.** With Protective Mothers off, every seed replays as it did in v5.5, and settings and links saved before v5.6 load with it off. The Lab Partner knows the rules and sees each species' average care.
 
 **v5.5, October 3, 2026: males and females**
 
@@ -96,12 +90,11 @@ We believe this is how humans and AI should work together: as partners with comp
 
 | Version | Play it | Its README | Exact source |
 |---------|---------|------------|--------------|
-| v5.5 (October 3, 2026) | [/v5.5](https://jkh2.github.io/Primordial-Sim/v5.5/) | [v5.5/README.md](v5.5/README.md) | [`v5.5-release`](https://github.com/jkh2/Primordial-Sim/tree/v5.5-release) branch |
-| v5.4 (October 3, 2026) | [/v5.4](https://jkh2.github.io/Primordial-Sim/v5.4/) | [v5.4/README.md](v5.4/README.md) | [`v5.4-release`](https://github.com/jkh2/Primordial-Sim/tree/v5.4-release) branch |
-| v5.3 (October 2, 2026) | [/v5.3](https://jkh2.github.io/Primordial-Sim/v5.3/) | [v5.3/README.md](v5.3/README.md) | [`v5.3-release`](https://github.com/jkh2/Primordial-Sim/tree/v5.3-release) branch |
-| v5 (September 29, 2026) | [/v5](https://jkh2.github.io/Primordial-Sim/v5/) | [v5/README.md](v5/README.md) | [`v5-release`](https://github.com/jkh2/Primordial-Sim/tree/v5-release) branch |
-| v4 (September 29, 2026) | [/v4](https://jkh2.github.io/Primordial-Sim/v4/) | [v4/README.md](v4/README.md) | [`v4-release`](https://github.com/jkh2/Primordial-Sim/tree/v4-release) branch |
-| v3, the original (March 12, 2026) | [/classic](https://jkh2.github.io/Primordial-Sim/classic/) | [classic/README.md](classic/README.md) | [`v3-original`](https://github.com/jkh2/Primordial-Sim/tree/v3-original) branch |
+| v5.4 (October 3, 2026) | [/v5.4](https://jkh2.github.io/Primordial-Sim/v5.4/) | [v5.4/README.md](../v5.4/README.md) | [`v5.4-release`](https://github.com/jkh2/Primordial-Sim/tree/v5.4-release) branch |
+| v5.3 (October 2, 2026) | [/v5.3](https://jkh2.github.io/Primordial-Sim/v5.3/) | [v5.3/README.md](../v5.3/README.md) | [`v5.3-release`](https://github.com/jkh2/Primordial-Sim/tree/v5.3-release) branch |
+| v5 (September 29, 2026) | [/v5](https://jkh2.github.io/Primordial-Sim/v5/) | [v5/README.md](../v5/README.md) | [`v5-release`](https://github.com/jkh2/Primordial-Sim/tree/v5-release) branch |
+| v4 (September 29, 2026) | [/v4](https://jkh2.github.io/Primordial-Sim/v4/) | [v4/README.md](../v4/README.md) | [`v4-release`](https://github.com/jkh2/Primordial-Sim/tree/v4-release) branch |
+| v3, the original (March 12, 2026) | [/classic](https://jkh2.github.io/Primordial-Sim/classic/) | [classic/README.md](../classic/README.md) | [`v3-original`](https://github.com/jkh2/Primordial-Sim/tree/v3-original) branch |
 
 ## What It Is
 
@@ -192,7 +185,7 @@ The world advances in fixed steps of 1/60 of a simulated second, up to two steps
 3. **Sense and steer**: each organism scans the nearby grid cells (wider in food chain mode) and adds up five forces: hunt (toward smaller edible prey), flee (away from larger predators), flock (toward its own species), food attraction (toward the nearest algae), and separation (away from crowding). It also checks whether it can eat something, notes the nearest possible mate, and adds a little wander
 4. **Move**: forces are scaled by the speed gene and a size penalty (bigger is slightly slower), velocity is clamped, and position wraps around the edges
 5. **Metabolism**: energy is spent according to size, the efficiency gene and the trait costs; size follows energy; organisms die of starvation or old age, and a body that dies with energy left begins to decay
-6. **Reproduce**: an organism big enough to reproduce gives each newborn the energy it starts with, then rests for 3 seconds before it can breed again. In sexual mode each gene comes from one parent or the mate, then genes may mutate. With males and females, only a mother gives birth, and only with a male of her species close by; the father pays half of each newborn's energy. With protective mothers, the mother's care gene sets how many babies share that energy, and she guards them for a few seconds before she feeds again. The newborn is one generation past its parent, and if its genes have drifted beyond the Split Distance from its species' founder, it starts a new branch
+6. **Reproduce**: an organism big enough to reproduce gives each newborn the energy it starts with, then rests for 3 seconds before it can breed again. In sexual mode each gene comes from one parent or the mate, then genes may mutate. With males and females, only a mother gives birth, and only with a male of her species close by; the father pays half of each newborn's energy The newborn is one generation past its parent, and if its genes have drifted beyond the Split Distance from its species' founder, it starts a new branch
 7. **Decay**: dead bodies release their remaining energy as algae around where they died, spread over four seconds
 8. **Census**: twice per simulated second, species populations, names, extinctions, trails, the graph and the family tree are updated
 9. **Experiments**: if an AI experiment is running, its timer is checked and the end-state snapshot captured when it finishes
@@ -231,7 +224,7 @@ The AI Lab Partner operates through four integrated systems:
 |-------|--------|
 | Left click | Drop food cluster |
 | Right click | Bring in a small group of a living species |
-| Hover | Inspect organism (species and its ancestor, size, energy, age, kills, generation, genes, diet, sex, care) |
+| Hover | Inspect organism (species and its ancestor, size, energy, age, kills, generation, genes, diet, sex) |
 | Space | Pause / Resume |
 | 1 / 2 / 3 / 4 | Speed: 0.5x / 1x / 2x / 5x |
 | S | Toggle sound |
@@ -244,7 +237,7 @@ The AI Lab Partner operates through four integrated systems:
 - **World**: pause, reset, sound, video recording, fullscreen, scenario presets, the world seed with Replay, Share Link, Export and Import, organism and food amounts, food oases, simulation speed, the population graph, and the species census
 - **Species**: number of starting species, starting and maximum size, organism speed, lifespan, size to reproduce, offspring count
 - **Rules**: grazers and hunters (the diet gene) and the starting diets, same-species protection, the food chain mode, size advantage to eat, energy from eating, how much of a dead body becomes algae, and the five behavior drives (hunt, flee, flock, food attraction, separation)
-- **Evolve**: mutation on or off, mutation rate and strength, trait cost, which genes can evolve (including diet and care), whether new species can form, the split distance, sexual reproduction, males and females, and protective mothers
+- **Evolve**: mutation on or off, mutation rate and strength, trait cost, which genes can evolve (including diet), whether new species can form, the split distance, sexual reproduction, and males and females
 - **Tree**: the live family tree of every named species; hover for details, click to spotlight a family
 - **Visual**: glow and glow strength, water effects, detailed creatures, birth and death effects, oasis springs, lineage trails, food glow, trail length
 
@@ -286,14 +279,6 @@ A pond where only half the creatures can bear young grows half as fast. So a mot
 
 What we found: in crowded ponds, populations stay in the same range as without sexes. Where numbers get small, finding a mate becomes the problem. In Superorganism the few grazers left after the opening frenzy die out instead of coming back, and in the Males and Females preset the hunters lasted ten minutes on eight of the nine seeds we tried.
 
-### Protective Mothers
-
-With **Protective Mothers** on (in the Evolve tab), every creature carries a care gene from 0% to 100%, starting near 50%. Care trades number for strength. At 0% a litter holds twice as many babies, each with half the energy; at 100% half as many (at least one), each with up to twice the energy; at 50% litters are the same as in a world without care. Each baby takes its care from its mother or, with sexual reproduction, its father, and it mutates like any other gene unless Care Gene is unticked under Traits That Evolve.
-
-After a birth, a mother guards for six seconds times her care. She doesn't feed or breed while she guards. Her babies swim toward her when they stray, and she moves between them and the nearest creature close by that could eat a newborn. When a hunter catches one of her babies within about 30 pixels of her, she steps in with a chance equal to her care. Unless the hunter is big enough to eat her too, it is stunned for a second, pushed away, and loses its meal. A mother flares gold while she defends. Hover over a creature to see its care, how long it has left to guard, or whether its mother is guarding it.
-
-What we found: in crowded ponds care seems to cost more than it pays. They held fewer creatures with care on, and in the default world care drifted down to about 43%. Its effect on the hunters depends on the world: in Predators and Prey they did as well as without care, but in Males and Females they died out on three of the nine seeds we tried, where without care they died out on one. Care moves slowly; the clearest change we saw was in Origin of Species, where it rose to about 58% while hunters were multiplying and fell back once they had eaten nearly everything else.
-
 ### Speciation and the Family Tree
 
 Every organism belongs to a lineage. The starting species are the roots of the tree, founded on the average starting genome. At each birth, the newborn's four genes are compared with its species' founding genes. If it has drifted farther than the **Split Distance**, it joins a sister lineage that already split off in that direction, or founds a new one.
@@ -324,7 +309,7 @@ Any modern browser with WebGL: Chrome, Firefox, Safari, Edge. No plugins, no ext
 
 ## Where It's Going
 
-- **Now: richer life.** Bite contests with armor and jaws, toxins and warning colors, small evolved brains as an optional replacement for the five fixed drives, day and night, seasons, terrain and currents, disease, life stages, mate choice, scent trails, colonies, and a WebGPU engine for 100,000 or more organisms where the browser supports it.
+- **Now: richer life.** Parents that defend their young, bite contests with armor and jaws, toxins and warning colors, small evolved brains as an optional replacement for the five fixed drives, day and night, seasons, terrain and currents, disease, life stages, mate choice, scent trails, colonies, and a WebGPU engine for 100,000 or more organisms where the browser supports it.
 - **Paused, coming back: the Lab Partner as a working scientist.** Proper tool calls instead of parsing text, time-series records so reports cite trends, experiments repeated across several seeds against an unchanged control, a lab notebook that persists between sessions, charts in its reports, and an Alliance mode where Claude, Grok and Gemini each interpret the same result, plus a pond news feed and hall of fame for new species, extinctions and records.
 - **Then: a world worth sharing.** A camera that follows one creature through its life, zoom and pan, dragging to stir a current, a narrated documentary mode, and the Wellspring at the heart of the world.
 - **Someday: a 3D world** people can step into with VR headsets, right in the browser.
@@ -341,7 +326,7 @@ Learn more about the SIDLF framework and human-AI symbiosis at [jameskeithharwoo
 
 ## License
 
-**Sentinel AI Systems Non-Commercial License v1.0** — See [LICENSE](LICENSE) for full terms.
+**Sentinel AI Systems Non-Commercial License v1.0** — See [LICENSE](../LICENSE) for full terms.
 
 **Free for:** personal use, entertainment, education, academic research, classroom instruction, and learning from the code.
 
@@ -349,4 +334,4 @@ Learn more about the SIDLF framework and human-AI symbiosis at [jameskeithharwoo
 
 We built this openly so people can learn from it, enjoy it, and be inspired by it. We ask that if you profit from it, you include us in that conversation.
 
-See [IP-DECLARATION.md](IP-DECLARATION.md) for the formal intellectual property declaration and prior art documentation.
+See [IP-DECLARATION.md](../IP-DECLARATION.md) for the formal intellectual property declaration and prior art documentation.
