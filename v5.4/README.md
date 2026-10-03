@@ -1,6 +1,8 @@
+> **Archived README for v5.4, the public version on October 3, 2026 (before males and females).** This is how the README read while v5.4 was the public version. Play v5.4 at [/v5.4](https://jkh2.github.io/Primordial-Sim/v5.4/). The current README is [here](../README.md). Only the image and file links below were changed so they work from this folder; the untouched original is on the [`v5.4-release`](https://github.com/jkh2/Primordial-Sim/tree/v5.4-release) branch.
+
 # Primordial-Sim
 
-![Primordial-Sim Banner](banner.png)
+![Primordial-Sim Banner](../banner.png)
 
 ### Emergent Artificial Life Engine
 
@@ -25,14 +27,6 @@ We believe this is how humans and AI should work together: as partners with comp
 ---
 
 ## What's New in v5
-
-**v5.5, October 3, 2026: males and females**
-
-- **Males and females.** A new **Males and Females** switch in the Evolve tab. Every baby is born male or female. Only females carry young, and only when a male of their own species is close by; each baby takes every gene from one parent or the other. Males wear a pale ring, and hovering over a creature shows its sex and whether a female is ready to breed and looking for a male.
-- **Making it pay.** When only half the pond can bear young, it grows half as fast, and our first try lost Battle Royale entirely and the hunters in Predators and Prey. So a mother rests about a third as long between litters, the father pays half of each baby's energy if he can, and a female ready to breed with no male nearby calls: lone grown males swim toward the nearest female of their kind who is calling, or toward the heart of their species' range if none is.
-- **Males and Females preset.** Predators and Prey with males and females on. Grazers and hunters still rise and fall in turns. The hunters lasted the full ten minutes on eight of the nine seeds we tried; on the ninth they died out after about eight and a half minutes. Without sexes they lasted on all nine. A hunter species down to a few dozen can run out of mates.
-- **What we saw.** In crowded worlds, populations stay in the same range as without sexes. Small groups are where it bites: in Superorganism the few grazers left after the opening frenzy can't find each other, so grazers vanish and only a few dozen hunters remain, where without sexes the grazers come back. Nature knows this too: rare animals that can't find mates are in danger even with plenty of food. Males don't end up bigger than females, probably because a father pays toward every litter he sires.
-- **Off plays exactly like v5.4.** With Males and Females off, every seed replays as it did in v5.4, and settings and links saved before v5.5 load with it off. The Lab Partner knows the rules and sees how many males and females each species has.
 
 **v5.4, October 3, 2026: grazers and hunters**
 
@@ -88,11 +82,10 @@ We believe this is how humans and AI should work together: as partners with comp
 
 | Version | Play it | Its README | Exact source |
 |---------|---------|------------|--------------|
-| v5.4 (October 3, 2026) | [/v5.4](https://jkh2.github.io/Primordial-Sim/v5.4/) | [v5.4/README.md](v5.4/README.md) | [`v5.4-release`](https://github.com/jkh2/Primordial-Sim/tree/v5.4-release) branch |
-| v5.3 (October 2, 2026) | [/v5.3](https://jkh2.github.io/Primordial-Sim/v5.3/) | [v5.3/README.md](v5.3/README.md) | [`v5.3-release`](https://github.com/jkh2/Primordial-Sim/tree/v5.3-release) branch |
-| v5 (September 29, 2026) | [/v5](https://jkh2.github.io/Primordial-Sim/v5/) | [v5/README.md](v5/README.md) | [`v5-release`](https://github.com/jkh2/Primordial-Sim/tree/v5-release) branch |
-| v4 (September 29, 2026) | [/v4](https://jkh2.github.io/Primordial-Sim/v4/) | [v4/README.md](v4/README.md) | [`v4-release`](https://github.com/jkh2/Primordial-Sim/tree/v4-release) branch |
-| v3, the original (March 12, 2026) | [/classic](https://jkh2.github.io/Primordial-Sim/classic/) | [classic/README.md](classic/README.md) | [`v3-original`](https://github.com/jkh2/Primordial-Sim/tree/v3-original) branch |
+| v5.3 (October 2, 2026) | [/v5.3](https://jkh2.github.io/Primordial-Sim/v5.3/) | [v5.3/README.md](../v5.3/README.md) | [`v5.3-release`](https://github.com/jkh2/Primordial-Sim/tree/v5.3-release) branch |
+| v5 (September 29, 2026) | [/v5](https://jkh2.github.io/Primordial-Sim/v5/) | [v5/README.md](../v5/README.md) | [`v5-release`](https://github.com/jkh2/Primordial-Sim/tree/v5-release) branch |
+| v4 (September 29, 2026) | [/v4](https://jkh2.github.io/Primordial-Sim/v4/) | [v4/README.md](../v4/README.md) | [`v4-release`](https://github.com/jkh2/Primordial-Sim/tree/v4-release) branch |
+| v3, the original (March 12, 2026) | [/classic](https://jkh2.github.io/Primordial-Sim/classic/) | [classic/README.md](../classic/README.md) | [`v3-original`](https://github.com/jkh2/Primordial-Sim/tree/v3-original) branch |
 
 ## What It Is
 
@@ -183,7 +176,7 @@ The world advances in fixed steps of 1/60 of a simulated second, up to two steps
 3. **Sense and steer**: each organism scans the nearby grid cells (wider in food chain mode) and adds up five forces: hunt (toward smaller edible prey), flee (away from larger predators), flock (toward its own species), food attraction (toward the nearest algae), and separation (away from crowding). It also checks whether it can eat something, notes the nearest possible mate, and adds a little wander
 4. **Move**: forces are scaled by the speed gene and a size penalty (bigger is slightly slower), velocity is clamped, and position wraps around the edges
 5. **Metabolism**: energy is spent according to size, the efficiency gene and the trait costs; size follows energy; organisms die of starvation or old age, and a body that dies with energy left begins to decay
-6. **Reproduce**: an organism big enough to reproduce gives each newborn the energy it starts with, then rests for 3 seconds before it can breed again. In sexual mode each gene comes from one parent or the mate, then genes may mutate. With males and females, only a mother gives birth, and only with a male of her species close by; the father pays half of each newborn's energy The newborn is one generation past its parent, and if its genes have drifted beyond the Split Distance from its species' founder, it starts a new branch
+6. **Reproduce**: an organism big enough to reproduce gives each newborn the energy it starts with, then rests for 3 seconds before it can breed again. In sexual mode each gene comes from one parent or the mate, then genes may mutate. The newborn is one generation past its parent, and if its genes have drifted beyond the Split Distance from its species' founder, it starts a new branch
 7. **Decay**: dead bodies release their remaining energy as algae around where they died, spread over four seconds
 8. **Census**: twice per simulated second, species populations, names, extinctions, trails, the graph and the family tree are updated
 9. **Experiments**: if an AI experiment is running, its timer is checked and the end-state snapshot captured when it finishes
@@ -208,7 +201,6 @@ The AI Lab Partner operates through four integrated systems:
 |--------|-----------|------|---------|-----------|
 | Stable Eden | 4,000 | 3,000 | 5 | Peaceful aquarium, high food, low aggression, territories form gradually; starts with mixed diets |
 | Predators and Prey | 500 | 3,000 | 3 | Two grazer species and a hunter species, started near what the pond can hold: grazers and hunters rise and fall in turns |
-| Males and Females | 500 | 3,000 | 3 | Predators and Prey with males and females: every birth needs a mother and a father of the same species |
 | Arms Race | 5,000 | 1,800 | 4 | High mutation drives rapid evolution under moderate scarcity |
 | Battle Royale | 12,000 | 600 | 6 | Massive population, almost no food, fast carnage, most species go extinct |
 | Superorganism | 6,000 | 2,500 | 4 | Max flocking — species move as tight swarms like slime molds; starts with mixed diets |
@@ -222,7 +214,7 @@ The AI Lab Partner operates through four integrated systems:
 |-------|--------|
 | Left click | Drop food cluster |
 | Right click | Bring in a small group of a living species |
-| Hover | Inspect organism (species and its ancestor, size, energy, age, kills, generation, genes, diet, sex) |
+| Hover | Inspect organism (species and its ancestor, size, energy, age, kills, generation, genes, diet) |
 | Space | Pause / Resume |
 | 1 / 2 / 3 / 4 | Speed: 0.5x / 1x / 2x / 5x |
 | S | Toggle sound |
@@ -235,7 +227,7 @@ The AI Lab Partner operates through four integrated systems:
 - **World**: pause, reset, sound, video recording, fullscreen, scenario presets, the world seed with Replay, Share Link, Export and Import, organism and food amounts, food oases, simulation speed, the population graph, and the species census
 - **Species**: number of starting species, starting and maximum size, organism speed, lifespan, size to reproduce, offspring count
 - **Rules**: grazers and hunters (the diet gene) and the starting diets, same-species protection, the food chain mode, size advantage to eat, energy from eating, how much of a dead body becomes algae, and the five behavior drives (hunt, flee, flock, food attraction, separation)
-- **Evolve**: mutation on or off, mutation rate and strength, trait cost, which genes can evolve (including diet), whether new species can form, the split distance, sexual reproduction, and males and females
+- **Evolve**: mutation on or off, mutation rate and strength, trait cost, which genes can evolve (including diet), whether new species can form, the split distance, and sexual reproduction
 - **Tree**: the live family tree of every named species; hover for details, click to spotlight a family
 - **Visual**: glow and glow strength, water effects, detailed creatures, birth and death effects, oasis springs, lineage trails, food glow, trail length
 
@@ -269,14 +261,6 @@ With **Grazers and Hunters** on (the default), every creature carries a diet gen
 
 What we found tuning it: the presets start far more crowded than their ponds can hold, and the first seconds are a scramble in which most creatures are eaten. With a mixed start in a crowded world, the hunters win that scramble and eat nearly every grazer, and the pond crashes to a few dozen. So the crowded presets start as omnivores: they stay about as full as in v5.3 and evolve their own grazers, sometimes within a few minutes. Hunters couldn't hold on in a pond until they lived longer and bred more slowly than their prey, as real predators do. Started near what its pond can hold, the Predators and Prey preset keeps grazers and hunters rising and falling in turns.
 
-### Males and Females
-
-With **Males and Females** on (in the Evolve tab; it turns on Sexual Reproduction too), every creature is born male or female, half and half on average. Only a female gives birth, and only when a male of her own species is within about 60 pixels. A young offshoot that hasn't reached 10 members yet still counts as the species it came from, so it can breed with them. Each baby takes every gene, diet included, from one parent or the other, then mutates as usual. Males wear a pale ring around the body (or around the dot with Detailed Creatures off).
-
-A pond where only half the creatures can bear young grows half as fast. So a mother rests about a third as long between litters as a creature that divides alone, and the father pays half of each baby's energy as far as he can. A female who is ready to breed with no male in reach calls. Grown males with no female in reach swim toward the nearest calling female of their species, or toward the heart of their species' range when no one is calling, and a waiting female heads there too. Sexes come from their own random stream, so turning them off replays a seed exactly as before.
-
-What we found: in crowded ponds, populations stay in the same range as without sexes. Where numbers get small, finding a mate becomes the problem. In Superorganism the few grazers left after the opening frenzy die out instead of coming back, and in the Males and Females preset the hunters lasted ten minutes on eight of the nine seeds we tried.
-
 ### Speciation and the Family Tree
 
 Every organism belongs to a lineage. The starting species are the roots of the tree, founded on the average starting genome. At each birth, the newborn's four genes are compared with its species' founding genes. If it has drifted farther than the **Split Distance**, it joins a sister lineage that already split off in that direction, or founds a new one.
@@ -307,7 +291,7 @@ Any modern browser with WebGL: Chrome, Firefox, Safari, Edge. No plugins, no ext
 
 ## Where It's Going
 
-- **Now: richer life.** Parents that defend their young, bite contests with armor and jaws, toxins and warning colors, small evolved brains as an optional replacement for the five fixed drives, day and night, seasons, terrain and currents, disease, life stages, mate choice, scent trails, colonies, and a WebGPU engine for 100,000 or more organisms where the browser supports it.
+- **Now: richer life.** Males and females, parents that defend their young, bite contests with armor and jaws, toxins and warning colors, small evolved brains as an optional replacement for the five fixed drives, day and night, seasons, terrain and currents, disease, life stages, mate choice, scent trails, colonies, and a WebGPU engine for 100,000 or more organisms where the browser supports it.
 - **Paused, coming back: the Lab Partner as a working scientist.** Proper tool calls instead of parsing text, time-series records so reports cite trends, experiments repeated across several seeds against an unchanged control, a lab notebook that persists between sessions, charts in its reports, and an Alliance mode where Claude, Grok and Gemini each interpret the same result, plus a pond news feed and hall of fame for new species, extinctions and records.
 - **Then: a world worth sharing.** A camera that follows one creature through its life, zoom and pan, dragging to stir a current, a narrated documentary mode, and the Wellspring at the heart of the world.
 - **Someday: a 3D world** people can step into with VR headsets, right in the browser.
@@ -324,7 +308,7 @@ Learn more about the SIDLF framework and human-AI symbiosis at [jameskeithharwoo
 
 ## License
 
-**Sentinel AI Systems Non-Commercial License v1.0** — See [LICENSE](LICENSE) for full terms.
+**Sentinel AI Systems Non-Commercial License v1.0** — See [LICENSE](../LICENSE) for full terms.
 
 **Free for:** personal use, entertainment, education, academic research, classroom instruction, and learning from the code.
 
@@ -332,4 +316,4 @@ Learn more about the SIDLF framework and human-AI symbiosis at [jameskeithharwoo
 
 We built this openly so people can learn from it, enjoy it, and be inspired by it. We ask that if you profit from it, you include us in that conversation.
 
-See [IP-DECLARATION.md](IP-DECLARATION.md) for the formal intellectual property declaration and prior art documentation.
+See [IP-DECLARATION.md](../IP-DECLARATION.md) for the formal intellectual property declaration and prior art documentation.
