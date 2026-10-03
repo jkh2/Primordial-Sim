@@ -1,12 +1,14 @@
+> **Archived README for v5.6.1, the public version on October 3, 2026 (before bite contests).** This is how the README read while v5.6.1 was the public version. Play it at [/v5.6](https://jkh2.github.io/Primordial-Sim/v5.6/). The current README is [here](../README.md). Only the image and file links below were changed so they work from this folder; the untouched original is on the [`v5.6.1-release`](https://github.com/jkh2/Primordial-Sim/tree/v5.6.1-release) branch.
+
 # Primordial-Sim
 
-![Primordial-Sim Banner](banner.png)
+![Primordial-Sim Banner](../banner.png)
 
 ### Emergent Artificial Life Engine
 
 A real-time WebGL ecosystem where living cells eat, hunt, flee, flock, reproduce, mutate, and split into new species that nobody designed, with a multi-provider AI Lab Partner that observes, experiments, and writes research reports on the living world. All from simple rules, all in your browser.
 
-**[Launch Primordial](https://jkh2.github.io/Primordial-Sim/)** · Version 5.7 · Single-file HTML · Zero install · GitHub Pages
+**[Launch Primordial](https://jkh2.github.io/Primordial-Sim/)** · Version 5.6.1 · Single-file HTML · Zero install · GitHub Pages
 
 **New here?** Choose the **Origin of Species** preset in the World tab and press **T**. Everything starts as one red species; within a few minutes the family tree fills with species that split off on their own.
 
@@ -25,16 +27,6 @@ We believe this is how humans and AI should work together: as partners with comp
 ---
 
 ## What's New in v5
-
-**v5.7, October 3, 2026: bite contests**
-
-- **Armor and jaws.** A new **Bite Contests** switch in the Rules tab gives every creature two more genes. Armor is a plated rim that can stop a bite; jaws are fangs at the front that cut through armor. When a hunter catches prey with more armor than it has jaws, the bite fails with a chance of three times the difference, at most 90%. A failed bite costs the hunter 2 energy, stuns it for half a second and pushes the two apart, and the prey gets away.
-- **Every edge has a price.** Armor slows the body, up to 25% at full armor, and both genes add to a creature's running costs the way speed and perception do. Both start between 0% and 10% in every world, so they only grow where they pay.
-- **You can see them.** Armor shows as a thicker, segmented, bone-colored band around the body (a dark ring with Detailed Creatures off), and jaws as two fangs at the front, red at the base and ivory at the tip, longer the stronger the jaws. A creature's card and the family tree show armor and jaws too.
-- **A new preset: Armor and Jaws.** It is Origin of Species with bite contests on. As the ancestor branches into grazers and hunters, an arms race starts after about three minutes. On all nine seeds we ran, grazer armor climbed from about 5% to between 75% and 97% within ten minutes, and hunter jaws to between 62% and 85%. Armor saves the grazers: in Origin of Species without contests the hunters ate nearly every one, leaving none after ten minutes on five of the nine seeds and at most 48 on the rest. With contests the grazers lasted on all nine, with 75 to 1,394 of them, and the pond held 741 to 1,770 creatures instead of 437 to 728.
-- **Elsewhere it moves slowly.** In Predators and Prey, grazers and hunters both lasted ten minutes on all nine seeds we ran, and armor and jaws stayed under about 10%: with little mutation, they barely move in ten minutes. In Males and Females, our first nine seeds looked bad for the hunters (they lasted on only four), so we ran 18 more with and without contests. Over all 27, the hunters lasted ten minutes on 18 with contests and on 21 without, a gap small enough to be chance.
-- **What Gen means.** Hold the mouse over Gen in the stats bar to see what it counts: the most parent-to-baby steps any family line has taken. It moves at the pace of breeding, not lifespan, so it climbs faster than one per lifespan. It also shows the average generation of the creatures alive now.
-- **Off plays exactly like v5.6.1.** With Bite Contests off, every seed replays as it did before, and settings and links saved before v5.7 load with it off. The Lab Partner knows the rules and sees each species' average armor and jaws.
 
 **v5.6.1, October 3, 2026: friendlier on phones**
 
@@ -111,13 +103,12 @@ We believe this is how humans and AI should work together: as partners with comp
 
 | Version | Play it | Its README | Exact source |
 |---------|---------|------------|--------------|
-| v5.6.1 (October 3, 2026) | [/v5.6](https://jkh2.github.io/Primordial-Sim/v5.6/) | [v5.6/README.md](v5.6/README.md) | [`v5.6.1-release`](https://github.com/jkh2/Primordial-Sim/tree/v5.6.1-release) branch (v5.6 itself: [`v5.6-release`](https://github.com/jkh2/Primordial-Sim/tree/v5.6-release)) |
-| v5.5 (October 3, 2026) | [/v5.5](https://jkh2.github.io/Primordial-Sim/v5.5/) | [v5.5/README.md](v5.5/README.md) | [`v5.5-release`](https://github.com/jkh2/Primordial-Sim/tree/v5.5-release) branch |
-| v5.4 (October 3, 2026) | [/v5.4](https://jkh2.github.io/Primordial-Sim/v5.4/) | [v5.4/README.md](v5.4/README.md) | [`v5.4-release`](https://github.com/jkh2/Primordial-Sim/tree/v5.4-release) branch |
-| v5.3 (October 2, 2026) | [/v5.3](https://jkh2.github.io/Primordial-Sim/v5.3/) | [v5.3/README.md](v5.3/README.md) | [`v5.3-release`](https://github.com/jkh2/Primordial-Sim/tree/v5.3-release) branch |
-| v5 (September 29, 2026) | [/v5](https://jkh2.github.io/Primordial-Sim/v5/) | [v5/README.md](v5/README.md) | [`v5-release`](https://github.com/jkh2/Primordial-Sim/tree/v5-release) branch |
-| v4 (September 29, 2026) | [/v4](https://jkh2.github.io/Primordial-Sim/v4/) | [v4/README.md](v4/README.md) | [`v4-release`](https://github.com/jkh2/Primordial-Sim/tree/v4-release) branch |
-| v3, the original (March 12, 2026) | [/classic](https://jkh2.github.io/Primordial-Sim/classic/) | [classic/README.md](classic/README.md) | [`v3-original`](https://github.com/jkh2/Primordial-Sim/tree/v3-original) branch |
+| v5.5 (October 3, 2026) | [/v5.5](https://jkh2.github.io/Primordial-Sim/v5.5/) | [v5.5/README.md](../v5.5/README.md) | [`v5.5-release`](https://github.com/jkh2/Primordial-Sim/tree/v5.5-release) branch |
+| v5.4 (October 3, 2026) | [/v5.4](https://jkh2.github.io/Primordial-Sim/v5.4/) | [v5.4/README.md](../v5.4/README.md) | [`v5.4-release`](https://github.com/jkh2/Primordial-Sim/tree/v5.4-release) branch |
+| v5.3 (October 2, 2026) | [/v5.3](https://jkh2.github.io/Primordial-Sim/v5.3/) | [v5.3/README.md](../v5.3/README.md) | [`v5.3-release`](https://github.com/jkh2/Primordial-Sim/tree/v5.3-release) branch |
+| v5 (September 29, 2026) | [/v5](https://jkh2.github.io/Primordial-Sim/v5/) | [v5/README.md](../v5/README.md) | [`v5-release`](https://github.com/jkh2/Primordial-Sim/tree/v5-release) branch |
+| v4 (September 29, 2026) | [/v4](https://jkh2.github.io/Primordial-Sim/v4/) | [v4/README.md](../v4/README.md) | [`v4-release`](https://github.com/jkh2/Primordial-Sim/tree/v4-release) branch |
+| v3, the original (March 12, 2026) | [/classic](https://jkh2.github.io/Primordial-Sim/classic/) | [classic/README.md](../classic/README.md) | [`v3-original`](https://github.com/jkh2/Primordial-Sim/tree/v3-original) branch |
 
 ## What It Is
 
@@ -137,7 +128,7 @@ The AI Lab Partner watches it all happen, analyzes the data, designs and runs ex
 
 **Predator-prey food chains** — An optional Rock-Paper-Scissors mode creates circular predation: each starting species hunts the next one in sequence, wrapping around, and new species inherit their ancestor's place in the cycle. This prevents any single lineage from dominating and produces classic Lotka-Volterra population oscillations in the population graph.
 
-**Interactive sandbox** — Left-click drops a cluster of food. Right-click brings in a small group of a living species (or a new arrival if everything has died out). Click or tap any organism to open its card: its species and where that species came from, its size, energy, age, kills, generation, and its genes. The card follows the creature until you click the water or press Esc. Space pauses, and 1 to 4 set the speed from slow motion to 5x. Ten tuned presets range from a peaceful aquarium to extinction events, the Origin of Species and an arms race of armor and jaws. You can record video of a run, go fullscreen, share your settings as a link, or export them to a file.
+**Interactive sandbox** — Left-click drops a cluster of food. Right-click brings in a small group of a living species (or a new arrival if everything has died out). Click or tap any organism to open its card: its species and where that species came from, its size, energy, age, kills, generation, and its genes. The card follows the creature until you click the water or press Esc. Space pauses, and 1 to 4 set the speed from slow motion to 5x. Seven tuned presets range from a peaceful aquarium to extinction events and the Origin of Species. You can record video of a run, go fullscreen, share your settings as a link, or export them to a file.
 
 **Living visuals** — Organisms are drawn as teardrop cells pointed the way they swim, with a membrane rim and a nucleus. Their genes are visible: a longer tail means a faster swimmer, spines and a redder rim mean aggression, glowing eye-spots mean sharp perception, and a translucent body means an efficient metabolism. Cells pulse like a heartbeat, stretch when they move fast, and dim and flicker when starving. The world is primordial water with drifting caustic light and plankton, food is swaying bioluminescent algae, and oases are glowing springs with rising bubbles. Kills pull the prey's motes toward the predator, births split like dividing cells, and dead bodies linger as faint, see-through cells that shrink and fade while algae sprouts around them. Glow Strength sets how brightly crowds of cells light each other up. On slower machines, turn off Water Effects or Detailed Creatures in the Visual tab.
 
@@ -240,13 +231,12 @@ The AI Lab Partner operates through four integrated systems:
 | Food Chain Cycle | 4,500 | 2,200 | 3 | Rock-paper-scissors predation, classic oscillating population waves |
 | Extinction Event | 8,000 | 4,000 | 8 | Abundant start, food dries up, slow die-off reveals which traits survive |
 | Origin of Species | 1,000 | 8,000 | 1 | One ancestor, plenty of food, strong mutation: watch it branch into dozens of species on the family tree |
-| Armor and Jaws | 1,000 | 8,000 | 1 | Origin of Species with bite contests: as grazers and hunters branch off, grazers grow armor and hunters grow longer fangs |
 
 ### Controls
 
 | Input | Action |
 |-------|--------|
-| Click a creature | Open its card: species and its ancestor, size, energy, age, kills, generation, genes, diet, sex, care, armor and jaws. Click the water or press Esc to close it |
+| Click a creature | Open its card: species and its ancestor, size, energy, age, kills, generation, genes, diet, sex, care. Click the water or press Esc to close it |
 | Left click on water | Drop food cluster (closes an open card first) |
 | Right click | Bring in a small group of a living species |
 | Space | Pause / Resume |
@@ -261,12 +251,12 @@ The AI Lab Partner operates through four integrated systems:
 
 - **World**: pause, reset, sound, video recording, fullscreen, scenario presets, the world seed with Replay, Share Link, Export and Import, organism and food amounts, food oases, simulation speed, the population graph, and the species census
 - **Species**: number of starting species, starting and maximum size, organism speed, lifespan, size to reproduce, offspring count
-- **Rules**: grazers and hunters (the diet gene) and the starting diets, bite contests, same-species protection, the food chain mode, size advantage to eat, energy from eating, how much of a dead body becomes algae, and the five behavior drives (hunt, flee, flock, food attraction, separation)
-- **Evolve**: mutation on or off, mutation rate and strength, trait cost, which genes can evolve (including diet, care, armor and jaws), whether new species can form, the split distance, sexual reproduction, males and females, and protective mothers
+- **Rules**: grazers and hunters (the diet gene) and the starting diets, same-species protection, the food chain mode, size advantage to eat, energy from eating, how much of a dead body becomes algae, and the five behavior drives (hunt, flee, flock, food attraction, separation)
+- **Evolve**: mutation on or off, mutation rate and strength, trait cost, which genes can evolve (including diet and care), whether new species can form, the split distance, sexual reproduction, males and females, and protective mothers
 - **Tree**: the live family tree of every named species; hover for details, click to spotlight a family
 - **Visual**: glow and glow strength, water effects, detailed creatures, birth and death effects, oasis springs, lineage trails, food glow, trail length
 
-The stats bar under the tabs shows frames per second, organisms alive, food, the highest generation reached (hold the mouse over Gen for what it counts and the average generation of the living), and the number of living species.
+The stats bar under the tabs shows frames per second, organisms alive, food, the highest generation reached, and the number of living species.
 
 ### AI Lab Panel (Right Panel)
 
@@ -282,7 +272,7 @@ Every world is built from a numeric seed shown in the World tab. **Reset World**
 
 ### Trait Costs
 
-Genes are not free. With **Trait Cost** above 0, speed (quadratically, like drag), perception and aggression raise an organism's metabolic cost, and high efficiency lowers its top speed. Setting it to 0 restores the original cost-free genes. The **Gen** counter shows the highest generation reached so far, and each creature's card shows its own generation.
+Genes are not free. With **Trait Cost** above 0, speed (quadratically, like drag), perception and aggression raise an organism's metabolic cost, and high efficiency lowers its top speed. Setting it to 0 restores the original cost-free genes. The **Gen** counter shows the highest generation reached so far, and the tooltip shows each organism's generation.
 
 ### The Energy Cycle
 
@@ -308,15 +298,9 @@ What we found: in crowded ponds, populations stay in the same range as without s
 
 With **Protective Mothers** on (in the Evolve tab), every creature carries a care gene from 0% to 100%, starting near 50%. Care trades number for strength. At 0% a litter holds twice as many babies, each with half the energy; at 100% half as many (at least one), each with up to twice the energy; at 50% litters are the same as in a world without care. Each baby takes its care from its mother or, with sexual reproduction, its father, and it mutates like any other gene unless Care Gene is unticked under Traits That Evolve.
 
-After a birth, a mother guards for six seconds times her care. She doesn't feed or breed while she guards. Her babies swim toward her when they stray, and she moves between them and the nearest creature close by that could eat a newborn. When a hunter catches one of her babies within about 30 pixels of her, she steps in with a chance equal to her care. Unless the hunter is big enough to eat her too, it is stunned for a second, pushed away, and loses its meal. A mother flares gold while she defends. Click a creature to see its care, how long it has left to guard, or whether its mother is guarding it.
+After a birth, a mother guards for six seconds times her care. She doesn't feed or breed while she guards. Her babies swim toward her when they stray, and she moves between them and the nearest creature close by that could eat a newborn. When a hunter catches one of her babies within about 30 pixels of her, she steps in with a chance equal to her care. Unless the hunter is big enough to eat her too, it is stunned for a second, pushed away, and loses its meal. A mother flares gold while she defends. Hover over a creature to see its care, how long it has left to guard, or whether its mother is guarding it.
 
 What we found: in crowded ponds care seems to cost more than it pays. They held fewer creatures with care on, and in the default world care drifted down to about 43%. Its effect on the hunters depends on the world: in Predators and Prey they did as well as without care, but in Males and Females they died out on three of the nine seeds we tried, where without care they died out on one. Care moves slowly; the clearest change we saw was in Origin of Species, where it rose to about 58% while hunters were multiplying and fell back once they had eaten nearly everything else.
-
-### Bite Contests
-
-With **Bite Contests** on (in the Rules tab), every creature carries an armor gene and a jaws gene, each from 0% to 100% and between 0% and 10% when a world begins. When a creature catches prey whose armor is higher than its own jaws, the bite fails with a chance of three times the difference, at most 90%: prey with 40% armor stops a hunter with 10% jaws 90% of the time, and one with 20% jaws 60% of the time. A failed bite costs the attacker 2 energy, stuns it for half a second and pushes it away, and the prey swims off. Armor slows the body (25% at full armor), and both genes add to the trait costs, so neither is free. Each baby takes armor and jaws from one parent or the other under sexual reproduction, and they mutate like the other genes unless Armor Gene or Jaws Gene is unticked under Traits That Evolve. Armor shows as a segmented, bone-colored band around the body, and jaws as two fangs at the front.
-
-What we found tuning it: at first both genes started at zero and cost too much, and they barely moved. Starting them between 0% and 10% and making each point of difference count three times got them moving where they matter. With little mutation, as in Predators and Prey, they stay small for ten minutes. In Origin of Species, with its strong mutation and fast breeding, they become an arms race, and the armor lets grazers survive hunters that otherwise eat nearly all of them. The **Armor and Jaws** preset is that world.
 
 ### Speciation and the Family Tree
 
@@ -348,7 +332,7 @@ Any modern browser with WebGL: Chrome, Firefox, Safari, Edge. No plugins, no ext
 
 ## Where It's Going
 
-- **Now: richer life.** Toxins and warning colors, small evolved brains as an optional replacement for the five fixed drives, day and night, seasons, terrain and currents, disease, life stages, mate choice, scent trails, colonies, and a WebGPU engine for 100,000 or more organisms where the browser supports it.
+- **Now: richer life.** Bite contests with armor and jaws, toxins and warning colors, small evolved brains as an optional replacement for the five fixed drives, day and night, seasons, terrain and currents, disease, life stages, mate choice, scent trails, colonies, and a WebGPU engine for 100,000 or more organisms where the browser supports it.
 - **Paused, coming back: the Lab Partner as a working scientist.** Proper tool calls instead of parsing text, time-series records so reports cite trends, experiments repeated across several seeds against an unchanged control, a lab notebook that persists between sessions, charts in its reports, and an Alliance mode where Claude, Grok and Gemini each interpret the same result, plus a pond news feed and hall of fame for new species, extinctions and records.
 - **Then: a world worth sharing.** A camera that follows one creature through its life, zoom and pan, dragging to stir a current, a narrated documentary mode, and the Wellspring at the heart of the world.
 - **Someday: a 3D world** people can step into with VR headsets, right in the browser.
@@ -365,7 +349,7 @@ Learn more about the SIDLF framework and human-AI symbiosis at [jameskeithharwoo
 
 ## License
 
-**Sentinel AI Systems Non-Commercial License v1.0** — See [LICENSE](LICENSE) for full terms.
+**Sentinel AI Systems Non-Commercial License v1.0** — See [LICENSE](../LICENSE) for full terms.
 
 **Free for:** personal use, entertainment, education, academic research, classroom instruction, and learning from the code.
 
@@ -373,4 +357,4 @@ Learn more about the SIDLF framework and human-AI symbiosis at [jameskeithharwoo
 
 We built this openly so people can learn from it, enjoy it, and be inspired by it. We ask that if you profit from it, you include us in that conversation.
 
-See [IP-DECLARATION.md](IP-DECLARATION.md) for the formal intellectual property declaration and prior art documentation.
+See [IP-DECLARATION.md](../IP-DECLARATION.md) for the formal intellectual property declaration and prior art documentation.
