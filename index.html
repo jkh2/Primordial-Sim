@@ -215,7 +215,7 @@ button.btn.recording{background:rgba(255,50,50,0.25)!important;border-color:rgba
       <div class="toggle-row"><span>Starting Diets</span><select class="sel" id="selDietStart" title="Which diets the starting species have; changing it starts a new world">
         <option value="omnivores">All omnivores</option><option value="mixed">Mixed</option><option value="grazers">All grazers</option><option value="hunters">All hunters</option></select></div>
       <div class="toggle-row"><span>Bite Contests (armor and jaws)</span><input type="checkbox" id="chkBite"/></div>
-      <div class="hint-text" style="font-size:0.68rem;color:var(--muted);margin:-4px 0 10px">On: a bite can fail. Armor, a plated rim that slows the body, blocks bites; jaws, fangs at the front, cut through armor. Both cost energy and start at zero, so they only grow where they pay. A failed bite stuns the attacker and costs it energy. Off: every bite succeeds, as before v5.7.</div>
+      <div class="hint-text" style="font-size:0.68rem;color:var(--muted);margin:-4px 0 10px">On: a bite can fail. Armor, a plated rim that slows the body, blocks bites; jaws, fangs at the front, cut through armor. Both cost energy and start small, so they only grow where they pay. A failed bite stuns the attacker and costs it energy. Off: every bite succeeds, as before v5.7.</div>
       <div class="section-label">Predation</div>
       <div class="toggle-row"><span>Same Species Protected</span><input type="checkbox" id="chkSameSpecies" checked/></div>
       <div class="toggle-row"><span>Food Chain (Rock-Paper-Scissors)</span><input type="checkbox" id="chkFoodChain"/></div>
@@ -278,7 +278,7 @@ button.btn.recording{background:rgba(255,50,50,0.25)!important;border-color:rgba
     <div class="stat-chip">FPS <span class="sv" id="sFps">--</span></div>
     <div class="stat-chip">Alive <span class="sv" id="sAlive">0</span></div>
     <div class="stat-chip">Food <span class="sv" id="sFoodCount">0</span></div>
-    <div class="stat-chip">Gen <span class="sv" id="sGen">0</span></div>
+    <div class="stat-chip" id="genChip">Gen <span class="sv" id="sGen">0</span></div>
     <div class="stat-chip">Species <span class="sv" id="sSpCount">0</span></div>
   </div>
 </div>
@@ -503,14 +503,14 @@ vSpecies:$('vSpecies'),vStartSize:$('vStartSize'),vMaxSize:$('vMaxSize'),vOrgSpe
 vReproSize:$('vReproSize'),vOffspring:$('vOffspring'),vOases:$('vOases'),
 vEatRatio:$('vEatRatio'),vEatGain:$('vEatGain'),vDecay:$('vDecay'),vHunt:$('vHunt'),vFlee:$('vFlee'),vFlock:$('vFlock'),vFoodDrive:$('vFoodDrive'),vSeparation:$('vSeparation'),
 vMutRate:$('vMutRate'),vMutStr:$('vMutStr'),vFoodGlow:$('vFoodGlow'),vGlow:$('vGlow'),vTrail:$('vTrail'),
-sFps:$('sFps'),sAlive:$('sAlive'),sFoodCount:$('sFoodCount'),sGen:$('sGen'),
+sFps:$('sFps'),sAlive:$('sAlive'),sFoodCount:$('sFoodCount'),sGen:$('sGen'),genChip:$('genChip'),
 speciesLegend:$('speciesLegend'),popGraph:$('popGraph'),
 // AI panel
 aiPanel:$('aiPanel'),aiToggle:$('aiToggle'),aiClose:$('aiClose'),aiChat:$('aiChat'),aiInput:$('aiInput'),aiSend:$('aiSend'),
 expStatus:$('expStatus'),expStatusText:$('expStatusText')};
 
 let W=0,H=0,running=true,hasInteracted=false;
-let lastT=performance.now(),fpsT=0,fpsN=0,generation=0,simTime=0;
+let lastT=performance.now(),fpsT=0,fpsN=0,generation=0,simTime=0,genTipTick=0;
 
 // ═══════════════════════════════════════════════
 // ORGANISMS (SoA with genetic traits — same as v2)
@@ -552,7 +552,7 @@ function guardDrive(a,m){odigest[a]=CARE_STUN;oflare[m]=0.6;const dx=ox[a]-ox[m]
 // Armor slows the body (ARMOR_SLOW at full armor) and both genes add to the trait costs (ARMOR_LOAD, JAWS_LOAD), so they only grow
 // where they pay.
 const gArmor=new Float32Array(MAX_ORG),gJaws=new Float32Array(MAX_ORG);
-const BITE_START=0.2,BITE_BLOCK=1.5,BITE_MAXBLOCK=0.9,BITE_FAIL=2,BITE_STUN=0.5,ARMOR_SLOW=0.35,ARMOR_LOAD=0.4,JAWS_LOAD=0.4;
+const BITE_START=0.1,BITE_BLOCK=3,BITE_MAXBLOCK=0.9,BITE_FAIL=2,BITE_STUN=0.5,ARMOR_SLOW=0.25,ARMOR_LOAD=0.15,JAWS_LOAD=0.15;
 // Prey j's armor turns attacker a's bite: a pays and is pushed off, j darts away
 function biteFail(a,j){oenergy[a]-=BITE_FAIL;odigest[a]=BITE_STUN;const dx=ox[a]-ox[j],dy=oy[a]-oy[j],d=Math.sqrt(dx*dx+dy*dy)+0.1;ovx[a]+=dx/d*2;ovy[a]+=dy/d*2;ovx[j]-=dx/d*2;ovy[j]-=dy/d*2;}
 let callPrev=new Int32Array(MAX_CALLING),callNow=new Int32Array(MAX_CALLING),nCallPrev=0,nCallNow=0;
@@ -1198,7 +1198,7 @@ Males and females: with chkSexes on, each organism is born male or female (each 
 
 Protective mothers: with chkCare on, each organism carries a care gene from 0% to 100% (carePercent is a species' average; 50% gives the same litters as a world without care). Care trades number for strength: at 0% a litter holds twice as many babies, each with half the energy; at 100% half as many (at least one), each with up to twice the energy. After giving birth a mother guards for up to 6 seconds (6 times her care): she doesn't feed, hunt or breed, her babies swim toward her, and she moves between them and the nearest creature that could eat a newborn. When a hunter catches a baby within about 30 pixels of its guarding mother, she steps in with a chance equal to her care and, unless the hunter could eat her too, stuns it for a second and drives it off without its meal. A mother flares gold while she defends.
 
-Bite contests: with chkBite on, each organism carries an armor gene and a jaws gene, both from 0% to 100% and 0% at the start of every world (armorPercent and jawsPercent are a species' averages). When a creature catches prey whose armor is higher than its jaws, the bite fails with a chance of 1.5 times the difference (at most 90%): the attacker loses 2 energy, is stunned for half a second and pushed off, and the prey gets away. Armor slows the body (up to 35% at full armor), and both genes add to the trait costs, so they only spread where they pay. Armor shows as a plated grey rim, jaws as fangs at the front.
+Bite contests: with chkBite on, each organism carries an armor gene and a jaws gene, both from 0% to 100% and between 0% and 10% at the start of every world (armorPercent and jawsPercent are a species' averages). When a creature catches prey whose armor is higher than its jaws, the bite fails with a chance of 3 times the difference (at most 90%): the attacker loses 2 energy, is stunned for half a second and pushed off, and the prey gets away. Armor slows the body (up to 25% at full armor), and both genes add to the trait costs, so they only spread where they pay. Armor shows as a plated grey rim, jaws as fangs at the front.
 
 Be concise, scientific, and insightful. Use the species names given. When analyzing, reference specific gene values and population numbers.`;
 
@@ -1566,9 +1566,10 @@ function frame(now){
   const mins=simTime/60|0,secs=simTime%60|0;ui.timeDisplay.textContent=(mins<10?'0':'')+mins+':'+(secs<10?'0':'')+secs;
   renderWorld();
   fpsT+=rawDt;fpsN++;if(fpsT>=0.4){ui.sFps.textContent=(fpsN/fpsT|0);fpsT=0;fpsN=0;}
-  let alive=0;for(let i=0;i<orgCount;i++)if(oalive[i])alive++;
+  let alive=0,genSum=0;for(let i=0;i<orgCount;i++)if(oalive[i]){alive++;genSum+=ogen[i];}
   let fAlive=0;for(let i=0;i<foodCount;i++)if(falive[i])fAlive++;
   ui.sAlive.textContent=alive;ui.sFoodCount.textContent=fAlive;ui.sGen.textContent=generation;
+  if(++genTipTick>=30){genTipTick=0;ui.genChip.title=`Generations: the most parent-to-baby steps any family line has taken since the world began. A creature can breed many times in one life, so this follows how fast creatures breed, not the lifespan. The creatures alive now average generation ${(genSum/Math.max(1,alive)).toFixed(1)}.`;}
   updateLabels();frameCount++;
 }
 
