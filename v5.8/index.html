@@ -150,7 +150,7 @@ button.btn.recording{background:rgba(255,50,50,0.25)!important;border-color:rgba
 <div class="panel" id="panel">
   <div class="panel-header">
     <div class="panel-title">Primordial</div>
-    <div class="panel-subtitle">Genesis Engine · Sentinel Edition · v5.9</div>
+    <div class="panel-subtitle">Genesis Engine · Sentinel Edition · v5.8</div>
     <button class="panel-close" id="panelClose" title="Collapse panel">&#10005;</button>
   </div>
   <div class="tabs">
@@ -174,7 +174,7 @@ button.btn.recording{background:rgba(255,50,50,0.25)!important;border-color:rgba
       <div class="btn-row">
         <select class="sel" id="selPreset">
           <option value="eden">Stable Eden</option>
-          <option value="predprey">Predators and Prey</option><option value="mates">Males and Females</option><option value="fireflies">Fireflies (courtship)</option>
+          <option value="predprey">Predators and Prey</option><option value="mates">Males and Females</option>
           <option value="armsrace">Arms Race</option>
           <option value="battleroyale">Battle Royale</option>
           <option value="superorganism">Superorganism</option>
@@ -254,8 +254,6 @@ button.btn.recording{background:rgba(255,50,50,0.25)!important;border-color:rgba
       <div class="toggle-row"><span>Diet Gene (grazer to hunter)</span><input type="checkbox" id="chkEvoDiet" checked/></div>
       <div class="toggle-row"><span>Care Gene (protective parents)</span><input type="checkbox" id="chkEvoCare" checked/></div>
       <div class="toggle-row"><span>Who Guards Gene (when it evolves)</span><input type="checkbox" id="chkEvoDad" checked/></div>
-      <div class="toggle-row"><span>Brawn Gene (rival males)</span><input type="checkbox" id="chkEvoBrawn" checked/></div>
-      <div class="toggle-row"><span>Display Gene (showy males)</span><input type="checkbox" id="chkEvoShow" checked/></div>
       <div class="toggle-row"><span>Armor Gene (bite contests)</span><input type="checkbox" id="chkEvoArmor" checked/></div>
       <div class="toggle-row"><span>Jaws Gene (bite contests)</span><input type="checkbox" id="chkEvoJaws" checked/></div>
       <div class="section-label">Speciation</div>
@@ -265,10 +263,6 @@ button.btn.recording{background:rgba(255,50,50,0.25)!important;border-color:rgba
       <div class="toggle-row"><span>Reproduction</span><select class="sel" id="selRepro" title="How babies are made"><option value="asexual">Divide alone</option><option value="pairs">Any two mix genes</option><option value="sexes">Male and female</option></select></div>
       <input type="checkbox" id="chkSexual" hidden/><input type="checkbox" id="chkSexes" hidden/>
       <div class="hint-text" style="font-size:0.68rem;color:var(--muted);margin:-4px 0 10px">Divide alone: each parent splits into copies of itself, changed only by mutation. Any two mix genes: a parent with a mate of its own species close by mixes genes with it, and a loner still divides alone. Male and female: babies are born male or female, and only a female carries young, only with a male of her own species close by. Males wear a pale ring.</div>
-      <div class="toggle-row"><span>Mate Choice (females pick the best male)</span><input type="checkbox" id="chkChoice"/></div>
-      <div class="toggle-row"><span>Rival Males (the stronger wins)</span><input type="checkbox" id="chkRivals"/></div>
-      <div class="toggle-row"><span>Showy Males (flash like fireflies)</span><input type="checkbox" id="chkShow"/></div>
-      <div class="hint-text" style="font-size:0.68rem;color:var(--muted);margin:-4px 0 10px">Courtship, with Male and female. Mate Choice: a female ready to breed takes the best male in reach instead of the nearest: the biggest, and with Showy Males the brightest. Rival Males: grown males of a species who meet near a female shove, and the stronger drives the other off for 2 seconds, when no female will take him. A brawn gene lets a male grow up to half again as big and fight harder, at a running cost. Showy Males: grown males flash like fireflies, each species in its own rhythm, and a display gene makes a male brighter. Females see a bright male from farther away and prefer him, but flashing costs energy, and hunters see him from farther away too and go for him first. Females carry both genes without showing them.</div>
       <div class="toggle-row"><span>Protective Parents (care gene)</span><input type="checkbox" id="chkCare"/></div>
       <div class="toggle-row"><span>Who Guards</span><select class="sel" id="selGuard" title="With males and females, which parent guards the young"><option value="mother">Mother</option><option value="father">Father</option><option value="both">Both</option><option value="evolve">Evolves</option></select></div>
       <div class="hint-text" style="font-size:0.68rem;color:var(--muted);margin:-4px 0 10px">After a birth, a caring parent stops feeding and guards the young for up to 6 seconds. The babies follow it like ducklings and it puts itself between them and hunters. When a hunter catches a baby near it, the more caring the guard is the likelier it drives the hunter off, unless the hunter is big enough to eat it too. More care means fewer, stronger babies; less care means many small ones. Who Guards counts with Male and female: the mother, the father or both. With Evolves a gene decides, so each species finds its own way. Only a grown father stays. A guarding father can't mate, so a father who leaves can sire more young.</div>
@@ -359,7 +353,7 @@ To get started for free, create a free key at openrouter.ai/keys (no credit card
   </div>
 </div>
 
-<div class="badge">Primordial v5.9 · Sentinel AI Systems × Claude Sentinel · SIDLF · <a href="v5.8/" title="Play v5.8 from October 3, 2026, before courtship and firefly males">v5.8</a> · <a href="v5.7/" title="Play v5.7 from October 3, 2026, before who guards and the Reproduction menu">v5.7</a> · <a href="v5.6/" title="Play v5.6.1 from October 3, 2026, before bite contests">v5.6.1</a> · <a href="v5.5/" title="Play v5.5 from October 3, 2026, before protective mothers">v5.5</a> · <a href="v5.4/" title="Play v5.4 from October 3, 2026, before males and females">v5.4</a> · <a href="v5.3/" title="Play v5.3 from October 2, 2026, before grazers and hunters">v5.3</a> · <a href="v5/" title="Play v5 from September 29, 2026, before dead bodies fed the pond">v5</a> · <a href="v4/" title="Play v4 from September 2026, before species could evolve">v4</a> · <a href="classic/" title="Play the original v3 from March 2026">Original v3</a></div>
+<div class="badge">Primordial v5.8 · Sentinel AI Systems × Claude Sentinel · SIDLF · <a href="../v5.7/" title="Play v5.7 from October 3, 2026, before who guards and the Reproduction menu">v5.7</a> · <a href="../v5.6/" title="Play v5.6.1 from October 3, 2026, before bite contests">v5.6.1</a> · <a href="../v5.5/" title="Play v5.5 from October 3, 2026, before protective mothers">v5.5</a> · <a href="../v5.4/" title="Play v5.4 from October 3, 2026, before males and females">v5.4</a> · <a href="../v5.3/" title="Play v5.3 from October 2, 2026, before grazers and hunters">v5.3</a> · <a href="../v5/" title="Play v5 from September 29, 2026, before dead bodies fed the pond">v5</a> · <a href="../v4/" title="Play v4 from September 2026, before species could evolve">v4</a> · <a href="../classic/" title="Play the original v3 from March 2026">Original v3</a></div>
 <div class="rec-dot" id="recDot">REC <span id="recTime">0:00</span></div>
 
 <script>
@@ -431,21 +425,20 @@ gl_FragColor=vec4(mix(col,vec3(0.85,1.0,0.9),core*0.5),(core+halo)*v_tw);}`;
 // Speed = tail length, aggression = spines and a redder rim, perception = glowing eye-spots,
 // efficiency = translucent body. Diet shapes the body: grazers are round with a green gut, hunters are long darts
 // with a red rim, and a 50/50 omnivore looks exactly like the creatures from before diets. With Males and Females on, males wear a pale ring;
-// a parent defending its young flares; a showy male flashes yellow-green from his rear like a firefly. Hungry cells dim and flicker; well-fed cells glow.
-const ORG_VS=`attribute vec2 a_pos;attribute vec4 a_look;attribute vec4 a_genes;attribute vec4 a_state;attribute float a_mark;attribute vec2 a_bite;attribute float a_flash;uniform vec2 u_res;uniform float u_time;
-varying float v_head;varying float v_hue;varying float v_diet;varying vec4 v_genes;varying vec4 v_state;varying float v_mark;varying vec2 v_bite;varying float v_flash;
+// a mother defending her young flares. Hungry cells dim and flicker; well-fed cells glow.
+const ORG_VS=`attribute vec2 a_pos;attribute vec4 a_look;attribute vec4 a_genes;attribute vec4 a_state;attribute float a_mark;attribute vec2 a_bite;uniform vec2 u_res;uniform float u_time;
+varying float v_head;varying float v_hue;varying float v_diet;varying vec4 v_genes;varying vec4 v_state;varying float v_mark;varying vec2 v_bite;
 void main(){vec2 clip=(a_pos/u_res)*2.0-1.0;clip.y=-clip.y;gl_Position=vec4(clip,0.0,1.0);
 float beat=1.0+0.07*sin(u_time*(2.5+(1.0-a_state.x)*3.0)+a_state.y*6.2832);
-gl_PointSize=a_look.y*beat;v_head=a_look.x;v_hue=a_look.z;v_diet=a_look.w;v_genes=a_genes;v_state=a_state;v_mark=a_mark;v_bite=a_bite;v_flash=a_flash;}`;
-const ORG_FS=HP+HSV_GLSL+`uniform float u_time;uniform float u_simple;uniform float u_glow;varying float v_head;varying float v_hue;varying float v_diet;varying vec4 v_genes;varying vec4 v_state;varying float v_mark;varying vec2 v_bite;varying float v_flash;
-const vec3 MALE_RING=vec3(0.9,0.95,1.0),FLARE=vec3(1.0,0.92,0.6),FIREFLY=vec3(0.78,1.0,0.32),PLATE=vec3(0.62,0.58,0.5),FANG=vec3(1.0,0.95,0.85);
+gl_PointSize=a_look.y*beat;v_head=a_look.x;v_hue=a_look.z;v_diet=a_look.w;v_genes=a_genes;v_state=a_state;v_mark=a_mark;v_bite=a_bite;}`;
+const ORG_FS=HP+HSV_GLSL+`uniform float u_time;uniform float u_simple;uniform float u_glow;varying float v_head;varying float v_hue;varying float v_diet;varying vec4 v_genes;varying vec4 v_state;varying float v_mark;varying vec2 v_bite;
+const vec3 MALE_RING=vec3(0.9,0.95,1.0),FLARE=vec3(1.0,0.92,0.6),PLATE=vec3(0.62,0.58,0.5),FANG=vec3(1.0,0.95,0.85);
 vec4 over(vec4 acc,vec3 c,float a){a=clamp(a,0.0,1.0);return vec4(c*a+acc.rgb*(1.0-a),a+acc.a*(1.0-a));}
 void main(){float v_male=mod(v_mark,2.0),v_flare=step(1.5,v_mark);
 if(u_simple>0.5){float dd=length(gl_PointCoord-0.5)*2.0;if(dd>1.0)discard;float cr=exp(-dd*2.0)*0.6+(1.0-dd*dd)*0.4;float sa=(cr*0.7+0.3)*v_state.w;vec3 col=hsv(v_hue,0.85,0.7+cr*0.3)*cr;
 if(v_bite.x>0.04){float ar=smoothstep(0.62,0.8,dd)*v_bite.x*v_state.w;col=mix(col,PLATE*0.8,ar*0.85);sa=max(sa,ar*0.8);}
 if(v_male>0.5){float rg=smoothstep(0.2,0.05,abs(dd-0.75))*v_state.w;col=mix(col,MALE_RING,rg*0.8);sa=max(sa,rg*0.85);}
-if(v_flare>0.5){float fl=(0.6+0.4*sin(u_time*24.0))*v_state.w;col=mix(col,FLARE,fl*0.7);sa=max(sa,fl);}
-float em=v_flash*v_state.w*(exp(-dd*2.2)*1.6);gl_FragColor=vec4(col*sa+FIREFLY*em,sa*(1.0-u_glow));return;}
+if(v_flare>0.5){float fl=(0.6+0.4*sin(u_time*24.0))*v_state.w;col=mix(col,FLARE,fl*0.7);sa=max(sa,fl);}gl_FragColor=vec4(col*sa,sa*(1.0-u_glow));return;}
 vec2 p=gl_PointCoord-0.5;p.y=-p.y;float cs=cos(v_head),sn=sin(v_head);vec2 q=vec2(cs*p.x+sn*p.y,-sn*p.x+cs*p.y)*2.0;
 float spd=v_genes.x,agg=v_genes.y,eff=v_genes.z,per=v_genes.w,fed=v_state.x,seed=v_state.y,mv=v_state.z;
 float tp=max(v_diet-0.5,0.0),tn=max(0.5-v_diet,0.0);
@@ -473,8 +466,7 @@ acc=over(acc,mix(vec3(0.95,0.25,0.2),FANG,clamp(u/L,0.0,1.0)),step(0.0,u)*step(u
 float nd=length(q-vec2(-0.1,0.0))-R*(0.3+0.12*fed);acc=over(acc,mix(base*0.22,vec3(0.25,0.7,0.2),tn*1.6),smoothstep(0.03,-0.03,nd)*0.85*inside);
 if(per>0.25){float er=0.045+per*0.06;vec2 e1=q-vec2(R*0.55,R*0.36),e2=q-vec2(R*0.55,-R*0.36);float e=max(smoothstep(er,er*0.3,length(e1)),smoothstep(er,er*0.3,length(e2)));
 acc=over(acc,mix(vec3(1.0),vec3(0.75,1.0,1.0),0.5),e*(per-0.1));}
-float em=0.0;if(v_flash>0.01){float xr=R*stretch*elong,ld=length(q+vec2(xr*0.62,0.0));em=v_flash*v_state.w*(smoothstep(0.24,0.0,ld)*1.8+exp(-ld*2.6)*0.8*(1.0-smoothstep(0.75,1.0,length(q))));} // a showy male's lantern glows at his rear, as a firefly's does
-if(acc.a<0.02&&em<0.02)discard;float a=acc.a*v_state.w;gl_FragColor=vec4(acc.rgb/max(acc.a,0.0001)*bright*a+FIREFLY*em+vec3(0.35)*max(em-1.2,0.0),a*(1.0-u_glow));}`;
+if(acc.a<0.02)discard;float a=acc.a*v_state.w;gl_FragColor=vec4(acc.rgb/acc.a*bright*a,a*(1.0-u_glow));}`;
 
 // Lineage trails: faint threads following where each species lives
 const LINE_VS=`attribute vec2 a_pos;attribute vec4 a_col;uniform vec2 u_res;varying vec4 v_col;void main(){vec2 clip=(a_pos/u_res)*2.0-1.0;clip.y=-clip.y;gl_Position=vec4(clip,0.0,1.0);v_col=a_col;}`;
@@ -489,10 +481,10 @@ function ensureBgTarget(){const w=Math.max(1,Math.ceil(W/2)),h=Math.max(1,Math.c
   gl.bindFramebuffer(gl.FRAMEBUFFER,bgFbo);gl.framebufferTexture2D(gl.FRAMEBUFFER,gl.COLOR_ATTACHMENT0,gl.TEXTURE_2D,bgTex,0);gl.bindFramebuffer(gl.FRAMEBUFFER,null);}
 const bgLoc={pos:gl.getAttribLocation(bgProg,'a_pos'),res:gl.getUniformLocation(bgProg,'u_res'),scale:gl.getUniformLocation(bgProg,'u_scale'),time:gl.getUniformLocation(bgProg,'u_time'),oases:gl.getUniformLocation(bgProg,'u_oases'),nOases:gl.getUniformLocation(bgProg,'u_nOases'),fx:gl.getUniformLocation(bgProg,'u_fx')};
 const foodLoc={pos:gl.getAttribLocation(foodProg,'a_pos'),seed:gl.getAttribLocation(foodProg,'a_seed'),res:gl.getUniformLocation(foodProg,'u_res'),time:gl.getUniformLocation(foodProg,'u_time'),scale:gl.getUniformLocation(foodProg,'u_scale')};
-const orgLoc={pos:gl.getAttribLocation(orgProg,'a_pos'),look:gl.getAttribLocation(orgProg,'a_look'),genes:gl.getAttribLocation(orgProg,'a_genes'),state:gl.getAttribLocation(orgProg,'a_state'),mark:gl.getAttribLocation(orgProg,'a_mark'),flash:gl.getAttribLocation(orgProg,'a_flash'),bite:gl.getAttribLocation(orgProg,'a_bite'),res:gl.getUniformLocation(orgProg,'u_res'),time:gl.getUniformLocation(orgProg,'u_time'),simple:gl.getUniformLocation(orgProg,'u_simple'),glow:gl.getUniformLocation(orgProg,'u_glow')};
+const orgLoc={pos:gl.getAttribLocation(orgProg,'a_pos'),look:gl.getAttribLocation(orgProg,'a_look'),genes:gl.getAttribLocation(orgProg,'a_genes'),state:gl.getAttribLocation(orgProg,'a_state'),mark:gl.getAttribLocation(orgProg,'a_mark'),bite:gl.getAttribLocation(orgProg,'a_bite'),res:gl.getUniformLocation(orgProg,'u_res'),time:gl.getUniformLocation(orgProg,'u_time'),simple:gl.getUniformLocation(orgProg,'u_simple'),glow:gl.getUniformLocation(orgProg,'u_glow')};
 const lineLoc={pos:gl.getAttribLocation(lineProg,'a_pos'),col:gl.getAttribLocation(lineProg,'a_col'),res:gl.getUniformLocation(lineProg,'u_res')};
 const foodBuf=gl.createBuffer(),orgBuf=gl.createBuffer(),lineBuf=gl.createBuffer();
-const ORG_STRIDE=18;
+const ORG_STRIDE=17;
 const oasisUniform=new Float32Array(32);
 
 const SPECIES_HUES=[0.0,0.08,0.15,0.30,0.45,0.55,0.65,0.75,0.83,0.92,0.18,0.38];
@@ -512,7 +504,7 @@ sReproSize:$('sReproSize'),sOffspring:$('sOffspring'),sOases:$('sOases'),
 chkSameSpecies:$('chkSameSpecies'),chkFoodChain:$('chkFoodChain'),sEatRatio:$('sEatRatio'),sEatGain:$('sEatGain'),sDecay:$('sDecay'),
 sHunt:$('sHunt'),sFlee:$('sFlee'),sFlock:$('sFlock'),sFoodDrive:$('sFoodDrive'),sSeparation:$('sSeparation'),
 chkMutation:$('chkMutation'),sMutRate:$('sMutRate'),sMutStr:$('sMutStr'),sTraitCost:$('sTraitCost'),vTraitCost:$('vTraitCost'),seedInput:$('seedInput'),
-chkSpeciation:$('chkSpeciation'),chkSexual:$('chkSexual'),chkSexes:$('chkSexes'),chkCare:$('chkCare'),chkEvoCare:$('chkEvoCare'),selRepro:$('selRepro'),selGuard:$('selGuard'),chkEvoDad:$('chkEvoDad'),chkChoice:$('chkChoice'),chkRivals:$('chkRivals'),chkShow:$('chkShow'),chkEvoBrawn:$('chkEvoBrawn'),chkEvoShow:$('chkEvoShow'),chkBite:$('chkBite'),chkEvoArmor:$('chkEvoArmor'),chkEvoJaws:$('chkEvoJaws'),sSplit:$('sSplit'),vSplit:$('vSplit'),chkLineage:$('chkLineage'),sSpCount:$('sSpCount'),treeStats:$('treeStats'),treeInfo:$('treeInfo'),
+chkSpeciation:$('chkSpeciation'),chkSexual:$('chkSexual'),chkSexes:$('chkSexes'),chkCare:$('chkCare'),chkEvoCare:$('chkEvoCare'),selRepro:$('selRepro'),selGuard:$('selGuard'),chkEvoDad:$('chkEvoDad'),chkBite:$('chkBite'),chkEvoArmor:$('chkEvoArmor'),chkEvoJaws:$('chkEvoJaws'),sSplit:$('sSplit'),vSplit:$('vSplit'),chkLineage:$('chkLineage'),sSpCount:$('sSpCount'),treeStats:$('treeStats'),treeInfo:$('treeInfo'),
 chkEvoSpeed:$('chkEvoSpeed'),chkEvoAggro:$('chkEvoAggro'),chkEvoEfficiency:$('chkEvoEfficiency'),chkEvoPerception:$('chkEvoPerception'),chkEvoDiet:$('chkEvoDiet'),chkDiet:$('chkDiet'),selDietStart:$('selDietStart'),
 chkGlow:$('chkGlow'),chkDetail:$('chkDetail'),chkWater:$('chkWater'),chkDeathFX:$('chkDeathFX'),chkShowOases:$('chkShowOases'),
 sFoodGlow:$('sFoodGlow'),sGlow:$('sGlow'),sTrail:$('sTrail'),
@@ -581,23 +573,6 @@ function guardDrive(a,m){odigest[a]=CARE_STUN;oflare[m]=0.6;const dx=ox[a]-ox[m]
 const gArmor=new Float32Array(MAX_ORG),gJaws=new Float32Array(MAX_ORG);
 const BITE_START=0.1,BITE_BLOCK=3,BITE_MAXBLOCK=0.9,BITE_FAIL=2,BITE_STUN=0.5,ARMOR_SLOW=0.25,ARMOR_LOAD=0.15,JAWS_LOAD=0.15;
 // Prey j's armor turns attacker a's bite: a pays and is pushed off, j darts away
-// Courtship (with Males and Females). Mate Choice: a female breeds with the best male in reach instead of the nearest, scored
-// by size and, with Showy Males, by display (SHOW_BASE+display). Rival Males: two grown males of a species who touch with a female
-// in reach shove (away from females they let each other be, like bachelor herds of deer); the stronger (size times 1+brawn) wins,
-// and the loser pays RIVAL_COST energy (the winner a third of that) and is driven off for RIVAL_TIME seconds, when no female
-// takes him. gBrawn is a build gene: a male can grow BRAWN_MAX times bigger than the top size at full brawn, at a running cost
-// (BRAWN_LOAD). Showy Males: gShow is a display gene. A grown male shows it (oshow) by flashing
-// like a firefly in his species' rhythm; showing costs energy (SHOW_LOAD), and anyone sees him from up to 1+SHOW_SPOT times
-// farther: females can pick him from farther away, and hunters spot him sooner and go for him first. Females carry both genes
-// without showing them, as with antlers.
-// Every grown male flashes, as every male firefly does; his lantern shines at FLASH_BASE plus the rest of the way times his display.
-// Both start between 0 and COURT_START, so they only grow where they pay.
-const COURT_START=0.1,FLASH_BASE=0.5,SHOW_BASE=0.2,SHOW_LOAD=0.15,SHOW_SPOT=1,RIVAL_COST=1,RIVAL_TIME=2,RIVAL_PUSH=2.5,BRAWN_MAX=0.5,BRAWN_LOAD=0.15;
-const gBrawn=new Float32Array(MAX_ORG),gShow=new Float32Array(MAX_ORG),orival=new Float32Array(MAX_ORG),oshow=new Float32Array(MAX_ORG);
-// How bright a showy male is at time t (0 to 1): 1 to 3 quick flashes every 1.5 to 3.5 seconds, a rhythm that comes from his
-// species (an offshoot flashes like its parent until it becomes a species of its own), each male at his own moment
-function flashLevel(i,t){const h=hash32(worldSeed^0xF1A5,cladeKin[oclade[i]]),per=1.5+(h%1000)/500,np=1+(h>>>10)%3,gap=0.3+((h>>>13)%100)/500;
-  const ph=(t+(oid[i]*0.618034%1)*per)%per,k=Math.floor(ph/gap);if(k>=np)return 0;const u=(ph-k*gap)/0.2;return u<1?Math.sin(u*Math.PI):0;}
 function biteFail(a,j){oenergy[a]-=BITE_FAIL;odigest[a]=BITE_STUN;const dx=ox[a]-ox[j],dy=oy[a]-oy[j],d=Math.sqrt(dx*dx+dy*dy)+0.1;ovx[a]+=dx/d*2;ovy[a]+=dy/d*2;ovx[j]-=dx/d*2;ovy[j]-=dy/d*2;}
 let callPrev=new Int32Array(MAX_CALLING),callNow=new Int32Array(MAX_CALLING),nCallPrev=0,nCallNow=0;
 function sexRand(){let t=sexSeed=(sexSeed+0x6D2B79F5)|0;t=Math.imul(t^t>>>15,t|1);t^=t+Math.imul(t^t>>>7,t|61);return((t^t>>>14)>>>0)/4294967296;}
@@ -656,7 +631,7 @@ function newClade(parent,root,hue,g,x,y){
   if(clades.length>=MAX_CLADES)return -1;
   const id=clades.length;x=(x%W+W)%W;y=(y%H+H)%H;
   const c={id,parent,root,hue,css:hsvCss(hue,0.8,0.95),rgb:hsvRgb(hue,0.7,1),name:null,born:simTime,died:null,ref:g,kids:[],pop:0,peak:0,established:false,
-    sum:[0,0,0,0,0,0,0,0,0,0,0],sz:0,szm:0,en:0,m:0,grid:null,hx:x,hy:y,trail:[x,y,1],hist:null,histStart:0};
+    sum:[0,0,0,0,0,0,0,0,0],sz:0,en:0,m:0,grid:null,hx:x,hy:y,trail:[x,y,1],hist:null,histStart:0};
   clades.push(c);liveClades.push(c);cladeHue[id]=hue;cladeRoot[id]=root;cladeKin[id]=parent>=0?cladeKin[parent]:id;spotMask[id]=parent>=0?spotMask[parent]:0;
   if(parent>=0)clades[parent].kids.push(id);
   return id;
@@ -672,13 +647,13 @@ const ROMAN=['','',' II',' III',' IV',' V',' VI',' VII',' VIII',' IX',' X'];
 function cladeName(id){const h=hash32(worldSeed,id);const base=NAME_A[h%NAME_A.length]+NAME_B[(h>>>8)%NAME_B.length]+NAME_C[(h>>>16)%NAME_C.length];
   let k=1;for(const c of namedClades)if(c.name===base||c.name.startsWith(base+' '))k++;return k>1?base+(ROMAN[k]||' '+k):base;}
 function childHue(parentHue,id){const h=hash32(worldSeed^0x5BD1E995,id);const off=(0.05+(h%1000)/1000*0.06)*((h>>>12)&1?1:-1);return((parentHue+off)%1+1)%1;}
-function genomeDist(i,r){const a=gSpeed[i]-r[0],b=gAggro[i]-r[1],c=gEfficiency[i]-r[2],d=gPerception[i]-r[3],e=gDiet[i]-r[4],f=ui.chkCare.checked?gCare[i]-r[5]:0,bt=ui.chkBite.checked,g=bt?gArmor[i]-r[6]:0,h=bt?gJaws[i]-r[7]:0,k=guardEvolves()?gDad[i]-r[8]:0,sx=ui.chkSexes.checked,l=sx&&ui.chkRivals.checked?gBrawn[i]-r[9]:0,m=sx&&ui.chkShow.checked?gShow[i]-r[10]:0;return Math.sqrt(a*a+b*b+c*c+d*d+e*e+f*f+g*g+h*h+k*k+l*l+m*m);}
+function genomeDist(i,r){const a=gSpeed[i]-r[0],b=gAggro[i]-r[1],c=gEfficiency[i]-r[2],d=gPerception[i]-r[3],e=gDiet[i]-r[4],f=ui.chkCare.checked?gCare[i]-r[5]:0,bt=ui.chkBite.checked,g=bt?gArmor[i]-r[6]:0,h=bt?gJaws[i]-r[7]:0,k=guardEvolves()?gDad[i]-r[8]:0;return Math.sqrt(a*a+b*b+c*c+d*d+e*e+f*f+g*g+h*h+k*k);}
 function speciate(idx,pc,T){
   const c=clades[pc];if(genomeDist(idx,c.ref)<=T)return pc;
   let best=-1,bd=T;
   for(const k of c.kids){const kc=clades[k];if(kc.died!==null)continue;const dk=genomeDist(idx,kc.ref);if(dk<=bd){bd=dk;best=k;}}
   if(best>=0)return best;
-  const id=newClade(pc,c.root,childHue(c.hue,clades.length),[gSpeed[idx],gAggro[idx],gEfficiency[idx],gPerception[idx],gDiet[idx],gCare[idx],gArmor[idx],gJaws[idx],gDad[idx],gBrawn[idx],gShow[idx]],ox[idx],oy[idx]);
+  const id=newClade(pc,c.root,childHue(c.hue,clades.length),[gSpeed[idx],gAggro[idx],gEfficiency[idx],gPerception[idx],gDiet[idx],gCare[idx],gArmor[idx],gJaws[idx],gDad[idx]],ox[idx],oy[idx]);
   return id<0?pc:id;
 }
 function namedAncestor(id){while(id>=0&&!clades[id].established)id=clades[id].parent;return id>=0?clades[id]:null;}
@@ -686,9 +661,9 @@ function cladeLabel(id){const c=clades[id];if(c.established)return c.name;const 
 // Census: every half second of simulated time, count each species, track its genes and where it lives,
 // and note births of named species and extinctions
 function census(){
-  for(const c of liveClades){c.pop=0;c.sum[0]=c.sum[1]=c.sum[2]=c.sum[3]=c.sum[4]=c.sum[5]=c.sum[6]=c.sum[7]=c.sum[8]=c.sum[9]=c.sum[10]=0;c.sz=0;c.szm=0;c.en=0;c.m=0;if(c.grid)c.grid.fill(0);}
+  for(const c of liveClades){c.pop=0;c.sum[0]=c.sum[1]=c.sum[2]=c.sum[3]=c.sum[4]=c.sum[5]=c.sum[6]=c.sum[7]=c.sum[8]=0;c.sz=0;c.en=0;c.m=0;if(c.grid)c.grid.fill(0);}
   const gx=TGW/W,gy=TGH/H;
-  for(let i=0;i<orgCount;i++){if(!oalive[i])continue;const c=clades[oclade[i]];c.pop++;c.sum[0]+=gSpeed[i];c.sum[1]+=gAggro[i];c.sum[2]+=gEfficiency[i];c.sum[3]+=gPerception[i];c.sum[4]+=gDiet[i];c.sum[5]+=gCare[i];c.sum[6]+=gArmor[i];c.sum[7]+=gJaws[i];c.sum[8]+=gDad[i];c.sum[9]+=gBrawn[i];c.sum[10]+=gShow[i];c.sz+=osize[i];c.szm+=osex[i]*osize[i];c.en+=oenergy[i];c.m+=osex[i];
+  for(let i=0;i<orgCount;i++){if(!oalive[i])continue;const c=clades[oclade[i]];c.pop++;c.sum[0]+=gSpeed[i];c.sum[1]+=gAggro[i];c.sum[2]+=gEfficiency[i];c.sum[3]+=gPerception[i];c.sum[4]+=gDiet[i];c.sum[5]+=gCare[i];c.sum[6]+=gArmor[i];c.sum[7]+=gJaws[i];c.sum[8]+=gDad[i];c.sz+=osize[i];c.en+=oenergy[i];c.m+=osex[i];
     if(c.grid){const k=(Math.min(TGW-1,Math.max(0,ox[i]*gx|0))+Math.min(TGH-1,Math.max(0,oy[i]*gy|0))*TGW)*3;c.grid[k]++;c.grid[k+1]+=ox[i];c.grid[k+2]+=oy[i];}}
   censusN++;const next=[];
   for(const c of liveClades){
@@ -834,7 +809,7 @@ function updateRecTimer(){
 
 // All configurable slider/checkbox IDs
 const SETTING_SLIDERS=['selDietStart','selGuard','sOrganisms','sFood','sFoodRate','sSpeed','sSpecies','sStartSize','sMaxSize','sOrgSpeed','sLifespan','sReproSize','sOffspring','sOases','sEatRatio','sEatGain','sDecay','sHunt','sFlee','sFlock','sFoodDrive','sSeparation','sMutRate','sMutStr','sTraitCost','sSplit','sFoodGlow','sGlow','sTrail'];
-const SETTING_CHECKS=['chkSameSpecies','chkFoodChain','chkMutation','chkEvoSpeed','chkEvoAggro','chkEvoEfficiency','chkEvoPerception','chkEvoDiet','chkDiet','chkSpeciation','chkSexual','chkSexes','chkCare','chkEvoCare','chkEvoDad','chkChoice','chkRivals','chkShow','chkEvoBrawn','chkEvoShow','chkBite','chkEvoArmor','chkEvoJaws','chkGlow','chkDetail','chkWater','chkDeathFX','chkShowOases','chkLineage'];
+const SETTING_CHECKS=['chkSameSpecies','chkFoodChain','chkMutation','chkEvoSpeed','chkEvoAggro','chkEvoEfficiency','chkEvoPerception','chkEvoDiet','chkDiet','chkSpeciation','chkSexual','chkSexes','chkCare','chkEvoCare','chkEvoDad','chkBite','chkEvoArmor','chkEvoJaws','chkGlow','chkDetail','chkWater','chkDeathFX','chkShowOases','chkLineage'];
 
 // The version of the simulation's rules that made a saved world. A seed replays exactly only under the rules that made it (older
 // versions stay playable from the badge links), so loading settings from other rules says so. Bump it whenever a release changes
@@ -843,9 +818,8 @@ const SETTING_CHECKS=['chkSameSpecies','chkFoodChain','chkMutation','chkEvoSpeed
 // v5.5 added males and females. With them off it plays exactly like v5.4, and settings saved before them load with them off.
 // v5.6 added protective mothers and v5.7 bite contests, the same way: off plays exactly like the version before. v5.6.1 only changed the creature card and the menu.
 // v5.8 added Who Guards; with the mother guarding (the default, and how settings saved before it load) it plays exactly like v5.7.
-// v5.9 added courtship (Mate Choice, Rival Males, Showy Males); with all three off it plays exactly like v5.8.
-const APP_VERSION='5.9';
-function sameRules(s){const c=s.checks||{},v=s._app;return v===APP_VERSION||v==='5.8'||v==='5.7'||!c.chkBite&&(v==='5.6'||!c.chkCare&&(v==='5.5'||!c.chkSexes&&(v==='5.4'||v==='5.2.1'&&!c.chkDiet)));}
+const APP_VERSION='5.8';
+function sameRules(s){const c=s.checks||{},v=s._app;return v===APP_VERSION||v==='5.7'||!c.chkBite&&(v==='5.6'||!c.chkCare&&(v==='5.5'||!c.chkSexes&&(v==='5.4'||v==='5.2.1'&&!c.chkDiet)));}
 function versionNote(s){return sameRules(s)?'':' Made in '+(s._app?'v'+s._app:'an earlier version')+', so the run may differ; older versions are linked in the corner badge.';}
 
 function captureSettings(){
@@ -866,7 +840,6 @@ function applySettings(s){
   if(!s.checks||s.checks.chkCare===undefined){ui.chkCare.checked=false;ui.chkEvoCare.checked=true;} // saved before protective mothers
   if(s.sliders.selGuard===undefined)ui.selGuard.value='mother'; // saved before who guards
   if(!s.checks||s.checks.chkEvoDad===undefined)ui.chkEvoDad.checked=true;
-  if(!s.checks||s.checks.chkShow===undefined){ui.chkChoice.checked=false;ui.chkRivals.checked=false;ui.chkShow.checked=false;ui.chkEvoBrawn.checked=true;ui.chkEvoShow.checked=true;} // saved before courtship
   if(!s.checks||s.checks.chkBite===undefined){ui.chkBite.checked=false;ui.chkEvoArmor.checked=true;ui.chkEvoJaws.checked=true;} // saved before bite contests
   if(Number.isFinite(+s.seed))ui.seedInput.value=String(+s.seed>>>0);
   if(s._preset&&s._preset!=='custom')$('selPreset').value=s._preset;
@@ -955,9 +928,6 @@ const PRESETS={
   // Predators and Prey with males and females: hunters kept going for 10 minutes on 8 of 9 seeds (all 9 without sexes; a hunter
   // species down to a few dozen can lose its last females or males)
   mates:{dietStart:'mixed',sexes:true,org:500,food:3000,rate:35,species:3,speed:1.0,startSize:3.0,maxSize:18,orgSpeed:1.0,lifespan:45,reproSize:12,offspring:2,oases:5,hunt:0.8,flee:1.0,flock:0.8,foodDrive:1.0,sep:0.5,eatRatio:1.5,eatGain:0.4,chain:false,mutation:true,mutRate:0.05,mutStr:0.08},
-  // Males and Females with Showy Males: as with real fireflies, females choose by flash alone. On 18 seeds grazers and hunters both lasted
-  // ten minutes, and grazer display ended at about 7.2% against 4.7% for a control gene that does nothing (hunters 5.2% vs 4.0%).
-  fireflies:{dietStart:'mixed',sexes:true,show:true,org:500,food:3000,rate:35,species:3,speed:1.0,startSize:3.0,maxSize:18,orgSpeed:1.0,lifespan:45,reproSize:12,offspring:2,oases:5,hunt:0.8,flee:1.0,flock:0.8,foodDrive:1.0,sep:0.5,eatRatio:1.5,eatGain:0.4,chain:false,mutation:true,mutRate:0.05,mutStr:0.08},
   armsrace:{org:5000,food:1800,rate:12,species:4,speed:1.2,startSize:2.5,maxSize:20,orgSpeed:1.3,lifespan:30,reproSize:11,offspring:2,oases:3,hunt:1.2,flee:1.8,flock:0.3,foodDrive:1.4,sep:0.6,eatRatio:1.25,eatGain:0.55,chain:false,mutation:true,mutRate:0.25,mutStr:0.30},
   battleroyale:{org:12000,food:600,rate:4,species:6,speed:1.5,startSize:2.0,maxSize:24,orgSpeed:1.6,lifespan:20,reproSize:14,offspring:1,oases:1,hunt:2.5,flee:1.2,flock:0.1,foodDrive:0.8,sep:0.3,eatRatio:1.1,eatGain:0.7,chain:false,mutation:true,mutRate:0.15,mutStr:0.20},
   superorganism:{dietStart:'mixed',org:6000,food:2500,rate:18,species:4,speed:0.9,startSize:2.5,maxSize:14,orgSpeed:1.0,lifespan:35,reproSize:10,offspring:2,oases:4,hunt:0.5,flee:1.5,flock:2.0,foodDrive:1.0,sep:0.8,eatRatio:1.35,eatGain:0.45,chain:false,mutation:true,mutRate:0.10,mutStr:0.12},
@@ -970,7 +940,7 @@ const PRESETS={
   // seeds we ran, grazer armor passed 75% and hunter jaws 60% within ten minutes, and grazers and hunters both lasted.
   armor:{bite:true,org:1000,food:8000,rate:180,species:1,speed:1.0,startSize:3.0,maxSize:18,orgSpeed:1.2,lifespan:40,reproSize:8,offspring:2,oases:5,hunt:0.8,flee:1.5,flock:0.5,foodDrive:1.2,sep:0.6,eatRatio:2.0,eatGain:0.5,chain:false,mutation:true,mutRate:0.3,mutStr:0.3,speciation:true,split:0.30},
 };
-function applyPreset(name){const p=PRESETS[name];if(!p)return;ui.sOrganisms.value=p.org;ui.sFood.value=p.food;ui.sFoodRate.value=p.rate;ui.sSpecies.value=p.species;ui.sSpeed.value=p.speed;ui.sStartSize.value=p.startSize;ui.sMaxSize.value=p.maxSize;ui.sOrgSpeed.value=p.orgSpeed;ui.sLifespan.value=p.lifespan;ui.sReproSize.value=p.reproSize;ui.sOffspring.value=p.offspring;ui.sOases.value=p.oases;ui.sHunt.value=p.hunt;ui.sFlee.value=p.flee;ui.sFlock.value=p.flock;ui.sFoodDrive.value=p.foodDrive;ui.sSeparation.value=p.sep;ui.sEatRatio.value=p.eatRatio;ui.sEatGain.value=p.eatGain;ui.sDecay.value=p.decay!==undefined?p.decay:0.9;ui.chkFoodChain.checked=p.chain;ui.chkDiet.checked=p.diet!==undefined?p.diet:true;ui.selDietStart.value=p.dietStart||'omnivores';ui.chkSexes.checked=!!p.sexes;ui.chkSexual.checked=!!p.sexes;ui.chkBite.checked=!!p.bite;if(p.bite){ui.chkEvoArmor.checked=true;ui.chkEvoJaws.checked=true;}ui.chkChoice.checked=!!p.choice;ui.chkRivals.checked=!!p.rivals;ui.chkShow.checked=!!p.show;if(p.rivals)ui.chkEvoBrawn.checked=true;if(p.show)ui.chkEvoShow.checked=true;ui.chkMutation.checked=p.mutation;ui.sMutRate.value=p.mutRate;ui.sMutStr.value=p.mutStr;if(p.speciation!==undefined)ui.chkSpeciation.checked=p.speciation;if(p.split!==undefined)ui.sSplit.value=p.split;updateLabels();}
+function applyPreset(name){const p=PRESETS[name];if(!p)return;ui.sOrganisms.value=p.org;ui.sFood.value=p.food;ui.sFoodRate.value=p.rate;ui.sSpecies.value=p.species;ui.sSpeed.value=p.speed;ui.sStartSize.value=p.startSize;ui.sMaxSize.value=p.maxSize;ui.sOrgSpeed.value=p.orgSpeed;ui.sLifespan.value=p.lifespan;ui.sReproSize.value=p.reproSize;ui.sOffspring.value=p.offspring;ui.sOases.value=p.oases;ui.sHunt.value=p.hunt;ui.sFlee.value=p.flee;ui.sFlock.value=p.flock;ui.sFoodDrive.value=p.foodDrive;ui.sSeparation.value=p.sep;ui.sEatRatio.value=p.eatRatio;ui.sEatGain.value=p.eatGain;ui.sDecay.value=p.decay!==undefined?p.decay:0.9;ui.chkFoodChain.checked=p.chain;ui.chkDiet.checked=p.diet!==undefined?p.diet:true;ui.selDietStart.value=p.dietStart||'omnivores';ui.chkSexes.checked=!!p.sexes;ui.chkSexual.checked=!!p.sexes;ui.chkBite.checked=!!p.bite;if(p.bite){ui.chkEvoArmor.checked=true;ui.chkEvoJaws.checked=true;}ui.chkMutation.checked=p.mutation;ui.sMutRate.value=p.mutRate;ui.sMutStr.value=p.mutStr;if(p.speciation!==undefined)ui.chkSpeciation.checked=p.speciation;if(p.split!==undefined)ui.sSplit.value=p.split;updateLabels();}
 
 // ═══════════════════════════════════════════════
 // SIMULATION STATE SNAPSHOT SYSTEM
@@ -989,7 +959,7 @@ function getSimSnapshot(){
   const pct=(v,n)=>(v/n*100).toFixed(0);
   const speciesData=living.slice(0,12).map(c=>{const n=c.pop||1,a=c.parent>=0?namedAncestor(c.parent):null;
     return{name:c.name,splitFrom:a?a.name:null,originalLineage:SPECIES_NAMES[c.root%12],population:c.pop,ageSeconds:+(simTime-c.born).toFixed(0),avgSize:(c.sz/n).toFixed(1),avgEnergy:(c.en/n).toFixed(1),
-      genes:{speed:pct(c.sum[0],n),aggro:pct(c.sum[1],n),efficiency:pct(c.sum[2],n),perception:pct(c.sum[3],n),...(ui.chkDiet.checked?{dietMeatPercent:pct(c.sum[4],n)}:{}),...(ui.chkCare.checked?{carePercent:pct(c.sum[5],n)}:{}),...(ui.chkBite.checked?{armorPercent:pct(c.sum[6],n),jawsPercent:pct(c.sum[7],n)}:{}),...(guardEvolves()?{fatherSharePercent:pct(c.sum[8],n)}:{}),...(ui.chkSexes.checked&&ui.chkRivals.checked?{brawnPercent:pct(c.sum[9],n)}:{}),...(ui.chkSexes.checked&&ui.chkShow.checked?{displayPercent:pct(c.sum[10],n)}:{})},...(ui.chkSexes.checked?{males:c.m,females:c.pop-c.m,avgMaleSize:(c.szm/Math.max(1,c.m)).toFixed(1),avgFemaleSize:((c.sz-c.szm)/Math.max(1,c.pop-c.m)).toFixed(1)}:{})};});
+      genes:{speed:pct(c.sum[0],n),aggro:pct(c.sum[1],n),efficiency:pct(c.sum[2],n),perception:pct(c.sum[3],n),...(ui.chkDiet.checked?{dietMeatPercent:pct(c.sum[4],n)}:{}),...(ui.chkCare.checked?{carePercent:pct(c.sum[5],n)}:{}),...(ui.chkBite.checked?{armorPercent:pct(c.sum[6],n),jawsPercent:pct(c.sum[7],n)}:{}),...(guardEvolves()?{fatherSharePercent:pct(c.sum[8],n)}:{})},...(ui.chkSexes.checked?{males:c.m,females:c.pop-c.m}:{})};});
   return{
     simTime:simTime.toFixed(1),generation,avgGeneration:(genSum/Math.max(1,totalAlive)).toFixed(1),seed:worldSeed,totalAlive,totalFood,
     startingSpecies:+ui.sSpecies.value,livingSpecies:living.length,speciesEverNamed:namedClades.length,organismsInUnnamedOffshoots:offshoots,
@@ -997,7 +967,7 @@ function getSimSnapshot(){
     settings:{organisms:ui.sOrganisms.value,food:ui.sFood.value,foodRate:ui.sFoodRate.value,speed:ui.sSpeed.value,
       hunt:ui.sHunt.value,flee:ui.sFlee.value,flock:ui.sFlock.value,foodDrive:ui.sFoodDrive.value,
       eatRatio:ui.sEatRatio.value,decayToAlgae:ui.sDecay.value,mutRate:ui.sMutRate.value,mutStr:ui.sMutStr.value,traitCost:ui.sTraitCost.value,
-      speciation:ui.chkSpeciation.checked,splitDistance:ui.sSplit.value,sexualReproduction:ui.chkSexual.checked,malesAndFemales:ui.chkSexes.checked,protectiveParents:ui.chkCare.checked,whoGuards:ui.selGuard.value,mateChoice:ui.chkChoice.checked,rivalMales:ui.chkRivals.checked,showyMales:ui.chkShow.checked,biteContests:ui.chkBite.checked,diets:ui.chkDiet.checked,startingDiets:ui.selDietStart.value,
+      speciation:ui.chkSpeciation.checked,splitDistance:ui.sSplit.value,sexualReproduction:ui.chkSexual.checked,malesAndFemales:ui.chkSexes.checked,protectiveParents:ui.chkCare.checked,whoGuards:ui.selGuard.value,biteContests:ui.chkBite.checked,diets:ui.chkDiet.checked,startingDiets:ui.selDietStart.value,
       foodChain:ui.chkFoodChain.checked,mutation:ui.chkMutation.checked},
     topPredator:maxKiller.kills>0?{species:cladeLabel(oclade[maxKiller.idx]),kills:maxKiller.kills,size:osize[maxKiller.idx]?.toFixed(1)}:null,
     extinctions:extinctLog.slice(-10).map(id=>clades[id].name)
@@ -1239,7 +1209,7 @@ You can suggest experiments. When you do, output a JSON block in this exact form
 {"hypothesis":"...","changes":{"sHunt":"2.0","sFlee":"0.5"},"checkboxes":{"chkFoodChain":true},"duration":30}
 \`\`\`
 Valid slider IDs: selDietStart (mixed, grazers, omnivores or hunters; takes effect when the world resets), selGuard (mother, father, both or evolve; who guards the young with chkCare and chkSexes on), sOrganisms, sFood, sFoodRate, sSpeed, sSpecies, sStartSize, sMaxSize, sOrgSpeed, sLifespan, sReproSize, sOffspring, sOases, sEatRatio, sEatGain, sDecay, sHunt, sFlee, sFlock, sFoodDrive, sSeparation, sMutRate, sMutStr, sTraitCost, sSplit
-Valid checkbox IDs: chkSameSpecies, chkFoodChain, chkMutation, chkEvoSpeed, chkEvoAggro, chkEvoEfficiency, chkEvoPerception, chkEvoDiet, chkDiet, chkSpeciation, chkSexual, chkSexes (males and females; needs chkSexual on too), chkCare (protective parents), chkEvoCare, chkEvoDad (lets the who-guards gene mutate), chkChoice (mate choice), chkRivals (rival males), chkShow (showy males), chkEvoBrawn, chkEvoShow, chkBite (bite contests), chkEvoArmor, chkEvoJaws
+Valid checkbox IDs: chkSameSpecies, chkFoodChain, chkMutation, chkEvoSpeed, chkEvoAggro, chkEvoEfficiency, chkEvoPerception, chkEvoDiet, chkDiet, chkSpeciation, chkSexual, chkSexes (males and females; needs chkSexual on too), chkCare (protective parents), chkEvoCare, chkEvoDad (lets the who-guards gene mutate), chkBite (bite contests), chkEvoArmor, chkEvoJaws
 
 Trait costs: with sTraitCost above 0, high speed, perception and aggression genes raise metabolic cost (speed quadratically) and high efficiency lowers top speed, so each gene is a trade-off rather than a free upgrade. With bite contests on, armor and jaws add to that cost too.
 
@@ -1253,7 +1223,6 @@ Males and females: the page's Reproduction menu sets chkSexual and chkSexes: Div
 
 Protective parents: with chkCare on, each organism carries a care gene from 0% to 100% (carePercent is a species' average; 50% gives the same litters as a world without care). Care trades number for strength: at 0% a litter holds twice as many babies, each with half the energy; at 100% half as many (at least one), each with up to twice the energy; the mother's gene sets the litter. After a birth a parent guards for up to 6 seconds (6 times its own care): it doesn't feed, hunt or breed, the babies swim toward it, and it moves between them and the nearest creature that could eat a newborn. When a hunter catches a baby within about 30 pixels of a guarding parent, the parent steps in with a chance equal to its care and, unless the hunter could eat it too, stuns it for a second and drives it off without its meal. A parent flares gold while it defends. Without males and females the parent that gave birth guards. With chkSexes on, whoGuards (selGuard) says who: mother (the default), father, both, or evolve. Only a grown father (at least sReproSize) stays to guard; a younger one leaves. A guarding father can't mate and doesn't look for a mate, so a father who leaves can sire more litters, while a mother who leaves can feed and breed again sooner. With evolve, each organism carries a who-guards gene (fatherSharePercent is a species' average, starting near 50%): at 0% only the mother guards, at 50% both do, at 100% only the father, and in between the less involved parent guards for part of its time.
 
-Courtship (needs chkSexes): with chkChoice on, a female ready to breed takes the best male in reach instead of the nearest: the biggest, and with chkShow on, the one with the brightest display (size times 0.2 plus display). With chkRivals on, two grown males of a species who touch while a female is in reach shove (away from females they leave each other alone): the stronger (size times 1 plus brawn) wins, the loser loses 1 energy (the winner a third of that) and is driven off for 2 seconds, when no female will take him. Each organism carries a brawn gene (brawnPercent): a male at full brawn can grow half again past the top size and fights harder, at a running cost. With chkShow on, each organism carries a display gene (displayPercent): every grown male flashes like a firefly in his species' own rhythm (1 to 3 flashes every 1.5 to 3.5 seconds; a new species gets its own), at half brightness with 0% display and full brightness with 100%. Displaying costs energy, and anyone sees a displaying male from up to twice as far: females can pick him from farther away, and hunters spot him sooner and go for him first. Females carry both genes without showing them. Brawn and display start between 0% and 10% in every world. Each species' avgMaleSize and avgFemaleSize show whether males grow bigger than females.
 Bite contests: with chkBite on, each organism carries an armor gene and a jaws gene, both from 0% to 100% and between 0% and 10% at the start of every world (armorPercent and jawsPercent are a species' averages). When a creature catches prey whose armor is higher than its jaws, the bite fails with a chance of 3 times the difference (at most 90%): the attacker loses 2 energy, is stunned for half a second and pushed off, and the prey gets away. Armor slows the body (up to 25% at full armor), and both genes add to the trait costs, so they only spread where they pay. Armor shows as a plated grey rim, jaws as fangs at the front. The Armor and Jaws preset is Origin of Species with bite contests on.
 
 Be concise, scientific, and insightful. Use the species names given. When analyzing, reference specific gene values and population numbers.`;
@@ -1308,15 +1277,15 @@ ui.aiInput.addEventListener('keydown',(e)=>{if(e.key==='Enter'&&!e.shiftKey){e.p
 // WORLD INIT & SIMULATION (same as v2)
 // ═══════════════════════════════════════════════
 function initWorld(){
-  seedRandom(readSeedInput());sexSeed=hash32(worldSeed,0x5E7E5)|0;nextOid=0;selOrg=-1;const careOn=ui.chkCare.checked,biteOn=ui.chkBite.checked,dadOn=guardEvolves(),rivalOn=ui.chkSexes.checked&&ui.chkRivals.checked,showOn=ui.chkSexes.checked&&ui.chkShow.checked;orgHint=0;foodHint=0;foodAccum=0;stepAcc=0;
+  seedRandom(readSeedInput());sexSeed=hash32(worldSeed,0x5E7E5)|0;nextOid=0;selOrg=-1;const careOn=ui.chkCare.checked,biteOn=ui.chkBite.checked,dadOn=guardEvolves();orgHint=0;foodHint=0;foodAccum=0;stepAcc=0;
   const nOrg=+ui.sOrganisms.value,nFood=+ui.sFood.value,nSp=+ui.sSpecies.value,sz0=+ui.sStartSize.value,dietOn=ui.chkDiet.checked;
   orgCount=nOrg;
   clades=[];liveClades=[];namedClades=[];extinctLog=[];censusN=0;spotClade=-1;treeDirty=true;graphDirty=true;simTime=0;
   // The starting species are the roots of the family tree, each founded on the average starting genome
-  for(let s=0;s<nSp;s++){const id=newClade(-1,s,SPECIES_HUES[s%12],[0.5,0.5,0.5,0.5,dietOn?startDiet(s,nSp):0.5,0.5,0,0,0.5,0,0],W/2,H/2);const c=clades[id];c.trail=[];establish(c,SPECIES_NAMES[s%12]);c.histStart=1;}
+  for(let s=0;s<nSp;s++){const id=newClade(-1,s,SPECIES_HUES[s%12],[0.5,0.5,0.5,0.5,dietOn?startDiet(s,nSp):0.5,0.5,0,0,0.5],W/2,H/2);const c=clades[id];c.trail=[];establish(c,SPECIES_NAMES[s%12]);c.histStart=1;}
   // With diets, a hunter species starts with DIET_HUNTER_SHARE as many members as a grazer or omnivore species
   const startSlot=[];if(dietOn)for(let s2=0;s2<nSp;s2++){const k=Math.round((startDiet(s2,nSp)>0.65?DIET_HUNTER_SHARE:1)*20);for(let m=0;m<k;m++)startSlot.push(s2);}const nSlot=startSlot.length;
-  for(let i=0;i<orgCount;i++){ox[i]=rand()*W;oy[i]=rand()*H;ovx[i]=(rand()-0.5)*2;ovy[i]=(rand()-0.5)*2;oclade[i]=dietOn?startSlot[i*nSlot/orgCount|0]:i%nSp;odigest[i]=0;osize[i]=sz0+(rand()-0.5)*1.5;oenergy[i]=osize[i]*2;oage[i]=rand()*5;oalive[i]=1;okills[i]=0;ogen[i]=0;orest[i]=0;osex[i]=sexRand()<0.5?1:0;oid[i]=++nextOid;omom[i]=-1;odad[i]=-1;ocare[i]=0;oflare[i]=0;gCare[i]=careOn?0.4+rand()*0.2:0.5;gDad[i]=dadOn?0.4+rand()*0.2:0.5;gBrawn[i]=rivalOn?rand()*COURT_START:0;gShow[i]=showOn?rand()*COURT_START:0;orival[i]=0;oshow[i]=0;gArmor[i]=biteOn?rand()*BITE_START:0;gJaws[i]=biteOn?rand()*BITE_START:0;gSpeed[i]=0.4+rand()*0.2;gAggro[i]=0.4+rand()*0.2;gEfficiency[i]=0.4+rand()*0.2;gPerception[i]=0.4+rand()*0.2;
+  for(let i=0;i<orgCount;i++){ox[i]=rand()*W;oy[i]=rand()*H;ovx[i]=(rand()-0.5)*2;ovy[i]=(rand()-0.5)*2;oclade[i]=dietOn?startSlot[i*nSlot/orgCount|0]:i%nSp;odigest[i]=0;osize[i]=sz0+(rand()-0.5)*1.5;oenergy[i]=osize[i]*2;oage[i]=rand()*5;oalive[i]=1;okills[i]=0;ogen[i]=0;orest[i]=0;osex[i]=sexRand()<0.5?1:0;oid[i]=++nextOid;omom[i]=-1;odad[i]=-1;ocare[i]=0;oflare[i]=0;gCare[i]=careOn?0.4+rand()*0.2:0.5;gDad[i]=dadOn?0.4+rand()*0.2:0.5;gArmor[i]=biteOn?rand()*BITE_START:0;gJaws[i]=biteOn?rand()*BITE_START:0;gSpeed[i]=0.4+rand()*0.2;gAggro[i]=0.4+rand()*0.2;gEfficiency[i]=0.4+rand()*0.2;gPerception[i]=0.4+rand()*0.2;
     setDiet(i,dietOn?clamp(startDiet(oclade[i],nSp)+(rand()-0.5)*0.1,0,1):0.5);}
   foodCount=nFood;
   for(let i=0;i<foodCount;i++){fx[i]=rand()*W;fy[i]=rand()*H;falive[i]=1;fglow[i]=rand()*TAU;}
@@ -1358,8 +1327,6 @@ function reproduce(pi){
     let dt=gDiet[pi];if(dietOn&&mate>=0&&rand()<0.5)dt=gDiet[mate];if(eD&&mutOn&&rand()<mutRate)dt=clamp(dt+(rand()-0.5)*mutStr,0,1);setDiet(idx,dt);
     let gc=gCare[pi];if(careOn){if(mate>=0&&rand()<0.5)gc=gCare[mate];if(ui.chkEvoCare.checked&&mutOn&&rand()<mutRate)gc=clamp(gc+(rand()-0.5)*mutStr,0,1);}gCare[idx]=gc;
     let gd=gDad[pi];if(evoG){if(rand()<0.5)gd=gDad[mate];if(ui.chkEvoDad.checked&&mutOn&&rand()<mutRate)gd=clamp(gd+(rand()-0.5)*mutStr,0,1);}gDad[idx]=gd;
-    let gb=gBrawn[pi],gw=gShow[pi];if(sexOn&&ui.chkRivals.checked){if(rand()<0.5)gb=gBrawn[mate];if(ui.chkEvoBrawn.checked&&mutOn&&rand()<mutRate)gb=clamp(gb+(rand()-0.5)*mutStr,0,1);}
-    if(sexOn&&ui.chkShow.checked){if(rand()<0.5)gw=gShow[mate];if(ui.chkEvoShow.checked&&mutOn&&rand()<mutRate)gw=clamp(gw+(rand()-0.5)*mutStr,0,1);}gBrawn[idx]=gb;gShow[idx]=gw;orival[idx]=0;oshow[idx]=0;
     let ga=gArmor[pi],gj=gJaws[pi];if(biteOn){if(mate>=0){if(rand()<0.5)ga=gArmor[mate];if(rand()<0.5)gj=gJaws[mate];}if(mutOn){if(ui.chkEvoArmor.checked&&rand()<mutRate)ga=clamp(ga+(rand()-0.5)*mutStr,0,1);if(ui.chkEvoJaws.checked&&rand()<mutRate)gj=clamp(gj+(rand()-0.5)*mutStr,0,1);}}gArmor[idx]=ga;gJaws[idx]=gj;
     oclade[idx]=speciate(idx,pc,splitT);}}
 
@@ -1370,10 +1337,9 @@ function simulate(dt){
   const reproSz=Math.min(+ui.sReproSize.value,maxSz),eatR=+ui.sEatRatio.value,eatG=+ui.sEatGain.value,sameSafe=ui.chkSameSpecies.checked;
   const nSp=+ui.sSpecies.value,foodChain=ui.chkFoodChain.checked&&nSp>1;
   const hunt=+ui.sHunt.value,flee=+ui.sFlee.value,flock=+ui.sFlock.value,foodD=+ui.sFoodDrive.value,sep=+ui.sSeparation.value;
-  const sDt=dt*spd;if(sDt<0.0001)return;simTime+=sDt;orgHint=0;const tc=+ui.sTraitCost.value,careOn=ui.chkCare.checked,biteOn=ui.chkBite.checked,sexOn=ui.chkSexes.checked,choiceOn=sexOn&&ui.chkChoice.checked,rivalOn=sexOn&&ui.chkRivals.checked,showOn=sexOn&&ui.chkShow.checked,pickOn=choiceOn||showOn,dietOn=ui.chkDiet.checked,sz0=+ui.sStartSize.value,invMature=1/Math.max(0.5,(reproSz-sz0)*DIET_MATURE);
+  const sDt=dt*spd;if(sDt<0.0001)return;simTime+=sDt;orgHint=0;const tc=+ui.sTraitCost.value,careOn=ui.chkCare.checked,biteOn=ui.chkBite.checked,sexOn=ui.chkSexes.checked,dietOn=ui.chkDiet.checked,sz0=+ui.sStartSize.value,invMature=1/Math.max(0.5,(reproSz-sz0)*DIET_MATURE);
   if(soundOn&&ambOsc){let alive=0;for(let i=0;i<orgCount;i++)if(oalive[i])alive++;ambOsc.frequency.setTargetAtTime(40+(alive/Math.max(1,+ui.sOrganisms.value))*80,audioCtx.currentTime,0.5);}
   buildGrid();buildFoodGrid();const repro=[];if(sexOn){const t=callPrev;callPrev=callNow;callNow=t;nCallPrev=nCallNow;nCallNow=0;}for(let i=0;i<orgCount;i++)okin[i]=cladeKin[oclade[i]];
-  if(showOn)for(let i=0;i<orgCount;i++)oshow[i]=oalive[i]&&osex[i]&&osize[i]>=reproSz?gShow[i]:0; // only grown males display
   for(let i=0;i<orgCount;i++){
     if(!oalive[i])continue;let ax=0,ay=0;
     const cx=Math.min(gridW-1,Math.max(0,ox[i]/CELL|0)),cy=Math.min(gridH-1,Math.max(0,oy[i]/CELL|0));
@@ -1384,19 +1350,14 @@ function simulate(dt){
     const guarding=careOn&&ocare[i]>0;if(guarding)ocare[i]-=sDt; // a guarding parent neither feeds nor hunts
     const myMeat=dietOn?oMeat[i]*myM:1,myPlant=dietOn?1+(oPlant[i]-1)*myM:1,iHunt=myMeat>DIET_MIN&&!guarding,huntW=Math.min(1,myMeat),foodW=Math.min(1,myPlant),myR=eatR-Math.max(0,eatR-DIET_JAW_RATIO)*myJaw,myDef=1+DIET_DEFEND*myJaw;
     let full=(dietOn||careOn||biteOn)&&odigest[i]>0;if(full)odigest[i]-=sDt;
-    if(rivalOn&&orival[i]>0)orival[i]-=sDt;
-    let flX=0,flY=0,flN=0,mateJ=-1,mateD=CELL*1.5,mateS=-1,preyJ=-1,preyD=1e9,threatJ=-1,threatD=1e9,guardJ=-1,guardD=1e9;const scanR=foodChain?2:1;
+    let flX=0,flY=0,flN=0,mateJ=-1,mateD=CELL*1.5,preyJ=-1,preyD=1e9,threatJ=-1,threatD=1e9,guardJ=-1,guardD=1e9;const scanR=foodChain?2:1;
     // Kin flock together and are never prey (unless Same Species Protected is off). Prey eaten earlier this step is
     // still in the grid until the next rebuild, so it is checked for life before it can be eaten again.
     for(let dy=-scanR;dy<=scanR;dy++)for(let dx=-scanR;dx<=scanR;dx++){const nx=cx+dx,ny=cy+dy;if(nx<0||nx>=gridW||ny<0||ny>=gridH)continue;const ci=ny*gridW+nx,cnt=gridCounts[ci],base=ci*GMAX;
-      for(let k=0;k<cnt;k++){const j=gridEntries[base+k];if(j===i)continue;const ddx=ox[j]-ox[i],ddy=oy[j]-oy[i],d2=ddx*ddx+ddy*ddy,d=Math.sqrt(d2)+0.1,cR=mySz+osize[j],inP=d<CELL*myPerc*(showOn?1+SHOW_SPOT*oshow[j]:1);
+      for(let k=0;k<cnt;k++){const j=gridEntries[base+k];if(j===i)continue;const ddx=ox[j]-ox[i],ddy=oy[j]-oy[i],d2=ddx*ddx+ddy*ddy,d=Math.sqrt(d2)+0.1,cR=mySz+osize[j],inP=d<CELL*myPerc;
         const same=okin[j]===myK;let canEat=false,isPrey=false;
         const jM=dietOn?clamp((osize[j]-sz0)*invMature,0,1):1,jJaw=dietOn?oJaw[j]*jM:0;
-        if(same){const sR=showOn&&osex[j]&&!osex[i]?1+SHOW_SPOT*oshow[j]:1;if(d<CELL*1.5*sR){if(d<CELL*1.5){flX+=ddx;flY+=ddy;flN++;}if(sexOn?osex[j]!==osex[i]&&!(careOn&&osex[j]&&ocare[j]>0)&&!(rivalOn&&orival[j]>0):oclade[j]===myC){
-          if(pickOn&&!osex[i]){const sc=(choiceOn?osize[j]:1)*(showOn?SHOW_BASE+oshow[j]:1);if(sc>mateS||sc===mateS&&d<mateD){mateS=sc;mateD=d;mateJ=j;}} // a choosy female takes the best male in reach
-          else if(d<mateD){mateD=d;mateJ=j;}}
-          if(rivalOn&&osex[i]&&osex[j]&&omate[i]>=0&&d<cR&&mySz>=reproSz&&osize[j]>=reproSz&&orival[i]<=0&&orival[j]<=0&&mySz*(1+gBrawn[i])>osize[j]*(1+gBrawn[j])){ // two grown males meet near a female: the stronger drives the other off
-            orival[j]=RIVAL_TIME;oenergy[j]-=RIVAL_COST;oenergy[i]-=RIVAL_COST/3;ovx[j]+=ddx/d*RIVAL_PUSH;ovy[j]+=ddy/d*RIVAL_PUSH;}}if(d<cR*0.8){const sf=sep*2/(d+1);ax-=ddx/d*sf;ay-=ddy/d*sf;}
+        if(same){if(d<CELL*1.5){flX+=ddx;flY+=ddy;flN++;if(d<mateD&&(sexOn?osex[j]!==osex[i]&&!(careOn&&osex[j]&&ocare[j]>0):oclade[j]===myC)){mateD=d;mateJ=j;}}if(d<cR*0.8){const sf=sep*2/(d+1);ax-=ddx/d*sf;ay-=ddy/d*sf;}
           if(sameSafe)continue;canEat=iHunt&&!full&&mySz>osize[j]*myR*(1+DIET_DEFEND*jJaw);isPrey=osize[j]>mySz*(eatR-Math.max(0,eatR-DIET_JAW_RATIO)*jJaw)*myDef;}
         else if(foodChain){canEat=iHunt&&!full&&canEatInChain(cladeRoot[myC],cladeRoot[oclade[j]],nSp);isPrey=canEatInChain(cladeRoot[oclade[j]],cladeRoot[myC],nSp);}
         else{canEat=iHunt&&!full&&mySz>osize[j]*myR*(1+DIET_DEFEND*jJaw);isPrey=osize[j]>mySz*(eatR-Math.max(0,eatR-DIET_JAW_RATIO)*jJaw)*myDef;}
@@ -1404,7 +1365,7 @@ function simulate(dt){
         if(guarding&&!same&&inP&&d<guardD&&osize[j]>sz0&&(!dietOn||oMeat[j]*jM>DIET_MIN)){guardD=d;guardJ=j;} // could eat a newborn
         // Every creature feels a gentle pull toward all it could eat and a push from all that could eat it; with diets on,
         // hunters trade that pull for a chase after the nearest prey, and prey also run from the nearest hunter (below)
-        if(canEat&&inP){const de=showOn?d/(1+SHOW_SPOT*oshow[j]):d;if(dietOn&&de<preyD){preyD=de;preyJ=j;}const hf=hunt*myAggro*0.5/(d+5)*huntW*(dietOn?1-oJaw[i]:1);ax+=ddx/d*hf;ay+=ddy/d*hf;if(d<cR*0.6&&oalive[j]){const g=careOn?guardOf(j):-1;if(g>=0&&wrapDist2(g,j)<CARE_GUARD*CARE_GUARD&&rand()<gCare[g]){const gJ=dietOn?oJaw[g]*clamp((osize[g]-sz0)*invMature,0,1):0;if(!(foodChain||mySz>osize[g]*myR*(1+DIET_DEFEND*gJ))){guardDrive(i,g);full=true;continue;}}if(biteOn){const blk=Math.min(BITE_MAXBLOCK,BITE_BLOCK*(gArmor[j]-gJaws[i]));if(blk>0&&rand()<blk){biteFail(i,j);full=true;continue;}}oalive[j]=0;const gain=dietOn?Math.min(oenergy[j],eatG*(osize[j]*oMeat[i]+oJaw[i]*DIET_HUNTER_BONUS*oenergy[j])):osize[j]*eatG;if(dietOn){odigest[i]=DIET_DIGEST;full=true;}addHusk(ox[j],oy[j],oenergy[j]-gain,oclade[j],osize[j],Math.atan2(-ovy[j],ovx[j]),dietOn?gDiet[j]:0.5);oenergy[i]+=gain;okills[i]++;spawnDeathFX(ox[j],oy[j],cladeHue[oclade[j]],4+osize[j]*0.5|0,osize[j]/maxSz,ox[i],oy[i]);const now=performance.now();if(now-lastThudSound>80){playThud(osize[j]/maxSz);lastThudSound=now;}}}
+        if(canEat&&inP){if(dietOn&&d<preyD){preyD=d;preyJ=j;}const hf=hunt*myAggro*0.5/(d+5)*huntW*(dietOn?1-oJaw[i]:1);ax+=ddx/d*hf;ay+=ddy/d*hf;if(d<cR*0.6&&oalive[j]){const g=careOn?guardOf(j):-1;if(g>=0&&wrapDist2(g,j)<CARE_GUARD*CARE_GUARD&&rand()<gCare[g]){const gJ=dietOn?oJaw[g]*clamp((osize[g]-sz0)*invMature,0,1):0;if(!(foodChain||mySz>osize[g]*myR*(1+DIET_DEFEND*gJ))){guardDrive(i,g);full=true;continue;}}if(biteOn){const blk=Math.min(BITE_MAXBLOCK,BITE_BLOCK*(gArmor[j]-gJaws[i]));if(blk>0&&rand()<blk){biteFail(i,j);full=true;continue;}}oalive[j]=0;const gain=dietOn?Math.min(oenergy[j],eatG*(osize[j]*oMeat[i]+oJaw[i]*DIET_HUNTER_BONUS*oenergy[j])):osize[j]*eatG;if(dietOn){odigest[i]=DIET_DIGEST;full=true;}addHusk(ox[j],oy[j],oenergy[j]-gain,oclade[j],osize[j],Math.atan2(-ovy[j],ovx[j]),dietOn?gDiet[j]:0.5);oenergy[i]+=gain;okills[i]++;spawnDeathFX(ox[j],oy[j],cladeHue[oclade[j]],4+osize[j]*0.5|0,osize[j]/maxSz,ox[i],oy[i]);const now=performance.now();if(now-lastThudSound>80){playThud(osize[j]/maxSz);lastThudSound=now;}}}
         else if(isPrey&&inP){if(dietOn&&d<threatD){threatD=d;threatJ=j;}const ff=flee*1.2/(d+3);ax-=ddx/d*ff;ay-=ddy/d*ff;}
         else if(!same&&d<cR*1.2){const sf=sep*0.5/(d+2);ax-=ddx/d*sf;ay-=ddy/d*sf;}}}
     omate[i]=mateJ;
@@ -1432,7 +1393,7 @@ function simulate(dt){
     // Trait costs: fast, far-seeing, aggressive bodies burn more energy (centered so a 50% genome costs the same as before);
     // with bite contests on, armor and jaws cost energy too (from zero, since every world starts without them).
     // Speed cost is quadratic, like drag.
-    const geneLoad=1.8*(gSpeed[i]*gSpeed[i]-0.25)+0.6*(gPerception[i]-0.5)+0.3*(gAggro[i]-0.5)+(biteOn?ARMOR_LOAD*gArmor[i]+JAWS_LOAD*gJaws[i]:0)+(rivalOn&&osex[i]?BRAWN_LOAD*gBrawn[i]:0)+(showOn?SHOW_LOAD*oshow[i]:0);const metaCost=0.3*(1.2-gEfficiency[i]*0.5)*Math.max(0.2,1+tc*geneLoad)*(dietOn?1-DIET_LOWMET*oJaw[i]:1);oenergy[i]-=sDt*metaCost;osize[i]=clamp(Math.sqrt(Math.max(0.5,oenergy[i]))*1.5,1,rivalOn&&osex[i]?maxSz*(1+BRAWN_MAX*gBrawn[i]):maxSz);oage[i]+=sDt;
+    const geneLoad=1.8*(gSpeed[i]*gSpeed[i]-0.25)+0.6*(gPerception[i]-0.5)+0.3*(gAggro[i]-0.5)+(biteOn?ARMOR_LOAD*gArmor[i]+JAWS_LOAD*gJaws[i]:0);const metaCost=0.3*(1.2-gEfficiency[i]*0.5)*Math.max(0.2,1+tc*geneLoad)*(dietOn?1-DIET_LOWMET*oJaw[i]:1);oenergy[i]-=sDt*metaCost;osize[i]=clamp(Math.sqrt(Math.max(0.5,oenergy[i]))*1.5,1,maxSz);oage[i]+=sDt;
     if(oenergy[i]<=0||oage[i]>(dietOn?life*(1+DIET_LIFE*oJaw[i]):life)){if(oenergy[i]<=0)spawnDeathFX(ox[i],oy[i],cladeHue[myC],2,0.3);else addHusk(ox[i],oy[i],oenergy[i],myC,mySz,Math.atan2(-ovy[i],ovx[i]),dietOn?gDiet[i]:0.5);oalive[i]=0;continue;}
     if(orest[i]>0)orest[i]-=sDt;else if(osize[i]>=reproSz&&oenergy[i]>reproSz*2.5&&(!sexOn||!osex[i]&&mateJ>=0))repro.push(i);
   }
@@ -1519,7 +1480,7 @@ function showTreeInfo(id){
   const gs=live?c.sum.map(v=>v/n):c.ref;const p=v=>(v*100|0)+'%';
   ui.treeInfo.innerHTML=`<b style="color:${c.css}">${c.name}</b> · `+(a?`split from ${a.name} at ${fmtTime(c.born)}`:'starting species')+'<br>'+
     (live?`Living, ${c.pop} now (peak ${c.peak})`:`Extinct at ${fmtTime(c.died)} (peak ${c.peak})`)+'<br>'+
-    `${live?'Genes now':'Founding genes'}: Spd ${p(gs[0])} Agg ${p(gs[1])} Eff ${p(gs[2])} Per ${p(gs[3])}`+(ui.chkDiet.checked&&gs[4]!==undefined?`<br>Diet: ${dietWord(gs[4])}, ${p(gs[4])} meat`:'')+(ui.chkCare.checked&&gs[5]!==undefined?`<br>Care: ${p(gs[5])}`+(guardEvolves()&&gs[8]!==undefined?` · Who guards: ${guardShareWord(gs[8])} (father's share ${p(gs[8])})`:''):'')+(ui.chkBite.checked&&gs[6]!==undefined?`<br>Armor: ${p(gs[6])} · Jaws: ${p(gs[7])}`:'')+(ui.chkSexes.checked&&(ui.chkRivals.checked||ui.chkShow.checked)&&gs[9]!==undefined?'<br>'+[ui.chkRivals.checked?`Brawn: ${p(gs[9])}`:'',ui.chkShow.checked?`Display: ${p(gs[10])}`:''].filter(Boolean).join(' · ')+(live&&c.pop?` · males ${(c.szm/Math.max(1,c.m)).toFixed(1)} vs females ${((c.sz-c.szm)/Math.max(1,c.pop-c.m)).toFixed(1)} in size`:''):'');
+    `${live?'Genes now':'Founding genes'}: Spd ${p(gs[0])} Agg ${p(gs[1])} Eff ${p(gs[2])} Per ${p(gs[3])}`+(ui.chkDiet.checked&&gs[4]!==undefined?`<br>Diet: ${dietWord(gs[4])}, ${p(gs[4])} meat`:'')+(ui.chkCare.checked&&gs[5]!==undefined?`<br>Care: ${p(gs[5])}`+(guardEvolves()&&gs[8]!==undefined?` · Who guards: ${guardShareWord(gs[8])} (father's share ${p(gs[8])})`:''):'')+(ui.chkBite.checked&&gs[6]!==undefined?`<br>Armor: ${p(gs[6])} · Jaws: ${p(gs[7])}`:'');
 }
 function treeRowAt(e){const r=treeCanvas.getBoundingClientRect(),k=Math.floor((e.clientY-r.top-treeGeom.top)/treeGeom.rowH);return k>=0&&k<treeRows.length?treeRows[k].c.id:-1;}
 treeCanvas.addEventListener('mousemove',e=>{const id=treeRowAt(e);if(id!==treeHover){treeHover=id;showTreeInfo(id);treeDirty=true;}});
@@ -1533,14 +1494,12 @@ function treeVisible(){return !ui.panel.classList.contains('collapsed')&&$('tab-
 let mouseX=-1e4,mouseY=-1e4,hoveredOrg=-1,selOrg=-1,selId=0,pointerKind='mouse',tipW=0,tipH=0;
 function findOrgAt(x,y,r){let best=-1,bestD=r*r;const cx=Math.min(gridW-1,Math.max(0,x/CELL|0)),cy=Math.min(gridH-1,Math.max(0,y/CELL|0));for(let dy=-1;dy<=1;dy++)for(let dx=-1;dx<=1;dx++){const nx=cx+dx,ny=cy+dy;if(nx<0||nx>=gridW||ny<0||ny>=gridH)continue;const ci=ny*gridW+nx,cnt=gridCounts[ci],base=ci*GMAX;for(let k=0;k<cnt;k++){const j=gridEntries[base+k];if(!oalive[j])continue;const ddx=ox[j]-x,ddy=oy[j]-y,d2=ddx*ddx+ddy*ddy;if(d2<bestD){bestD=d2;best=j;}}}return best;}
 // With Males and Females on: a female big and fed enough to breed waits for a male of her kind to come close
-// With courtship on: the brawn and display genes (a female carries them without showing them), and whether a rival drove him off
-function courtWord(i){const r=ui.chkRivals.checked,w=ui.chkShow.checked;if(!r&&!w)return '';return '<br>'+[r?`Brawn: ${(gBrawn[i]*100|0)}%`:'',w?`Display: ${(gShow[i]*100|0)}%`:''].filter(Boolean).join(' · ')+(osex[i]?'':' (carried)')+(r&&orival[i]>0?'<br>Driven off by a rival':'')+(w&&oshow[i]>0?'<br>Flashing for females':'');}
 function sexWord(i){if(osex[i])return 'Male';const rs=Math.min(+ui.sReproSize.value,+ui.sMaxSize.value);return orest[i]<=0&&osize[i]>=rs&&oenergy[i]>rs*2.5?'Female, ready to breed, looking for a male':'Female';}
 // With Protective Parents on: the care gene (and who-guards gene), and whether this creature is guarding young or being guarded
 function careWord(i){const g=guardOf(i),who=!ui.chkSexes.checked?'parent':g===omom[i]?'mother':'father';return `Care: ${(gCare[i]*100|0)}%`+(guardEvolves()?`<br>Who guards: ${guardShareWord(gDad[i])} (father's share ${(gDad[i]*100|0)}%)`:'')+(ocare[i]>0?`<br>Guarding young (${Math.ceil(ocare[i])}s left)`:g>=0?`<br>Guarded by its ${who}`:'');}
 function updateTooltip(){hoveredOrg=pointerKind==='mouse'&&mouseX>-1e3?findOrgAt(mouseX,mouseY,20):-1;canvas.style.cursor=hoveredOrg>=0?'pointer':'';
   if(selOrg>=0&&(!oalive[selOrg]||oid[selOrg]!==selId))selOrg=-1;
-  if(selOrg<0){ui.tooltip.classList.remove('show');return;}const i=selOrg;const ci=oclade[i],cp=clades[ci].parent>=0?namedAncestor(clades[ci].parent):null;ui.tooltip.innerHTML=`<b style="color:${clades[ci].css}">${cladeLabel(ci)} #${i}</b>${cp&&clades[ci].established?` <span style="color:var(--muted)">from ${cp.name}</span>`:''}<br>Size: ${osize[i].toFixed(1)} · Energy: ${oenergy[i].toFixed(1)}<br>Age: ${oage[i].toFixed(1)}s · Kills: ${okills[i]} · Gen: ${ogen[i]}<br><span style="color:var(--accent2)">Spd:</span>${(gSpeed[i]*100|0)}% <span style="color:var(--warm)">Agg:</span>${(gAggro[i]*100|0)}% <span style="color:var(--accent)">Eff:</span>${(gEfficiency[i]*100|0)}% <span style="color:var(--accent3)">Per:</span>${(gPerception[i]*100|0)}%`+(ui.chkDiet.checked?`<br>Diet: ${dietWord(gDiet[i])}, ${(gDiet[i]*100|0)}% meat`:'')+(ui.chkSexes.checked?'<br>'+sexWord(i)+courtWord(i):'')+(ui.chkCare.checked?'<br>'+careWord(i):'')+(ui.chkBite.checked?`<br>Armor: ${(gArmor[i]*100|0)}% · Jaws: ${(gJaws[i]*100|0)}%`:'')+'<br><span class="tip-close">'+(pointerKind==='mouse'?'Click the water or press Esc to close':'Tap the water to close')+'</span>';
+  if(selOrg<0){ui.tooltip.classList.remove('show');return;}const i=selOrg;const ci=oclade[i],cp=clades[ci].parent>=0?namedAncestor(clades[ci].parent):null;ui.tooltip.innerHTML=`<b style="color:${clades[ci].css}">${cladeLabel(ci)} #${i}</b>${cp&&clades[ci].established?` <span style="color:var(--muted)">from ${cp.name}</span>`:''}<br>Size: ${osize[i].toFixed(1)} · Energy: ${oenergy[i].toFixed(1)}<br>Age: ${oage[i].toFixed(1)}s · Kills: ${okills[i]} · Gen: ${ogen[i]}<br><span style="color:var(--accent2)">Spd:</span>${(gSpeed[i]*100|0)}% <span style="color:var(--warm)">Agg:</span>${(gAggro[i]*100|0)}% <span style="color:var(--accent)">Eff:</span>${(gEfficiency[i]*100|0)}% <span style="color:var(--accent3)">Per:</span>${(gPerception[i]*100|0)}%`+(ui.chkDiet.checked?`<br>Diet: ${dietWord(gDiet[i])}, ${(gDiet[i]*100|0)}% meat`:'')+(ui.chkSexes.checked?'<br>'+sexWord(i):'')+(ui.chkCare.checked?'<br>'+careWord(i):'')+(ui.chkBite.checked?`<br>Armor: ${(gArmor[i]*100|0)}% · Jaws: ${(gJaws[i]*100|0)}%`:'')+'<br><span class="tip-close">'+(pointerKind==='mouse'?'Click the water or press Esc to close':'Tap the water to close')+'</span>';
   tipW=ui.tooltip.offsetWidth;tipH=ui.tooltip.offsetHeight;placeTip();ui.tooltip.classList.add('show');}
 // Keep the card beside its creature, on whichever side fits on screen.
 function placeTip(){if(selOrg<0)return;const i=selOrg,r=Math.max(10,osize[i]*2);let x=ox[i]+r,y=oy[i]+r;if(x+tipW>W-8)x=ox[i]-r-tipW;if(y+tipH>H-8)y=oy[i]-r-tipH;
@@ -1610,16 +1569,16 @@ function renderWorld(){
   gl.drawArrays(gl.POINTS,0,wi);
   gl.disableVertexAttribArray(aPos);gl.disableVertexAttribArray(aHue);gl.disableVertexAttribArray(aAlpha);gl.disableVertexAttribArray(aSize);}
   // Creatures
-  const maxV=Math.max(0.1,(+ui.sOrgSpeed.value)*3),detail=ui.chkDetail.checked,dietOn=ui.chkDiet.checked,sexOn=ui.chkSexes.checked,careOn=ui.chkCare.checked,biteOn=ui.chkBite.checked,showOn=sexOn&&ui.chkShow.checked;let n=0;
+  const maxV=Math.max(0.1,(+ui.sOrgSpeed.value)*3),detail=ui.chkDetail.checked,dietOn=ui.chkDiet.checked,sexOn=ui.chkSexes.checked,careOn=ui.chkCare.checked,biteOn=ui.chkBite.checked;let n=0;
   for(let i=0;i<orgCount;i++){if(!oalive[i])continue;const o=n*ORG_STRIDE;const vx=ovx[i],vy=ovy[i],v=Math.sqrt(vx*vx+vy*vy);
     orgData[o]=ox[i];orgData[o+1]=oy[i];
     orgData[o+2]=Math.atan2(-vy,vx);orgData[o+3]=(detail?Math.max(7,osize[i]*3.8):Math.max(1.5,osize[i]*1.2))*(i===hoveredOrg||i===selOrg?1.5:1);orgData[o+4]=cladeHue[oclade[i]];orgData[o+5]=dietOn?gDiet[i]:0.5;
     orgData[o+6]=gSpeed[i];orgData[o+7]=gAggro[i];orgData[o+8]=gEfficiency[i];orgData[o+9]=gPerception[i];
-    orgData[o+10]=Math.min(1,oenergy[i]/12);orgData[o+11]=(i*0.618034)%1;orgData[o+12]=Math.min(1,v/maxV);orgData[o+13]=spotClade<0||spotMask[oclade[i]]?1:0.14;orgData[o+14]=(sexOn?osex[i]:0)+(careOn&&oflare[i]>0?2:0);orgData[o+15]=biteOn?gArmor[i]:0;orgData[o+16]=biteOn?gJaws[i]:0;orgData[o+17]=showOn&&oshow[i]>0?(FLASH_BASE+(1-FLASH_BASE)*oshow[i])*flashLevel(i,simTime):0;n++;}
+    orgData[o+10]=Math.min(1,oenergy[i]/12);orgData[o+11]=(i*0.618034)%1;orgData[o+12]=Math.min(1,v/maxV);orgData[o+13]=spotClade<0||spotMask[oclade[i]]?1:0.14;orgData[o+14]=(sexOn?osex[i]:0)+(careOn&&oflare[i]>0?2:0);orgData[o+15]=biteOn?gArmor[i]:0;orgData[o+16]=biteOn?gJaws[i]:0;n++;}
   // Dead bodies: still, dim, see-through cells that shrink and fade as they break down into algae
   if(ui.chkDeathFX.checked)for(let k=0;k<huskCount;k++){const o=n*ORG_STRIDE,f=hLeft[k]/hFull[k];
     orgData[o]=hx[k];orgData[o+1]=hy[k];orgData[o+2]=hHead[k];orgData[o+3]=(detail?Math.max(7,hSize[k]*3.8):Math.max(1.5,hSize[k]*1.2))*(0.6+0.4*f);orgData[o+4]=hHue[k];orgData[o+5]=hDiet[k];
-    orgData[o+6]=0;orgData[o+7]=0;orgData[o+8]=1;orgData[o+9]=0;orgData[o+10]=0.3;orgData[o+11]=0;orgData[o+12]=0;orgData[o+13]=0.6*f*(spotClade<0||spotMask[hClade[k]]?1:0.14);orgData[o+14]=0;orgData[o+15]=0;orgData[o+16]=0;orgData[o+17]=0;n++;}
+    orgData[o+6]=0;orgData[o+7]=0;orgData[o+8]=1;orgData[o+9]=0;orgData[o+10]=0.3;orgData[o+11]=0;orgData[o+12]=0;orgData[o+13]=0.6*f*(spotClade<0||spotMask[hClade[k]]?1:0.14);orgData[o+14]=0;orgData[o+15]=0;orgData[o+16]=0;n++;}
   gl.useProgram(orgProg);gl.uniform2f(orgLoc.res,W,H);gl.uniform1f(orgLoc.time,visTime);gl.uniform1f(orgLoc.simple,detail?0:1);gl.uniform1f(orgLoc.glow,ui.chkGlow.checked?+ui.sGlow.value:0);
   gl.bindBuffer(gl.ARRAY_BUFFER,orgBuf);gl.bufferData(gl.ARRAY_BUFFER,orgData.subarray(0,n*ORG_STRIDE),gl.DYNAMIC_DRAW);
   const st=ORG_STRIDE*4;
@@ -1629,9 +1588,8 @@ function renderWorld(){
   gl.enableVertexAttribArray(orgLoc.state);gl.vertexAttribPointer(orgLoc.state,4,gl.FLOAT,false,st,40);
   gl.enableVertexAttribArray(orgLoc.mark);gl.vertexAttribPointer(orgLoc.mark,1,gl.FLOAT,false,st,56);
   gl.enableVertexAttribArray(orgLoc.bite);gl.vertexAttribPointer(orgLoc.bite,2,gl.FLOAT,false,st,60);
-  gl.enableVertexAttribArray(orgLoc.flash);gl.vertexAttribPointer(orgLoc.flash,1,gl.FLOAT,false,st,68);
   gl.blendFunc(gl.ONE,gl.ONE_MINUS_SRC_ALPHA);gl.drawArrays(gl.POINTS,0,n);
-  gl.disableVertexAttribArray(orgLoc.pos);gl.disableVertexAttribArray(orgLoc.look);gl.disableVertexAttribArray(orgLoc.genes);gl.disableVertexAttribArray(orgLoc.state);gl.disableVertexAttribArray(orgLoc.mark);gl.disableVertexAttribArray(orgLoc.bite);gl.disableVertexAttribArray(orgLoc.flash);
+  gl.disableVertexAttribArray(orgLoc.pos);gl.disableVertexAttribArray(orgLoc.look);gl.disableVertexAttribArray(orgLoc.genes);gl.disableVertexAttribArray(orgLoc.state);gl.disableVertexAttribArray(orgLoc.mark);gl.disableVertexAttribArray(orgLoc.bite);
 }
 const SIM_STEP=1/60,MAX_STEPS_PER_FRAME=2;let stepAcc=0;
 function frame(now){
@@ -1652,7 +1610,7 @@ function frame(now){
   updateLabels();frameCount++;
 }
 
-function updateLabels(){ui.vTraitCost.textContent=(+ui.sTraitCost.value).toFixed(1);ui.vOrganisms.textContent=ui.sOrganisms.value;ui.vFood.textContent=ui.sFood.value;ui.vFoodRate.textContent=ui.sFoodRate.value+'/s';ui.vSpeed.textContent=(+ui.sSpeed.value).toFixed(2);ui.vSpecies.textContent=ui.sSpecies.value;ui.vStartSize.textContent=(+ui.sStartSize.value).toFixed(1);ui.vMaxSize.textContent=ui.sMaxSize.value;ui.vOrgSpeed.textContent=(+ui.sOrgSpeed.value).toFixed(1);ui.vLifespan.textContent=ui.sLifespan.value+'s';ui.vReproSize.textContent=+ui.sReproSize.value>=+ui.sMaxSize.value?'Full size':ui.sReproSize.value;ui.vOffspring.textContent=ui.sOffspring.value;ui.vOases.textContent=ui.sOases.value;ui.vEatRatio.textContent=(+ui.sEatRatio.value).toFixed(2)+'x';ui.vEatGain.textContent=(+ui.sEatGain.value).toFixed(2);ui.vDecay.textContent=Math.round(+ui.sDecay.value*100)+'%';ui.vHunt.textContent=(+ui.sHunt.value).toFixed(1);ui.vFlee.textContent=(+ui.sFlee.value).toFixed(1);ui.vFlock.textContent=(+ui.sFlock.value).toFixed(2);ui.vFoodDrive.textContent=(+ui.sFoodDrive.value).toFixed(1);ui.vSeparation.textContent=(+ui.sSeparation.value).toFixed(2);ui.vMutRate.textContent=(+ui.sMutRate.value).toFixed(2);ui.vMutStr.textContent=(+ui.sMutStr.value).toFixed(2);ui.vSplit.textContent=(+ui.sSplit.value).toFixed(2);ui.vFoodGlow.textContent=(+ui.sFoodGlow.value).toFixed(1);ui.vGlow.textContent=Math.round(+ui.sGlow.value*100)+'%';const tv=+ui.sTrail.value;ui.vTrail.textContent=tv<0.05?'Off':tv<0.3?'Short':tv<0.6?'Medium':'Long';ui.btnPause.textContent=running?'Pause':'Play';const q=ui.quickPause;if(q._run!==running){q._run=running;$('qpLabel').textContent=running?'PAUSE':'PLAY';$('qpIcon').textContent=running?'\u275A\u275A':'\u25B6\uFE0E';}ui.btnPause.classList.toggle('active',!running);const rv=ui.chkSexes.checked?'sexes':ui.chkSexual.checked?'pairs':'asexual';if(ui.selRepro.value!==rv)ui.selRepro.value=rv;const go=!(ui.chkSexes.checked&&ui.chkCare.checked);if(ui.selGuard.disabled!==go)ui.selGuard.disabled=go;const nc=!ui.chkSexes.checked;if(ui.chkChoice.disabled!==nc){ui.chkChoice.disabled=nc;ui.chkRivals.disabled=nc;ui.chkShow.disabled=nc;}}
+function updateLabels(){ui.vTraitCost.textContent=(+ui.sTraitCost.value).toFixed(1);ui.vOrganisms.textContent=ui.sOrganisms.value;ui.vFood.textContent=ui.sFood.value;ui.vFoodRate.textContent=ui.sFoodRate.value+'/s';ui.vSpeed.textContent=(+ui.sSpeed.value).toFixed(2);ui.vSpecies.textContent=ui.sSpecies.value;ui.vStartSize.textContent=(+ui.sStartSize.value).toFixed(1);ui.vMaxSize.textContent=ui.sMaxSize.value;ui.vOrgSpeed.textContent=(+ui.sOrgSpeed.value).toFixed(1);ui.vLifespan.textContent=ui.sLifespan.value+'s';ui.vReproSize.textContent=+ui.sReproSize.value>=+ui.sMaxSize.value?'Full size':ui.sReproSize.value;ui.vOffspring.textContent=ui.sOffspring.value;ui.vOases.textContent=ui.sOases.value;ui.vEatRatio.textContent=(+ui.sEatRatio.value).toFixed(2)+'x';ui.vEatGain.textContent=(+ui.sEatGain.value).toFixed(2);ui.vDecay.textContent=Math.round(+ui.sDecay.value*100)+'%';ui.vHunt.textContent=(+ui.sHunt.value).toFixed(1);ui.vFlee.textContent=(+ui.sFlee.value).toFixed(1);ui.vFlock.textContent=(+ui.sFlock.value).toFixed(2);ui.vFoodDrive.textContent=(+ui.sFoodDrive.value).toFixed(1);ui.vSeparation.textContent=(+ui.sSeparation.value).toFixed(2);ui.vMutRate.textContent=(+ui.sMutRate.value).toFixed(2);ui.vMutStr.textContent=(+ui.sMutStr.value).toFixed(2);ui.vSplit.textContent=(+ui.sSplit.value).toFixed(2);ui.vFoodGlow.textContent=(+ui.sFoodGlow.value).toFixed(1);ui.vGlow.textContent=Math.round(+ui.sGlow.value*100)+'%';const tv=+ui.sTrail.value;ui.vTrail.textContent=tv<0.05?'Off':tv<0.3?'Short':tv<0.6?'Medium':'Long';ui.btnPause.textContent=running?'Pause':'Play';const q=ui.quickPause;if(q._run!==running){q._run=running;$('qpLabel').textContent=running?'PAUSE':'PLAY';$('qpIcon').textContent=running?'\u275A\u275A':'\u25B6\uFE0E';}ui.btnPause.classList.toggle('active',!running);const rv=ui.chkSexes.checked?'sexes':ui.chkSexual.checked?'pairs':'asexual';if(ui.selRepro.value!==rv)ui.selRepro.value=rv;const go=!(ui.chkSexes.checked&&ui.chkCare.checked);if(ui.selGuard.disabled!==go)ui.selGuard.disabled=go;}
 
 function resize(){W=window.innerWidth;H=window.innerHeight;canvas.width=W;canvas.height=H;gl.viewport(0,0,W,H);gl.useProgram(prog);gl.uniform2f(uRes,W,H);gl.clearColor(0.02,0.04,0.08,1);gl.clear(gl.COLOR_BUFFER_BIT);}
 window.addEventListener('resize',()=>{resize();initGrids();});
@@ -1706,8 +1664,8 @@ canvas.addEventListener('click',(e)=>{interact();const j=findOrgAt(e.clientX,e.c
 canvas.addEventListener('contextmenu',(e)=>{e.preventDefault();interact();const sz0=+ui.sStartSize.value;
   let pool=liveClades.filter(c=>c.established);if(!pool.length)pool=liveClades;
   let c,g;if(pool.length){c=pool[Math.random()*pool.length|0];const n=c.pop||1;g=c.pop?c.sum.map(v=>v/n):c.ref;}
-  else{const root=Math.random()*(+ui.sSpecies.value)|0;g=[0.5,0.5,0.5,0.5,0.5,0.5,0,0,0.5,0,0];c=clades[newClade(-1,root,SPECIES_HUES[root%12],g,e.clientX,e.clientY)];if(!c)return;establish(c,cladeName(c.id));c.histStart=censusN+1;} // everything had died: a new arrival
-  orgHint=0;for(let s=0;s<5;s++){const idx=allocOrg();if(idx<0)break;ogen[idx]=0;osex[idx]=Math.random()<0.5?1:0;oid[idx]=++nextOid;omom[idx]=-1;odad[idx]=-1;ocare[idx]=0;oflare[idx]=0;gCare[idx]=clamp((g[5]??0.5)+(Math.random()-0.5)*0.1,0,1);gDad[idx]=clamp((g[8]??0.5)+(Math.random()-0.5)*0.1,0,1);gBrawn[idx]=clamp((g[9]??0)+(Math.random()-0.5)*0.1,0,1);gShow[idx]=clamp((g[10]??0)+(Math.random()-0.5)*0.1,0,1);orival[idx]=0;oshow[idx]=0;gArmor[idx]=clamp((g[6]??0)+(Math.random()-0.5)*0.1,0,1);gJaws[idx]=clamp((g[7]??0)+(Math.random()-0.5)*0.1,0,1);ox[idx]=e.clientX+(Math.random()-0.5)*25;oy[idx]=e.clientY+(Math.random()-0.5)*25;ovx[idx]=(Math.random()-0.5)*2;ovy[idx]=(Math.random()-0.5)*2;oclade[idx]=c.id;osize[idx]=sz0;oenergy[idx]=sz0*2;oage[idx]=0;orest[idx]=0;odigest[idx]=0;oalive[idx]=1;okills[idx]=0;
+  else{const root=Math.random()*(+ui.sSpecies.value)|0;g=[0.5,0.5,0.5,0.5,0.5,0.5,0,0,0.5];c=clades[newClade(-1,root,SPECIES_HUES[root%12],g,e.clientX,e.clientY)];if(!c)return;establish(c,cladeName(c.id));c.histStart=censusN+1;} // everything had died: a new arrival
+  orgHint=0;for(let s=0;s<5;s++){const idx=allocOrg();if(idx<0)break;ogen[idx]=0;osex[idx]=Math.random()<0.5?1:0;oid[idx]=++nextOid;omom[idx]=-1;odad[idx]=-1;ocare[idx]=0;oflare[idx]=0;gCare[idx]=clamp((g[5]??0.5)+(Math.random()-0.5)*0.1,0,1);gDad[idx]=clamp((g[8]??0.5)+(Math.random()-0.5)*0.1,0,1);gArmor[idx]=clamp((g[6]??0)+(Math.random()-0.5)*0.1,0,1);gJaws[idx]=clamp((g[7]??0)+(Math.random()-0.5)*0.1,0,1);ox[idx]=e.clientX+(Math.random()-0.5)*25;oy[idx]=e.clientY+(Math.random()-0.5)*25;ovx[idx]=(Math.random()-0.5)*2;ovy[idx]=(Math.random()-0.5)*2;oclade[idx]=c.id;osize[idx]=sz0;oenergy[idx]=sz0*2;oage[idx]=0;orest[idx]=0;odigest[idx]=0;oalive[idx]=1;okills[idx]=0;
     gSpeed[idx]=clamp(g[0]+(Math.random()-0.5)*0.1,0.05,1);gAggro[idx]=clamp(g[1]+(Math.random()-0.5)*0.1,0.05,1);gEfficiency[idx]=clamp(g[2]+(Math.random()-0.5)*0.1,0.05,1);gPerception[idx]=clamp(g[3]+(Math.random()-0.5)*0.1,0.05,1);setDiet(idx,clamp(g[4]+(Math.random()-0.5)*0.1,0,1));}});
 
 window.addEventListener('keydown',(e)=>{

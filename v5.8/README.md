@@ -1,12 +1,14 @@
+> **Archived README for v5.8, the public version on October 3, 2026 (before courtship: mate choice, rival males and firefly males).** This is how the README read while v5.8 was the public version. Play it at [/v5.8](https://jkh2.github.io/Primordial-Sim/v5.8/). The current README is [here](../README.md). Only the image and file links below were changed so they work from this folder; the untouched original is on the [`v5.8-release`](https://github.com/jkh2/Primordial-Sim/tree/v5.8-release) branch.
+
 # Primordial-Sim
 
-![Primordial-Sim Banner](banner.png)
+![Primordial-Sim Banner](../banner.png)
 
 ### Emergent Artificial Life Engine
 
 A real-time WebGL ecosystem where living cells eat, hunt, flee, flock, reproduce, mutate, and split into new species that nobody designed, with a multi-provider AI Lab Partner that observes, experiments, and writes research reports on the living world. All from simple rules, all in your browser.
 
-**[Launch Primordial](https://jkh2.github.io/Primordial-Sim/)** · Version 5.9 · Single-file HTML · Zero install · GitHub Pages
+**[Launch Primordial](https://jkh2.github.io/Primordial-Sim/)** · Version 5.8 · Single-file HTML · Zero install · GitHub Pages
 
 **New here?** Choose the **Origin of Species** preset in the World tab and press **T**. Everything starts as one red species; within a few minutes the family tree fills with species that split off on their own.
 
@@ -25,15 +27,6 @@ We believe this is how humans and AI should work together: as partners with comp
 ---
 
 ## What's New in v5
-
-**v5.9, October 3, 2026: courtship, and males that flash like fireflies**
-
-- **Three courtship switches.** With Reproduction set to Male and female, the Evolve tab has three new switches. **Mate Choice**: a female ready to breed takes the best male in reach instead of the nearest, the biggest, and with Showy Males the brightest. **Rival Males**: when two grown males of a species meet near a female, they shove, and the stronger drives the other off for 2 seconds. **Showy Males**: grown males flash like fireflies.
-- **Fireflies, as James imagined them.** Every grown male carries a yellow-green lantern at his rear and flashes it in his species' own code, one to three quick pulses every 1.5 to 3.5 seconds, the way each real firefly species has its own flash pattern. A new species gets a new code. A display gene makes a male brighter. Females see a bright male from farther away and prefer him, but flashing costs energy, and hunters see him from farther away too and go for him first, as predatory fireflies hunt by watching for other species' flashes.
-- **Rivals fight where it matters.** A brawn gene lets a male grow up to half again past the top size and fight harder, at a running cost. Males only fight with a female in reach; away from females they leave each other alone, like the bachelor herds of deer outside the rut. The loser is driven off for a moment and no female will take him until he recovers. Females carry brawn and display without showing them, the way a doe carries the genes for her sons' antlers.
-- **A new preset: Fireflies.** It is Males and Females with Showy Males on. Females choose by flash alone, as real firefly females do. On 18 seeds, grazers and hunters both lasted ten minutes on all 18, and the grazers' display ended at about 7.2% against 4.7% in control worlds where the same gene does nothing: their females' choice pushed it up by about half again. The hunters' display rose less, 5.2% against 4.0%, a gap small enough to be chance; hunters are fewer, so a hunter female rarely has more than one male in reach to choose from.
-- **What we found, honestly.** Ten minutes is only about ten generations, and sexual selection is a slow pressure, in real ponds as in this one. To tell choice from chance, we ran control worlds where the same genes are inherited but do nothing. With Rival Males on, grazer brawn ended ten minutes at about 5.4% against 3.0% in the controls (9 seeds each). With fast mutation, both genes climbed to 10% to 20% in ten minutes, but so did the do-nothing controls: a gene that starts near zero can only drift up. That check caught a mistake in our first build, where hunters saw a bright male from farther away but females didn't, so flashing cost more than it paid. Now both see him the same way. With all three switches on, grazers and hunters lasted as often as without courtship: in Males and Females the grazers on 9 of 9 seeds and the hunters on 8, and in Origin of Species the grazers on 6 of 9 and the hunters on all 9.
-- **Off plays exactly like v5.8.** With all three switches off, every seed replays as it did before, and settings and links saved before v5.9 load with them off. Choosing a preset now sets the courtship switches too. The Lab Partner knows the new rules and sees each species' brawn, display, and male and female sizes.
 
 **v5.8, October 3, 2026: who guards, and one Reproduction menu**
 
@@ -133,15 +126,14 @@ We believe this is how humans and AI should work together: as partners with comp
 
 | Version | Play it | Its README | Exact source |
 |---------|---------|------------|--------------|
-| v5.8 (October 3, 2026) | [/v5.8](https://jkh2.github.io/Primordial-Sim/v5.8/) | [v5.8/README.md](v5.8/README.md) | [`v5.8-release`](https://github.com/jkh2/Primordial-Sim/tree/v5.8-release) branch |
-| v5.7 (October 3, 2026) | [/v5.7](https://jkh2.github.io/Primordial-Sim/v5.7/) | [v5.7/README.md](v5.7/README.md) | [`v5.7-release`](https://github.com/jkh2/Primordial-Sim/tree/v5.7-release) branch |
-| v5.6.1 (October 3, 2026) | [/v5.6](https://jkh2.github.io/Primordial-Sim/v5.6/) | [v5.6/README.md](v5.6/README.md) | [`v5.6.1-release`](https://github.com/jkh2/Primordial-Sim/tree/v5.6.1-release) branch (v5.6 itself: [`v5.6-release`](https://github.com/jkh2/Primordial-Sim/tree/v5.6-release)) |
-| v5.5 (October 3, 2026) | [/v5.5](https://jkh2.github.io/Primordial-Sim/v5.5/) | [v5.5/README.md](v5.5/README.md) | [`v5.5-release`](https://github.com/jkh2/Primordial-Sim/tree/v5.5-release) branch |
-| v5.4 (October 3, 2026) | [/v5.4](https://jkh2.github.io/Primordial-Sim/v5.4/) | [v5.4/README.md](v5.4/README.md) | [`v5.4-release`](https://github.com/jkh2/Primordial-Sim/tree/v5.4-release) branch |
-| v5.3 (October 2, 2026) | [/v5.3](https://jkh2.github.io/Primordial-Sim/v5.3/) | [v5.3/README.md](v5.3/README.md) | [`v5.3-release`](https://github.com/jkh2/Primordial-Sim/tree/v5.3-release) branch |
-| v5 (September 29, 2026) | [/v5](https://jkh2.github.io/Primordial-Sim/v5/) | [v5/README.md](v5/README.md) | [`v5-release`](https://github.com/jkh2/Primordial-Sim/tree/v5-release) branch |
-| v4 (September 29, 2026) | [/v4](https://jkh2.github.io/Primordial-Sim/v4/) | [v4/README.md](v4/README.md) | [`v4-release`](https://github.com/jkh2/Primordial-Sim/tree/v4-release) branch |
-| v3, the original (March 12, 2026) | [/classic](https://jkh2.github.io/Primordial-Sim/classic/) | [classic/README.md](classic/README.md) | [`v3-original`](https://github.com/jkh2/Primordial-Sim/tree/v3-original) branch |
+| v5.7 (October 3, 2026) | [/v5.7](https://jkh2.github.io/Primordial-Sim/v5.7/) | [v5.7/README.md](../v5.7/README.md) | [`v5.7-release`](https://github.com/jkh2/Primordial-Sim/tree/v5.7-release) branch |
+| v5.6.1 (October 3, 2026) | [/v5.6](https://jkh2.github.io/Primordial-Sim/v5.6/) | [v5.6/README.md](../v5.6/README.md) | [`v5.6.1-release`](https://github.com/jkh2/Primordial-Sim/tree/v5.6.1-release) branch (v5.6 itself: [`v5.6-release`](https://github.com/jkh2/Primordial-Sim/tree/v5.6-release)) |
+| v5.5 (October 3, 2026) | [/v5.5](https://jkh2.github.io/Primordial-Sim/v5.5/) | [v5.5/README.md](../v5.5/README.md) | [`v5.5-release`](https://github.com/jkh2/Primordial-Sim/tree/v5.5-release) branch |
+| v5.4 (October 3, 2026) | [/v5.4](https://jkh2.github.io/Primordial-Sim/v5.4/) | [v5.4/README.md](../v5.4/README.md) | [`v5.4-release`](https://github.com/jkh2/Primordial-Sim/tree/v5.4-release) branch |
+| v5.3 (October 2, 2026) | [/v5.3](https://jkh2.github.io/Primordial-Sim/v5.3/) | [v5.3/README.md](../v5.3/README.md) | [`v5.3-release`](https://github.com/jkh2/Primordial-Sim/tree/v5.3-release) branch |
+| v5 (September 29, 2026) | [/v5](https://jkh2.github.io/Primordial-Sim/v5/) | [v5/README.md](../v5/README.md) | [`v5-release`](https://github.com/jkh2/Primordial-Sim/tree/v5-release) branch |
+| v4 (September 29, 2026) | [/v4](https://jkh2.github.io/Primordial-Sim/v4/) | [v4/README.md](../v4/README.md) | [`v4-release`](https://github.com/jkh2/Primordial-Sim/tree/v4-release) branch |
+| v3, the original (March 12, 2026) | [/classic](https://jkh2.github.io/Primordial-Sim/classic/) | [classic/README.md](../classic/README.md) | [`v3-original`](https://github.com/jkh2/Primordial-Sim/tree/v3-original) branch |
 
 ## What It Is
 
@@ -258,7 +250,6 @@ The AI Lab Partner operates through four integrated systems:
 | Stable Eden | 4,000 | 3,000 | 5 | Peaceful aquarium, high food, low aggression, territories form gradually; starts with mixed diets |
 | Predators and Prey | 500 | 3,000 | 3 | Two grazer species and a hunter species, started near what the pond can hold: grazers and hunters rise and fall in turns |
 | Males and Females | 500 | 3,000 | 3 | Predators and Prey with males and females: every birth needs a mother and a father of the same species |
-| Fireflies | 500 | 3,000 | 3 | Males and Females with Showy Males: every grown male flashes in his species' own code, and females choose the brightest |
 | Arms Race | 5,000 | 1,800 | 4 | High mutation drives rapid evolution under moderate scarcity |
 | Battle Royale | 12,000 | 600 | 6 | Massive population, almost no food, fast carnage, most species go extinct |
 | Superorganism | 6,000 | 2,500 | 4 | Max flocking — species move as tight swarms like slime molds; starts with mixed diets |
@@ -331,20 +322,6 @@ A pond where only half the creatures can bear young grows half as fast. So a mot
 
 What we found: in crowded ponds, populations stay in the same range as without sexes. Where numbers get small, finding a mate becomes the problem. In Superorganism the few grazers left after the opening frenzy die out instead of coming back, and in the Males and Females preset the hunters lasted ten minutes on eight of the nine seeds we tried.
 
-### Courtship
-
-With Reproduction set to **Male and female**, three switches in the Evolve tab shape who fathers the young. Each one can be on or off by itself.
-
-**Mate Choice.** A female ready to breed looks over the males in reach and takes the best one instead of the nearest: the biggest, and with Showy Males on, the biggest and brightest together (size times 0.2 plus display).
-
-**Rival Males.** When two grown males of the same species touch while a female is in reach, the stronger one, by size times one plus his brawn, drives the other off. The loser pays 1 energy (the winner a third of that), is pushed away, and no female will take him for 2 seconds. Away from females, males leave each other alone. Every creature carries a brawn gene: at full brawn a male can grow half again past the top size, at a running cost like the other genes.
-
-**Showy Males.** Every grown male flashes a yellow-green lantern at his rear in his species' own code: one to three quick pulses every 1.5 to 3.5 seconds, drawn from the world seed so each species, new ones included, gets its own. A display gene makes him brighter, from half brightness at 0% to full at 100%. Females see a displaying male from up to twice as far away and, without Mate Choice, take the brightest male in reach; hunters see him from as far and go for the brightest prey first. Displaying costs energy.
-
-Females carry brawn and display without showing them, and each baby takes each gene from its mother or its father before mutation. Both genes start between 0% and 10% in every world, so they only grow where they pay. Click a male to see his brawn and display, whether he is flashing, or whether a rival has driven him off; the family tree shows each species' brawn, display and the average size of its males and females.
-
-What we found: in ten minutes, sexual selection is a gentle push. Compared with control worlds where the same genes do nothing, display rose faster where females chose by flash, and brawn where rivals fought, but by a few points, not by leaps. Faster mutation makes both genes climb quickly, but a gene that starts near zero climbs by chance alone, and the controls climbed just as fast. Courtship didn't change how often grazers and hunters lasted.
-
 ### Protective Parents
 
 With **Protective Parents** on (in the Evolve tab), every creature carries a care gene from 0% to 100%, starting near 50%. Care trades number for strength. At 0% a litter holds twice as many babies, each with half the energy; at 100% half as many (at least one), each with up to twice the energy; at 50% litters are the same as in a world without care. Each baby takes its care from its mother or, when two parents mix genes, its father, and it mutates like any other gene unless Care Gene is unticked under Traits That Evolve.
@@ -391,7 +368,7 @@ Any modern browser with WebGL: Chrome, Firefox, Safari, Edge. No plugins, no ext
 
 ## Where It's Going
 
-- **Now: richer life.** Toxins and warning colors, small evolved brains as an optional replacement for the five fixed drives, day and night, seasons, terrain and currents, disease, life stages, guards that mob hunters they can beat and hide their young from ones they can't, fighters and sneakers (rivals who back off after a loss, and males who slip in to mate while others fight), scent trails, colonies, and a WebGPU engine for 100,000 or more organisms where the browser supports it.
+- **Now: richer life.** Toxins and warning colors, small evolved brains as an optional replacement for the five fixed drives, day and night, seasons, terrain and currents, disease, life stages, courtship (mate choice, rival males, and showy males that flash like fireflies), scent trails, colonies, and a WebGPU engine for 100,000 or more organisms where the browser supports it.
 - **Paused, coming back: the Lab Partner as a working scientist.** Proper tool calls instead of parsing text, time-series records so reports cite trends, experiments repeated across several seeds against an unchanged control, a lab notebook that persists between sessions, charts in its reports, and an Alliance mode where Claude, Grok and Gemini each interpret the same result, plus a pond news feed and hall of fame for new species, extinctions and records.
 - **Then: a world worth sharing.** A camera that follows one creature through its life, zoom and pan, dragging to stir a current, a narrated documentary mode, and the Wellspring at the heart of the world.
 - **Someday: a 3D world** people can step into with VR headsets, right in the browser.
@@ -408,7 +385,7 @@ Learn more about the SIDLF framework and human-AI symbiosis at [jameskeithharwoo
 
 ## License
 
-**Sentinel AI Systems Non-Commercial License v1.0** — See [LICENSE](LICENSE) for full terms.
+**Sentinel AI Systems Non-Commercial License v1.0** — See [LICENSE](../LICENSE) for full terms.
 
 **Free for:** personal use, entertainment, education, academic research, classroom instruction, and learning from the code.
 
@@ -416,4 +393,4 @@ Learn more about the SIDLF framework and human-AI symbiosis at [jameskeithharwoo
 
 We built this openly so people can learn from it, enjoy it, and be inspired by it. We ask that if you profit from it, you include us in that conversation.
 
-See [IP-DECLARATION.md](IP-DECLARATION.md) for the formal intellectual property declaration and prior art documentation.
+See [IP-DECLARATION.md](../IP-DECLARATION.md) for the formal intellectual property declaration and prior art documentation.
