@@ -150,7 +150,7 @@ button.btn.recording{background:rgba(255,50,50,0.25)!important;border-color:rgba
 <div class="panel" id="panel">
   <div class="panel-header">
     <div class="panel-title">Primordial</div>
-    <div class="panel-subtitle">Genesis Engine · Sentinel Edition · v5.11</div>
+    <div class="panel-subtitle">Genesis Engine · Sentinel Edition · v5.10.1</div>
     <button class="panel-close" id="panelClose" title="Collapse panel">&#10005;</button>
   </div>
   <div class="tabs">
@@ -197,9 +197,6 @@ button.btn.recording{background:rgba(255,50,50,0.25)!important;border-color:rgba
       </div>
       <div id="shareStatus" style="font-family:var(--font-mono);font-size:0.65rem;color:var(--muted);margin-bottom:8px;word-break:break-all"></div>
       <div class="ctrl"><div class="ctrl-label"><span>Organisms</span><strong id="vOrganisms">5000</strong></div><input type="range" id="sOrganisms" min="500" max="50000" step="500" value="5000"/></div>
-      <div class="toggle-row"><span>Engine</span><select class="sel" id="selEngine" title="Which chip works out what each creature senses around it"><option value="cpu">CPU (exact replays)</option><option value="gpu">GPU (more creatures)</option></select></div>
-      <div class="hint-text" style="font-size:0.68rem;color:var(--muted);margin:-4px 0 4px">Checking every creature's neighbors is the slow part of a crowded pond. GPU hands it to the graphics card, which checks all of them at once, so far more creatures run smoothly. Each creature then sees the pond as it stood at the start of the step, so a GPU run differs a little from a CPU run and replays exactly only on the same computer. Needs WebGPU (recent Chrome, Edge or Safari).</div>
-      <div id="engineStat" class="hint-text" style="font-size:0.68rem;color:var(--accent);margin:0 0 10px;font-family:var(--font-mono)"></div>
       <div class="ctrl"><div class="ctrl-label"><span>Food Pellets</span><strong id="vFood">2000</strong></div><input type="range" id="sFood" min="100" max="10000" step="100" value="2000"/></div>
       <div class="ctrl"><div class="ctrl-label"><span>Food Spawn Rate</span><strong id="vFoodRate">25</strong></div><input type="range" id="sFoodRate" min="1" max="200" step="1" value="25"/></div>
       <div class="ctrl"><div class="ctrl-label"><span>Food Oases</span><strong id="vOases">4</strong></div><input type="range" id="sOases" min="0" max="8" step="1" value="4"/></div>
@@ -364,7 +361,7 @@ To get started for free, create a free key at openrouter.ai/keys (no credit card
   </div>
 </div>
 
-<div class="badge">Primordial v5.11 · Sentinel AI Systems × Claude Sentinel · SIDLF · <a href="v5.10/" title="Play v5.10.1 from October 3, 2026, before the GPU engine">v5.10.1</a> · <a href="v5.9/" title="Play v5.9.2 from October 3, 2026, before smart guards">v5.9.2</a> · <a href="v5.8/" title="Play v5.8 from October 3, 2026, before courtship and firefly males">v5.8</a> · <a href="v5.7/" title="Play v5.7 from October 3, 2026, before who guards and the Reproduction menu">v5.7</a> · <a href="v5.6/" title="Play v5.6.1 from October 3, 2026, before bite contests">v5.6.1</a> · <a href="v5.5/" title="Play v5.5 from October 3, 2026, before protective mothers">v5.5</a> · <a href="v5.4/" title="Play v5.4 from October 3, 2026, before males and females">v5.4</a> · <a href="v5.3/" title="Play v5.3 from October 2, 2026, before grazers and hunters">v5.3</a> · <a href="v5/" title="Play v5 from September 29, 2026, before dead bodies fed the pond">v5</a> · <a href="v4/" title="Play v4 from September 2026, before species could evolve">v4</a> · <a href="classic/" title="Play the original v3 from March 2026">Original v3</a></div>
+<div class="badge">Primordial v5.10.1 · Sentinel AI Systems × Claude Sentinel · SIDLF · <a href="../v5.9/" title="Play v5.9.2 from October 3, 2026, before smart guards">v5.9.2</a> · <a href="../v5.8/" title="Play v5.8 from October 3, 2026, before courtship and firefly males">v5.8</a> · <a href="../v5.7/" title="Play v5.7 from October 3, 2026, before who guards and the Reproduction menu">v5.7</a> · <a href="../v5.6/" title="Play v5.6.1 from October 3, 2026, before bite contests">v5.6.1</a> · <a href="../v5.5/" title="Play v5.5 from October 3, 2026, before protective mothers">v5.5</a> · <a href="../v5.4/" title="Play v5.4 from October 3, 2026, before males and females">v5.4</a> · <a href="../v5.3/" title="Play v5.3 from October 2, 2026, before grazers and hunters">v5.3</a> · <a href="../v5/" title="Play v5 from September 29, 2026, before dead bodies fed the pond">v5</a> · <a href="../v4/" title="Play v4 from September 2026, before species could evolve">v4</a> · <a href="../classic/" title="Play the original v3 from March 2026">Original v3</a></div>
 <div class="rec-dot" id="recDot">REC <span id="recTime">0:00</span></div>
 
 <script>
@@ -516,7 +513,7 @@ sSpecies:$('sSpecies'),sStartSize:$('sStartSize'),sMaxSize:$('sMaxSize'),sOrgSpe
 sReproSize:$('sReproSize'),sOffspring:$('sOffspring'),sOases:$('sOases'),
 chkSameSpecies:$('chkSameSpecies'),chkFoodChain:$('chkFoodChain'),sEatRatio:$('sEatRatio'),sEatGain:$('sEatGain'),sDecay:$('sDecay'),
 sHunt:$('sHunt'),sFlee:$('sFlee'),sFlock:$('sFlock'),sFoodDrive:$('sFoodDrive'),sSeparation:$('sSeparation'),
-chkMutation:$('chkMutation'),sMutRate:$('sMutRate'),sMutStr:$('sMutStr'),sTraitCost:$('sTraitCost'),vTraitCost:$('vTraitCost'),seedInput:$('seedInput'),selEngine:$('selEngine'),engineStat:$('engineStat'),
+chkMutation:$('chkMutation'),sMutRate:$('sMutRate'),sMutStr:$('sMutStr'),sTraitCost:$('sTraitCost'),vTraitCost:$('vTraitCost'),seedInput:$('seedInput'),
 chkSpeciation:$('chkSpeciation'),chkSexual:$('chkSexual'),chkSexes:$('chkSexes'),chkCare:$('chkCare'),chkEvoCare:$('chkEvoCare'),selRepro:$('selRepro'),selGuard:$('selGuard'),chkEvoDad:$('chkEvoDad'),chkSmartGuard:$('chkSmartGuard'),chkChoice:$('chkChoice'),chkRivals:$('chkRivals'),chkShow:$('chkShow'),chkEvoBrawn:$('chkEvoBrawn'),chkEvoShow:$('chkEvoShow'),chkBite:$('chkBite'),chkEvoArmor:$('chkEvoArmor'),chkEvoJaws:$('chkEvoJaws'),sSplit:$('sSplit'),vSplit:$('vSplit'),chkLineage:$('chkLineage'),sSpCount:$('sSpCount'),treeStats:$('treeStats'),treeInfo:$('treeInfo'),
 chkEvoSpeed:$('chkEvoSpeed'),chkEvoAggro:$('chkEvoAggro'),chkEvoEfficiency:$('chkEvoEfficiency'),chkEvoPerception:$('chkEvoPerception'),chkEvoDiet:$('chkEvoDiet'),chkDiet:$('chkDiet'),selDietStart:$('selDietStart'),
 chkGlow:$('chkGlow'),chkDetail:$('chkDetail'),chkWater:$('chkWater'),chkDeathFX:$('chkDeathFX'),chkShowOases:$('chkShowOases'),
@@ -848,7 +845,7 @@ function updateRecTimer(){
 // ═══════════════════════════════════════════════
 
 // All configurable slider/checkbox IDs
-const SETTING_SLIDERS=['selEngine','selDietStart','selGuard','sOrganisms','sFood','sFoodRate','sSpeed','sSpecies','sStartSize','sMaxSize','sOrgSpeed','sLifespan','sReproSize','sOffspring','sOases','sEatRatio','sEatGain','sDecay','sHunt','sFlee','sFlock','sFoodDrive','sSeparation','sMutRate','sMutStr','sTraitCost','sSplit','sFoodGlow','sGlow','sTrail'];
+const SETTING_SLIDERS=['selDietStart','selGuard','sOrganisms','sFood','sFoodRate','sSpeed','sSpecies','sStartSize','sMaxSize','sOrgSpeed','sLifespan','sReproSize','sOffspring','sOases','sEatRatio','sEatGain','sDecay','sHunt','sFlee','sFlock','sFoodDrive','sSeparation','sMutRate','sMutStr','sTraitCost','sSplit','sFoodGlow','sGlow','sTrail'];
 const SETTING_CHECKS=['chkSameSpecies','chkFoodChain','chkMutation','chkEvoSpeed','chkEvoAggro','chkEvoEfficiency','chkEvoPerception','chkEvoDiet','chkDiet','chkSpeciation','chkSexual','chkSexes','chkCare','chkEvoCare','chkEvoDad','chkSmartGuard','chkChoice','chkRivals','chkShow','chkEvoBrawn','chkEvoShow','chkBite','chkEvoArmor','chkEvoJaws','chkGlow','chkDetail','chkWater','chkDeathFX','chkShowOases','chkLineage'];
 
 // The version of the simulation's rules that made a saved world. A seed replays exactly only under the rules that made it (older
@@ -859,10 +856,10 @@ const SETTING_CHECKS=['chkSameSpecies','chkFoodChain','chkMutation','chkEvoSpeed
 // v5.6 added protective mothers and v5.7 bite contests, the same way: off plays exactly like the version before. v5.6.1 only changed the creature card and the menu.
 // v5.8 added Who Guards; with the mother guarding (the default, and how settings saved before it load) it plays exactly like v5.7.
 // v5.9 added courtship (Mate Choice, Rival Males, Showy Males); with all three off it plays exactly like v5.8.
-// v5.10 added Smart Guards; with it off it plays exactly like v5.9. v5.11 added the GPU engine; the CPU engine plays exactly like v5.10.
-const APP_VERSION='5.11';
-function sameRules(s){const c=s.checks||{},v=s._app;return v===APP_VERSION||v==='5.10'||v==='5.9'||v==='5.8'||v==='5.7'||!c.chkBite&&(v==='5.6'||!c.chkCare&&(v==='5.5'||!c.chkSexes&&(v==='5.4'||v==='5.2.1'&&!c.chkDiet)));}
-function versionNote(s){return (sameRules(s)?'':' Made in '+(s._app?'v'+s._app:'an earlier version')+', so the run may differ; older versions are linked in the corner badge.')+(s.sliders&&s.sliders.selEngine==='gpu'?' Made on the GPU engine, so it replays exactly only on the computer that made it.':'');}
+// v5.10 added Smart Guards; with it off it plays exactly like v5.9.
+const APP_VERSION='5.10';
+function sameRules(s){const c=s.checks||{},v=s._app;return v===APP_VERSION||v==='5.9'||v==='5.8'||v==='5.7'||!c.chkBite&&(v==='5.6'||!c.chkCare&&(v==='5.5'||!c.chkSexes&&(v==='5.4'||v==='5.2.1'&&!c.chkDiet)));}
+function versionNote(s){return sameRules(s)?'':' Made in '+(s._app?'v'+s._app:'an earlier version')+', so the run may differ; older versions are linked in the corner badge.';}
 
 function captureSettings(){
   const s={_format:'primordial-settings',_version:4,_app:APP_VERSION,_date:new Date().toISOString(),_preset:$('selPreset').value,sliders:{},checks:{}};
@@ -881,7 +878,6 @@ function applySettings(s){
   if(!s.checks||s.checks.chkSexes===undefined)ui.chkSexes.checked=false; // saved before males and females
   if(!s.checks||s.checks.chkCare===undefined){ui.chkCare.checked=false;ui.chkEvoCare.checked=true;} // saved before protective mothers
   if(s.sliders.selGuard===undefined)ui.selGuard.value='mother'; // saved before who guards
-  if(s.sliders.selEngine===undefined)ui.selEngine.value='cpu'; // saved before the GPU engine
   if(!s.checks||s.checks.chkEvoDad===undefined)ui.chkEvoDad.checked=true;
   if(!s.checks||s.checks.chkSmartGuard===undefined)ui.chkSmartGuard.checked=false; // saved before smart guards
   if(!s.checks||s.checks.chkShow===undefined){ui.chkChoice.checked=false;ui.chkRivals.checked=false;ui.chkShow.checked=false;ui.chkEvoBrawn.checked=true;ui.chkEvoShow.checked=true;} // saved before courtship
@@ -1032,7 +1028,7 @@ function getSimSnapshot(){
     settings:{organisms:ui.sOrganisms.value,food:ui.sFood.value,foodRate:ui.sFoodRate.value,speed:ui.sSpeed.value,
       hunt:ui.sHunt.value,flee:ui.sFlee.value,flock:ui.sFlock.value,foodDrive:ui.sFoodDrive.value,
       eatRatio:ui.sEatRatio.value,decayToAlgae:ui.sDecay.value,mutRate:ui.sMutRate.value,mutStr:ui.sMutStr.value,traitCost:ui.sTraitCost.value,
-      speciation:ui.chkSpeciation.checked,splitDistance:ui.sSplit.value,sexualReproduction:ui.chkSexual.checked,malesAndFemales:ui.chkSexes.checked,protectiveParents:ui.chkCare.checked,smartGuards:ui.chkSmartGuard.checked,engine:ui.selEngine.value,whoGuards:ui.selGuard.value,mateChoice:ui.chkChoice.checked,rivalMales:ui.chkRivals.checked,showyMales:ui.chkShow.checked,biteContests:ui.chkBite.checked,diets:ui.chkDiet.checked,startingDiets:ui.selDietStart.value,
+      speciation:ui.chkSpeciation.checked,splitDistance:ui.sSplit.value,sexualReproduction:ui.chkSexual.checked,malesAndFemales:ui.chkSexes.checked,protectiveParents:ui.chkCare.checked,smartGuards:ui.chkSmartGuard.checked,whoGuards:ui.selGuard.value,mateChoice:ui.chkChoice.checked,rivalMales:ui.chkRivals.checked,showyMales:ui.chkShow.checked,biteContests:ui.chkBite.checked,diets:ui.chkDiet.checked,startingDiets:ui.selDietStart.value,
       foodChain:ui.chkFoodChain.checked,mutation:ui.chkMutation.checked},
     topPredator:maxKiller.kills>0?{species:cladeLabel(oclade[maxKiller.idx]),kills:maxKiller.kills,size:osize[maxKiller.idx]?.toFixed(1)}:null,
     extinctions:extinctLog.slice(-10).map(id=>clades[id].name)
@@ -1288,8 +1284,6 @@ Males and females: the page's Reproduction menu sets chkSexual and chkSexes: Div
 
 Protective parents: with chkCare on, each organism carries a care gene from 0% to 100% (carePercent is a species' average; 50% gives the same litters as a world without care). Care trades number for strength: at 0% a litter holds twice as many babies, each with half the energy; at 100% half as many (at least one), each with up to twice the energy; the mother's gene sets the litter. After a birth a parent guards for up to 6 seconds (6 times its own care): it doesn't feed, hunt or breed, the babies swim toward it, and it moves between them and the nearest creature that could eat a newborn. When a hunter catches a baby within about 30 pixels of a guarding parent, the parent steps in with a chance equal to its care and, unless the hunter could eat it too, stuns it for a second and drives it off without its meal. A parent flares gold while it defends. Without males and females the parent that gave birth guards. With chkSexes on, whoGuards (selGuard) says who: mother (the default), father, both, or evolve. Only a grown father (at least sReproSize) stays to guard; a younger one leaves. A guarding father can't mate and doesn't look for a mate, so a father who leaves can sire more litters, while a mother who leaves can feed and breed again sooner. With evolve, each organism carries a who-guards gene (fatherSharePercent is a species' average, starting near 50%): at 0% only the mother guards, at 50% both do, at 100% only the father, and in between the less involved parent guards for part of its time. With chkSmartGuard on, a guard sizes up each creature near it that could eat a newborn: one too small to eat the guard is mobbed (chased and stunned and pushed off on contact), each drive-off costs the guard 1 energy and 2 seconds' rest. Against one big enough to eat the guard, a guard is bold as often as its care (decided after each birth): a bold guard charges it anyway, a shy one turns away and leads its young off while they huddle close.
 
-Engine (selEngine, in the snapshot as engine): cpu, the default, or gpu. On gpu the graphics card works out what each creature senses (neighbors, mates, prey, threats, flocking) from the pond as it stood at the start of the step, instead of seeing the moves of creatures updated earlier in the same step; everything else is the same. So the rules match but runs differ a little from the CPU engine, and a gpu run replays exactly only on the computer that made it. The gpu engine exists to run far more creatures smoothly.
-
 Courtship (needs chkSexes): with chkChoice on, a female ready to breed takes the best male in reach instead of the nearest: the biggest, and with chkShow on, the one with the brightest display (size times 0.2 plus display). With chkRivals on, two grown males of a species who touch while a female is in reach shove (away from females they leave each other alone): the stronger (size times 1 plus brawn) wins, the loser loses 1 energy (the winner a third of that) and is driven off for 2 seconds, when no female will take him. Each organism carries a brawn gene (brawnPercent): a male at full brawn can grow half again past the top size and fights harder, at a running cost. With chkShow on, each organism carries a display gene (displayPercent): every grown male flashes like a firefly in his species' own rhythm (1 to 3 flashes every 1.5 to 3.5 seconds; a new species gets its own), at 70% brightness with 0% display and full brightness with 100%. Displaying costs energy, and anyone sees a displaying male from up to twice as far: females can pick him from farther away, and hunters spot him sooner and go for him first. Females carry both genes without showing them. Brawn and display start between 0% and 10% in every world. Each species' avgMaleSize and avgFemaleSize show whether males grow bigger than females.
 Bite contests: with chkBite on, each organism carries an armor gene and a jaws gene, both from 0% to 100% and between 0% and 10% at the start of every world (armorPercent and jawsPercent are a species' averages). When a creature catches prey whose armor is higher than its jaws, the bite fails with a chance of 3 times the difference (at most 90%): the attacker loses 2 energy, is stunned for half a second and pushed off, and the prey gets away. Armor slows the body (up to 25% at full armor), and both genes add to the trait costs, so they only spread where they pay. Armor shows as a plated grey rim, jaws as fangs at the front. The Armor and Jaws preset is Origin of Species with bite contests on.
 
@@ -1360,7 +1354,6 @@ function initWorld(){
   dfxCount=0;dfxNext=0;huskCount=0;decayCarry=0;generation=0;simTime=0;nCallPrev=nCallNow=0;
   initGrids();initOases();
   census();nextCensus=CENSUS_DT;
-  nbRestart();
 }
 
 let foodAccum=0;
@@ -1402,19 +1395,16 @@ function reproduce(pi){
     let ga=gArmor[pi],gj=gJaws[pi];if(biteOn){if(mate>=0){if(rand()<0.5)ga=gArmor[mate];if(rand()<0.5)gj=gJaws[mate];}if(mutOn){if(ui.chkEvoArmor.checked&&rand()<mutRate)ga=clamp(ga+(rand()-0.5)*mutStr,0,1);if(ui.chkEvoJaws.checked&&rand()<mutRate)gj=clamp(gj+(rand()-0.5)*mutStr,0,1);}}gArmor[idx]=ga;gJaws[idx]=gj;
     oclade[idx]=speciate(idx,pc,splitT);}}
 
-// A hunter i closes on prey j: a guarding parent may drive it off, armor may turn the bite, or j is eaten. Returns 1 if j was
-// eaten, 0 if the hunter was held off (either way the hunter is done for this step).
-function attack(i,j,mySz,myR,careOn,dietOn,foodChain,biteOn,sz0,invMature,eatG,maxSz){const g=careOn?guardOf(j):-1;if(g>=0&&wrapDist2(g,j)<CARE_GUARD*CARE_GUARD&&rand()<gCare[g]){const gJ=dietOn?oJaw[g]*clamp((osize[g]-sz0)*invMature,0,1):0;if(!(foodChain||mySz>osize[g]*myR*(1+DIET_DEFEND*gJ))){guardDrive(i,g);return 0;}}if(biteOn){const blk=Math.min(BITE_MAXBLOCK,BITE_BLOCK*(gArmor[j]-gJaws[i]));if(blk>0&&rand()<blk){biteFail(i,j);return 0;}}oalive[j]=0;const gain=dietOn?Math.min(oenergy[j],eatG*(osize[j]*oMeat[i]+oJaw[i]*DIET_HUNTER_BONUS*oenergy[j])):osize[j]*eatG;if(dietOn)odigest[i]=DIET_DIGEST;addHusk(ox[j],oy[j],oenergy[j]-gain,oclade[j],osize[j],Math.atan2(-ovy[j],ovx[j]),dietOn?gDiet[j]:0.5);oenergy[i]+=gain;okills[i]++;spawnDeathFX(ox[j],oy[j],cladeHue[oclade[j]],4+osize[j]*0.5|0,osize[j]/maxSz,ox[i],oy[i]);const now=performance.now();if(now-lastThudSound>80){playThud(osize[j]/maxSz);lastThudSound=now;}return 1;}
 function canEatInChain(predSp,preySp,nSp){return((predSp+1)%nSp)===preySp;}
 
-function simulate(dt,nb){ // nb: on the GPU engine, what each creature sensed around it (see nbKick)
+function simulate(dt){
   const spd=+ui.sSpeed.value,orgSpd=+ui.sOrgSpeed.value,maxSz=+ui.sMaxSize.value,life=+ui.sLifespan.value;
   const reproSz=Math.min(+ui.sReproSize.value,maxSz),eatR=+ui.sEatRatio.value,eatG=+ui.sEatGain.value,sameSafe=ui.chkSameSpecies.checked;
   const nSp=+ui.sSpecies.value,foodChain=ui.chkFoodChain.checked&&nSp>1;
   const hunt=+ui.sHunt.value,flee=+ui.sFlee.value,flock=+ui.sFlock.value,foodD=+ui.sFoodDrive.value,sep=+ui.sSeparation.value;
   const sDt=dt*spd;if(sDt<0.0001)return;simTime+=sDt;orgHint=0;const tc=+ui.sTraitCost.value,careOn=ui.chkCare.checked,smartOn=careOn&&ui.chkSmartGuard.checked,biteOn=ui.chkBite.checked,sexOn=ui.chkSexes.checked,choiceOn=sexOn&&ui.chkChoice.checked,rivalOn=sexOn&&ui.chkRivals.checked,showOn=sexOn&&ui.chkShow.checked,pickOn=choiceOn||showOn,dietOn=ui.chkDiet.checked,sz0=+ui.sStartSize.value,invMature=1/Math.max(0.5,(reproSz-sz0)*DIET_MATURE);
   if(soundOn&&ambOsc){let alive=0;for(let i=0;i<orgCount;i++)if(oalive[i])alive++;ambOsc.frequency.setTargetAtTime(40+(alive/Math.max(1,+ui.sOrganisms.value))*80,audioCtx.currentTime,0.5);}
-  if(!nb)buildGrid();buildFoodGrid();const repro=[];if(sexOn){const t=callPrev;callPrev=callNow;callNow=t;nCallPrev=nCallNow;nCallNow=0;}for(let i=0;i<orgCount;i++)okin[i]=cladeKin[oclade[i]];
+  buildGrid();buildFoodGrid();const repro=[];if(sexOn){const t=callPrev;callPrev=callNow;callNow=t;nCallPrev=nCallNow;nCallNow=0;}for(let i=0;i<orgCount;i++)okin[i]=cladeKin[oclade[i]];
   if(showOn)for(let i=0;i<orgCount;i++)oshow[i]=oalive[i]&&osex[i]&&osize[i]>=reproSz?gShow[i]:0; // only grown males display
   for(let i=0;i<orgCount;i++){
     if(!oalive[i])continue;let ax=0,ay=0;
@@ -1430,14 +1420,7 @@ function simulate(dt,nb){ // nb: on the GPU engine, what each creature sensed ar
     let flX=0,flY=0,flN=0,mateJ=-1,mateD=CELL*1.5,mateS=-1,preyJ=-1,preyD=1e9,threatJ=-1,threatD=1e9,guardJ=-1,guardD=1e9,mobJ=-1,mobD=1e9,hideJ=-1,hideD=1e9;const scanR=foodChain?2:1;
     // Kin flock together and are never prey (unless Same Species Protected is off). Prey eaten earlier this step is
     // still in the grid until the next rebuild, so it is checked for life before it can be eaten again.
-    if(nb){ // GPU engine: the graphics card found what i senses, in the pond as it stood at the start of this step; the events it
-      // found (a rival to drive off, a hunter to mob, prey to catch) happen here, if both creatures are still able
-      if(i<nb.n){const o=i*16,F=nb.f,I=nb.i;ax+=F[o];ay+=F[o+1];flX=F[o+2];flY=F[o+3];flN=F[o+4];
-        mateJ=I[o+5];if(mateJ>=0&&!oalive[mateJ])mateJ=-1;preyJ=I[o+6];threatJ=I[o+7];if(threatJ>=0&&!oalive[threatJ])threatJ=-1;guardJ=I[o+8];mobJ=I[o+9];hideJ=I[o+10];
-        const rj=I[o+12];if(rj>=0&&oalive[rj]&&orival[i]<=0&&orival[rj]<=0){const ddx=ox[rj]-ox[i],ddy=oy[rj]-oy[i],d=Math.sqrt(ddx*ddx+ddy*ddy)+0.1;orival[rj]=RIVAL_TIME;oenergy[rj]-=RIVAL_COST;oenergy[i]-=RIVAL_COST/3;ovx[rj]+=ddx/d*RIVAL_PUSH;ovy[rj]+=ddy/d*RIVAL_PUSH;}
-        const mh=I[o+13];if(mh>=0&&oalive[mh]&&odigest[mh]<=0&&omobRest[i]<=0){guardDrive(mh,i);omobRest[i]=MOB_REST;oenergy[i]-=MOB_COST;}
-        const kj=I[o+11];if(kj>=0&&oalive[kj]&&!full){if(!attack(i,kj,mySz,myR,careOn,dietOn,foodChain,biteOn,sz0,invMature,eatG,maxSz)||dietOn)full=true;}}}
-    else for(let dy=-scanR;dy<=scanR;dy++)for(let dx=-scanR;dx<=scanR;dx++){const nx=cx+dx,ny=cy+dy;if(nx<0||nx>=gridW||ny<0||ny>=gridH)continue;const ci=ny*gridW+nx,cnt=gridCounts[ci],base=ci*GMAX;
+    for(let dy=-scanR;dy<=scanR;dy++)for(let dx=-scanR;dx<=scanR;dx++){const nx=cx+dx,ny=cy+dy;if(nx<0||nx>=gridW||ny<0||ny>=gridH)continue;const ci=ny*gridW+nx,cnt=gridCounts[ci],base=ci*GMAX;
       for(let k=0;k<cnt;k++){const j=gridEntries[base+k];if(j===i)continue;const ddx=ox[j]-ox[i],ddy=oy[j]-oy[i],d2=ddx*ddx+ddy*ddy,d=Math.sqrt(d2)+0.1,cR=mySz+osize[j],inP=d<CELL*myPerc*(showOn?1+SHOW_SPOT*oshow[j]:1);
         const same=okin[j]===myK;let canEat=false,isPrey=false;
         const jM=dietOn?clamp((osize[j]-sz0)*invMature,0,1):1,jJaw=dietOn?oJaw[j]*jM:0;
@@ -1454,7 +1437,7 @@ function simulate(dt,nb){ // nb: on the GPU engine, what each creature sensed ar
           if(smartOn){if(isPrey){if(d<hideD){hideD=d;hideJ=j;}}else{if(d<mobD){mobD=d;mobJ=j;}if(d<cR&&odigest[j]<=0&&omobRest[i]<=0){guardDrive(j,i);omobRest[i]=MOB_REST;oenergy[i]-=MOB_COST;}}}} // could it eat the guard too?
         // Every creature feels a gentle pull toward all it could eat and a push from all that could eat it; with diets on,
         // hunters trade that pull for a chase after the nearest prey, and prey also run from the nearest hunter (below)
-        if(canEat&&inP){const de=showOn?d/(1+SHOW_SPOT*oshow[j]):d;if(dietOn&&de<preyD){preyD=de;preyJ=j;}const hf=hunt*myAggro*0.5/(d+5)*huntW*(dietOn?1-oJaw[i]:1);ax+=ddx/d*hf;ay+=ddy/d*hf;if(d<cR*0.6&&oalive[j]){if(!attack(i,j,mySz,myR,careOn,dietOn,foodChain,biteOn,sz0,invMature,eatG,maxSz)){full=true;continue;}if(dietOn)full=true;}}
+        if(canEat&&inP){const de=showOn?d/(1+SHOW_SPOT*oshow[j]):d;if(dietOn&&de<preyD){preyD=de;preyJ=j;}const hf=hunt*myAggro*0.5/(d+5)*huntW*(dietOn?1-oJaw[i]:1);ax+=ddx/d*hf;ay+=ddy/d*hf;if(d<cR*0.6&&oalive[j]){const g=careOn?guardOf(j):-1;if(g>=0&&wrapDist2(g,j)<CARE_GUARD*CARE_GUARD&&rand()<gCare[g]){const gJ=dietOn?oJaw[g]*clamp((osize[g]-sz0)*invMature,0,1):0;if(!(foodChain||mySz>osize[g]*myR*(1+DIET_DEFEND*gJ))){guardDrive(i,g);full=true;continue;}}if(biteOn){const blk=Math.min(BITE_MAXBLOCK,BITE_BLOCK*(gArmor[j]-gJaws[i]));if(blk>0&&rand()<blk){biteFail(i,j);full=true;continue;}}oalive[j]=0;const gain=dietOn?Math.min(oenergy[j],eatG*(osize[j]*oMeat[i]+oJaw[i]*DIET_HUNTER_BONUS*oenergy[j])):osize[j]*eatG;if(dietOn){odigest[i]=DIET_DIGEST;full=true;}addHusk(ox[j],oy[j],oenergy[j]-gain,oclade[j],osize[j],Math.atan2(-ovy[j],ovx[j]),dietOn?gDiet[j]:0.5);oenergy[i]+=gain;okills[i]++;spawnDeathFX(ox[j],oy[j],cladeHue[oclade[j]],4+osize[j]*0.5|0,osize[j]/maxSz,ox[i],oy[i]);const now=performance.now();if(now-lastThudSound>80){playThud(osize[j]/maxSz);lastThudSound=now;}}}
         else if(isPrey&&inP){if(dietOn&&d<threatD){threatD=d;threatJ=j;}const ff=flee*1.2/(d+3);ax-=ddx/d*ff;ay-=ddy/d*ff;}
         else if(!same&&d<cR*1.2){const sf=sep*0.5/(d+2);ax-=ddx/d*sf;ay-=ddy/d*sf;}}}
     omate[i]=mateJ;
@@ -1494,167 +1477,6 @@ function simulate(dt,nb){ // nb: on the GPU engine, what each creature sensed ar
   for(let i=0;i<dfxCount;i++){dfxLife[i]-=sDt*2;if(dfxLife[i]<=0)continue;dfxX[i]+=dfxVX[i];dfxY[i]+=dfxVY[i];dfxVX[i]*=0.95;dfxVY[i]*=0.95;}
   if(simTime>=nextCensus){census();nextCensus=simTime+CENSUS_DT;}
 }
-
-// GPU engine. With Engine set to GPU, the graphics card (through WebGPU) does the neighbor checks, the part of each step that
-// grows with crowding, for every creature at once. It sees the pond as it stood at the start of the step, while the CPU engine
-// lets each creature see the moves of those updated before it in the same step, so the two engines play the same rules a little
-// differently, and a GPU run replays exactly only on the same computer. Eating algae, births, deaths, care and courtship still
-// run on the CPU as before. After each step nbKick packs the pond into nbOrg (16 numbers per creature) and the graphics card
-// answers with 16 per creature in nb: its pull and push (0-1), its flockmates' offset and count (2-4), and the mate, prey,
-// threat, hunter to guard against, to mob and to hide from, prey within reach, rival to drive off and hunter to strike (5-13).
-// neighborPassJS is the same pass in JavaScript; the shader mirrors it line for line, and the tests compare the two.
-const nbOrg=new Float32Array(MAX_ORG*16),nbOrgU=new Uint32Array(nbOrg.buffer),nbPar=new ArrayBuffer(96);
-const nb={f:new Float32Array(MAX_ORG*16),i:null,n:0};nb.i=new Int32Array(nb.f.buffer);
-let gpu=null,gpuInitP=null,gpuTried=false,gpuBusy=false,nbWanted=false,nbState='none',nbToken=0,nbForceJS=false,nbKickT=0,stepMsCpu=0,stepMsGpu=0;
-function engineGPU(){return ui.selEngine.value==='gpu';}
-function nbParams(){
-  const sexOn=ui.chkSexes.checked,careOn=ui.chkCare.checked,choiceOn=sexOn&&ui.chkChoice.checked,showOn=sexOn&&ui.chkShow.checked,maxSz=+ui.sMaxSize.value,reproSz=Math.min(+ui.sReproSize.value,maxSz),sz0=+ui.sStartSize.value,nSp=+ui.sSpecies.value;
-  return {sexOn,careOn,smartOn:careOn&&ui.chkSmartGuard.checked,rivalOn:sexOn&&ui.chkRivals.checked,showOn,choiceOn,pickOn:choiceOn||showOn,dietOn:ui.chkDiet.checked,foodChain:ui.chkFoodChain.checked&&nSp>1,sameSafe:ui.chkSameSpecies.checked,biteOn:ui.chkBite.checked,
-    nSp,sep:+ui.sSeparation.value,hunt:+ui.sHunt.value,flee:+ui.sFlee.value,eatR:+ui.sEatRatio.value,sz0,reproSz,invMature:1/Math.max(0.5,(reproSz-sz0)*DIET_MATURE)};
-}
-function nbPack(P){
-  const n=orgCount,F=nbOrg,U=nbOrgU,dg=P.dietOn||P.careOn||P.biteOn;
-  for(let i=0;i<n;i++){const o=i*16;if(!oalive[i]){U[o+12]=0;continue;}const c=oclade[i];
-    F[o]=ox[i];F[o+1]=oy[i];F[o+2]=osize[i];F[o+3]=P.showOn&&osex[i]&&osize[i]>=P.reproSz?gShow[i]:0;F[o+4]=oMeat[i];F[o+5]=oJaw[i];F[o+6]=gBrawn[i];F[o+7]=gPerception[i];
-    F[o+8]=gAggro[i];U[o+9]=cladeKin[c];U[o+10]=c;U[o+11]=cladeRoot[c];
-    U[o+12]=1|(osex[i]?2:0)|(ocare[i]>0?4:0)|(dg&&odigest[i]>0?8:0)|(odigest[i]>0?16:0)|(orival[i]>0?32:0)|(omate[i]>=0?64:0)|(omobRest[i]>0?128:0);}
-  return n;
-}
-function neighborPassJS(P,n){
-  const F=nbOrg,U=nbOrgU,OF=nb.f,OI=nb.i,C=CELL,scanR=P.foodChain?2:1;
-  for(let i=0;i<n;i++){const a=i*16,o=a,fi=U[a+12];let ax=0,ay=0,flX=0,flY=0,flN=0,mateJ=-1,preyJ=-1,threatJ=-1,guardJ=-1,mobJ=-1,hideJ=-1,killJ=-1,rivalJ=-1,mobHitJ=-1;
-    if(fi&1){const xi=F[a],yi=F[a+1],mySz=F[a+2],myK=U[a+9],myC=U[a+10],myRoot=U[a+11],maleI=(fi&2)!==0,myAggro=0.5+F[a+8],myPerc=0.5+F[a+7]*1.5;
-      const myM=P.dietOn?clamp((mySz-P.sz0)*P.invMature,0,1):1,myJaw=P.dietOn?F[a+5]*myM:0,guarding=P.careOn&&(fi&4)!==0,myMeat=P.dietOn?F[a+4]*myM:1,iHunt=myMeat>DIET_MIN&&!guarding,huntW=Math.min(1,myMeat);
-      const myR=P.eatR-Math.max(0,P.eatR-DIET_JAW_RATIO)*myJaw,myDef=1+DIET_DEFEND*myJaw,full=(fi&8)!==0;
-      let mateD=C*1.5,mateS=-1,preyD=1e9,threatD=1e9,guardD=1e9,mobD=1e9,hideD=1e9,killD=1e9,rivalD=1e9,mobHitD=1e9;
-      const cx=Math.min(gridW-1,Math.max(0,xi/C|0)),cy=Math.min(gridH-1,Math.max(0,yi/C|0));
-      for(let dy=-scanR;dy<=scanR;dy++)for(let dx=-scanR;dx<=scanR;dx++){const nx=cx+dx,ny=cy+dy;if(nx<0||nx>=gridW||ny<0||ny>=gridH)continue;const ci=ny*gridW+nx,cnt=gridCounts[ci],base=ci*GMAX;
-        for(let k=0;k<cnt;k++){const j=gridEntries[base+k];if(j===i)continue;const b=j*16,fj=U[b+12],ddx=F[b]-xi,ddy=F[b+1]-yi,d=Math.sqrt(ddx*ddx+ddy*ddy)+0.1,szj=F[b+2],showj=F[b+3],cR=mySz+szj;
-          const inP=d<C*myPerc*(P.showOn?1+SHOW_SPOT*showj:1),same=U[b+9]===myK,jM=P.dietOn?clamp((szj-P.sz0)*P.invMature,0,1):1,jJaw=P.dietOn?F[b+5]*jM:0,maleJ=(fj&2)!==0;let canEat=false,isPrey=false;
-          if(same){const sR=P.showOn&&maleJ&&!maleI?1+SHOW_SPOT*showj:1;
-            if(d<C*1.5*sR){if(d<C*1.5){flX+=ddx;flY+=ddy;flN++;}
-              if(P.sexOn?maleJ!==maleI&&!(P.careOn&&maleJ&&(fj&4))&&!(P.rivalOn&&(fj&32)):U[b+10]===myC){
-                if(P.pickOn&&!maleI){const sc=(P.choiceOn?szj:1)*(P.showOn?SHOW_BASE+showj:1);if(sc>mateS||sc===mateS&&d<mateD){mateS=sc;mateD=d;mateJ=j;}}
-                else if(d<mateD){mateD=d;mateJ=j;}}
-              if(P.rivalOn&&maleI&&maleJ&&(fi&64)&&d<cR&&mySz>=P.reproSz&&szj>=P.reproSz&&!(fi&32)&&!(fj&32)&&mySz*(1+F[a+6])>szj*(1+F[b+6])&&d<rivalD){rivalD=d;rivalJ=j;}}
-            if(d<cR*0.8){const sf=P.sep*2/(d+1);ax-=ddx/d*sf;ay-=ddy/d*sf;}
-            if(P.sameSafe)continue;canEat=iHunt&&!full&&mySz>szj*myR*(1+DIET_DEFEND*jJaw);isPrey=szj>mySz*(P.eatR-Math.max(0,P.eatR-DIET_JAW_RATIO)*jJaw)*myDef;}
-          else if(P.foodChain){const rj=U[b+11];canEat=iHunt&&!full&&(myRoot+1)%P.nSp===rj;isPrey=(rj+1)%P.nSp===myRoot;}
-          else{canEat=iHunt&&!full&&mySz>szj*myR*(1+DIET_DEFEND*jJaw);isPrey=szj>mySz*(P.eatR-Math.max(0,P.eatR-DIET_JAW_RATIO)*jJaw)*myDef;}
-          if(isPrey&&P.dietOn&&F[b+4]*jM<=DIET_MIN)isPrey=false;
-          if(guarding&&!same&&inP&&szj>P.sz0&&(!P.dietOn||F[b+4]*jM>DIET_MIN)){if(d<guardD){guardD=d;guardJ=j;}
-            if(P.smartOn){if(isPrey){if(d<hideD){hideD=d;hideJ=j;}}else{if(d<mobD){mobD=d;mobJ=j;}if(d<cR&&!(fj&16)&&!(fi&128)&&d<mobHitD){mobHitD=d;mobHitJ=j;}}}}
-          if(canEat&&inP){const de=P.showOn?d/(1+SHOW_SPOT*showj):d;if(P.dietOn&&de<preyD){preyD=de;preyJ=j;}const hf=P.hunt*myAggro*0.5/(d+5)*huntW*(P.dietOn?1-F[a+5]:1);ax+=ddx/d*hf;ay+=ddy/d*hf;if(d<cR*0.6&&d<killD){killD=d;killJ=j;}}
-          else if(isPrey&&inP){if(P.dietOn&&d<threatD){threatD=d;threatJ=j;}const ff=P.flee*1.2/(d+3);ax-=ddx/d*ff;ay-=ddy/d*ff;}
-          else if(!same&&d<cR*1.2){const sf=P.sep*0.5/(d+2);ax-=ddx/d*sf;ay-=ddy/d*sf;}}}}
-    OF[o]=ax;OF[o+1]=ay;OF[o+2]=flX;OF[o+3]=flY;OF[o+4]=flN;OI[o+5]=mateJ;OI[o+6]=preyJ;OI[o+7]=threatJ;OI[o+8]=guardJ;OI[o+9]=mobJ;OI[o+10]=hideJ;OI[o+11]=killJ;OI[o+12]=rivalJ;OI[o+13]=mobHitJ;}
-}
-const NB_WGSL=`
-struct Par{n:u32,gridW:u32,gridH:u32,gmax:u32,flags:u32,scanR:i32,nSp:u32,p0:u32,
-  cell:f32,sep:f32,hunt:f32,flee:f32,eatR:f32,sz0:f32,invMature:f32,reproSz:f32,
-  showSpot:f32,showBase:f32,dietDefend:f32,dietJawRatio:f32,dietMin:f32,p1:f32,p2:f32,p3:f32};
-@group(0) @binding(0) var<uniform> P:Par;
-@group(0) @binding(1) var<storage,read> org:array<vec4<f32>>;
-@group(0) @binding(2) var<storage,read> gcount:array<u32>;
-@group(0) @binding(3) var<storage,read> gentry:array<i32>;
-@group(0) @binding(4) var<storage,read_write> outb:array<vec4<f32>>;
-fn bit(f:u32,b:u32)->bool{return ((f>>b)&1u)==1u;}
-fn ib(v:i32)->f32{return bitcast<f32>(v);}
-@compute @workgroup_size(64)
-fn main(@builtin(global_invocation_id) gid:vec3<u32>){
-  let i=gid.x;if(i>=P.n){return;}
-  let a0=org[i*4u];let a1=org[i*4u+1u];let a2=org[i*4u+2u];let fi=bitcast<u32>(org[i*4u+3u].x);
-  var ax=0.0;var ay=0.0;var flX=0.0;var flY=0.0;var flN=0.0;
-  var mateJ=-1;var preyJ=-1;var threatJ=-1;var guardJ=-1;var mobJ=-1;var hideJ=-1;var killJ=-1;var rivalJ=-1;var mobHitJ=-1;
-  if(bit(fi,0u)){
-    let sexOn=bit(P.flags,0u);let careOn=bit(P.flags,1u);let smartOn=bit(P.flags,2u);let rivalOn=bit(P.flags,3u);let showOn=bit(P.flags,4u);
-    let choiceOn=bit(P.flags,5u);let pickOn=bit(P.flags,6u);let dietOn=bit(P.flags,7u);let foodChain=bit(P.flags,8u);let sameSafe=bit(P.flags,9u);
-    let xi=a0.x;let yi=a0.y;let mySz=a0.z;let myK=bitcast<u32>(a2.y);let myC=bitcast<u32>(a2.z);let myRoot=bitcast<u32>(a2.w);let maleI=bit(fi,1u);
-    let myAggro=0.5+a2.x;let myPerc=0.5+a1.w*1.5;
-    let myM=select(1.0,clamp((mySz-P.sz0)*P.invMature,0.0,1.0),dietOn);let myJaw=select(0.0,a1.y*myM,dietOn);
-    let guarding=careOn&&bit(fi,2u);let myMeat=select(1.0,a1.x*myM,dietOn);let iHunt=myMeat>P.dietMin&&!guarding;let huntW=min(1.0,myMeat);
-    let myR=P.eatR-max(0.0,P.eatR-P.dietJawRatio)*myJaw;let myDef=1.0+P.dietDefend*myJaw;let full=bit(fi,3u);
-    var mateD=P.cell*1.5;var mateS=-1.0;var preyD=1e9;var threatD=1e9;var guardD=1e9;var mobD=1e9;var hideD=1e9;var killD=1e9;var rivalD=1e9;var mobHitD=1e9;
-    let gw=i32(P.gridW);let gh=i32(P.gridH);
-    let cx=min(gw-1,max(0,i32(xi/P.cell)));let cy=min(gh-1,max(0,i32(yi/P.cell)));
-    for(var dy=-P.scanR;dy<=P.scanR;dy++){for(var dx=-P.scanR;dx<=P.scanR;dx++){
-      let nx=cx+dx;let ny=cy+dy;if(nx<0||nx>=gw||ny<0||ny>=gh){continue;}
-      let ci=u32(ny)*P.gridW+u32(nx);let cnt=gcount[ci];let base=ci*P.gmax;
-      for(var k=0u;k<cnt;k++){
-        let j=gentry[base+k];let ju=u32(j);if(ju==i){continue;}
-        let b0=org[ju*4u];let b1=org[ju*4u+1u];let b2=org[ju*4u+2u];let fj=bitcast<u32>(org[ju*4u+3u].x);
-        let ddx=b0.x-xi;let ddy=b0.y-yi;let d=sqrt(ddx*ddx+ddy*ddy)+0.1;let szj=b0.z;let showj=b0.w;let cR=mySz+szj;
-        let inP=d<P.cell*myPerc*select(1.0,1.0+P.showSpot*showj,showOn);let same=bitcast<u32>(b2.y)==myK;
-        let jM=select(1.0,clamp((szj-P.sz0)*P.invMature,0.0,1.0),dietOn);let jJaw=select(0.0,b1.y*jM,dietOn);let maleJ=bit(fj,1u);
-        var canEat=false;var isPrey=false;
-        if(same){
-          let sR=select(1.0,1.0+P.showSpot*showj,showOn&&maleJ&&!maleI);
-          if(d<P.cell*1.5*sR){
-            if(d<P.cell*1.5){flX+=ddx;flY+=ddy;flN+=1.0;}
-            var ok=bitcast<u32>(b2.z)==myC;
-            if(sexOn){ok=maleJ!=maleI&&!(careOn&&maleJ&&bit(fj,2u))&&!(rivalOn&&bit(fj,5u));}
-            if(ok){
-              if(pickOn&&!maleI){let sc=select(1.0,szj,choiceOn)*select(1.0,P.showBase+showj,showOn);if(sc>mateS||(sc==mateS&&d<mateD)){mateS=sc;mateD=d;mateJ=j;}}
-              else if(d<mateD){mateD=d;mateJ=j;}}
-            if(rivalOn&&maleI&&maleJ&&bit(fi,6u)&&d<cR&&mySz>=P.reproSz&&szj>=P.reproSz&&!bit(fi,5u)&&!bit(fj,5u)&&mySz*(1.0+a1.z)>szj*(1.0+b1.z)&&d<rivalD){rivalD=d;rivalJ=j;}}
-          if(d<cR*0.8){let sf=P.sep*2.0/(d+1.0);ax-=ddx/d*sf;ay-=ddy/d*sf;}
-          if(sameSafe){continue;}
-          canEat=iHunt&&!full&&mySz>szj*myR*(1.0+P.dietDefend*jJaw);isPrey=szj>mySz*(P.eatR-max(0.0,P.eatR-P.dietJawRatio)*jJaw)*myDef;}
-        else if(foodChain){let rj=bitcast<u32>(b2.w);canEat=iHunt&&!full&&((myRoot+1u)%P.nSp)==rj;isPrey=((rj+1u)%P.nSp)==myRoot;}
-        else{canEat=iHunt&&!full&&mySz>szj*myR*(1.0+P.dietDefend*jJaw);isPrey=szj>mySz*(P.eatR-max(0.0,P.eatR-P.dietJawRatio)*jJaw)*myDef;}
-        if(isPrey&&dietOn&&b1.x*jM<=P.dietMin){isPrey=false;}
-        if(guarding&&!same&&inP&&szj>P.sz0&&(!dietOn||b1.x*jM>P.dietMin)){
-          if(d<guardD){guardD=d;guardJ=j;}
-          if(smartOn){if(isPrey){if(d<hideD){hideD=d;hideJ=j;}}else{if(d<mobD){mobD=d;mobJ=j;}if(d<cR&&!bit(fj,4u)&&!bit(fi,7u)&&d<mobHitD){mobHitD=d;mobHitJ=j;}}}}
-        if(canEat&&inP){
-          let de=select(d,d/(1.0+P.showSpot*showj),showOn);if(dietOn&&de<preyD){preyD=de;preyJ=j;}
-          let hf=P.hunt*myAggro*0.5/(d+5.0)*huntW*select(1.0,1.0-a1.y,dietOn);ax+=ddx/d*hf;ay+=ddy/d*hf;
-          if(d<cR*0.6&&d<killD){killD=d;killJ=j;}}
-        else if(isPrey&&inP){if(dietOn&&d<threatD){threatD=d;threatJ=j;}let ff=P.flee*1.2/(d+3.0);ax-=ddx/d*ff;ay-=ddy/d*ff;}
-        else if(!same&&d<cR*1.2){let sf=P.sep*0.5/(d+2.0);ax-=ddx/d*sf;ay-=ddy/d*sf;}
-      }}}
-  }
-  outb[i*4u]=vec4<f32>(ax,ay,flX,flY);
-  outb[i*4u+1u]=vec4<f32>(flN,ib(mateJ),ib(preyJ),ib(threatJ));
-  outb[i*4u+2u]=vec4<f32>(ib(guardJ),ib(mobJ),ib(hideJ),ib(killJ));
-  outb[i*4u+3u]=vec4<f32>(ib(rivalJ),ib(mobHitJ),0.0,0.0);
-}`;
-async function gpuInit(){
-  if(gpu||gpuTried)return gpu;gpuTried=true;
-  try{if(!navigator.gpu)return null;const ad=await navigator.gpu.requestAdapter({powerPreference:'high-performance'});if(!ad)return null;
-    const dev=await ad.requestDevice(),mod=dev.createShaderModule({code:NB_WGSL}),info=await mod.getCompilationInfo();
-    if(info.messages.some(m=>m.type==='error')){console.warn('GPU engine shader:',info.messages.map(m=>m.lineNum+': '+m.message).join('\n'));return null;}
-    const S=GPUBufferUsage,pipe=await dev.createComputePipelineAsync({layout:'auto',compute:{module:mod,entryPoint:'main'}});
-    gpu={dev,pipe,orgB:dev.createBuffer({size:MAX_ORG*64,usage:S.STORAGE|S.COPY_DST}),outB:dev.createBuffer({size:MAX_ORG*64,usage:S.STORAGE|S.COPY_SRC}),
-      readB:dev.createBuffer({size:MAX_ORG*64,usage:S.MAP_READ|S.COPY_DST}),parB:dev.createBuffer({size:96,usage:S.UNIFORM|S.COPY_DST}),cntB:null,entB:null,cells:0,bind:null,cnt32:null};
-    dev.lost.then(i=>{console.warn('GPU engine lost:',i.message);gpu=null;gpuInitP=null;gpuTried=false;gpuBusy=false;if(engineGPU()){ui.selEngine.value='cpu';engineNote('The graphics card stopped answering, so the CPU engine took over.');}});
-    return gpu;
-  }catch(e){console.warn('GPU engine unavailable:',e);return null;}
-}
-function nbKick(){ // after each step, and when a world starts: ask what every creature will sense in the next step
-  if(!engineGPU())return;
-  if(gpuBusy){nbWanted=true;return;}
-  if(!gpu&&!nbForceJS){(gpuInitP||(gpuInitP=gpuInit())).then(g=>{if(!g||g!==gpu){if(engineGPU()){ui.selEngine.value='cpu';engineNote('This browser has no WebGPU, so the CPU engine is running.');}return;}engineHoldT=0;nbRestart();});return;}
-  const t0=performance.now();buildGrid();const P=nbParams(),n=nbPack(P),tok=nbToken;nbState='pending';
-  if(!gpu){neighborPassJS(P,n);nb.n=n;nbState='ready';stepMsGpu=performance.now()-t0;return;}
-  const g=gpu,dev=g.dev,cells=gridW*gridH;gpuBusy=true;nbKickT=t0;
-  if(g.cells!==cells){g.cntB?.destroy();g.entB?.destroy();const S=GPUBufferUsage;g.cntB=dev.createBuffer({size:cells*4,usage:S.STORAGE|S.COPY_DST});g.entB=dev.createBuffer({size:cells*GMAX*4,usage:S.STORAGE|S.COPY_DST});g.cnt32=new Uint32Array(cells);g.cells=cells;
-    g.bind=dev.createBindGroup({layout:g.pipe.getBindGroupLayout(0),entries:[{binding:0,resource:{buffer:g.parB}},{binding:1,resource:{buffer:g.orgB}},{binding:2,resource:{buffer:g.cntB}},{binding:3,resource:{buffer:g.entB}},{binding:4,resource:{buffer:g.outB}}]});}
-  const pu=new Uint32Array(nbPar),pf=new Float32Array(nbPar),pi=new Int32Array(nbPar);
-  pu[0]=n;pu[1]=gridW;pu[2]=gridH;pu[3]=GMAX;pu[4]=P.sexOn|P.careOn<<1|P.smartOn<<2|P.rivalOn<<3|P.showOn<<4|P.choiceOn<<5|P.pickOn<<6|P.dietOn<<7|P.foodChain<<8|P.sameSafe<<9;pi[5]=P.foodChain?2:1;pu[6]=P.nSp;
-  pf[8]=CELL;pf[9]=P.sep;pf[10]=P.hunt;pf[11]=P.flee;pf[12]=P.eatR;pf[13]=P.sz0;pf[14]=P.invMature;pf[15]=P.reproSz;pf[16]=SHOW_SPOT;pf[17]=SHOW_BASE;pf[18]=DIET_DEFEND;pf[19]=DIET_JAW_RATIO;pf[20]=DIET_MIN;
-  g.cnt32.set(gridCounts);dev.queue.writeBuffer(g.parB,0,nbPar);dev.queue.writeBuffer(g.cntB,0,g.cnt32);dev.queue.writeBuffer(g.entB,0,gridEntries);
-  const bytes=Math.max(64,n*64);dev.queue.writeBuffer(g.orgB,0,nbOrg.buffer,0,bytes);
-  const enc=dev.createCommandEncoder(),pass=enc.beginComputePass();pass.setPipeline(g.pipe);pass.setBindGroup(0,g.bind);pass.dispatchWorkgroups(Math.max(1,Math.ceil(n/64)));pass.end();
-  enc.copyBufferToBuffer(g.outB,0,g.readB,0,bytes);dev.queue.submit([enc.finish()]);
-  g.readB.mapAsync(GPUMapMode.READ,0,bytes).then(()=>{
-    new Uint8Array(nb.f.buffer,0,bytes).set(new Uint8Array(g.readB.getMappedRange(0,bytes)));g.readB.unmap();gpuBusy=false;
-    if(tok!==nbToken||nbWanted){nbWanted=false;nbKick();return;}
-    nb.n=n;nbState='ready';stepMsGpu=stepMsGpu*0.8+(performance.now()-nbKickT)*0.2;stepPump();
-  },e=>{gpuBusy=false;console.warn('GPU engine read failed:',e);if(engineGPU()){ui.selEngine.value='cpu';engineNote('The graphics card stopped answering, so the CPU engine took over.');}});
-}
-function nbRestart(){nbToken++;nbState='none';nb.n=0;nbKick();} // a new world, or the engine switched on: the old answer no longer fits
-let engineHoldT=0;function engineNote(t){ui.engineStat.textContent=t;engineHoldT=performance.now()+8000;}function engineNoteHold(){return performance.now()<engineHoldT;}
 
 // Oasis overlay
 
@@ -1847,29 +1669,18 @@ function renderWorld(){
   gl.blendFunc(gl.ONE,gl.ONE_MINUS_SRC_ALPHA);gl.drawArrays(gl.POINTS,0,n);
   gl.disableVertexAttribArray(orgLoc.pos);gl.disableVertexAttribArray(orgLoc.look);gl.disableVertexAttribArray(orgLoc.genes);gl.disableVertexAttribArray(orgLoc.state);gl.disableVertexAttribArray(orgLoc.mark);gl.disableVertexAttribArray(orgLoc.bite);gl.disableVertexAttribArray(orgLoc.flash);
 }
-const SIM_STEP=1/60,MAX_STEPS_PER_FRAME=2;let stepAcc=0,stepsThisFrame=0;
-// Runs the fixed steps owed this frame. On the GPU engine each step waits for the graphics card's answer about the pond, so
-// this also runs when that answer arrives.
-function stepPump(){
-  const g=engineGPU();
-  while(running&&stepAcc>=SIM_STEP&&stepsThisFrame<MAX_STEPS_PER_FRAME){
-    if(g&&nbState!=='ready'){if(stepAcc>SIM_STEP*MAX_STEPS_PER_FRAME)stepAcc=SIM_STEP*MAX_STEPS_PER_FRAME;return;}
-    const t0=performance.now();spawnFood(SIM_STEP*(+ui.sSpeed.value));
-    if(g){nbState='none';simulate(SIM_STEP,nb);nbKick();}else simulate(SIM_STEP);
-    stepMsCpu=stepMsCpu*0.8+(performance.now()-t0)*0.2;checkExperiment();stepAcc-=SIM_STEP;stepsThisFrame++;}
-  if(stepsThisFrame===MAX_STEPS_PER_FRAME)stepAcc=0;
-}
+const SIM_STEP=1/60,MAX_STEPS_PER_FRAME=2;let stepAcc=0;
 function frame(now){
   requestAnimationFrame(frame);const rawDt=Math.min(0.05,(now-lastT)/1000);lastT=now;
   // Fixed timestep: the simulation advances in identical 1/60s steps regardless of frame rate, so a seed replays exactly
   visTime+=rawDt;
-  if(running){stepAcc+=rawDt;stepsThisFrame=0;stepPump();}
+  if(running){stepAcc+=rawDt;let steps=0;while(stepAcc>=SIM_STEP&&steps<MAX_STEPS_PER_FRAME){spawnFood(SIM_STEP*(+ui.sSpeed.value));simulate(SIM_STEP);checkExperiment();stepAcc-=SIM_STEP;steps++;}if(steps===MAX_STEPS_PER_FRAME)stepAcc=0;}
   if(graphDirty){drawPopGraph();updateLegend();graphDirty=false;}
   treeRedrawT+=rawDt;if(treeVisible()&&(treeDirty||treeRedrawT>0.5)){drawTree();treeDirty=false;treeRedrawT=0;}
   if(++tooltipTick>=3){updateTooltip();tooltipTick=0;}else placeTip();
   const mins=simTime/60|0,secs=simTime%60|0;ui.timeDisplay.textContent=(mins<10?'0':'')+mins+':'+(secs<10?'0':'')+secs;
   renderWorld();
-  fpsT+=rawDt;fpsN++;if(fpsT>=0.4){ui.sFps.textContent=(fpsN/fpsT|0);fpsT=0;fpsN=0;if(running&&!engineNoteHold())ui.engineStat.textContent=(engineGPU()?`Each step: ${stepMsCpu.toFixed(1)} ms on the CPU, ${(gpu?stepMsGpu:0).toFixed(1)} ms waiting on the graphics card`:`Each step: ${stepMsCpu.toFixed(1)} ms on the CPU`);}
+  fpsT+=rawDt;fpsN++;if(fpsT>=0.4){ui.sFps.textContent=(fpsN/fpsT|0);fpsT=0;fpsN=0;}
   let alive=0,genSum=0;for(let i=0;i<orgCount;i++)if(oalive[i]){alive++;genSum+=ogen[i];}
   let fAlive=0;for(let i=0;i<foodCount;i++)if(falive[i])fAlive++;
   ui.sAlive.textContent=alive;ui.sFoodCount.textContent=fAlive;ui.sGen.textContent=generation;
@@ -1907,7 +1718,6 @@ ui.btnFullscreen.addEventListener('click',()=>{interact();if(!document.fullscree
 ui.chkSexes.addEventListener('change',()=>{if(ui.chkSexes.checked)ui.chkSexual.checked=true;});
 ui.chkSexual.addEventListener('change',()=>{if(!ui.chkSexual.checked)ui.chkSexes.checked=false;});
 ui.selRepro.addEventListener('change',()=>{interact();const v=ui.selRepro.value;ui.chkSexual.checked=v!=='asexual';ui.chkSexes.checked=v==='sexes';});
-ui.selEngine.addEventListener('change',()=>{interact();if(engineGPU())engineNote('Starting the GPU engine…');nbRestart();});
 ui.selDietStart.addEventListener('change',()=>{interact();ui.chkDiet.checked=true;resize();initWorld();});
 ui.selPreset.addEventListener('change',()=>{interact();const v=ui.selPreset.value;if(v!=='custom'){applyPreset(v);resize();initWorld();}});
 document.querySelectorAll('input[type="range"]').forEach(s=>{s.addEventListener('input',()=>{interact();updateLabels();ui.selPreset.value='custom';});});

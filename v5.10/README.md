@@ -1,12 +1,14 @@
+> **Archived README for v5.10.1, the public version on October 3, 2026 (before the GPU engine).** This is how the README read while v5.10.1 was the public version. Play it at [/v5.10](https://jkh2.github.io/Primordial-Sim/v5.10/). The current README is [here](../README.md). Only the image and file links below were changed so they work from this folder; the untouched original is on the [`v5.10.1-release`](https://github.com/jkh2/Primordial-Sim/tree/v5.10.1-release) branch (v5.10 itself: [`v5.10-release`](https://github.com/jkh2/Primordial-Sim/tree/v5.10-release)).
+
 # Primordial-Sim
 
-![Primordial-Sim Banner](banner.png)
+![Primordial-Sim Banner](../banner.png
 
 ### Emergent Artificial Life Engine
 
 A real-time WebGL ecosystem where living cells eat, hunt, flee, flock, reproduce, mutate, and split into new species that nobody designed, with a multi-provider AI Lab Partner that observes, experiments, and writes research reports on the living world. All from simple rules, all in your browser.
 
-**[Launch Primordial](https://jkh2.github.io/Primordial-Sim/)** · Version 5.11 · Single-file HTML · Zero install · GitHub Pages
+**[Launch Primordial](https://jkh2.github.io/Primordial-Sim/)** · Version 5.10.1 · Single-file HTML · Zero install · GitHub Pages
 
 **New here?** Choose the **Origin of Species** preset in the World tab and press **T**. Everything starts as one red species; within a few minutes the family tree fills with species that split off on their own.
 
@@ -25,13 +27,6 @@ We believe this is how humans and AI should work together: as partners with comp
 ---
 
 ## What's New in v5
-
-**v5.11, October 3, 2026: the GPU engine**
-
-- **Room for far more creatures.** At James's request, a new **Engine** menu in the World tab hands the slowest part of each step to the graphics card. That part is every creature checking the creatures around it for mates, prey, threats and flockmates, and it grows faster than the population does. On the CPU, one step took 9 ms with 5,000 creatures, 61 ms with 20,000 and 239 ms with 40,000. With the GPU engine, the graphics card checks every creature at once, and what's left for the CPU took 7, 7 and 14 ms in the same worlds. How many creatures run smoothly now depends on your graphics card. Our test machine has none (WebGPU ran there in software, far slower than a real card), so the card's own share is the number to watch on yours. Eating algae, births, deaths, care and courtship still run on the CPU exactly as before.
-- **See the difference yourself.** Under the Engine menu, a line shows how long each step takes, on the CPU and waiting on the graphics card, so you can watch the engine work on your own machine.
-- **The same rules, seen all at once.** On the GPU engine every creature sees the pond as it stood at the start of the step. On the CPU engine each creature also sees the moves of those updated before it in the same step. The two engines play the same rules, but their runs differ a little. In 72 ten-minute test worlds, 36 on each engine, the GPU engine's ponds lived much like the CPU's: grazers and hunters held on about as often. One difference: in Males and Females with protective parents, hunters lasted in all 9 worlds on the GPU engine, against 6 of 9 on the CPU. The graphics card's answers matched a JavaScript copy of the same pass exactly on every creature tested, up to 20,000 at once.
-- **CPU stays the default.** The CPU engine plays exactly like v5.10.1, so every seed and share link replays as before. A GPU run replays exactly only on the computer that made it, since graphics cards round numbers differently. The GPU engine needs WebGPU (recent Chrome, Edge or Safari); without it, the page says so and stays on the CPU. Share links and saved files remember the engine.
 
 **v5.10.1, October 3, 2026: short share links**
 
@@ -159,17 +154,16 @@ We believe this is how humans and AI should work together: as partners with comp
 
 | Version | Play it | Its README | Exact source |
 |---------|---------|------------|--------------|
-| v5.10.1 (October 3, 2026) | [/v5.10](https://jkh2.github.io/Primordial-Sim/v5.10/) | [v5.10/README.md](v5.10/README.md) | [`v5.10.1-release`](https://github.com/jkh2/Primordial-Sim/tree/v5.10.1-release) branch (v5.10: [`v5.10-release`](https://github.com/jkh2/Primordial-Sim/tree/v5.10-release)) |
-| v5.9.2 (October 3, 2026) | [/v5.9](https://jkh2.github.io/Primordial-Sim/v5.9/) | [v5.9/README.md](v5.9/README.md) | [`v5.9.2-release`](https://github.com/jkh2/Primordial-Sim/tree/v5.9.2-release) branch (v5.9: [`v5.9-release`](https://github.com/jkh2/Primordial-Sim/tree/v5.9-release), v5.9.1: [`v5.9.1-release`](https://github.com/jkh2/Primordial-Sim/tree/v5.9.1-release)) |
-| v5.8 (October 3, 2026) | [/v5.8](https://jkh2.github.io/Primordial-Sim/v5.8/) | [v5.8/README.md](v5.8/README.md) | [`v5.8-release`](https://github.com/jkh2/Primordial-Sim/tree/v5.8-release) branch |
-| v5.7 (October 3, 2026) | [/v5.7](https://jkh2.github.io/Primordial-Sim/v5.7/) | [v5.7/README.md](v5.7/README.md) | [`v5.7-release`](https://github.com/jkh2/Primordial-Sim/tree/v5.7-release) branch |
-| v5.6.1 (October 3, 2026) | [/v5.6](https://jkh2.github.io/Primordial-Sim/v5.6/) | [v5.6/README.md](v5.6/README.md) | [`v5.6.1-release`](https://github.com/jkh2/Primordial-Sim/tree/v5.6.1-release) branch (v5.6 itself: [`v5.6-release`](https://github.com/jkh2/Primordial-Sim/tree/v5.6-release)) |
-| v5.5 (October 3, 2026) | [/v5.5](https://jkh2.github.io/Primordial-Sim/v5.5/) | [v5.5/README.md](v5.5/README.md) | [`v5.5-release`](https://github.com/jkh2/Primordial-Sim/tree/v5.5-release) branch |
-| v5.4 (October 3, 2026) | [/v5.4](https://jkh2.github.io/Primordial-Sim/v5.4/) | [v5.4/README.md](v5.4/README.md) | [`v5.4-release`](https://github.com/jkh2/Primordial-Sim/tree/v5.4-release) branch |
-| v5.3 (October 2, 2026) | [/v5.3](https://jkh2.github.io/Primordial-Sim/v5.3/) | [v5.3/README.md](v5.3/README.md) | [`v5.3-release`](https://github.com/jkh2/Primordial-Sim/tree/v5.3-release) branch |
-| v5 (September 29, 2026) | [/v5](https://jkh2.github.io/Primordial-Sim/v5/) | [v5/README.md](v5/README.md) | [`v5-release`](https://github.com/jkh2/Primordial-Sim/tree/v5-release) branch |
-| v4 (September 29, 2026) | [/v4](https://jkh2.github.io/Primordial-Sim/v4/) | [v4/README.md](v4/README.md) | [`v4-release`](https://github.com/jkh2/Primordial-Sim/tree/v4-release) branch |
-| v3, the original (March 12, 2026) | [/classic](https://jkh2.github.io/Primordial-Sim/classic/) | [classic/README.md](classic/README.md) | [`v3-original`](https://github.com/jkh2/Primordial-Sim/tree/v3-original) branch |
+| v5.9.2 (October 3, 2026) | [/v5.9](https://jkh2.github.io/Primordial-Sim/v5.9/) | [v5.9/README.md](../v5.9/README.md | [`v5.9.2-release`](https://github.com/jkh2/Primordial-Sim/tree/v5.9.2-release) branch (v5.9: [`v5.9-release`](https://github.com/jkh2/Primordial-Sim/tree/v5.9-release), v5.9.1: [`v5.9.1-release`](https://github.com/jkh2/Primordial-Sim/tree/v5.9.1-release)) |
+| v5.8 (October 3, 2026) | [/v5.8](https://jkh2.github.io/Primordial-Sim/v5.8/) | [v5.8/README.md](../v5.8/README.md | [`v5.8-release`](https://github.com/jkh2/Primordial-Sim/tree/v5.8-release) branch |
+| v5.7 (October 3, 2026) | [/v5.7](https://jkh2.github.io/Primordial-Sim/v5.7/) | [v5.7/README.md](../v5.7/README.md | [`v5.7-release`](https://github.com/jkh2/Primordial-Sim/tree/v5.7-release) branch |
+| v5.6.1 (October 3, 2026) | [/v5.6](https://jkh2.github.io/Primordial-Sim/v5.6/) | [v5.6/README.md](../v5.6/README.md | [`v5.6.1-release`](https://github.com/jkh2/Primordial-Sim/tree/v5.6.1-release) branch (v5.6 itself: [`v5.6-release`](https://github.com/jkh2/Primordial-Sim/tree/v5.6-release)) |
+| v5.5 (October 3, 2026) | [/v5.5](https://jkh2.github.io/Primordial-Sim/v5.5/) | [v5.5/README.md](../v5.5/README.md | [`v5.5-release`](https://github.com/jkh2/Primordial-Sim/tree/v5.5-release) branch |
+| v5.4 (October 3, 2026) | [/v5.4](https://jkh2.github.io/Primordial-Sim/v5.4/) | [v5.4/README.md](../v5.4/README.md | [`v5.4-release`](https://github.com/jkh2/Primordial-Sim/tree/v5.4-release) branch |
+| v5.3 (October 2, 2026) | [/v5.3](https://jkh2.github.io/Primordial-Sim/v5.3/) | [v5.3/README.md](../v5.3/README.md | [`v5.3-release`](https://github.com/jkh2/Primordial-Sim/tree/v5.3-release) branch |
+| v5 (September 29, 2026) | [/v5](https://jkh2.github.io/Primordial-Sim/v5/) | [v5/README.md](../v5/README.md | [`v5-release`](https://github.com/jkh2/Primordial-Sim/tree/v5-release) branch |
+| v4 (September 29, 2026) | [/v4](https://jkh2.github.io/Primordial-Sim/v4/) | [v4/README.md](../v4/README.md | [`v4-release`](https://github.com/jkh2/Primordial-Sim/tree/v4-release) branch |
+| v3, the original (March 12, 2026) | [/classic](https://jkh2.github.io/Primordial-Sim/classic/) | [classic/README.md](../classic/README.md | [`v3-original`](https://github.com/jkh2/Primordial-Sim/tree/v3-original) branch |
 
 ## What It Is
 
@@ -411,7 +405,7 @@ Or just open the HTML file directly in any modern browser. No server, no build, 
 
 ## Performance
 
-Drawing runs on the GPU. The simulation runs on the CPU unless you pick the GPU engine in the World tab, which hands the neighbor checks, the part that grows with crowding, to the graphics card through WebGPU. At startup the organism count is picked from your screen: 8,000 on wide desktop screens, 5,000 on laptops, 3,000 on smaller windows, and 2,000 to 4,000 on touch devices. The Organisms slider goes up to 50,000. If the frame rate drops, try the GPU engine, lower the count, or turn off Water Effects and Detailed Creatures in the Visual tab. The line under the Engine menu shows how long each step takes. A big starting crowd also needs more food to last, so raise Food Pellets and Food Spawn Rate with it.
+Drawing runs on the GPU and the simulation runs on the CPU. At startup the organism count is picked from your screen: 8,000 on wide desktop screens, 5,000 on laptops, 3,000 on smaller windows, and 2,000 to 4,000 on touch devices. The Organisms slider goes up to 50,000. If the frame rate drops, lower it, or turn off Water Effects and Detailed Creatures in the Visual tab.
 
 The spatial hash grid is the key performance enabler. Without it, 50,000 organisms would need 2.5 billion pairwise distance checks per step; with it, each organism only looks at the organisms in the grid cells around it.
 
@@ -421,7 +415,7 @@ Any modern browser with WebGL: Chrome, Firefox, Safari, Edge. No plugins, no ext
 
 ## Where It's Going
 
-- **Now: richer life.** Toxins and warning colors, small evolved brains as an optional replacement for the five fixed drives, day and night, seasons, terrain and currents, disease, life stages, hunters that work in packs, fighters and sneakers (rivals who back off after a loss, and males who slip in to mate while others fight), scent trails, colonies, and moving more of each step onto the graphics card so even bigger ponds run smoothly.
+- **Now: richer life.** Toxins and warning colors, small evolved brains as an optional replacement for the five fixed drives, day and night, seasons, terrain and currents, disease, life stages, hunters that work in packs, fighters and sneakers (rivals who back off after a loss, and males who slip in to mate while others fight), scent trails, colonies, and a WebGPU engine for 100,000 or more organisms where the browser supports it.
 - **Paused, coming back: the Lab Partner as a working scientist.** Proper tool calls instead of parsing text, time-series records so reports cite trends, experiments repeated across several seeds against an unchanged control, a lab notebook that persists between sessions, charts in its reports, and an Alliance mode where Claude, Grok and Gemini each interpret the same result, plus a pond news feed and hall of fame for new species, extinctions and records.
 - **Then: a world worth sharing.** A camera that follows one creature through its life, zoom and pan, dragging to stir a current, a narrated documentary mode, and the Wellspring at the heart of the world.
 - **Someday: a 3D world** people can step into with VR headsets, right in the browser.
@@ -438,7 +432,7 @@ Learn more about the SIDLF framework and human-AI symbiosis at [jameskeithharwoo
 
 ## License
 
-**Sentinel AI Systems Non-Commercial License v1.0** — See [LICENSE](LICENSE) for full terms.
+**Sentinel AI Systems Non-Commercial License v1.0** — See [LICENSE](../LICENSE for full terms.
 
 **Free for:** personal use, entertainment, education, academic research, classroom instruction, and learning from the code.
 
@@ -446,4 +440,4 @@ Learn more about the SIDLF framework and human-AI symbiosis at [jameskeithharwoo
 
 We built this openly so people can learn from it, enjoy it, and be inspired by it. We ask that if you profit from it, you include us in that conversation.
 
-See [IP-DECLARATION.md](IP-DECLARATION.md) for the formal intellectual property declaration and prior art documentation.
+See [IP-DECLARATION.md](../IP-DECLARATION.md for the formal intellectual property declaration and prior art documentation.
