@@ -6,7 +6,7 @@
 
 A real-time WebGL ecosystem where living cells eat, hunt, flee, flock, reproduce, mutate, and split into new species that nobody designed, with a multi-provider AI Lab Partner that observes, experiments, and writes research reports on the living world. All from simple rules, all in your browser.
 
-**[Launch Primordial](https://jkh2.github.io/Primordial-Sim/)** · Version 5.9 · Single-file HTML · Zero install · GitHub Pages
+**[Launch Primordial](https://jkh2.github.io/Primordial-Sim/)** · Version 5.9.1 · Single-file HTML · Zero install · GitHub Pages
 
 **New here?** Choose the **Origin of Species** preset in the World tab and press **T**. Everything starts as one red species; within a few minutes the family tree fills with species that split off on their own.
 
@@ -25,6 +25,10 @@ We believe this is how humans and AI should work together: as partners with comp
 ---
 
 ## What's New in v5
+
+**v5.9.1, October 3, 2026: brighter fireflies**
+
+- **Flashes you can't miss.** James found the males' flashes hard to notice, so each flash now throws a wide yellow-green glow around the male, about two and a half times his size, with a white-hot center. Every grown male flashes at 70% brightness or more, up from 50%, and each pulse lasts longer, about a quarter second, closer to a real firefly's. This changes only how the pond looks: every seed plays exactly as in v5.9, which stays on the [`v5.9-release`](https://github.com/jkh2/Primordial-Sim/tree/v5.9-release) branch.
 
 **v5.9, October 3, 2026: courtship, and males that flash like fireflies**
 
@@ -339,7 +343,7 @@ With Reproduction set to **Male and female**, three switches in the Evolve tab s
 
 **Rival Males.** When two grown males of the same species touch while a female is in reach, the stronger one, by size times one plus his brawn, drives the other off. The loser pays 1 energy (the winner a third of that), is pushed away, and no female will take him for 2 seconds. Away from females, males leave each other alone. Every creature carries a brawn gene: at full brawn a male can grow half again past the top size, at a running cost like the other genes.
 
-**Showy Males.** Every grown male flashes a yellow-green lantern at his rear in his species' own code: one to three quick pulses every 1.5 to 3.5 seconds, drawn from the world seed so each species, new ones included, gets its own. A display gene makes him brighter, from half brightness at 0% to full at 100%. Females see a displaying male from up to twice as far away and, without Mate Choice, take the brightest male in reach; hunters see him from as far and go for the brightest prey first. Displaying costs energy.
+**Showy Males.** Every grown male flashes a yellow-green lantern at his rear in his species' own code: one to three quick pulses every 1.5 to 3.5 seconds, drawn from the world seed so each species, new ones included, gets its own. A display gene makes him brighter, from 70% brightness at 0% to full at 100%, and each flash lights a glow around him about two and a half times his size. Females see a displaying male from up to twice as far away and, without Mate Choice, take the brightest male in reach; hunters see him from as far and go for the brightest prey first. Displaying costs energy.
 
 Females carry brawn and display without showing them, and each baby takes each gene from its mother or its father before mutation. Both genes start between 0% and 10% in every world, so they only grow where they pay. Click a male to see his brawn and display, whether he is flashing, or whether a rival has driven him off; the family tree shows each species' brawn, display and the average size of its males and females.
 
