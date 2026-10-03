@@ -142,7 +142,7 @@ button.btn.recording{background:rgba(255,50,50,0.25)!important;border-color:rgba
 <div class="panel" id="panel">
   <div class="panel-header">
     <div class="panel-title">Primordial</div>
-    <div class="panel-subtitle">Genesis Engine · Sentinel Edition · v5.4</div>
+    <div class="panel-subtitle">Genesis Engine · Sentinel Edition · v5.3</div>
     <button class="panel-close" id="panelClose" title="Collapse panel">&#10005;</button>
   </div>
   <div class="tabs">
@@ -166,7 +166,6 @@ button.btn.recording{background:rgba(255,50,50,0.25)!important;border-color:rgba
       <div class="btn-row">
         <select class="sel" id="selPreset">
           <option value="eden">Stable Eden</option>
-          <option value="predprey">Predators and Prey</option>
           <option value="armsrace">Arms Race</option>
           <option value="battleroyale">Battle Royale</option>
           <option value="superorganism">Superorganism</option>
@@ -209,11 +208,6 @@ button.btn.recording{background:rgba(255,50,50,0.25)!important;border-color:rgba
       <div class="ctrl"><div class="ctrl-label"><span>Offspring Count</span><strong id="vOffspring">2</strong></div><input type="range" id="sOffspring" min="1" max="5" step="1" value="2"/></div>
     </div>
     <div class="tab-page" id="tab-rules">
-      <div class="section-label">Diets</div>
-      <div class="toggle-row"><span>Grazers and Hunters (diet gene)</span><input type="checkbox" id="chkDiet" checked/></div>
-      <div class="hint-text" style="font-size:0.68rem;color:var(--muted);margin:-4px 0 10px">On: each creature's diet runs from grazer (only algae) to hunter (only other creatures), with omnivores eating both in between. Grazers get more from algae; hunters are built to kill, live longer and breed slower. Off: everyone eats everything, as before v5.4.</div>
-      <div class="toggle-row"><span>Starting Diets</span><select class="sel" id="selDietStart" title="Which diets the starting species have; changing it starts a new world">
-        <option value="omnivores">All omnivores</option><option value="mixed">Mixed</option><option value="grazers">All grazers</option><option value="hunters">All hunters</option></select></div>
       <div class="section-label">Predation</div>
       <div class="toggle-row"><span>Same Species Protected</span><input type="checkbox" id="chkSameSpecies" checked/></div>
       <div class="toggle-row"><span>Food Chain (Rock-Paper-Scissors)</span><input type="checkbox" id="chkFoodChain"/></div>
@@ -241,7 +235,6 @@ button.btn.recording{background:rgba(255,50,50,0.25)!important;border-color:rgba
       <div class="toggle-row"><span>Aggression Gene</span><input type="checkbox" id="chkEvoAggro" checked/></div>
       <div class="toggle-row"><span>Efficiency Gene (metabolism)</span><input type="checkbox" id="chkEvoEfficiency" checked/></div>
       <div class="toggle-row"><span>Perception Gene (sight range)</span><input type="checkbox" id="chkEvoPerception" checked/></div>
-      <div class="toggle-row"><span>Diet Gene (grazer to hunter)</span><input type="checkbox" id="chkEvoDiet" checked/></div>
       <div class="section-label">Speciation</div>
       <div class="toggle-row"><span>New Species Can Form</span><input type="checkbox" id="chkSpeciation" checked/></div>
       <div class="ctrl"><div class="ctrl-label"><span>Split Distance</span><strong id="vSplit">0.30</strong></div><input type="range" id="sSplit" min="0.10" max="0.80" step="0.02" value="0.30"/></div>
@@ -334,7 +327,7 @@ To get started for free, create a free key at openrouter.ai/keys (no credit card
   </div>
 </div>
 
-<div class="badge">Primordial v5.4 · Sentinel AI Systems × Claude Sentinel · SIDLF · <a href="v5.3/" title="Play v5.3 from October 2, 2026, before grazers and hunters">v5.3</a> · <a href="v5/" title="Play v5 from September 29, 2026, before dead bodies fed the pond">v5</a> · <a href="v4/" title="Play v4 from September 2026, before species could evolve">v4</a> · <a href="classic/" title="Play the original v3 from March 2026">Original v3</a></div>
+<div class="badge">Primordial v5.3 · Sentinel AI Systems × Claude Sentinel · SIDLF · <a href="../v5/" title="Play v5 from September 29, 2026, before dead bodies fed the pond">v5</a> · <a href="../v4/" title="Play v4 from September 2026, before species could evolve">v4</a> · <a href="../classic/" title="Play the original v3 from March 2026">Original v3</a></div>
 <div class="rec-dot" id="recDot">REC <span id="recTime">0:00</span></div>
 
 <script>
@@ -404,34 +397,32 @@ gl_FragColor=vec4(mix(col,vec3(0.85,1.0,0.9),core*0.5),(core+halo)*v_tw);}`;
 
 // Creatures: a teardrop cell pointed along its heading, drawn from its genes.
 // Speed = tail length, aggression = spines and a redder rim, perception = glowing eye-spots,
-// efficiency = translucent body. Diet shapes the body: grazers are round with a green gut, hunters are long darts
-// with a red rim, and a 50/50 omnivore looks exactly like the creatures from before diets. Hungry cells dim and flicker; well-fed cells glow.
-const ORG_VS=`attribute vec2 a_pos;attribute vec4 a_look;attribute vec4 a_genes;attribute vec4 a_state;uniform vec2 u_res;uniform float u_time;
-varying float v_head;varying float v_hue;varying float v_diet;varying vec4 v_genes;varying vec4 v_state;
+// efficiency = translucent body. Hungry cells dim and flicker; well-fed cells glow.
+const ORG_VS=`attribute vec2 a_pos;attribute vec3 a_look;attribute vec4 a_genes;attribute vec4 a_state;uniform vec2 u_res;uniform float u_time;
+varying float v_head;varying float v_hue;varying vec4 v_genes;varying vec4 v_state;
 void main(){vec2 clip=(a_pos/u_res)*2.0-1.0;clip.y=-clip.y;gl_Position=vec4(clip,0.0,1.0);
 float beat=1.0+0.07*sin(u_time*(2.5+(1.0-a_state.x)*3.0)+a_state.y*6.2832);
-gl_PointSize=a_look.y*beat;v_head=a_look.x;v_hue=a_look.z;v_diet=a_look.w;v_genes=a_genes;v_state=a_state;}`;
-const ORG_FS=HP+HSV_GLSL+`uniform float u_time;uniform float u_simple;uniform float u_glow;varying float v_head;varying float v_hue;varying float v_diet;varying vec4 v_genes;varying vec4 v_state;
+gl_PointSize=a_look.y*beat;v_head=a_look.x;v_hue=a_look.z;v_genes=a_genes;v_state=a_state;}`;
+const ORG_FS=HP+HSV_GLSL+`uniform float u_time;uniform float u_simple;uniform float u_glow;varying float v_head;varying float v_hue;varying vec4 v_genes;varying vec4 v_state;
 vec4 over(vec4 acc,vec3 c,float a){a=clamp(a,0.0,1.0);return vec4(c*a+acc.rgb*(1.0-a),a+acc.a*(1.0-a));}
 void main(){if(u_simple>0.5){float dd=length(gl_PointCoord-0.5)*2.0;if(dd>1.0)discard;float cr=exp(-dd*2.0)*0.6+(1.0-dd*dd)*0.4;float sa=(cr*0.7+0.3)*v_state.w;gl_FragColor=vec4(hsv(v_hue,0.85,0.7+cr*0.3)*cr*sa,sa*(1.0-u_glow));return;}
 vec2 p=gl_PointCoord-0.5;p.y=-p.y;float cs=cos(v_head),sn=sin(v_head);vec2 q=vec2(cs*p.x+sn*p.y,-sn*p.x+cs*p.y)*2.0;
 float spd=v_genes.x,agg=v_genes.y,eff=v_genes.z,per=v_genes.w,fed=v_state.x,seed=v_state.y,mv=v_state.z;
-float tp=max(v_diet-0.5,0.0),tn=max(0.5-v_diet,0.0);
-float R=0.46;float stretch=1.0+mv*0.22;float elong=1.0+tp*0.5-tn*0.2,wide=1.0-tp*0.4+tn*0.1;vec2 b=vec2(q.x/(stretch*elong),q.y/((1.0-mv*0.1)*wide));
-float taper=1.0+clamp(-b.x/R,0.0,1.0)*(0.6-tn*0.9)+clamp(b.x/R,0.0,1.0)*tp*1.6;float d=length(vec2(b.x,b.y*taper))-R;
+float R=0.46;float stretch=1.0+mv*0.22;vec2 b=vec2(q.x/stretch,q.y/(1.0-mv*0.1));
+float taper=1.0+clamp(-b.x/R,0.0,1.0)*0.6;float d=length(vec2(b.x,b.y*taper))-R;
 float bright=0.35+0.65*fed;if(fed<0.3)bright*=0.75+0.25*sin(u_time*18.0+seed*50.0);
 vec3 base=hsv(v_hue,0.78,1.0);
 vec4 acc=vec4(0.0);
 acc=over(acc,base,exp(-max(d,0.0)*9.0)*0.22*fed*step(0.0,d));
-float tailLen=0.1+spd*0.48;float tx=-(q.x+R*stretch*elong*0.85);
+float tailLen=0.1+spd*0.48;float tx=-(q.x+R*stretch*0.85);
 if(tx>0.0&&tx<tailLen){float k=tx/tailLen;float wig=sin(tx*16.0-u_time*(6.0+spd*10.0))*0.07*k;float w=0.17*(1.0-k)+0.02;acc=over(acc,base*1.1,smoothstep(w,w*0.3,abs(q.y-wig))*(1.0-k*0.7)*0.9);}
 float r=length(q);float ang=atan(q.y,q.x);
 if(agg>0.3){float n=5.0+floor(agg*6.0);float spike=pow(abs(cos(ang*n*0.5)),10.0);float len=(agg-0.3)*0.42;float front=smoothstep(-0.35,0.1,q.x);
-float sp=smoothstep(0.03,0.0,d+0.02-len*spike)*step(-0.07,d)*spike*front;acc=over(acc,mix(base,vec3(1.0,0.3,0.25),0.6),sp*0.9);}
-float inside=smoothstep(0.035,-0.035,d);vec3 body=mix(base*0.55,base*0.95,smoothstep(-R,0.0,d));body=mix(body,vec3(0.35,0.85,0.3),tn*0.6);
+float sp=smoothstep(0.03,0.0,r-(R*0.95+len*spike))*step(R*0.85,r)*spike*front;acc=over(acc,mix(base,vec3(1.0,0.3,0.25),0.6),sp*0.9);}
+float inside=smoothstep(0.035,-0.035,d);vec3 body=mix(base*0.55,base*0.95,smoothstep(-R,0.0,d));
 acc=over(acc,body,inside*mix(0.92,0.35,eff));
-float rim=smoothstep(0.07,0.0,abs(d+0.035))*inside;acc=over(acc,mix(base*1.25,vec3(1.0,0.35,0.3),min(1.0,agg*0.55+tp*1.3)),rim);
-float nd=length(q-vec2(-0.1,0.0))-R*(0.3+0.12*fed);acc=over(acc,mix(base*0.22,vec3(0.25,0.7,0.2),tn*1.6),smoothstep(0.03,-0.03,nd)*0.85*inside);
+float rim=smoothstep(0.07,0.0,abs(d+0.035))*inside;acc=over(acc,mix(base*1.25,vec3(1.0,0.35,0.3),agg*0.55),rim);
+float nd=length(q-vec2(-0.1,0.0))-R*(0.3+0.12*fed);acc=over(acc,base*0.22,smoothstep(0.03,-0.03,nd)*0.85*inside);
 if(per>0.25){float er=0.045+per*0.06;vec2 e1=q-vec2(R*0.55,R*0.36),e2=q-vec2(R*0.55,-R*0.36);float e=max(smoothstep(er,er*0.3,length(e1)),smoothstep(er,er*0.3,length(e2)));
 acc=over(acc,mix(vec3(1.0),vec3(0.75,1.0,1.0),0.5),e*(per-0.1));}
 if(acc.a<0.02)discard;float a=acc.a*v_state.w;gl_FragColor=vec4(acc.rgb/acc.a*bright*a,a*(1.0-u_glow));}`;
@@ -452,7 +443,7 @@ const foodLoc={pos:gl.getAttribLocation(foodProg,'a_pos'),seed:gl.getAttribLocat
 const orgLoc={pos:gl.getAttribLocation(orgProg,'a_pos'),look:gl.getAttribLocation(orgProg,'a_look'),genes:gl.getAttribLocation(orgProg,'a_genes'),state:gl.getAttribLocation(orgProg,'a_state'),res:gl.getUniformLocation(orgProg,'u_res'),time:gl.getUniformLocation(orgProg,'u_time'),simple:gl.getUniformLocation(orgProg,'u_simple'),glow:gl.getUniformLocation(orgProg,'u_glow')};
 const lineLoc={pos:gl.getAttribLocation(lineProg,'a_pos'),col:gl.getAttribLocation(lineProg,'a_col'),res:gl.getUniformLocation(lineProg,'u_res')};
 const foodBuf=gl.createBuffer(),orgBuf=gl.createBuffer(),lineBuf=gl.createBuffer();
-const ORG_STRIDE=14;
+const ORG_STRIDE=13;
 const oasisUniform=new Float32Array(32);
 
 const SPECIES_HUES=[0.0,0.08,0.15,0.30,0.45,0.55,0.65,0.75,0.83,0.92,0.18,0.38];
@@ -473,7 +464,7 @@ chkSameSpecies:$('chkSameSpecies'),chkFoodChain:$('chkFoodChain'),sEatRatio:$('s
 sHunt:$('sHunt'),sFlee:$('sFlee'),sFlock:$('sFlock'),sFoodDrive:$('sFoodDrive'),sSeparation:$('sSeparation'),
 chkMutation:$('chkMutation'),sMutRate:$('sMutRate'),sMutStr:$('sMutStr'),sTraitCost:$('sTraitCost'),vTraitCost:$('vTraitCost'),seedInput:$('seedInput'),
 chkSpeciation:$('chkSpeciation'),chkSexual:$('chkSexual'),sSplit:$('sSplit'),vSplit:$('vSplit'),chkLineage:$('chkLineage'),sSpCount:$('sSpCount'),treeStats:$('treeStats'),treeInfo:$('treeInfo'),
-chkEvoSpeed:$('chkEvoSpeed'),chkEvoAggro:$('chkEvoAggro'),chkEvoEfficiency:$('chkEvoEfficiency'),chkEvoPerception:$('chkEvoPerception'),chkEvoDiet:$('chkEvoDiet'),chkDiet:$('chkDiet'),selDietStart:$('selDietStart'),
+chkEvoSpeed:$('chkEvoSpeed'),chkEvoAggro:$('chkEvoAggro'),chkEvoEfficiency:$('chkEvoEfficiency'),chkEvoPerception:$('chkEvoPerception'),
 chkGlow:$('chkGlow'),chkDetail:$('chkDetail'),chkWater:$('chkWater'),chkDeathFX:$('chkDeathFX'),chkShowOases:$('chkShowOases'),
 sFoodGlow:$('sFoodGlow'),sGlow:$('sGlow'),sTrail:$('sTrail'),
 vOrganisms:$('vOrganisms'),vFood:$('vFood'),vFoodRate:$('vFoodRate'),vSpeed:$('vSpeed'),
@@ -503,33 +494,6 @@ const okin=new Uint16Array(MAX_ORG); // each organism's kin (see cladeKin), refr
 const oalive=new Uint8Array(MAX_ORG),okills=new Uint16Array(MAX_ORG);
 const gSpeed=new Float32Array(MAX_ORG),gAggro=new Float32Array(MAX_ORG);
 const gEfficiency=new Float32Array(MAX_ORG),gPerception=new Float32Array(MAX_ORG);
-// Diet: 0 = pure grazer (algae only), 0.5 = omnivore (eats both, as every creature did before v5.4), 1 = pure hunter (prey only).
-// oPlant and oMeat cache what a creature gets from each food, set whenever its diet is: an omnivore gets full value from both;
-// leaning one way trades the other food away, and a grazer digests algae better (up to DIET_GRAZER_BONUS more for a pure one).
-// A share under DIET_MIN means that food is ignored: grazers never attack and hunters leave algae alone.
-// oJaw (0 up to 50% meat, 1 for a pure hunter) is how far a body is built to kill. It lets a hunter take prey up to
-// 1/DIET_JAW_RATIO its own size instead of needing the usual Size Advantage to Eat, makes it DIET_DEFEND harder to eat,
-// lets it sprint DIET_SPRINT faster after prey, cuts its metabolism by DIET_LOWMET, stretches its life by DIET_LIFE and its
-// rest between births by DIET_REST (big hunters live long and breed slowly), and adds DIET_HUNTER_BONUS times the prey's stored
-// energy, times Eat Gain, to each meal. After a kill a hunter digests for DIET_DIGEST seconds before it can attack again.
-const gDiet=new Float32Array(MAX_ORG),oPlant=new Float32Array(MAX_ORG),oMeat=new Float32Array(MAX_ORG),oJaw=new Float32Array(MAX_ORG);
-const odigest=new Float32Array(MAX_ORG); // seconds left digesting the last kill
-const DIET_MIN=0.05,DIET_GRAZER_BONUS=0.3,DIET_HUNTER_BONUS=1,DIET_JAW_RATIO=0.75,DIET_DEFEND=0.5,DIET_SPRINT=0.3,DIET_LOWMET=0.5,DIET_LIFE=1,DIET_REST=3,DIET_DIGEST=1;
-// Everyone is born grazing and grows into its adult diet, fully adult DIET_MATURE of the way from birth size to breeding size
-// (young hunters graze like tadpoles; a starving hunter that shrinks back below that grazes again)
-const DIET_MATURE=0.5;
-// Hunters steer at the nearest prey in sight (DIET_CHASE) and prey steer away from the nearest hunter (DIET_ESCAPE),
-// on top of the gentle pull and push every creature feels
-const DIET_CHASE=0.45,DIET_ESCAPE=0.3;
-// A Mixed start: grazer species at DIET_GRAZER, hunter species at DIET_HUNTER with DIET_HUNTER_SHARE as many members
-const DIET_GRAZER=0.1,DIET_HUNTER=0.8,DIET_HUNTER_SHARE=0.5;
-function setDiet(i,d){gDiet[i]=d;oPlant[i]=Math.min(1,2*(1-d))*(1+DIET_GRAZER_BONUS*Math.max(0,1-2*d));oMeat[i]=Math.min(1,2*d);oJaw[i]=Math.max(0,2*d-1);}
-// Starting diets (the Starting Diets choice): all omnivores (the default), all grazers, all hunters, or a mix. In a mix a lone
-// starting species is an omnivore; several start as grazer, hunter, grazer, omnivore, repeating. A crowded mixed start is a
-// feeding frenzy that the hunters win, and crowded worlds then crash far below what they hold under v5.3 (the default world to a
-// few dozen); starting everyone as omnivores keeps them about as full as v5.3, and grazers evolve on their own in a few minutes.
-function startDiet(s,nSp){const m=ui.selDietStart.value;return m==='grazers'?DIET_GRAZER:m==='omnivores'?0.5:m==='hunters'?DIET_HUNTER:nSp===1?0.5:[DIET_GRAZER,DIET_HUNTER,DIET_GRAZER,0.5][s%4];}
-function dietWord(d){return d<0.35?'grazer':d>0.65?'hunter':'omnivore';}
 const ogen=new Uint16Array(MAX_ORG);
 const orest=new Float32Array(MAX_ORG); // seconds a parent rests after giving birth before it can breed again
 // Free-slot search resumes where the last one stopped (reset each step) instead of rescanning from 0
@@ -554,7 +518,7 @@ function newClade(parent,root,hue,g,x,y){
   if(clades.length>=MAX_CLADES)return -1;
   const id=clades.length;x=(x%W+W)%W;y=(y%H+H)%H;
   const c={id,parent,root,hue,css:hsvCss(hue,0.8,0.95),rgb:hsvRgb(hue,0.7,1),name:null,born:simTime,died:null,ref:g,kids:[],pop:0,peak:0,established:false,
-    sum:[0,0,0,0,0],sz:0,en:0,grid:null,hx:x,hy:y,trail:[x,y,1],hist:null,histStart:0};
+    sum:[0,0,0,0],sz:0,en:0,grid:null,hx:x,hy:y,trail:[x,y,1],hist:null,histStart:0};
   clades.push(c);liveClades.push(c);cladeHue[id]=hue;cladeRoot[id]=root;cladeKin[id]=parent>=0?cladeKin[parent]:id;spotMask[id]=parent>=0?spotMask[parent]:0;
   if(parent>=0)clades[parent].kids.push(id);
   return id;
@@ -570,13 +534,13 @@ const ROMAN=['','',' II',' III',' IV',' V',' VI',' VII',' VIII',' IX',' X'];
 function cladeName(id){const h=hash32(worldSeed,id);const base=NAME_A[h%NAME_A.length]+NAME_B[(h>>>8)%NAME_B.length]+NAME_C[(h>>>16)%NAME_C.length];
   let k=1;for(const c of namedClades)if(c.name===base||c.name.startsWith(base+' '))k++;return k>1?base+(ROMAN[k]||' '+k):base;}
 function childHue(parentHue,id){const h=hash32(worldSeed^0x5BD1E995,id);const off=(0.05+(h%1000)/1000*0.06)*((h>>>12)&1?1:-1);return((parentHue+off)%1+1)%1;}
-function genomeDist(i,r){const a=gSpeed[i]-r[0],b=gAggro[i]-r[1],c=gEfficiency[i]-r[2],d=gPerception[i]-r[3],e=gDiet[i]-r[4];return Math.sqrt(a*a+b*b+c*c+d*d+e*e);}
+function genomeDist(i,r){const a=gSpeed[i]-r[0],b=gAggro[i]-r[1],c=gEfficiency[i]-r[2],d=gPerception[i]-r[3];return Math.sqrt(a*a+b*b+c*c+d*d);}
 function speciate(idx,pc,T){
   const c=clades[pc];if(genomeDist(idx,c.ref)<=T)return pc;
   let best=-1,bd=T;
   for(const k of c.kids){const kc=clades[k];if(kc.died!==null)continue;const dk=genomeDist(idx,kc.ref);if(dk<=bd){bd=dk;best=k;}}
   if(best>=0)return best;
-  const id=newClade(pc,c.root,childHue(c.hue,clades.length),[gSpeed[idx],gAggro[idx],gEfficiency[idx],gPerception[idx],gDiet[idx]],ox[idx],oy[idx]);
+  const id=newClade(pc,c.root,childHue(c.hue,clades.length),[gSpeed[idx],gAggro[idx],gEfficiency[idx],gPerception[idx]],ox[idx],oy[idx]);
   return id<0?pc:id;
 }
 function namedAncestor(id){while(id>=0&&!clades[id].established)id=clades[id].parent;return id>=0?clades[id]:null;}
@@ -584,9 +548,9 @@ function cladeLabel(id){const c=clades[id];if(c.established)return c.name;const 
 // Census: every half second of simulated time, count each species, track its genes and where it lives,
 // and note births of named species and extinctions
 function census(){
-  for(const c of liveClades){c.pop=0;c.sum[0]=c.sum[1]=c.sum[2]=c.sum[3]=c.sum[4]=0;c.sz=0;c.en=0;if(c.grid)c.grid.fill(0);}
+  for(const c of liveClades){c.pop=0;c.sum[0]=c.sum[1]=c.sum[2]=c.sum[3]=0;c.sz=0;c.en=0;if(c.grid)c.grid.fill(0);}
   const gx=TGW/W,gy=TGH/H;
-  for(let i=0;i<orgCount;i++){if(!oalive[i])continue;const c=clades[oclade[i]];c.pop++;c.sum[0]+=gSpeed[i];c.sum[1]+=gAggro[i];c.sum[2]+=gEfficiency[i];c.sum[3]+=gPerception[i];c.sum[4]+=gDiet[i];c.sz+=osize[i];c.en+=oenergy[i];
+  for(let i=0;i<orgCount;i++){if(!oalive[i])continue;const c=clades[oclade[i]];c.pop++;c.sum[0]+=gSpeed[i];c.sum[1]+=gAggro[i];c.sum[2]+=gEfficiency[i];c.sum[3]+=gPerception[i];c.sz+=osize[i];c.en+=oenergy[i];
     if(c.grid){const k=(Math.min(TGW-1,Math.max(0,ox[i]*gx|0))+Math.min(TGH-1,Math.max(0,oy[i]*gy|0))*TGW)*3;c.grid[k]++;c.grid[k+1]+=ox[i];c.grid[k+2]+=oy[i];}}
   censusN++;const next=[];
   for(const c of liveClades){
@@ -623,18 +587,18 @@ const falive=new Uint8Array(MAX_FOOD),fglow=new Float32Array(MAX_FOOD);
 // Death feeds the pond: a body that dies with energy left sinks and breaks down into algae over DECAY_TIME seconds.
 // Dead Bodies Become Algae sets how much of that energy comes back; the rest is lost. A starved body has nothing left.
 const MAX_HUSK=4000,DECAY_TIME=4;let huskCount=0,decayCarry=0; // decayCarry: crumbs under one pellet (always less than 3), kept so no energy is rounded away
-const hx=new Float32Array(MAX_HUSK),hy=new Float32Array(MAX_HUSK),hLeft=new Float32Array(MAX_HUSK),hFull=new Float32Array(MAX_HUSK),hAcc=new Float32Array(MAX_HUSK),hHue=new Float32Array(MAX_HUSK),hSize=new Float32Array(MAX_HUSK),hHead=new Float32Array(MAX_HUSK),hClade=new Uint16Array(MAX_HUSK),hDiet=new Float32Array(MAX_HUSK);
-function addHusk(x,y,energy,clade,size,head,diet){const e=energy*(+ui.sDecay.value);if(e<=0)return;
+const hx=new Float32Array(MAX_HUSK),hy=new Float32Array(MAX_HUSK),hLeft=new Float32Array(MAX_HUSK),hFull=new Float32Array(MAX_HUSK),hAcc=new Float32Array(MAX_HUSK),hHue=new Float32Array(MAX_HUSK),hSize=new Float32Array(MAX_HUSK),hHead=new Float32Array(MAX_HUSK),hClade=new Uint16Array(MAX_HUSK);
+function addHusk(x,y,energy,clade,size,head){const e=energy*(+ui.sDecay.value);if(e<=0)return;
   // A body too small to leave a whole pellet, or one that dies while MAX_HUSK bodies are already breaking down, returns its energy on the spot
   if(e<3||huskCount>=MAX_HUSK){spillAlgae(x,y,e,size);return;}
-  const k=huskCount++;hx[k]=x;hy[k]=y;hLeft[k]=e;hFull[k]=e;hAcc[k]=0;hHue[k]=cladeHue[clade];hSize[k]=size;hHead[k]=head;hClade[k]=clade;hDiet[k]=diet;}
+  const k=huskCount++;hx[k]=x;hy[k]=y;hLeft[k]=e;hFull[k]=e;hAcc[k]=0;hHue[k]=cladeHue[clade];hSize[k]=size;hHead[k]=head;hClade[k]=clade;}
 function dropAlgae(x,y,size){const idx=allocFood();if(idx<0)return false;const a=rand()*TAU,r=rand()*(size+6);fx[idx]=((x+Math.cos(a)*r)%W+W)%W;fy[idx]=((y+Math.sin(a)*r)%H+H)%H;falive[idx]=1;fglow[idx]=rand()*TAU;return true;}
 // Drops e energy as algae right here: whole pellets now, and the crumb left over joins decayCarry, which tips into one more pellet
 // here once it reaches 3. Crumbs never pile up, so they can't all land in one spot later. If the pond is full of algae, the rest is lost.
 function spillAlgae(x,y,e,size){while(e>=3){e-=3;if(!dropAlgae(x,y,size))return;}decayCarry+=e;if(decayCarry>=3){decayCarry-=3;dropAlgae(x,y,size);}}
 function decayHusks(sDt){foodHint=0;for(let k=huskCount-1;k>=0;k--){hAcc[k]+=sDt*hFull[k]/DECAY_TIME;
   while(hAcc[k]>=3&&hLeft[k]>=3){hAcc[k]-=3;hLeft[k]-=3;if(!dropAlgae(hx[k],hy[k],hSize[k])){hLeft[k]=0;break;}}
-  if(hLeft[k]<3){spillAlgae(hx[k],hy[k],hLeft[k],hSize[k]);const last=--huskCount;hx[k]=hx[last];hy[k]=hy[last];hLeft[k]=hLeft[last];hFull[k]=hFull[last];hAcc[k]=hAcc[last];hHue[k]=hHue[last];hSize[k]=hSize[last];hHead[k]=hHead[last];hClade[k]=hClade[last];hDiet[k]=hDiet[last];}}}
+  if(hLeft[k]<3){spillAlgae(hx[k],hy[k],hLeft[k],hSize[k]);const last=--huskCount;hx[k]=hx[last];hy[k]=hy[last];hLeft[k]=hLeft[last];hFull[k]=hFull[last];hAcc[k]=hAcc[last];hHue[k]=hHue[last];hSize[k]=hSize[last];hHead[k]=hHead[last];hClade[k]=hClade[last];}}}
 const MAX_DFX=2000;let dfxCount=0;
 const dfxX=new Float32Array(MAX_DFX),dfxY=new Float32Array(MAX_DFX);
 const dfxVX=new Float32Array(MAX_DFX),dfxVY=new Float32Array(MAX_DFX);
@@ -731,16 +695,14 @@ function updateRecTimer(){
 // ═══════════════════════════════════════════════
 
 // All configurable slider/checkbox IDs
-const SETTING_SLIDERS=['selDietStart','sOrganisms','sFood','sFoodRate','sSpeed','sSpecies','sStartSize','sMaxSize','sOrgSpeed','sLifespan','sReproSize','sOffspring','sOases','sEatRatio','sEatGain','sDecay','sHunt','sFlee','sFlock','sFoodDrive','sSeparation','sMutRate','sMutStr','sTraitCost','sSplit','sFoodGlow','sGlow','sTrail'];
-const SETTING_CHECKS=['chkSameSpecies','chkFoodChain','chkMutation','chkEvoSpeed','chkEvoAggro','chkEvoEfficiency','chkEvoPerception','chkEvoDiet','chkDiet','chkSpeciation','chkSexual','chkGlow','chkDetail','chkWater','chkDeathFX','chkShowOases','chkLineage'];
+const SETTING_SLIDERS=['sOrganisms','sFood','sFoodRate','sSpeed','sSpecies','sStartSize','sMaxSize','sOrgSpeed','sLifespan','sReproSize','sOffspring','sOases','sEatRatio','sEatGain','sDecay','sHunt','sFlee','sFlock','sFoodDrive','sSeparation','sMutRate','sMutStr','sTraitCost','sSplit','sFoodGlow','sGlow','sTrail'];
+const SETTING_CHECKS=['chkSameSpecies','chkFoodChain','chkMutation','chkEvoSpeed','chkEvoAggro','chkEvoEfficiency','chkEvoPerception','chkSpeciation','chkSexual','chkGlow','chkDetail','chkWater','chkDeathFX','chkShowOases','chkLineage'];
 
 // The version of the simulation's rules that made a saved world. A seed replays exactly only under the rules that made it (older
 // versions stay playable from the badge links), so loading settings from other rules says so. Bump it whenever a release changes
 // how a seed plays out; releases that leave the world alone (v5.3 only changed the Lab Partner) keep it.
-// v5.4 added diets. With Grazers and Hunters off it plays exactly like v5.2.1 to v5.3, and settings saved before diets load with them off.
-const APP_VERSION='5.4';
-function sameRules(s){return s._app===APP_VERSION||(s._app==='5.2.1'&&!(s.checks&&s.checks.chkDiet));}
-function versionNote(s){return sameRules(s)?'':' Made in '+(s._app?'v'+s._app:'an earlier version')+', so the run may differ; older versions are linked in the corner badge.';}
+const APP_VERSION='5.2.1';
+function versionNote(s){return s._app===APP_VERSION?'':' Made in '+(s._app?'v'+s._app:'an earlier version')+', so the run may differ; older versions are linked in the corner badge.';}
 
 function captureSettings(){
   const s={_format:'primordial-settings',_version:4,_app:APP_VERSION,_date:new Date().toISOString(),_preset:$('selPreset').value,sliders:{},checks:{}};
@@ -754,8 +716,6 @@ function applySettings(s){
   if(!s||!s.sliders)return false;
   for(const[id,val]of Object.entries(s.sliders)){const el=$(id);if(el)el.value=val;}
   for(const[id,val]of Object.entries(s.checks)){const el=$(id);if(el)el.checked=val;}
-  if(!s.checks||s.checks.chkDiet===undefined)ui.chkDiet.checked=false; // saved before diets existed
-  if(s.sliders.selDietStart===undefined)ui.selDietStart.value='omnivores';
   if(Number.isFinite(+s.seed))ui.seedInput.value=String(+s.seed>>>0);
   if(s._preset&&s._preset!=='custom')$('selPreset').value=s._preset;
   else $('selPreset').value='custom';
@@ -821,7 +781,7 @@ function importSettings(file){
         resize();initWorld();
         $('shareStatus').textContent='Settings loaded! ('+(s._preset||'custom')+')'+versionNote(s);
         $('shareStatus').style.color='var(--accent2)';
-        setTimeout(()=>{$('shareStatus').textContent='';},sameRules(s)?4000:10000);
+        setTimeout(()=>{$('shareStatus').textContent='';},s._app===APP_VERSION?4000:10000);
       }
     }catch(err){
       $('shareStatus').textContent='Error reading file: '+err.message;
@@ -833,23 +793,18 @@ function importSettings(file){
 }
 
 // Presets (same as v2)
-// dietStart: the Starting Diets choice a preset sets (all omnivores unless named). Eden and Superorganism are roomy enough
-// for a mixed start to keep grazers; in the crowded presets a mixed start lets hunters eat nearly everyone (see startDiet).
 const PRESETS={
-  eden:{dietStart:'mixed',org:4000,food:3000,rate:35,species:5,speed:1.0,startSize:3.0,maxSize:18,orgSpeed:1.0,lifespan:45,reproSize:12,offspring:2,oases:5,hunt:0.3,flee:1.0,flock:0.8,foodDrive:1.0,sep:0.5,eatRatio:1.5,eatGain:0.4,chain:false,mutation:true,mutRate:0.08,mutStr:0.10},
-  // Two grazer species and a hunter species in a roomy, food-rich pond, started near what it can hold so the hunters can't
-  // gorge on a crowd: the two rise and fall in turns, hunters peaking after grazers (both held for 10 minutes on 9 seeds, 20 on one)
-  predprey:{dietStart:'mixed',org:500,food:3000,rate:35,species:3,speed:1.0,startSize:3.0,maxSize:18,orgSpeed:1.0,lifespan:45,reproSize:12,offspring:2,oases:5,hunt:0.8,flee:1.0,flock:0.8,foodDrive:1.0,sep:0.5,eatRatio:1.5,eatGain:0.4,chain:false,mutation:true,mutRate:0.05,mutStr:0.08},
+  eden:{org:4000,food:3000,rate:35,species:5,speed:1.0,startSize:3.0,maxSize:18,orgSpeed:1.0,lifespan:45,reproSize:12,offspring:2,oases:5,hunt:0.3,flee:1.0,flock:0.8,foodDrive:1.0,sep:0.5,eatRatio:1.5,eatGain:0.4,chain:false,mutation:true,mutRate:0.08,mutStr:0.10},
   armsrace:{org:5000,food:1800,rate:12,species:4,speed:1.2,startSize:2.5,maxSize:20,orgSpeed:1.3,lifespan:30,reproSize:11,offspring:2,oases:3,hunt:1.2,flee:1.8,flock:0.3,foodDrive:1.4,sep:0.6,eatRatio:1.25,eatGain:0.55,chain:false,mutation:true,mutRate:0.25,mutStr:0.30},
   battleroyale:{org:12000,food:600,rate:4,species:6,speed:1.5,startSize:2.0,maxSize:24,orgSpeed:1.6,lifespan:20,reproSize:14,offspring:1,oases:1,hunt:2.5,flee:1.2,flock:0.1,foodDrive:0.8,sep:0.3,eatRatio:1.1,eatGain:0.7,chain:false,mutation:true,mutRate:0.15,mutStr:0.20},
-  superorganism:{dietStart:'mixed',org:6000,food:2500,rate:18,species:4,speed:0.9,startSize:2.5,maxSize:14,orgSpeed:1.0,lifespan:35,reproSize:10,offspring:2,oases:4,hunt:0.5,flee:1.5,flock:2.0,foodDrive:1.0,sep:0.8,eatRatio:1.35,eatGain:0.45,chain:false,mutation:true,mutRate:0.10,mutStr:0.12},
-  foodchain:{org:4500,food:2200,rate:18,species:3,speed:1.0,startSize:3.0,maxSize:16,orgSpeed:1.2,lifespan:35,reproSize:11,offspring:2,oases:4,hunt:1.0,flee:1.6,flock:0.5,foodDrive:1.2,sep:0.5,eatRatio:1.3,eatGain:0.5,chain:true,diet:false,mutation:true,mutRate:0.12,mutStr:0.15},
+  superorganism:{org:6000,food:2500,rate:18,species:4,speed:0.9,startSize:2.5,maxSize:14,orgSpeed:1.0,lifespan:35,reproSize:10,offspring:2,oases:4,hunt:0.5,flee:1.5,flock:2.0,foodDrive:1.0,sep:0.8,eatRatio:1.35,eatGain:0.45,chain:false,mutation:true,mutRate:0.10,mutStr:0.12},
+  foodchain:{org:4500,food:2200,rate:18,species:3,speed:1.0,startSize:3.0,maxSize:16,orgSpeed:1.2,lifespan:35,reproSize:11,offspring:2,oases:4,hunt:1.0,flee:1.6,flock:0.5,foodDrive:1.2,sep:0.5,eatRatio:1.3,eatGain:0.5,chain:true,mutation:true,mutRate:0.12,mutStr:0.15},
   extinction:{org:8000,food:4000,rate:2,species:8,speed:1.0,startSize:3.5,maxSize:18,orgSpeed:1.1,lifespan:40,reproSize:13,offspring:2,oases:2,hunt:1.0,flee:1.5,flock:0.6,foodDrive:1.5,sep:0.5,eatRatio:1.3,eatGain:0.5,chain:false,mutation:true,mutRate:0.12,mutStr:0.18},
   // One ancestor and plenty of food. Predators need twice their prey's size, so young species aren't eaten
   // out of existence by their ancestors (at 1.3x, the ancestor dominates and new species stay tiny).
   origin:{org:1000,food:8000,rate:180,species:1,speed:1.0,startSize:3.0,maxSize:18,orgSpeed:1.2,lifespan:40,reproSize:8,offspring:2,oases:5,hunt:0.8,flee:1.5,flock:0.5,foodDrive:1.2,sep:0.6,eatRatio:2.0,eatGain:0.5,chain:false,mutation:true,mutRate:0.3,mutStr:0.3,speciation:true,split:0.30},
 };
-function applyPreset(name){const p=PRESETS[name];if(!p)return;ui.sOrganisms.value=p.org;ui.sFood.value=p.food;ui.sFoodRate.value=p.rate;ui.sSpecies.value=p.species;ui.sSpeed.value=p.speed;ui.sStartSize.value=p.startSize;ui.sMaxSize.value=p.maxSize;ui.sOrgSpeed.value=p.orgSpeed;ui.sLifespan.value=p.lifespan;ui.sReproSize.value=p.reproSize;ui.sOffspring.value=p.offspring;ui.sOases.value=p.oases;ui.sHunt.value=p.hunt;ui.sFlee.value=p.flee;ui.sFlock.value=p.flock;ui.sFoodDrive.value=p.foodDrive;ui.sSeparation.value=p.sep;ui.sEatRatio.value=p.eatRatio;ui.sEatGain.value=p.eatGain;ui.sDecay.value=p.decay!==undefined?p.decay:0.9;ui.chkFoodChain.checked=p.chain;ui.chkDiet.checked=p.diet!==undefined?p.diet:true;ui.selDietStart.value=p.dietStart||'omnivores';ui.chkMutation.checked=p.mutation;ui.sMutRate.value=p.mutRate;ui.sMutStr.value=p.mutStr;if(p.speciation!==undefined)ui.chkSpeciation.checked=p.speciation;if(p.split!==undefined)ui.sSplit.value=p.split;updateLabels();}
+function applyPreset(name){const p=PRESETS[name];if(!p)return;ui.sOrganisms.value=p.org;ui.sFood.value=p.food;ui.sFoodRate.value=p.rate;ui.sSpecies.value=p.species;ui.sSpeed.value=p.speed;ui.sStartSize.value=p.startSize;ui.sMaxSize.value=p.maxSize;ui.sOrgSpeed.value=p.orgSpeed;ui.sLifespan.value=p.lifespan;ui.sReproSize.value=p.reproSize;ui.sOffspring.value=p.offspring;ui.sOases.value=p.oases;ui.sHunt.value=p.hunt;ui.sFlee.value=p.flee;ui.sFlock.value=p.flock;ui.sFoodDrive.value=p.foodDrive;ui.sSeparation.value=p.sep;ui.sEatRatio.value=p.eatRatio;ui.sEatGain.value=p.eatGain;ui.sDecay.value=p.decay!==undefined?p.decay:0.9;ui.chkFoodChain.checked=p.chain;ui.chkMutation.checked=p.mutation;ui.sMutRate.value=p.mutRate;ui.sMutStr.value=p.mutStr;if(p.speciation!==undefined)ui.chkSpeciation.checked=p.speciation;if(p.split!==undefined)ui.sSplit.value=p.split;updateLabels();}
 
 // ═══════════════════════════════════════════════
 // SIMULATION STATE SNAPSHOT SYSTEM
@@ -868,7 +823,7 @@ function getSimSnapshot(){
   const pct=(v,n)=>(v/n*100).toFixed(0);
   const speciesData=living.slice(0,12).map(c=>{const n=c.pop||1,a=c.parent>=0?namedAncestor(c.parent):null;
     return{name:c.name,splitFrom:a?a.name:null,originalLineage:SPECIES_NAMES[c.root%12],population:c.pop,ageSeconds:+(simTime-c.born).toFixed(0),avgSize:(c.sz/n).toFixed(1),avgEnergy:(c.en/n).toFixed(1),
-      genes:{speed:pct(c.sum[0],n),aggro:pct(c.sum[1],n),efficiency:pct(c.sum[2],n),perception:pct(c.sum[3],n),...(ui.chkDiet.checked?{dietMeatPercent:pct(c.sum[4],n)}:{})}};});
+      genes:{speed:pct(c.sum[0],n),aggro:pct(c.sum[1],n),efficiency:pct(c.sum[2],n),perception:pct(c.sum[3],n)}};});
   return{
     simTime:simTime.toFixed(1),generation,avgGeneration:(genSum/Math.max(1,totalAlive)).toFixed(1),seed:worldSeed,totalAlive,totalFood,
     startingSpecies:+ui.sSpecies.value,livingSpecies:living.length,speciesEverNamed:namedClades.length,organismsInUnnamedOffshoots:offshoots,
@@ -876,7 +831,7 @@ function getSimSnapshot(){
     settings:{organisms:ui.sOrganisms.value,food:ui.sFood.value,foodRate:ui.sFoodRate.value,speed:ui.sSpeed.value,
       hunt:ui.sHunt.value,flee:ui.sFlee.value,flock:ui.sFlock.value,foodDrive:ui.sFoodDrive.value,
       eatRatio:ui.sEatRatio.value,decayToAlgae:ui.sDecay.value,mutRate:ui.sMutRate.value,mutStr:ui.sMutStr.value,traitCost:ui.sTraitCost.value,
-      speciation:ui.chkSpeciation.checked,splitDistance:ui.sSplit.value,sexualReproduction:ui.chkSexual.checked,diets:ui.chkDiet.checked,startingDiets:ui.selDietStart.value,
+      speciation:ui.chkSpeciation.checked,splitDistance:ui.sSplit.value,sexualReproduction:ui.chkSexual.checked,
       foodChain:ui.chkFoodChain.checked,mutation:ui.chkMutation.checked},
     topPredator:maxKiller.kills>0?{species:cladeLabel(oclade[maxKiller.idx]),kills:maxKiller.kills,size:osize[maxKiller.idx]?.toFixed(1)}:null,
     extinctions:extinctLog.slice(-10).map(id=>clades[id].name)
@@ -1117,14 +1072,12 @@ You can suggest experiments. When you do, output a JSON block in this exact form
 \`\`\`experiment
 {"hypothesis":"...","changes":{"sHunt":"2.0","sFlee":"0.5"},"checkboxes":{"chkFoodChain":true},"duration":30}
 \`\`\`
-Valid slider IDs: selDietStart (mixed, grazers, omnivores or hunters; takes effect when the world resets), sOrganisms, sFood, sFoodRate, sSpeed, sSpecies, sStartSize, sMaxSize, sOrgSpeed, sLifespan, sReproSize, sOffspring, sOases, sEatRatio, sEatGain, sDecay, sHunt, sFlee, sFlock, sFoodDrive, sSeparation, sMutRate, sMutStr, sTraitCost, sSplit
-Valid checkbox IDs: chkSameSpecies, chkFoodChain, chkMutation, chkEvoSpeed, chkEvoAggro, chkEvoEfficiency, chkEvoPerception, chkEvoDiet, chkDiet, chkSpeciation, chkSexual
+Valid slider IDs: sOrganisms, sFood, sFoodRate, sSpeed, sSpecies, sStartSize, sMaxSize, sOrgSpeed, sLifespan, sReproSize, sOffspring, sOases, sEatRatio, sEatGain, sDecay, sHunt, sFlee, sFlock, sFoodDrive, sSeparation, sMutRate, sMutStr, sTraitCost, sSplit
+Valid checkbox IDs: chkSameSpecies, chkFoodChain, chkMutation, chkEvoSpeed, chkEvoAggro, chkEvoEfficiency, chkEvoPerception, chkSpeciation, chkSexual
 
 Trait costs: with sTraitCost above 0, high speed, perception and aggression genes raise metabolic cost (speed quadratically) and high efficiency lowers top speed, so each gene is a trade-off rather than a free upgrade.
 
 Energy: each algae pellet is worth 3 energy, and an organism's size is 1.5 times the square root of its energy. A parent that reaches sReproSize (capped at sMaxSize, so a value at or above sMaxSize means breeding at full size) gives each newborn its starting energy, then rests 3 seconds before it can breed again. When an organism dies of old age or is eaten, the energy left in its body (after the predator's share, which is prey size times sEatGain) breaks down into algae where it died over 4 seconds. sDecay (0 to 1) is the fraction that comes back; at 0, dead bodies feed nothing. A starved organism leaves nothing.
-
-Diets: with chkDiet on, each organism has a diet gene from 0% meat (pure grazer) to 100% (pure hunter); dietMeatPercent is a species' average and startingDiets (selDietStart) is how the world began: omnivores (the default), mixed, grazers or hunters. A 50% omnivore eats both foods at full value, like every organism before diets. Below 50%, prey is worth less (none at 0%) and algae up to 30% more (a pure grazer gets 3.9 energy per pellet instead of 3); above 50%, algae is worth less (none at 100%) and the body is built to kill, from not at all at 50% to fully at 100%. That build lets a hunter eat prey up to 1.33 times its own size instead of needing sEatRatio, makes it harder to eat, lets it sprint 30% faster after prey, cuts its metabolism by up to half, and makes it live up to twice as long and rest up to four times as long between births. A meal is prey size times sEatGain times the meat share, plus, for a hunter, its build times sEatGain times the prey's stored energy (never more than the prey had); after each kill a hunter digests for 1 second before it can attack again. Organisms are born grazing and grow into their adult diet by halfway to sReproSize. Those with under a 5% meat share never attack and are no threat; those with under a 5% plant share ignore algae. In a mixed start, one starting species begins at 50%; several begin as grazers (10%), hunters (80%, with half as many members) and omnivores (50%). With chkDiet off, everyone eats everything, as in earlier versions. The Food Chain Cycle preset turns diets off.
 
 Speciation: species are lineages. The starting species have color names (Red, Orange, Gold, ...). When a newborn's genes drift farther than the split distance (sSplit) from its species' founding genome, it founds a new lineage with a hue close to its ancestor's. Until that lineage has 10 members it still counts as its parent species; then it gets a generated name and becomes a species of its own. Different species can hunt each other by size, so a new species competes with its own ancestors. With sexual reproduction on, a parent mixes genes with a nearby mate of its own species.
 
@@ -1181,15 +1134,12 @@ ui.aiInput.addEventListener('keydown',(e)=>{if(e.key==='Enter'&&!e.shiftKey){e.p
 // ═══════════════════════════════════════════════
 function initWorld(){
   seedRandom(readSeedInput());orgHint=0;foodHint=0;foodAccum=0;stepAcc=0;
-  const nOrg=+ui.sOrganisms.value,nFood=+ui.sFood.value,nSp=+ui.sSpecies.value,sz0=+ui.sStartSize.value,dietOn=ui.chkDiet.checked;
+  const nOrg=+ui.sOrganisms.value,nFood=+ui.sFood.value,nSp=+ui.sSpecies.value,sz0=+ui.sStartSize.value;
   orgCount=nOrg;
   clades=[];liveClades=[];namedClades=[];extinctLog=[];censusN=0;spotClade=-1;treeDirty=true;graphDirty=true;simTime=0;
   // The starting species are the roots of the family tree, each founded on the average starting genome
-  for(let s=0;s<nSp;s++){const id=newClade(-1,s,SPECIES_HUES[s%12],[0.5,0.5,0.5,0.5,dietOn?startDiet(s,nSp):0.5],W/2,H/2);const c=clades[id];c.trail=[];establish(c,SPECIES_NAMES[s%12]);c.histStart=1;}
-  // With diets, a hunter species starts with DIET_HUNTER_SHARE as many members as a grazer or omnivore species
-  const startSlot=[];if(dietOn)for(let s2=0;s2<nSp;s2++){const k=Math.round((startDiet(s2,nSp)>0.65?DIET_HUNTER_SHARE:1)*20);for(let m=0;m<k;m++)startSlot.push(s2);}const nSlot=startSlot.length;
-  for(let i=0;i<orgCount;i++){ox[i]=rand()*W;oy[i]=rand()*H;ovx[i]=(rand()-0.5)*2;ovy[i]=(rand()-0.5)*2;oclade[i]=dietOn?startSlot[i*nSlot/orgCount|0]:i%nSp;odigest[i]=0;osize[i]=sz0+(rand()-0.5)*1.5;oenergy[i]=osize[i]*2;oage[i]=rand()*5;oalive[i]=1;okills[i]=0;ogen[i]=0;orest[i]=0;gSpeed[i]=0.4+rand()*0.2;gAggro[i]=0.4+rand()*0.2;gEfficiency[i]=0.4+rand()*0.2;gPerception[i]=0.4+rand()*0.2;
-    setDiet(i,dietOn?clamp(startDiet(oclade[i],nSp)+(rand()-0.5)*0.1,0,1):0.5);}
+  for(let s=0;s<nSp;s++){const id=newClade(-1,s,SPECIES_HUES[s%12],[0.5,0.5,0.5,0.5],W/2,H/2);const c=clades[id];c.trail=[];establish(c,SPECIES_NAMES[s%12]);c.histStart=1;}
+  for(let i=0;i<orgCount;i++){ox[i]=rand()*W;oy[i]=rand()*H;ovx[i]=(rand()-0.5)*2;ovy[i]=(rand()-0.5)*2;oclade[i]=i%nSp;osize[i]=sz0+(rand()-0.5)*1.5;oenergy[i]=osize[i]*2;oage[i]=rand()*5;oalive[i]=1;okills[i]=0;ogen[i]=0;orest[i]=0;gSpeed[i]=0.4+rand()*0.2;gAggro[i]=0.4+rand()*0.2;gEfficiency[i]=0.4+rand()*0.2;gPerception[i]=0.4+rand()*0.2;}
   foodCount=nFood;
   for(let i=0;i<foodCount;i++){fx[i]=rand()*W;fy[i]=rand()*H;falive[i]=1;fglow[i]=rand()*TAU;}
   dfxCount=0;dfxNext=0;huskCount=0;decayCarry=0;generation=0;simTime=0;
@@ -1204,21 +1154,20 @@ const BIRTH_REST=3;
 function reproduce(pi){
   const nOff=+ui.sOffspring.value,sz0=+ui.sStartSize.value;
   const mutOn=ui.chkMutation.checked,mutRate=+ui.sMutRate.value,mutStr=+ui.sMutStr.value,splitT=ui.chkSpeciation.checked?+ui.sSplit.value:Infinity;
-  const eS=ui.chkEvoSpeed.checked,eA=ui.chkEvoAggro.checked,eE=ui.chkEvoEfficiency.checked,eP=ui.chkEvoPerception.checked,dietOn=ui.chkDiet.checked,eD=dietOn&&ui.chkEvoDiet.checked;
+  const eS=ui.chkEvoSpeed.checked,eA=ui.chkEvoAggro.checked,eE=ui.chkEvoEfficiency.checked,eP=ui.chkEvoPerception.checked;
   // Sexual reproduction: a parent with a mate of its own species nearby mixes genes with it; alone, it divides as before
   const pc=oclade[pi],m=ui.chkSexual.checked?omate[pi]:-1,mate=(m>=0&&oalive[m]&&oclade[m]===pc)?m:-1;
   const now=performance.now();if(now-lastPopSound>50){playPop(600+Math.random()*400,0.3);lastPopSound=now;}
   const splitA=rand()*TAU;spawnBirthFX(ox[pi],oy[pi],cladeHue[pc],osize[pi]);
   // Birth conserves energy: the parent gives each baby only the energy it is born with (at most 60% of its own in all),
   // so it stays near full strength, then rests for BIRTH_REST seconds before it can breed again.
-  const e0=Math.min(sz0*2,oenergy[pi]*0.6/nOff);orest[pi]=BIRTH_REST*(dietOn?1+DIET_REST*oJaw[pi]:1);
+  const e0=Math.min(sz0*2,oenergy[pi]*0.6/nOff);orest[pi]=BIRTH_REST;
   for(let c=0;c<nOff;c++){const idx=allocOrg();if(idx<0)return;const ca=splitA+c*TAU/nOff,cc=Math.cos(ca),cs=Math.sin(ca);
     ogen[idx]=Math.min(65535,Math.max(ogen[pi],mate>=0?ogen[mate]:0)+1);if(ogen[idx]>generation)generation=ogen[idx];
-    ox[idx]=ox[pi]+cc*(osize[pi]+2);oy[idx]=oy[pi]+cs*(osize[pi]+2);ovx[idx]=cc*1.5;ovy[idx]=cs*1.5;osize[idx]=sz0;oenergy[idx]=e0;oenergy[pi]-=e0;oage[idx]=0;orest[idx]=0;odigest[idx]=0;oalive[idx]=1;okills[idx]=0;
+    ox[idx]=ox[pi]+cc*(osize[pi]+2);oy[idx]=oy[pi]+cs*(osize[pi]+2);ovx[idx]=cc*1.5;ovy[idx]=cs*1.5;osize[idx]=sz0;oenergy[idx]=e0;oenergy[pi]-=e0;oage[idx]=0;orest[idx]=0;oalive[idx]=1;okills[idx]=0;
     gSpeed[idx]=gSpeed[pi];gAggro[idx]=gAggro[pi];gEfficiency[idx]=gEfficiency[pi];gPerception[idx]=gPerception[pi];
     if(mate>=0){if(rand()<0.5)gSpeed[idx]=gSpeed[mate];if(rand()<0.5)gAggro[idx]=gAggro[mate];if(rand()<0.5)gEfficiency[idx]=gEfficiency[mate];if(rand()<0.5)gPerception[idx]=gPerception[mate];}
     if(mutOn){if(eS&&rand()<mutRate)gSpeed[idx]=clamp(gSpeed[idx]+(rand()-0.5)*mutStr,0.05,1);if(eA&&rand()<mutRate)gAggro[idx]=clamp(gAggro[idx]+(rand()-0.5)*mutStr,0.05,1);if(eE&&rand()<mutRate)gEfficiency[idx]=clamp(gEfficiency[idx]+(rand()-0.5)*mutStr,0.05,1);if(eP&&rand()<mutRate)gPerception[idx]=clamp(gPerception[idx]+(rand()-0.5)*mutStr,0.05,1);}
-    let dt=gDiet[pi];if(dietOn&&mate>=0&&rand()<0.5)dt=gDiet[mate];if(eD&&mutOn&&rand()<mutRate)dt=clamp(dt+(rand()-0.5)*mutStr,0,1);setDiet(idx,dt);
     oclade[idx]=speciate(idx,pc,splitT);}}
 
 function canEatInChain(predSp,preySp,nSp){return((predSp+1)%nSp)===preySp;}
@@ -1228,50 +1177,39 @@ function simulate(dt){
   const reproSz=Math.min(+ui.sReproSize.value,maxSz),eatR=+ui.sEatRatio.value,eatG=+ui.sEatGain.value,sameSafe=ui.chkSameSpecies.checked;
   const nSp=+ui.sSpecies.value,foodChain=ui.chkFoodChain.checked&&nSp>1;
   const hunt=+ui.sHunt.value,flee=+ui.sFlee.value,flock=+ui.sFlock.value,foodD=+ui.sFoodDrive.value,sep=+ui.sSeparation.value;
-  const sDt=dt*spd;if(sDt<0.0001)return;simTime+=sDt;orgHint=0;const tc=+ui.sTraitCost.value,dietOn=ui.chkDiet.checked,sz0=+ui.sStartSize.value,invMature=1/Math.max(0.5,(reproSz-sz0)*DIET_MATURE);
+  const sDt=dt*spd;if(sDt<0.0001)return;simTime+=sDt;orgHint=0;const tc=+ui.sTraitCost.value;
   if(soundOn&&ambOsc){let alive=0;for(let i=0;i<orgCount;i++)if(oalive[i])alive++;ambOsc.frequency.setTargetAtTime(40+(alive/Math.max(1,+ui.sOrganisms.value))*80,audioCtx.currentTime,0.5);}
   buildGrid();buildFoodGrid();const repro=[];for(let i=0;i<orgCount;i++)okin[i]=cladeKin[oclade[i]];
   for(let i=0;i<orgCount;i++){
     if(!oalive[i])continue;let ax=0,ay=0;
     const cx=Math.min(gridW-1,Math.max(0,ox[i]/CELL|0)),cy=Math.min(gridH-1,Math.max(0,oy[i]/CELL|0));
     const myC=oclade[i],myK=okin[i],mySz=osize[i],myAggro=0.5+gAggro[i],myPerc=0.5+gPerception[i]*1.5;
-    // With diets off everyone eats everything (shares of 1); with them on, the diet and how grown-up a creature is (myM, see
-    // DIET_MATURE) set what it eats, how hard it chases, and how big its prey can be
-    const myM=dietOn?clamp((mySz-sz0)*invMature,0,1):1,myJaw=dietOn?oJaw[i]*myM:0;
-    const myMeat=dietOn?oMeat[i]*myM:1,myPlant=dietOn?1+(oPlant[i]-1)*myM:1,iHunt=myMeat>DIET_MIN,huntW=Math.min(1,myMeat),foodW=Math.min(1,myPlant),myR=eatR-Math.max(0,eatR-DIET_JAW_RATIO)*myJaw,myDef=1+DIET_DEFEND*myJaw;
-    let full=dietOn&&odigest[i]>0;if(full)odigest[i]-=sDt;
-    let flX=0,flY=0,flN=0,mateJ=-1,mateD=CELL*1.5,preyJ=-1,preyD=1e9,threatJ=-1,threatD=1e9;const scanR=foodChain?2:1;
+    let flX=0,flY=0,flN=0,mateJ=-1,mateD=CELL*1.5;const scanR=foodChain?2:1;
     // Kin flock together and are never prey (unless Same Species Protected is off). Prey eaten earlier this step is
     // still in the grid until the next rebuild, so it is checked for life before it can be eaten again.
     for(let dy=-scanR;dy<=scanR;dy++)for(let dx=-scanR;dx<=scanR;dx++){const nx=cx+dx,ny=cy+dy;if(nx<0||nx>=gridW||ny<0||ny>=gridH)continue;const ci=ny*gridW+nx,cnt=gridCounts[ci],base=ci*GMAX;
       for(let k=0;k<cnt;k++){const j=gridEntries[base+k];if(j===i)continue;const ddx=ox[j]-ox[i],ddy=oy[j]-oy[i],d2=ddx*ddx+ddy*ddy,d=Math.sqrt(d2)+0.1,cR=mySz+osize[j],inP=d<CELL*myPerc;
         const same=okin[j]===myK;let canEat=false,isPrey=false;
-        const jM=dietOn?clamp((osize[j]-sz0)*invMature,0,1):1,jJaw=dietOn?oJaw[j]*jM:0;
         if(same){if(d<CELL*1.5){flX+=ddx;flY+=ddy;flN++;if(d<mateD&&oclade[j]===myC){mateD=d;mateJ=j;}}if(d<cR*0.8){const sf=sep*2/(d+1);ax-=ddx/d*sf;ay-=ddy/d*sf;}
-          if(sameSafe)continue;canEat=iHunt&&!full&&mySz>osize[j]*myR*(1+DIET_DEFEND*jJaw);isPrey=osize[j]>mySz*(eatR-Math.max(0,eatR-DIET_JAW_RATIO)*jJaw)*myDef;}
-        else if(foodChain){canEat=iHunt&&!full&&canEatInChain(cladeRoot[myC],cladeRoot[oclade[j]],nSp);isPrey=canEatInChain(cladeRoot[oclade[j]],cladeRoot[myC],nSp);}
-        else{canEat=iHunt&&!full&&mySz>osize[j]*myR*(1+DIET_DEFEND*jJaw);isPrey=osize[j]>mySz*(eatR-Math.max(0,eatR-DIET_JAW_RATIO)*jJaw)*myDef;}
-        if(isPrey&&dietOn&&oMeat[j]*jM<=DIET_MIN)isPrey=false; // a grazer is no threat, however big
-        // Every creature feels a gentle pull toward all it could eat and a push from all that could eat it; with diets on,
-        // hunters trade that pull for a chase after the nearest prey, and prey also run from the nearest hunter (below)
-        if(canEat&&inP){if(dietOn&&d<preyD){preyD=d;preyJ=j;}const hf=hunt*myAggro*0.5/(d+5)*huntW*(dietOn?1-oJaw[i]:1);ax+=ddx/d*hf;ay+=ddy/d*hf;if(d<cR*0.6&&oalive[j]){oalive[j]=0;const gain=dietOn?Math.min(oenergy[j],eatG*(osize[j]*oMeat[i]+oJaw[i]*DIET_HUNTER_BONUS*oenergy[j])):osize[j]*eatG;if(dietOn){odigest[i]=DIET_DIGEST;full=true;}addHusk(ox[j],oy[j],oenergy[j]-gain,oclade[j],osize[j],Math.atan2(-ovy[j],ovx[j]),dietOn?gDiet[j]:0.5);oenergy[i]+=gain;okills[i]++;spawnDeathFX(ox[j],oy[j],cladeHue[oclade[j]],4+osize[j]*0.5|0,osize[j]/maxSz,ox[i],oy[i]);const now=performance.now();if(now-lastThudSound>80){playThud(osize[j]/maxSz);lastThudSound=now;}}}
-        else if(isPrey&&inP){if(dietOn&&d<threatD){threatD=d;threatJ=j;}const ff=flee*1.2/(d+3);ax-=ddx/d*ff;ay-=ddy/d*ff;}
+          if(sameSafe)continue;canEat=mySz>osize[j]*eatR;isPrey=osize[j]>mySz*eatR;}
+        else if(foodChain){canEat=canEatInChain(cladeRoot[myC],cladeRoot[oclade[j]],nSp);isPrey=canEatInChain(cladeRoot[oclade[j]],cladeRoot[myC],nSp);}
+        else{canEat=mySz>osize[j]*eatR;isPrey=osize[j]>mySz*eatR;}
+        if(canEat&&inP){const hf=hunt*myAggro*0.5/(d+5);ax+=ddx/d*hf;ay+=ddy/d*hf;if(d<cR*0.6&&oalive[j]){oalive[j]=0;const gain=osize[j]*eatG;addHusk(ox[j],oy[j],oenergy[j]-gain,oclade[j],osize[j],Math.atan2(-ovy[j],ovx[j]));oenergy[i]+=gain;okills[i]++;spawnDeathFX(ox[j],oy[j],cladeHue[oclade[j]],4+osize[j]*0.5|0,osize[j]/maxSz,ox[i],oy[i]);const now=performance.now();if(now-lastThudSound>80){playThud(osize[j]/maxSz);lastThudSound=now;}}}
+        else if(isPrey&&inP){const ff=flee*1.2/(d+3);ax-=ddx/d*ff;ay-=ddy/d*ff;}
         else if(!same&&d<cR*1.2){const sf=sep*0.5/(d+2);ax-=ddx/d*sf;ay-=ddy/d*sf;}}}
     omate[i]=mateJ;
-    if(preyJ>=0&&oalive[preyJ]){const pdx=ox[preyJ]-ox[i],pdy=oy[preyJ]-oy[i],pd=Math.sqrt(pdx*pdx+pdy*pdy)+0.1,hf=hunt*DIET_CHASE*myAggro*huntW*oJaw[i];ax+=pdx/pd*hf;ay+=pdy/pd*hf;}
-    if(threatJ>=0){const tdx=ox[threatJ]-ox[i],tdy=oy[threatJ]-oy[i],td=Math.sqrt(tdx*tdx+tdy*tdy)+0.1,ff=flee*DIET_ESCAPE*oJaw[threatJ];ax-=tdx/td*ff;ay-=tdy/td*ff;}
     if(flN>0){flX/=flN;flY/=flN;const fd=Math.sqrt(flX*flX+flY*flY)+0.1;ax+=flX/fd*flock*0.15;ay+=flY/fd*flock*0.15;}
-    let nfD=999999,nfI=-1;const fScan=myPlant>DIET_MIN?Math.min(3,1+gPerception[i]*2|0):-1; // pure hunters don't look for algae
+    let nfD=999999,nfI=-1;const fScan=Math.min(3,1+gPerception[i]*2|0);
     for(let dy2=-fScan;dy2<=fScan;dy2++)for(let dx2=-fScan;dx2<=fScan;dx2++){const nx=cx+dx2,ny=cy+dy2;if(nx<0||nx>=gridW||ny<0||ny>=gridH)continue;const ci=ny*gridW+nx,cnt=fgridCounts[ci],base=ci*FGMAX;for(let k=0;k<cnt;k++){const fi=fgridEntries[base+k];if(!falive[fi])continue;const fdx=fx[fi]-ox[i],fdy=fy[fi]-oy[i],fd2=fdx*fdx+fdy*fdy;if(fd2<nfD){nfD=fd2;nfI=fi;}}}
-    if(nfI>=0){const fdx=fx[nfI]-ox[i],fdy=fy[nfI]-oy[i],fd=Math.sqrt(nfD)+0.1;if(fd<mySz+3){falive[nfI]=0;oenergy[i]+=dietOn?3*myPlant:3;}else{ax+=fdx/fd*foodD*0.3*foodW;ay+=fdy/fd*foodD*0.3*foodW;}}
+    if(nfI>=0){const fdx=fx[nfI]-ox[i],fdy=fy[nfI]-oy[i],fd=Math.sqrt(nfD)+0.1;if(fd<mySz+3){falive[nfI]=0;oenergy[i]+=3;}else{ax+=fdx/fd*foodD*0.3;ay+=fdy/fd*foodD*0.3;}}
     const wt=simTime+i*0.7;ax+=Math.sin(wt*1.3+oy[i]*0.01)*0.15;ay+=Math.cos(wt*0.9+ox[i]*0.01)*0.15;
-    const spdGene=(0.6+gSpeed[i]*0.8)*(1-tc*0.3*(gEfficiency[i]-0.5)),sprint=preyJ>=0?1+DIET_SPRINT*oJaw[i]:1,sS=orgSpd*spdGene*(1/(1+mySz*0.04))*sprint;
+    const spdGene=(0.6+gSpeed[i]*0.8)*(1-tc*0.3*(gEfficiency[i]-0.5)),sS=orgSpd*spdGene*(1/(1+mySz*0.04));
     ovx[i]=(ovx[i]+ax*sDt*60)*0.95;ovy[i]=(ovy[i]+ay*sDt*60)*0.95;const vel=Math.sqrt(ovx[i]*ovx[i]+ovy[i]*ovy[i]),mv=sS*3;if(vel>mv){ovx[i]=ovx[i]/vel*mv;ovy[i]=ovy[i]/vel*mv;}
     ox[i]+=ovx[i]*sS;oy[i]+=ovy[i]*sS;if(ox[i]<0)ox[i]+=W;else if(ox[i]>W)ox[i]-=W;if(oy[i]<0)oy[i]+=H;else if(oy[i]>H)oy[i]-=H;
     // Trait costs: fast, far-seeing, aggressive bodies burn more energy (centered so a 50% genome costs the same as before).
     // Speed cost is quadratic, like drag.
-    const geneLoad=1.8*(gSpeed[i]*gSpeed[i]-0.25)+0.6*(gPerception[i]-0.5)+0.3*(gAggro[i]-0.5);const metaCost=0.3*(1.2-gEfficiency[i]*0.5)*Math.max(0.2,1+tc*geneLoad)*(dietOn?1-DIET_LOWMET*oJaw[i]:1);oenergy[i]-=sDt*metaCost;osize[i]=clamp(Math.sqrt(Math.max(0.5,oenergy[i]))*1.5,1,maxSz);oage[i]+=sDt;
-    if(oenergy[i]<=0||oage[i]>(dietOn?life*(1+DIET_LIFE*oJaw[i]):life)){if(oenergy[i]<=0)spawnDeathFX(ox[i],oy[i],cladeHue[myC],2,0.3);else addHusk(ox[i],oy[i],oenergy[i],myC,mySz,Math.atan2(-ovy[i],ovx[i]),dietOn?gDiet[i]:0.5);oalive[i]=0;continue;}
+    const geneLoad=1.8*(gSpeed[i]*gSpeed[i]-0.25)+0.6*(gPerception[i]-0.5)+0.3*(gAggro[i]-0.5);const metaCost=0.3*(1.2-gEfficiency[i]*0.5)*Math.max(0.2,1+tc*geneLoad);oenergy[i]-=sDt*metaCost;osize[i]=clamp(Math.sqrt(Math.max(0.5,oenergy[i]))*1.5,1,maxSz);oage[i]+=sDt;
+    if(oenergy[i]<=0||oage[i]>life){if(oenergy[i]<=0)spawnDeathFX(ox[i],oy[i],cladeHue[myC],2,0.3);else addHusk(ox[i],oy[i],oenergy[i],myC,mySz,Math.atan2(-ovy[i],ovx[i]));oalive[i]=0;continue;}
     if(orest[i]>0)orest[i]-=sDt;else if(osize[i]>=reproSz&&oenergy[i]>reproSz*2.5)repro.push(i);
   }
   for(const r of repro)if(oalive[r])reproduce(r); // a parent eaten later in this step doesn't give birth
@@ -1354,10 +1292,10 @@ function showTreeInfo(id){
   if(id<0){ui.treeInfo.innerHTML=spotClade>=0?`Spotlight on <b style="color:${clades[spotClade].css}">${clades[spotClade].name}</b> and its descendants. Click it again, or press Esc, to clear.`
     :'Each line is a species, from when it split off to now or to its extinction. Hover a line for details; click it to spotlight that family in the world.';return;}
   const c=clades[id],a=c.parent>=0?namedAncestor(c.parent):null,live=c.died===null,n=c.pop||1;
-  const gs=live?[c.sum[0]/n,c.sum[1]/n,c.sum[2]/n,c.sum[3]/n,c.sum[4]/n]:c.ref;const p=v=>(v*100|0)+'%';
+  const gs=live?[c.sum[0]/n,c.sum[1]/n,c.sum[2]/n,c.sum[3]/n]:c.ref;const p=v=>(v*100|0)+'%';
   ui.treeInfo.innerHTML=`<b style="color:${c.css}">${c.name}</b> · `+(a?`split from ${a.name} at ${fmtTime(c.born)}`:'starting species')+'<br>'+
     (live?`Living, ${c.pop} now (peak ${c.peak})`:`Extinct at ${fmtTime(c.died)} (peak ${c.peak})`)+'<br>'+
-    `${live?'Genes now':'Founding genes'}: Spd ${p(gs[0])} Agg ${p(gs[1])} Eff ${p(gs[2])} Per ${p(gs[3])}`+(ui.chkDiet.checked&&gs[4]!==undefined?`<br>Diet: ${dietWord(gs[4])}, ${p(gs[4])} meat`:'');
+    `${live?'Genes now':'Founding genes'}: Spd ${p(gs[0])} Agg ${p(gs[1])} Eff ${p(gs[2])} Per ${p(gs[3])}`;
 }
 function treeRowAt(e){const r=treeCanvas.getBoundingClientRect(),k=Math.floor((e.clientY-r.top-treeGeom.top)/treeGeom.rowH);return k>=0&&k<treeRows.length?treeRows[k].c.id:-1;}
 treeCanvas.addEventListener('mousemove',e=>{const id=treeRowAt(e);if(id!==treeHover){treeHover=id;showTreeInfo(id);treeDirty=true;}});
@@ -1368,7 +1306,7 @@ function treeVisible(){return !ui.panel.classList.contains('collapsed')&&$('tab-
 // Tooltip
 let mouseX=0,mouseY=0,hoveredOrg=-1;
 function findOrgAtMouse(){let best=-1,bestD=400;const cx=Math.min(gridW-1,Math.max(0,mouseX/CELL|0)),cy=Math.min(gridH-1,Math.max(0,mouseY/CELL|0));for(let dy=-1;dy<=1;dy++)for(let dx=-1;dx<=1;dx++){const nx=cx+dx,ny=cy+dy;if(nx<0||nx>=gridW||ny<0||ny>=gridH)continue;const ci=ny*gridW+nx,cnt=gridCounts[ci],base=ci*GMAX;for(let k=0;k<cnt;k++){const j=gridEntries[base+k];if(!oalive[j])continue;const ddx=ox[j]-mouseX,ddy=oy[j]-mouseY,d2=ddx*ddx+ddy*ddy;if(d2<bestD){bestD=d2;best=j;}}}return best;}
-function updateTooltip(){hoveredOrg=findOrgAtMouse();if(hoveredOrg<0){ui.tooltip.classList.remove('show');return;}const i=hoveredOrg;const ci=oclade[i],cp=clades[ci].parent>=0?namedAncestor(clades[ci].parent):null;ui.tooltip.innerHTML=`<b style="color:${clades[ci].css}">${cladeLabel(ci)} #${i}</b>${cp&&clades[ci].established?` <span style="color:var(--muted)">from ${cp.name}</span>`:''}<br>Size: ${osize[i].toFixed(1)} · Energy: ${oenergy[i].toFixed(1)}<br>Age: ${oage[i].toFixed(1)}s · Kills: ${okills[i]} · Gen: ${ogen[i]}<br><span style="color:var(--accent2)">Spd:</span>${(gSpeed[i]*100|0)}% <span style="color:var(--warm)">Agg:</span>${(gAggro[i]*100|0)}% <span style="color:var(--accent)">Eff:</span>${(gEfficiency[i]*100|0)}% <span style="color:var(--accent3)">Per:</span>${(gPerception[i]*100|0)}%`+(ui.chkDiet.checked?`<br>Diet: ${dietWord(gDiet[i])}, ${(gDiet[i]*100|0)}% meat`:'');ui.tooltip.style.left=Math.min(W-230,mouseX+15)+'px';ui.tooltip.style.top=Math.min(H-100,mouseY+15)+'px';ui.tooltip.classList.add('show');}
+function updateTooltip(){hoveredOrg=findOrgAtMouse();if(hoveredOrg<0){ui.tooltip.classList.remove('show');return;}const i=hoveredOrg;const ci=oclade[i],cp=clades[ci].parent>=0?namedAncestor(clades[ci].parent):null;ui.tooltip.innerHTML=`<b style="color:${clades[ci].css}">${cladeLabel(ci)} #${i}</b>${cp&&clades[ci].established?` <span style="color:var(--muted)">from ${cp.name}</span>`:''}<br>Size: ${osize[i].toFixed(1)} · Energy: ${oenergy[i].toFixed(1)}<br>Age: ${oage[i].toFixed(1)}s · Kills: ${okills[i]} · Gen: ${ogen[i]}<br><span style="color:var(--accent2)">Spd:</span>${(gSpeed[i]*100|0)}% <span style="color:var(--warm)">Agg:</span>${(gAggro[i]*100|0)}% <span style="color:var(--accent)">Eff:</span>${(gEfficiency[i]*100|0)}% <span style="color:var(--accent3)">Per:</span>${(gPerception[i]*100|0)}%`;ui.tooltip.style.left=Math.min(W-230,mouseX+15)+'px';ui.tooltip.style.top=Math.min(H-100,mouseY+15)+'px';ui.tooltip.classList.add('show');}
 
 // GL Buffers
 const RMAX=MAX_ORG+MAX_FOOD+MAX_DFX;
@@ -1434,23 +1372,23 @@ function renderWorld(){
   gl.drawArrays(gl.POINTS,0,wi);
   gl.disableVertexAttribArray(aPos);gl.disableVertexAttribArray(aHue);gl.disableVertexAttribArray(aAlpha);gl.disableVertexAttribArray(aSize);}
   // Creatures
-  const maxV=Math.max(0.1,(+ui.sOrgSpeed.value)*3),detail=ui.chkDetail.checked,dietOn=ui.chkDiet.checked;let n=0;
+  const maxV=Math.max(0.1,(+ui.sOrgSpeed.value)*3),detail=ui.chkDetail.checked;let n=0;
   for(let i=0;i<orgCount;i++){if(!oalive[i])continue;const o=n*ORG_STRIDE;const vx=ovx[i],vy=ovy[i],v=Math.sqrt(vx*vx+vy*vy);
     orgData[o]=ox[i];orgData[o+1]=oy[i];
-    orgData[o+2]=Math.atan2(-vy,vx);orgData[o+3]=(detail?Math.max(7,osize[i]*3.8):Math.max(1.5,osize[i]*1.2))*(i===hoveredOrg?1.5:1);orgData[o+4]=cladeHue[oclade[i]];orgData[o+5]=dietOn?gDiet[i]:0.5;
-    orgData[o+6]=gSpeed[i];orgData[o+7]=gAggro[i];orgData[o+8]=gEfficiency[i];orgData[o+9]=gPerception[i];
-    orgData[o+10]=Math.min(1,oenergy[i]/12);orgData[o+11]=(i*0.618034)%1;orgData[o+12]=Math.min(1,v/maxV);orgData[o+13]=spotClade<0||spotMask[oclade[i]]?1:0.14;n++;}
+    orgData[o+2]=Math.atan2(-vy,vx);orgData[o+3]=(detail?Math.max(7,osize[i]*3.8):Math.max(1.5,osize[i]*1.2))*(i===hoveredOrg?1.5:1);orgData[o+4]=cladeHue[oclade[i]];
+    orgData[o+5]=gSpeed[i];orgData[o+6]=gAggro[i];orgData[o+7]=gEfficiency[i];orgData[o+8]=gPerception[i];
+    orgData[o+9]=Math.min(1,oenergy[i]/12);orgData[o+10]=(i*0.618034)%1;orgData[o+11]=Math.min(1,v/maxV);orgData[o+12]=spotClade<0||spotMask[oclade[i]]?1:0.14;n++;}
   // Dead bodies: still, dim, see-through cells that shrink and fade as they break down into algae
   if(ui.chkDeathFX.checked)for(let k=0;k<huskCount;k++){const o=n*ORG_STRIDE,f=hLeft[k]/hFull[k];
-    orgData[o]=hx[k];orgData[o+1]=hy[k];orgData[o+2]=hHead[k];orgData[o+3]=(detail?Math.max(7,hSize[k]*3.8):Math.max(1.5,hSize[k]*1.2))*(0.6+0.4*f);orgData[o+4]=hHue[k];orgData[o+5]=hDiet[k];
-    orgData[o+6]=0;orgData[o+7]=0;orgData[o+8]=1;orgData[o+9]=0;orgData[o+10]=0.3;orgData[o+11]=0;orgData[o+12]=0;orgData[o+13]=0.6*f*(spotClade<0||spotMask[hClade[k]]?1:0.14);n++;}
+    orgData[o]=hx[k];orgData[o+1]=hy[k];orgData[o+2]=hHead[k];orgData[o+3]=(detail?Math.max(7,hSize[k]*3.8):Math.max(1.5,hSize[k]*1.2))*(0.6+0.4*f);orgData[o+4]=hHue[k];
+    orgData[o+5]=0;orgData[o+6]=0;orgData[o+7]=1;orgData[o+8]=0;orgData[o+9]=0.3;orgData[o+10]=0;orgData[o+11]=0;orgData[o+12]=0.6*f*(spotClade<0||spotMask[hClade[k]]?1:0.14);n++;}
   gl.useProgram(orgProg);gl.uniform2f(orgLoc.res,W,H);gl.uniform1f(orgLoc.time,visTime);gl.uniform1f(orgLoc.simple,detail?0:1);gl.uniform1f(orgLoc.glow,ui.chkGlow.checked?+ui.sGlow.value:0);
   gl.bindBuffer(gl.ARRAY_BUFFER,orgBuf);gl.bufferData(gl.ARRAY_BUFFER,orgData.subarray(0,n*ORG_STRIDE),gl.DYNAMIC_DRAW);
   const st=ORG_STRIDE*4;
   gl.enableVertexAttribArray(orgLoc.pos);gl.vertexAttribPointer(orgLoc.pos,2,gl.FLOAT,false,st,0);
-  gl.enableVertexAttribArray(orgLoc.look);gl.vertexAttribPointer(orgLoc.look,4,gl.FLOAT,false,st,8);
-  gl.enableVertexAttribArray(orgLoc.genes);gl.vertexAttribPointer(orgLoc.genes,4,gl.FLOAT,false,st,24);
-  gl.enableVertexAttribArray(orgLoc.state);gl.vertexAttribPointer(orgLoc.state,4,gl.FLOAT,false,st,40);
+  gl.enableVertexAttribArray(orgLoc.look);gl.vertexAttribPointer(orgLoc.look,3,gl.FLOAT,false,st,8);
+  gl.enableVertexAttribArray(orgLoc.genes);gl.vertexAttribPointer(orgLoc.genes,4,gl.FLOAT,false,st,20);
+  gl.enableVertexAttribArray(orgLoc.state);gl.vertexAttribPointer(orgLoc.state,4,gl.FLOAT,false,st,36);
   gl.blendFunc(gl.ONE,gl.ONE_MINUS_SRC_ALPHA);gl.drawArrays(gl.POINTS,0,n);
   gl.disableVertexAttribArray(orgLoc.pos);gl.disableVertexAttribArray(orgLoc.look);gl.disableVertexAttribArray(orgLoc.genes);gl.disableVertexAttribArray(orgLoc.state);
 }
@@ -1495,7 +1433,6 @@ ui.seedInput.addEventListener('keydown',(e)=>{if(e.key==='Enter'){resize();initW
 ui.btnSound.addEventListener('click',()=>{interact();toggleSound();});
 ui.btnRecord.addEventListener('click',()=>{interact();startRecording();});
 ui.btnFullscreen.addEventListener('click',()=>{interact();if(!document.fullscreenElement)document.documentElement.requestFullscreen?.();else document.exitFullscreen?.();});
-ui.selDietStart.addEventListener('change',()=>{interact();ui.chkDiet.checked=true;resize();initWorld();});
 ui.selPreset.addEventListener('change',()=>{interact();const v=ui.selPreset.value;if(v!=='custom'){applyPreset(v);resize();initWorld();}});
 document.querySelectorAll('input[type="range"]').forEach(s=>{s.addEventListener('input',()=>{interact();updateLabels();ui.selPreset.value='custom';});});
 ui.sOrganisms.addEventListener('change',()=>{interact();initWorld();});
@@ -1512,10 +1449,10 @@ canvas.addEventListener('mousemove',(e)=>{mouseX=e.clientX;mouseY=e.clientY;});
 canvas.addEventListener('click',(e)=>{interact();foodHint=0;for(let s=0;s<8;s++){const idx=allocFood();if(idx<0)break;fx[idx]=e.clientX+(Math.random()-0.5)*30;fy[idx]=e.clientY+(Math.random()-0.5)*30;falive[idx]=1;fglow[idx]=Math.random()*TAU;}});
 canvas.addEventListener('contextmenu',(e)=>{e.preventDefault();interact();const sz0=+ui.sStartSize.value;
   let pool=liveClades.filter(c=>c.established);if(!pool.length)pool=liveClades;
-  let c,g;if(pool.length){c=pool[Math.random()*pool.length|0];const n=c.pop||1;g=c.pop?[c.sum[0]/n,c.sum[1]/n,c.sum[2]/n,c.sum[3]/n,c.sum[4]/n]:c.ref;}
-  else{const root=Math.random()*(+ui.sSpecies.value)|0;g=[0.5,0.5,0.5,0.5,0.5];c=clades[newClade(-1,root,SPECIES_HUES[root%12],g,e.clientX,e.clientY)];if(!c)return;establish(c,cladeName(c.id));c.histStart=censusN+1;} // everything had died: a new arrival
-  orgHint=0;for(let s=0;s<5;s++){const idx=allocOrg();if(idx<0)break;ogen[idx]=0;ox[idx]=e.clientX+(Math.random()-0.5)*25;oy[idx]=e.clientY+(Math.random()-0.5)*25;ovx[idx]=(Math.random()-0.5)*2;ovy[idx]=(Math.random()-0.5)*2;oclade[idx]=c.id;osize[idx]=sz0;oenergy[idx]=sz0*2;oage[idx]=0;orest[idx]=0;odigest[idx]=0;oalive[idx]=1;okills[idx]=0;
-    gSpeed[idx]=clamp(g[0]+(Math.random()-0.5)*0.1,0.05,1);gAggro[idx]=clamp(g[1]+(Math.random()-0.5)*0.1,0.05,1);gEfficiency[idx]=clamp(g[2]+(Math.random()-0.5)*0.1,0.05,1);gPerception[idx]=clamp(g[3]+(Math.random()-0.5)*0.1,0.05,1);setDiet(idx,clamp(g[4]+(Math.random()-0.5)*0.1,0,1));}});
+  let c,g;if(pool.length){c=pool[Math.random()*pool.length|0];const n=c.pop||1;g=c.pop?[c.sum[0]/n,c.sum[1]/n,c.sum[2]/n,c.sum[3]/n]:c.ref;}
+  else{const root=Math.random()*(+ui.sSpecies.value)|0;g=[0.5,0.5,0.5,0.5];c=clades[newClade(-1,root,SPECIES_HUES[root%12],g,e.clientX,e.clientY)];if(!c)return;establish(c,cladeName(c.id));c.histStart=censusN+1;} // everything had died: a new arrival
+  orgHint=0;for(let s=0;s<5;s++){const idx=allocOrg();if(idx<0)break;ogen[idx]=0;ox[idx]=e.clientX+(Math.random()-0.5)*25;oy[idx]=e.clientY+(Math.random()-0.5)*25;ovx[idx]=(Math.random()-0.5)*2;ovy[idx]=(Math.random()-0.5)*2;oclade[idx]=c.id;osize[idx]=sz0;oenergy[idx]=sz0*2;oage[idx]=0;orest[idx]=0;oalive[idx]=1;okills[idx]=0;
+    gSpeed[idx]=clamp(g[0]+(Math.random()-0.5)*0.1,0.05,1);gAggro[idx]=clamp(g[1]+(Math.random()-0.5)*0.1,0.05,1);gEfficiency[idx]=clamp(g[2]+(Math.random()-0.5)*0.1,0.05,1);gPerception[idx]=clamp(g[3]+(Math.random()-0.5)*0.1,0.05,1);}});
 
 window.addEventListener('keydown',(e)=>{
   if(e.target.tagName==='INPUT'||e.target.tagName==='SELECT'||e.target.tagName==='TEXTAREA')return;
