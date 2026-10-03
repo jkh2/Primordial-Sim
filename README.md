@@ -28,7 +28,16 @@ We believe this is how humans and AI should work together: as partners with comp
 
 **v5.8, October 3, 2026: who guards, and one Reproduction menu**
 
-@@V58@@
+- **One Reproduction menu.** The Sexual Reproduction and Males and Females switches are now one **Reproduction** menu in the Evolve tab: **Divide alone**, **Any two mix genes**, or **Male and female**. Settings and links saved before load the way they were, and choosing a preset now sets the menu too.
+- **Who guards.** Protective Mothers is now **Protective Parents**. With Male and female on, a new **Who Guards** menu decides who guards the young after a birth: the mother, the father, both, or **Evolves**, where a who-guards gene lets each species find its own way. A guarding father can't mate or go looking for a mate, so a father who leaves can sire more young, and a mother who leaves can feed and breed again sooner. Click a baby to see which parent is guarding it.
+- **Only grown fathers stay.** In our first tests, both parents guarding wiped out the grazers in seven of nine worlds. A male doesn't have to be grown to father a litter, so many fathers were small; they stopped eating to guard, charged the hunters, and were eaten. Real animals showed the way: the fathers who stay to guard, like sticklebacks, seahorses and nesting birds, are grown males. So only a father big enough to breed stays, and a young one leaves.
+- **Who guards changes who wins.** In the Males and Females world with protective parents, over ten minutes:
+  - With the mother guarding, the grazers lasted on all 27 seeds we ran, the hunters on 17.
+  - With both parents guarding, the grazers lasted on 20 of 27 and the hunters on 24.
+  - With the father guarding, both lasted on all 9 seeds we ran.
+  - With Evolves, the grazers lasted on 26 of 27 and the hunters on 22.
+- **Fathers took on more.** In Origin of Species with males and females, protective parents and Evolves, the grazers lasted in seven of nine worlds, and in every one of those seven their who-guards gene climbed from about 50% to between 59% and 75%: their fathers came to do more of the guarding, so their mothers fed and bred again sooner. The hunters stayed near even.
+- **Mother plays exactly like v5.7.** With the mother guarding (the default, and how settings saved before v5.8 load), every seed replays as it did in v5.7. The Lab Partner knows the new rules and sees each species' who-guards gene.
 
 **v5.7, October 3, 2026: bite contests**
 
@@ -319,7 +328,7 @@ After a birth, a parent guards for six seconds times its care. It doesn't feed o
 
 **Who guards.** Without males and females, the parent that gave birth guards. With Reproduction set to Male and female, the **Who Guards** menu decides: **Mother** (the default, and how every world before v5.8 played), **Father**, **Both**, or **Evolves**. Only a grown father, one big enough to breed, stays to guard; a young one leaves. While a father guards he can't mate or go looking for a mate, so a father who leaves can sire more young, and a mother who leaves can feed and breed again sooner. With **Evolves**, every creature carries a who-guards gene that starts near 50%: at 0% only the mother guards, at 50% both do, at 100% only the father, and in between the less involved parent guards for part of its time. Each species finds its own way, and the family tree and a creature's card show where it stands.
 
-What we found: in crowded ponds care seems to cost more than it pays. They held fewer creatures with care on, and in the default world care drifted down to about 43%. Its effect on the hunters depends on the world: in Predators and Prey they did as well as without care, but in Males and Females they died out on three of the nine seeds we tried, where without care they died out on one. Care moves slowly; the clearest change we saw was in Origin of Species, where it rose to about 58% while hunters were multiplying and fell back once they had eaten nearly everything else.
+What we found: in crowded ponds care seems to cost more than it pays. They held fewer creatures with care on, and in the default world care drifted down to about 43%. Its effect on the hunters depends on the world: in Predators and Prey they did as well as without care, but in Males and Females they died out on three of the nine seeds we tried, where without care they died out on one. Care moves slowly; the clearest change we saw was in Origin of Species, where it rose to about 58% while hunters were multiplying and fell back once they had eaten nearly everything else. Who guards changes the balance too. In the Males and Females world the grazers lasted ten minutes on all 27 seeds we ran with the mother guarding but the hunters on only 17; with both parents guarding the hunters lasted on 24 and the grazers on 20; with Evolves the grazers lasted on 26 and the hunters on 22. In Origin of Species with Evolves, the grazers' fathers evolved to do more of the guarding.
 
 ### Bite Contests
 
