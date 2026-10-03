@@ -1,6 +1,8 @@
+> **Archived README for v5.3, the public version from October 2 to October 3, 2026 (before diets).** This is how the README read while v5.3 was the public version. Play v5.3 at [/v5.3](https://jkh2.github.io/Primordial-Sim/v5.3/). The current README is [here](../README.md). Only the image and file links below were changed so they work from this folder; the untouched original is on the [`v5.3-release`](https://github.com/jkh2/Primordial-Sim/tree/v5.3-release) branch.
+
 # Primordial-Sim
 
-![Primordial-Sim Banner](banner.png)
+![Primordial-Sim Banner](../banner.png)
 
 ### Emergent Artificial Life Engine
 
@@ -25,15 +27,6 @@ We believe this is how humans and AI should work together: as partners with comp
 ---
 
 ## What's New in v5
-
-**v5.4, October 3, 2026: grazers and hunters**
-
-- **A diet gene.** Every creature now has a diet that runs from grazer (eats only algae) to hunter (eats only other creatures). Omnivores in the middle eat both at full value, as every creature did before. Grazers get up to 30% more from algae. Hunters are built to kill: a pure hunter can take prey a third bigger than itself, is harder to eat, sprints after the nearest prey, burns up to half as much energy, lives up to twice as long and rests longer between births, and digests each kill for a second before it attacks again. Creatures are born grazing and grow into their adult diet, so young hunters graze like tadpoles. Diets are inherited and mutate, so they evolve.
-- **Bodies that show it.** Grazers are rounder, with a green tint and a green nucleus. Hunters are longer and sharper, with red rims and spines that follow the body. Hover over a creature to see its diet and its share of meat; the family tree shows each species' diet too.
-- **Starting Diets.** A new choice in the Rules tab starts a world as all omnivores, a mix of grazers, hunters and omnivores, all grazers, or all hunters. The crowded presets start as omnivores; Stable Eden and Superorganism start mixed.
-- **Predators and Prey preset.** Two grazer species and a hunter species in a roomy, food-rich pond. Their numbers rise and fall in turns, with the hunters peaking after the grazers, and both held on for ten minutes on all nine seeds we tried (and for twenty on the one we ran that long).
-- **What we saw.** Starting as omnivores, crowded worlds hold about as many creatures as in v5.3, and grazers often evolve on their own within a few minutes (in Arms Race, Battle Royale and some default worlds). In Origin of Species the single omnivore ancestor splits into grazers and hunters within a minute, and after about four minutes hunters take over. A crowded mixed start is a feeding frenzy that the hunters win: in the default world the grazers die out and the pond crashes to a few dozen before omnivores evolve again. An all-hunter pond eats itself down, and in the default world omnivores evolved back within three minutes.
-- **Diets off plays exactly like v5.3.** Turn off Grazers and Hunters in the Rules tab and every seed replays as it did in v5.2.1 through v5.3. Settings and links saved before v5.4 load with diets off, and the Food Chain Cycle preset keeps them off. The Lab Partner knows the diet rules and sees each species' average diet.
 
 **v5.3, October 2, 2026: a free Lab Partner**
 
@@ -80,10 +73,9 @@ We believe this is how humans and AI should work together: as partners with comp
 
 | Version | Play it | Its README | Exact source |
 |---------|---------|------------|--------------|
-| v5.3 (October 2, 2026) | [/v5.3](https://jkh2.github.io/Primordial-Sim/v5.3/) | [v5.3/README.md](v5.3/README.md) | [`v5.3-release`](https://github.com/jkh2/Primordial-Sim/tree/v5.3-release) branch |
-| v5 (September 29, 2026) | [/v5](https://jkh2.github.io/Primordial-Sim/v5/) | [v5/README.md](v5/README.md) | [`v5-release`](https://github.com/jkh2/Primordial-Sim/tree/v5-release) branch |
-| v4 (September 29, 2026) | [/v4](https://jkh2.github.io/Primordial-Sim/v4/) | [v4/README.md](v4/README.md) | [`v4-release`](https://github.com/jkh2/Primordial-Sim/tree/v4-release) branch |
-| v3, the original (March 12, 2026) | [/classic](https://jkh2.github.io/Primordial-Sim/classic/) | [classic/README.md](classic/README.md) | [`v3-original`](https://github.com/jkh2/Primordial-Sim/tree/v3-original) branch |
+| v5 (September 29, 2026) | [/v5](https://jkh2.github.io/Primordial-Sim/v5/) | [v5/README.md](../v5/README.md) | [`v5-release`](https://github.com/jkh2/Primordial-Sim/tree/v5-release) branch |
+| v4 (September 29, 2026) | [/v4](https://jkh2.github.io/Primordial-Sim/v4/) | [v4/README.md](../v4/README.md) | [`v4-release`](https://github.com/jkh2/Primordial-Sim/tree/v4-release) branch |
+| v3, the original (March 12, 2026) | [/classic](https://jkh2.github.io/Primordial-Sim/classic/) | [classic/README.md](../classic/README.md) | [`v3-original`](https://github.com/jkh2/Primordial-Sim/tree/v3-original) branch |
 
 ## What It Is
 
@@ -197,11 +189,10 @@ The AI Lab Partner operates through four integrated systems:
 
 | Preset | Organisms | Food | Species | Character |
 |--------|-----------|------|---------|-----------|
-| Stable Eden | 4,000 | 3,000 | 5 | Peaceful aquarium, high food, low aggression, territories form gradually; starts with mixed diets |
-| Predators and Prey | 500 | 3,000 | 3 | Two grazer species and a hunter species, started near what the pond can hold: grazers and hunters rise and fall in turns |
+| Stable Eden | 4,000 | 3,000 | 5 | Peaceful aquarium, high food, low aggression, territories form gradually |
 | Arms Race | 5,000 | 1,800 | 4 | High mutation drives rapid evolution under moderate scarcity |
 | Battle Royale | 12,000 | 600 | 6 | Massive population, almost no food, fast carnage, most species go extinct |
-| Superorganism | 6,000 | 2,500 | 4 | Max flocking — species move as tight swarms like slime molds; starts with mixed diets |
+| Superorganism | 6,000 | 2,500 | 4 | Max flocking — species move as tight swarms like slime molds |
 | Food Chain Cycle | 4,500 | 2,200 | 3 | Rock-paper-scissors predation, classic oscillating population waves |
 | Extinction Event | 8,000 | 4,000 | 8 | Abundant start, food dries up, slow die-off reveals which traits survive |
 | Origin of Species | 1,000 | 8,000 | 1 | One ancestor, plenty of food, strong mutation: watch it branch into dozens of species on the family tree |
@@ -212,7 +203,7 @@ The AI Lab Partner operates through four integrated systems:
 |-------|--------|
 | Left click | Drop food cluster |
 | Right click | Bring in a small group of a living species |
-| Hover | Inspect organism (species and its ancestor, size, energy, age, kills, generation, genes, diet) |
+| Hover | Inspect organism (species and its ancestor, size, energy, age, kills, generation, genes) |
 | Space | Pause / Resume |
 | 1 / 2 / 3 / 4 | Speed: 0.5x / 1x / 2x / 5x |
 | S | Toggle sound |
@@ -224,8 +215,8 @@ The AI Lab Partner operates through four integrated systems:
 
 - **World**: pause, reset, sound, video recording, fullscreen, scenario presets, the world seed with Replay, Share Link, Export and Import, organism and food amounts, food oases, simulation speed, the population graph, and the species census
 - **Species**: number of starting species, starting and maximum size, organism speed, lifespan, size to reproduce, offspring count
-- **Rules**: grazers and hunters (the diet gene) and the starting diets, same-species protection, the food chain mode, size advantage to eat, energy from eating, how much of a dead body becomes algae, and the five behavior drives (hunt, flee, flock, food attraction, separation)
-- **Evolve**: mutation on or off, mutation rate and strength, trait cost, which genes can evolve (including diet), whether new species can form, the split distance, and sexual reproduction
+- **Rules**: same-species protection, the food chain mode, size advantage to eat, energy from eating, how much of a dead body becomes algae, and the five behavior drives (hunt, flee, flock, food attraction, separation)
+- **Evolve**: mutation on or off, mutation rate and strength, trait cost, which genes can evolve, whether new species can form, the split distance, and sexual reproduction
 - **Tree**: the live family tree of every named species; hover for details, click to spotlight a family
 - **Visual**: glow and glow strength, water effects, detailed creatures, birth and death effects, oasis springs, lineage trails, food glow, trail length
 
@@ -250,14 +241,6 @@ Genes are not free. With **Trait Cost** above 0, speed (quadratically, like drag
 ### The Energy Cycle
 
 Energy enters the pond as algae (the starting food, the Food Spawn Rate and any food you click in; each piece is worth 3 energy) and in the bodies of the organisms a world starts with or that you add. It leaves only through metabolism and through the part of each dead body that doesn't come back. An organism's size is 1.5 times the square root of its energy, so size 12 takes 64 energy and size 18 takes 144. Birth moves energy from parent to young without losing any. When an organism dies of old age or is eaten, the energy left in its body (after whatever a predator took) breaks down into algae around where it died over four seconds; a body too small to make a whole piece of algae gives its energy back on the spot. **Dead Bodies Become Algae** sets how much returns, 90% by default, and the rest is lost. A starved organism has nothing left to give. Before decay was added, old age carried most of the default world's energy out of the pond (about half in v5 and about 70% in v5.1), which is why it used to starve down to about 20 organisms.
-
-### Diets: Grazers, Omnivores and Hunters
-
-With **Grazers and Hunters** on (the default), every creature carries a diet gene from 0% meat (a pure grazer) to 100% (a pure hunter). At 50% it is an omnivore that gets full value from both algae and prey, exactly like every creature before v5.4. Below 50%, prey is worth less and algae up to 30% more; above 50%, algae is worth less and the body is built to kill. A pure hunter can eat prey up to a third bigger than itself (instead of needing the Size Advantage to Eat), is harder to eat, sprints after the nearest prey in sight, burns half the energy, lives twice as long and rests four times as long between births, and gets part of its prey's stored energy on top of the usual meal. After each kill it digests for a second. Creatures under 5% meat never attack and are no threat to anyone; creatures under 5% plant ignore algae. Every creature is born grazing and grows into its adult diet by the time it is halfway to breeding size. The diet is inherited (mixed with the mate's under sexual reproduction) and mutates like the other genes; **Diet Gene** in the Evolve tab freezes it.
-
-**Starting Diets** in the Rules tab sets how a world begins: all omnivores, a mix (grazer, hunter, grazer and omnivore species, repeating, with hunter species at half the numbers), all grazers or all hunters.
-
-What we found tuning it: the presets start far more crowded than their ponds can hold, and the first seconds are a scramble in which most creatures are eaten. With a mixed start in a crowded world, the hunters win that scramble and eat nearly every grazer, and the pond crashes to a few dozen. So the crowded presets start as omnivores: they stay about as full as in v5.3 and evolve their own grazers, sometimes within a few minutes. Hunters couldn't hold on in a pond until they lived longer and bred more slowly than their prey, as real predators do. Started near what its pond can hold, the Predators and Prey preset keeps grazers and hunters rising and falling in turns.
 
 ### Speciation and the Family Tree
 
@@ -289,8 +272,8 @@ Any modern browser with WebGL: Chrome, Firefox, Safari, Edge. No plugins, no ext
 
 ## Where It's Going
 
-- **Now: richer life.** Males and females, parents that defend their young, bite contests with armor and jaws, toxins and warning colors, small evolved brains as an optional replacement for the five fixed drives, day and night, seasons, terrain and currents, disease, life stages, mate choice, scent trails, colonies, and a WebGPU engine for 100,000 or more organisms where the browser supports it.
-- **Paused, coming back: the Lab Partner as a working scientist.** Proper tool calls instead of parsing text, time-series records so reports cite trends, experiments repeated across several seeds against an unchanged control, a lab notebook that persists between sessions, charts in its reports, and an Alliance mode where Claude, Grok and Gemini each interpret the same result, plus a pond news feed and hall of fame for new species, extinctions and records.
+- **Next: the Lab Partner as a working scientist.** Proper tool calls instead of parsing text, time-series records so reports cite trends, experiments repeated across several seeds against an unchanged control, a lab notebook that persists between sessions, charts in its reports, and an Alliance mode where Claude, Grok and Gemini each interpret the same result, plus a pond news feed and hall of fame for new species, extinctions and records.
+- **Then: richer life and world.** Small evolved brains as an optional replacement for the five fixed drives, plant-eaters and meat-eaters with bodies that show their diet, day and night, seasons, terrain and currents, disease, parental care as a gene that can evolve, life stages, mate choice, scent trails, colonies, and a WebGPU engine for 100,000 or more organisms where the browser supports it.
 - **Then: a world worth sharing.** A camera that follows one creature through its life, zoom and pan, dragging to stir a current, a narrated documentary mode, and the Wellspring at the heart of the world.
 - **Someday: a 3D world** people can step into with VR headsets, right in the browser.
 
@@ -306,7 +289,7 @@ Learn more about the SIDLF framework and human-AI symbiosis at [jameskeithharwoo
 
 ## License
 
-**Sentinel AI Systems Non-Commercial License v1.0** — See [LICENSE](LICENSE) for full terms.
+**Sentinel AI Systems Non-Commercial License v1.0** — See [LICENSE](../LICENSE) for full terms.
 
 **Free for:** personal use, entertainment, education, academic research, classroom instruction, and learning from the code.
 
@@ -314,4 +297,4 @@ Learn more about the SIDLF framework and human-AI symbiosis at [jameskeithharwoo
 
 We built this openly so people can learn from it, enjoy it, and be inspired by it. We ask that if you profit from it, you include us in that conversation.
 
-See [IP-DECLARATION.md](IP-DECLARATION.md) for the formal intellectual property declaration and prior art documentation.
+See [IP-DECLARATION.md](../IP-DECLARATION.md) for the formal intellectual property declaration and prior art documentation.
