@@ -25,6 +25,12 @@ canvas#gl{position:fixed;inset:0;width:100%;height:100%;display:block;z-index:0}
 .ai-toggle{position:fixed;top:12px;right:12px;z-index:11;width:42px;height:42px;border-radius:12px;background:var(--panel);border:1px solid rgba(180,122,255,0.15);backdrop-filter:blur(16px);color:var(--accent3);font-size:1.1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all 0.25s ease;box-shadow:0 4px 20px rgba(0,0,0,0.3)}
 .ai-toggle:hover{background:rgba(180,122,255,0.12)}
 .ai-toggle.hidden{opacity:0;pointer-events:none}
+.panel-toggle,.ai-toggle{flex-direction:column;gap:2px;width:48px;height:50px;line-height:1}
+.tl{font-family:var(--font-mono);font-size:0.5rem;font-weight:500;letter-spacing:0.12em;color:var(--muted)}
+#quickPause{left:68px;color:var(--accent2)}#qpIcon{font-size:0.8rem;letter-spacing:-0.1em}
+.tip-close{color:var(--muted);font-size:0.62rem}
+/* An open panel sits above the corner buttons, so on a phone the AI LAB button no longer covers the menu's close button */
+.panel:not(.collapsed),.ai-panel:not(.collapsed){z-index:12}
 .ai-header{padding:16px 16px 0;flex-shrink:0}
 .ai-title{font-size:1.05rem;font-weight:600;background:linear-gradient(135deg,var(--accent3),var(--accent));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
 .ai-subtitle{font-size:0.7rem;color:var(--muted);font-family:var(--font-mono);font-weight:300;margin-top:2px}
@@ -131,18 +137,19 @@ button.btn.recording{background:rgba(255,50,50,0.25)!important;border-color:rgba
     <h2>Primordial — Life Evolves from Simple Rules</h2>
     <p>Organisms eat, grow, hunt, flee, reproduce, mutate, die, and branch into new species<br/>
     AI Lab Partner observes, experiments, and writes research reports<br/>
-    Click = food · Right-click = spawn · Hover = inspect · Space = pause<br/>
-    Keys: 1-4 = speed · S = sound · L = AI Lab · T = family tree</p>
+    <span id="hintControls">Click a creature = inspect · Click water = food · Right-click = spawn · Space = pause</span><span id="hintKeys"><br/>
+    Keys: 1-4 = speed · S = sound · L = AI Lab · T = family tree</span></p>
   </div>
 </div>
 
-<button class="panel-toggle hidden" id="panelToggle" title="Open controls">&#9776;</button>
+<button class="panel-toggle hidden" id="panelToggle" title="Open controls"><span class="tl">MENU</span>&#9776;</button>
+<button class="panel-toggle hidden" id="quickPause" title="Pause or resume (Space)"><span class="tl" id="qpLabel">PAUSE</span><span id="qpIcon">&#10074;&#10074;</span></button>
 
 <!-- LEFT PANEL — Simulation Controls (same as v2) -->
 <div class="panel" id="panel">
   <div class="panel-header">
     <div class="panel-title">Primordial</div>
-    <div class="panel-subtitle">Genesis Engine · Sentinel Edition · v5.6</div>
+    <div class="panel-subtitle">Genesis Engine · Sentinel Edition · v5.6.1</div>
     <button class="panel-close" id="panelClose" title="Collapse panel">&#10005;</button>
   </div>
   <div class="tabs">
@@ -284,7 +291,7 @@ button.btn.recording{background:rgba(255,50,50,0.25)!important;border-color:rgba
 </div>
 
 <!-- RIGHT PANEL — AI Lab Partner -->
-<button class="ai-toggle" id="aiToggle" title="AI Lab Partner">&#9883;</button>
+<button class="ai-toggle" id="aiToggle" title="AI Lab Partner"><span class="tl">AI LAB</span>&#9883;</button>
 <div class="ai-panel collapsed" id="aiPanel">
   <div class="ai-header">
     <div class="ai-title">AI Lab Partner</div>
@@ -343,7 +350,7 @@ To get started for free, create a free key at openrouter.ai/keys (no credit card
   </div>
 </div>
 
-<div class="badge">Primordial v5.6 · Sentinel AI Systems × Claude Sentinel · SIDLF · <a href="v5.5/" title="Play v5.5 from October 3, 2026, before protective mothers">v5.5</a> · <a href="v5.4/" title="Play v5.4 from October 3, 2026, before males and females">v5.4</a> · <a href="v5.3/" title="Play v5.3 from October 2, 2026, before grazers and hunters">v5.3</a> · <a href="v5/" title="Play v5 from September 29, 2026, before dead bodies fed the pond">v5</a> · <a href="v4/" title="Play v4 from September 2026, before species could evolve">v4</a> · <a href="classic/" title="Play the original v3 from March 2026">Original v3</a></div>
+<div class="badge">Primordial v5.6.1 · Sentinel AI Systems × Claude Sentinel · SIDLF · <a href="v5.5/" title="Play v5.5 from October 3, 2026, before protective mothers">v5.5</a> · <a href="v5.4/" title="Play v5.4 from October 3, 2026, before males and females">v5.4</a> · <a href="v5.3/" title="Play v5.3 from October 2, 2026, before grazers and hunters">v5.3</a> · <a href="v5/" title="Play v5 from September 29, 2026, before dead bodies fed the pond">v5</a> · <a href="v4/" title="Play v4 from September 2026, before species could evolve">v4</a> · <a href="classic/" title="Play the original v3 from March 2026">Original v3</a></div>
 <div class="rec-dot" id="recDot">REC <span id="recTime">0:00</span></div>
 
 <script>
@@ -486,7 +493,7 @@ function hsvCss(h,s,v){const c=hsvRgb(h,s,v);return`rgb(${c[0]*255|0},${c[1]*255
 // UI REFERENCES
 // ═══════════════════════════════════════════════
 const $=id=>document.getElementById(id);
-const ui={panel:$('panel'),panelToggle:$('panelToggle'),panelClose:$('panelClose'),hint:$('hint'),tooltip:$('tooltip'),timeDisplay:$('timeDisplay'),
+const ui={panel:$('panel'),panelToggle:$('panelToggle'),quickPause:$('quickPause'),panelClose:$('panelClose'),hint:$('hint'),tooltip:$('tooltip'),timeDisplay:$('timeDisplay'),
 btnPause:$('btnPause'),btnReset:$('btnReset'),btnSound:$('btnSound'),btnRecord:$('btnRecord'),btnFullscreen:$('btnFullscreen'),selPreset:$('selPreset'),
 sOrganisms:$('sOrganisms'),sFood:$('sFood'),sFoodRate:$('sFoodRate'),sSpeed:$('sSpeed'),
 sSpecies:$('sSpecies'),sStartSize:$('sStartSize'),sMaxSize:$('sMaxSize'),sOrgSpeed:$('sOrgSpeed'),sLifespan:$('sLifespan'),
@@ -797,7 +804,7 @@ const SETTING_CHECKS=['chkSameSpecies','chkFoodChain','chkMutation','chkEvoSpeed
 // how a seed plays out; releases that leave the world alone (v5.3 only changed the Lab Partner) keep it.
 // v5.4 added diets. With Grazers and Hunters off it plays exactly like v5.2.1 to v5.3, and settings saved before diets load with them off.
 // v5.5 added males and females. With them off it plays exactly like v5.4, and settings saved before them load with them off.
-// v5.6 added protective mothers and v5.7 bite contests, the same way: off plays exactly like the version before.
+// v5.6 added protective mothers and v5.7 bite contests, the same way: off plays exactly like the version before. v5.6.1 only changed the creature card and the menu.
 const APP_VERSION='5.7';
 function sameRules(s){const c=s.checks||{},v=s._app;return v===APP_VERSION||!c.chkBite&&(v==='5.6'||!c.chkCare&&(v==='5.5'||!c.chkSexes&&(v==='5.4'||v==='5.2.1'&&!c.chkDiet)));}
 function versionNote(s){return sameRules(s)?'':' Made in '+(s._app?'v'+s._app:'an earlier version')+', so the run may differ; older versions are linked in the corner badge.';}
@@ -1252,7 +1259,7 @@ ui.aiInput.addEventListener('keydown',(e)=>{if(e.key==='Enter'&&!e.shiftKey){e.p
 // WORLD INIT & SIMULATION (same as v2)
 // ═══════════════════════════════════════════════
 function initWorld(){
-  seedRandom(readSeedInput());sexSeed=hash32(worldSeed,0x5E7E5)|0;nextOid=0;const careOn=ui.chkCare.checked,biteOn=ui.chkBite.checked;orgHint=0;foodHint=0;foodAccum=0;stepAcc=0;
+  seedRandom(readSeedInput());sexSeed=hash32(worldSeed,0x5E7E5)|0;nextOid=0;selOrg=-1;const careOn=ui.chkCare.checked,biteOn=ui.chkBite.checked;orgHint=0;foodHint=0;foodAccum=0;stepAcc=0;
   const nOrg=+ui.sOrganisms.value,nFood=+ui.sFood.value,nSp=+ui.sSpecies.value,sz0=+ui.sStartSize.value,dietOn=ui.chkDiet.checked;
   orgCount=nOrg;
   clades=[];liveClades=[];namedClades=[];extinctLog=[];censusN=0;spotClade=-1;treeDirty=true;graphDirty=true;simTime=0;
@@ -1460,13 +1467,21 @@ treeCanvas.addEventListener('click',e=>{const id=treeRowAt(e);if(id>=0)setSpot(i
 function treeVisible(){return !ui.panel.classList.contains('collapsed')&&$('tab-tree').classList.contains('active');}
 
 // Tooltip
-let mouseX=0,mouseY=0,hoveredOrg=-1;
-function findOrgAtMouse(){let best=-1,bestD=400;const cx=Math.min(gridW-1,Math.max(0,mouseX/CELL|0)),cy=Math.min(gridH-1,Math.max(0,mouseY/CELL|0));for(let dy=-1;dy<=1;dy++)for(let dx=-1;dx<=1;dx++){const nx=cx+dx,ny=cy+dy;if(nx<0||nx>=gridW||ny<0||ny>=gridH)continue;const ci=ny*gridW+nx,cnt=gridCounts[ci],base=ci*GMAX;for(let k=0;k<cnt;k++){const j=gridEntries[base+k];if(!oalive[j])continue;const ddx=ox[j]-mouseX,ddy=oy[j]-mouseY,d2=ddx*ddx+ddy*ddy;if(d2<bestD){bestD=d2;best=j;}}}return best;}
+// The creature card opens only for a creature someone clicked or tapped, and follows it until they close it. A tap leaves no hover
+// point behind (phones used to pop cards open wherever the last tap was); a mouse still enlarges the creature under it.
+let mouseX=-1e4,mouseY=-1e4,hoveredOrg=-1,selOrg=-1,selId=0,pointerKind='mouse',tipW=0,tipH=0;
+function findOrgAt(x,y,r){let best=-1,bestD=r*r;const cx=Math.min(gridW-1,Math.max(0,x/CELL|0)),cy=Math.min(gridH-1,Math.max(0,y/CELL|0));for(let dy=-1;dy<=1;dy++)for(let dx=-1;dx<=1;dx++){const nx=cx+dx,ny=cy+dy;if(nx<0||nx>=gridW||ny<0||ny>=gridH)continue;const ci=ny*gridW+nx,cnt=gridCounts[ci],base=ci*GMAX;for(let k=0;k<cnt;k++){const j=gridEntries[base+k];if(!oalive[j])continue;const ddx=ox[j]-x,ddy=oy[j]-y,d2=ddx*ddx+ddy*ddy;if(d2<bestD){bestD=d2;best=j;}}}return best;}
 // With Males and Females on: a female big and fed enough to breed waits for a male of her kind to come close
 function sexWord(i){if(osex[i])return 'Male';const rs=Math.min(+ui.sReproSize.value,+ui.sMaxSize.value);return orest[i]<=0&&osize[i]>=rs&&oenergy[i]>rs*2.5?'Female, ready to breed, looking for a male':'Female';}
 // With Protective Mothers on: the care gene, and whether this creature is guarding young or being guarded
 function careWord(i){const g=guardOf(i);return `Care: ${(gCare[i]*100|0)}%`+(ocare[i]>0?`, guarding young (${ocare[i].toFixed(0)}s left)`:g>=0?', guarded by its mother':'');}
-function updateTooltip(){hoveredOrg=findOrgAtMouse();if(hoveredOrg<0){ui.tooltip.classList.remove('show');return;}const i=hoveredOrg;const ci=oclade[i],cp=clades[ci].parent>=0?namedAncestor(clades[ci].parent):null;ui.tooltip.innerHTML=`<b style="color:${clades[ci].css}">${cladeLabel(ci)} #${i}</b>${cp&&clades[ci].established?` <span style="color:var(--muted)">from ${cp.name}</span>`:''}<br>Size: ${osize[i].toFixed(1)} · Energy: ${oenergy[i].toFixed(1)}<br>Age: ${oage[i].toFixed(1)}s · Kills: ${okills[i]} · Gen: ${ogen[i]}<br><span style="color:var(--accent2)">Spd:</span>${(gSpeed[i]*100|0)}% <span style="color:var(--warm)">Agg:</span>${(gAggro[i]*100|0)}% <span style="color:var(--accent)">Eff:</span>${(gEfficiency[i]*100|0)}% <span style="color:var(--accent3)">Per:</span>${(gPerception[i]*100|0)}%`+(ui.chkDiet.checked?`<br>Diet: ${dietWord(gDiet[i])}, ${(gDiet[i]*100|0)}% meat`:'')+(ui.chkSexes.checked?'<br>'+sexWord(i):'')+(ui.chkCare.checked?'<br>'+careWord(i):'')+(ui.chkBite.checked?`<br>Armor: ${(gArmor[i]*100|0)}% · Jaws: ${(gJaws[i]*100|0)}%`:'');ui.tooltip.style.left=Math.min(W-230,mouseX+15)+'px';ui.tooltip.style.top=Math.min(H-100,mouseY+15)+'px';ui.tooltip.classList.add('show');}
+function updateTooltip(){hoveredOrg=pointerKind==='mouse'&&mouseX>-1e3?findOrgAt(mouseX,mouseY,20):-1;canvas.style.cursor=hoveredOrg>=0?'pointer':'';
+  if(selOrg>=0&&(!oalive[selOrg]||oid[selOrg]!==selId))selOrg=-1;
+  if(selOrg<0){ui.tooltip.classList.remove('show');return;}const i=selOrg;const ci=oclade[i],cp=clades[ci].parent>=0?namedAncestor(clades[ci].parent):null;ui.tooltip.innerHTML=`<b style="color:${clades[ci].css}">${cladeLabel(ci)} #${i}</b>${cp&&clades[ci].established?` <span style="color:var(--muted)">from ${cp.name}</span>`:''}<br>Size: ${osize[i].toFixed(1)} · Energy: ${oenergy[i].toFixed(1)}<br>Age: ${oage[i].toFixed(1)}s · Kills: ${okills[i]} · Gen: ${ogen[i]}<br><span style="color:var(--accent2)">Spd:</span>${(gSpeed[i]*100|0)}% <span style="color:var(--warm)">Agg:</span>${(gAggro[i]*100|0)}% <span style="color:var(--accent)">Eff:</span>${(gEfficiency[i]*100|0)}% <span style="color:var(--accent3)">Per:</span>${(gPerception[i]*100|0)}%`+(ui.chkDiet.checked?`<br>Diet: ${dietWord(gDiet[i])}, ${(gDiet[i]*100|0)}% meat`:'')+(ui.chkSexes.checked?'<br>'+sexWord(i):'')+(ui.chkCare.checked?'<br>'+careWord(i):'')+(ui.chkBite.checked?`<br>Armor: ${(gArmor[i]*100|0)}% · Jaws: ${(gJaws[i]*100|0)}%`:'')+'<br><span class="tip-close">'+(pointerKind==='mouse'?'Click the water or press Esc to close':'Tap the water to close')+'</span>';
+  tipW=ui.tooltip.offsetWidth;tipH=ui.tooltip.offsetHeight;placeTip();ui.tooltip.classList.add('show');}
+// Keep the card beside its creature, on whichever side fits on screen.
+function placeTip(){if(selOrg<0)return;const i=selOrg,r=Math.max(10,osize[i]*2);let x=ox[i]+r,y=oy[i]+r;if(x+tipW>W-8)x=ox[i]-r-tipW;if(y+tipH>H-8)y=oy[i]-r-tipH;
+  ui.tooltip.style.left=Math.max(8,x)+'px';ui.tooltip.style.top=Math.max(8,y)+'px';}
 
 // GL Buffers
 const RMAX=MAX_ORG+MAX_FOOD+MAX_DFX;
@@ -1535,7 +1550,7 @@ function renderWorld(){
   const maxV=Math.max(0.1,(+ui.sOrgSpeed.value)*3),detail=ui.chkDetail.checked,dietOn=ui.chkDiet.checked,sexOn=ui.chkSexes.checked,careOn=ui.chkCare.checked,biteOn=ui.chkBite.checked;let n=0;
   for(let i=0;i<orgCount;i++){if(!oalive[i])continue;const o=n*ORG_STRIDE;const vx=ovx[i],vy=ovy[i],v=Math.sqrt(vx*vx+vy*vy);
     orgData[o]=ox[i];orgData[o+1]=oy[i];
-    orgData[o+2]=Math.atan2(-vy,vx);orgData[o+3]=(detail?Math.max(7,osize[i]*3.8):Math.max(1.5,osize[i]*1.2))*(i===hoveredOrg?1.5:1);orgData[o+4]=cladeHue[oclade[i]];orgData[o+5]=dietOn?gDiet[i]:0.5;
+    orgData[o+2]=Math.atan2(-vy,vx);orgData[o+3]=(detail?Math.max(7,osize[i]*3.8):Math.max(1.5,osize[i]*1.2))*(i===hoveredOrg||i===selOrg?1.5:1);orgData[o+4]=cladeHue[oclade[i]];orgData[o+5]=dietOn?gDiet[i]:0.5;
     orgData[o+6]=gSpeed[i];orgData[o+7]=gAggro[i];orgData[o+8]=gEfficiency[i];orgData[o+9]=gPerception[i];
     orgData[o+10]=Math.min(1,oenergy[i]/12);orgData[o+11]=(i*0.618034)%1;orgData[o+12]=Math.min(1,v/maxV);orgData[o+13]=spotClade<0||spotMask[oclade[i]]?1:0.14;orgData[o+14]=(sexOn?osex[i]:0)+(careOn&&oflare[i]>0?2:0);orgData[o+15]=biteOn?gArmor[i]:0;orgData[o+16]=biteOn?gJaws[i]:0;n++;}
   // Dead bodies: still, dim, see-through cells that shrink and fade as they break down into algae
@@ -1562,7 +1577,7 @@ function frame(now){
   if(running){stepAcc+=rawDt;let steps=0;while(stepAcc>=SIM_STEP&&steps<MAX_STEPS_PER_FRAME){spawnFood(SIM_STEP*(+ui.sSpeed.value));simulate(SIM_STEP);checkExperiment();stepAcc-=SIM_STEP;steps++;}if(steps===MAX_STEPS_PER_FRAME)stepAcc=0;}
   if(graphDirty){drawPopGraph();updateLegend();graphDirty=false;}
   treeRedrawT+=rawDt;if(treeVisible()&&(treeDirty||treeRedrawT>0.5)){drawTree();treeDirty=false;treeRedrawT=0;}
-  if(++tooltipTick>=3){updateTooltip();tooltipTick=0;}
+  if(++tooltipTick>=3){updateTooltip();tooltipTick=0;}else placeTip();
   const mins=simTime/60|0,secs=simTime%60|0;ui.timeDisplay.textContent=(mins<10?'0':'')+mins+':'+(secs<10?'0':'')+secs;
   renderWorld();
   fpsT+=rawDt;fpsN++;if(fpsT>=0.4){ui.sFps.textContent=(fpsN/fpsT|0);fpsT=0;fpsN=0;}
@@ -1573,7 +1588,7 @@ function frame(now){
   updateLabels();frameCount++;
 }
 
-function updateLabels(){ui.vTraitCost.textContent=(+ui.sTraitCost.value).toFixed(1);ui.vOrganisms.textContent=ui.sOrganisms.value;ui.vFood.textContent=ui.sFood.value;ui.vFoodRate.textContent=ui.sFoodRate.value+'/s';ui.vSpeed.textContent=(+ui.sSpeed.value).toFixed(2);ui.vSpecies.textContent=ui.sSpecies.value;ui.vStartSize.textContent=(+ui.sStartSize.value).toFixed(1);ui.vMaxSize.textContent=ui.sMaxSize.value;ui.vOrgSpeed.textContent=(+ui.sOrgSpeed.value).toFixed(1);ui.vLifespan.textContent=ui.sLifespan.value+'s';ui.vReproSize.textContent=+ui.sReproSize.value>=+ui.sMaxSize.value?'Full size':ui.sReproSize.value;ui.vOffspring.textContent=ui.sOffspring.value;ui.vOases.textContent=ui.sOases.value;ui.vEatRatio.textContent=(+ui.sEatRatio.value).toFixed(2)+'x';ui.vEatGain.textContent=(+ui.sEatGain.value).toFixed(2);ui.vDecay.textContent=Math.round(+ui.sDecay.value*100)+'%';ui.vHunt.textContent=(+ui.sHunt.value).toFixed(1);ui.vFlee.textContent=(+ui.sFlee.value).toFixed(1);ui.vFlock.textContent=(+ui.sFlock.value).toFixed(2);ui.vFoodDrive.textContent=(+ui.sFoodDrive.value).toFixed(1);ui.vSeparation.textContent=(+ui.sSeparation.value).toFixed(2);ui.vMutRate.textContent=(+ui.sMutRate.value).toFixed(2);ui.vMutStr.textContent=(+ui.sMutStr.value).toFixed(2);ui.vSplit.textContent=(+ui.sSplit.value).toFixed(2);ui.vFoodGlow.textContent=(+ui.sFoodGlow.value).toFixed(1);ui.vGlow.textContent=Math.round(+ui.sGlow.value*100)+'%';const tv=+ui.sTrail.value;ui.vTrail.textContent=tv<0.05?'Off':tv<0.3?'Short':tv<0.6?'Medium':'Long';ui.btnPause.textContent=running?'Pause':'Play';ui.btnPause.classList.toggle('active',!running);}
+function updateLabels(){ui.vTraitCost.textContent=(+ui.sTraitCost.value).toFixed(1);ui.vOrganisms.textContent=ui.sOrganisms.value;ui.vFood.textContent=ui.sFood.value;ui.vFoodRate.textContent=ui.sFoodRate.value+'/s';ui.vSpeed.textContent=(+ui.sSpeed.value).toFixed(2);ui.vSpecies.textContent=ui.sSpecies.value;ui.vStartSize.textContent=(+ui.sStartSize.value).toFixed(1);ui.vMaxSize.textContent=ui.sMaxSize.value;ui.vOrgSpeed.textContent=(+ui.sOrgSpeed.value).toFixed(1);ui.vLifespan.textContent=ui.sLifespan.value+'s';ui.vReproSize.textContent=+ui.sReproSize.value>=+ui.sMaxSize.value?'Full size':ui.sReproSize.value;ui.vOffspring.textContent=ui.sOffspring.value;ui.vOases.textContent=ui.sOases.value;ui.vEatRatio.textContent=(+ui.sEatRatio.value).toFixed(2)+'x';ui.vEatGain.textContent=(+ui.sEatGain.value).toFixed(2);ui.vDecay.textContent=Math.round(+ui.sDecay.value*100)+'%';ui.vHunt.textContent=(+ui.sHunt.value).toFixed(1);ui.vFlee.textContent=(+ui.sFlee.value).toFixed(1);ui.vFlock.textContent=(+ui.sFlock.value).toFixed(2);ui.vFoodDrive.textContent=(+ui.sFoodDrive.value).toFixed(1);ui.vSeparation.textContent=(+ui.sSeparation.value).toFixed(2);ui.vMutRate.textContent=(+ui.sMutRate.value).toFixed(2);ui.vMutStr.textContent=(+ui.sMutStr.value).toFixed(2);ui.vSplit.textContent=(+ui.sSplit.value).toFixed(2);ui.vFoodGlow.textContent=(+ui.sFoodGlow.value).toFixed(1);ui.vGlow.textContent=Math.round(+ui.sGlow.value*100)+'%';const tv=+ui.sTrail.value;ui.vTrail.textContent=tv<0.05?'Off':tv<0.3?'Short':tv<0.6?'Medium':'Long';ui.btnPause.textContent=running?'Pause':'Play';const q=ui.quickPause;if(q._run!==running){q._run=running;$('qpLabel').textContent=running?'PAUSE':'PLAY';$('qpIcon').textContent=running?'\u275A\u275A':'\u25B6\uFE0E';}ui.btnPause.classList.toggle('active',!running);}
 
 function resize(){W=window.innerWidth;H=window.innerHeight;canvas.width=W;canvas.height=H;gl.viewport(0,0,W,H);gl.useProgram(prog);gl.uniform2f(uRes,W,H);gl.clearColor(0.02,0.04,0.08,1);gl.clear(gl.COLOR_BUFFER_BIT);}
 window.addEventListener('resize',()=>{resize();initGrids();});
@@ -1582,8 +1597,12 @@ function interact(){hasInteracted=true;if(ui.hint&&!ui.hint.classList.contains('
 
 // Tabs
 document.querySelectorAll('.tab').forEach(tab=>{tab.addEventListener('click',()=>{document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));document.querySelectorAll('.tab-page').forEach(p=>p.classList.remove('active'));tab.classList.add('active');document.getElementById('tab-'+tab.dataset.tab).classList.add('active');});});
-ui.panelClose.addEventListener('click',()=>{ui.panel.classList.add('collapsed');ui.panelToggle.classList.remove('hidden');});
-ui.panelToggle.addEventListener('click',()=>{ui.panel.classList.remove('collapsed');ui.panelToggle.classList.add('hidden');});
+function showPanel(open){ui.panel.classList.toggle('collapsed',!open);ui.panelToggle.classList.toggle('hidden',open);ui.quickPause.classList.toggle('hidden',open);}
+ui.panelClose.addEventListener('click',()=>showPanel(false));
+ui.panelToggle.addEventListener('click',()=>showPanel(true));
+ui.quickPause.addEventListener('click',()=>{interact();running=!running;updateLabels();});
+// Phones and tablets open on the full pond with the menu closed; the MENU button opens it.
+if(window.matchMedia?.('(pointer:coarse)')?.matches||window.innerWidth<=600){showPanel(false);$('hintControls').textContent='Tap a creature = inspect · Tap water = food · MENU = controls';$('hintKeys').style.display='none';}
 
 // AI Panel toggle
 ui.aiClose.addEventListener('click',()=>{ui.aiPanel.classList.add('collapsed');ui.aiToggle.classList.remove('hidden');});
@@ -1611,8 +1630,14 @@ $('btnExport').addEventListener('click',()=>{interact();exportSettings();});
 $('btnImport').addEventListener('click',()=>{interact();$('importFile').click();});
 $('importFile').addEventListener('change',(e)=>{if(e.target.files[0])importSettings(e.target.files[0]);e.target.value='';});
 
-canvas.addEventListener('mousemove',(e)=>{mouseX=e.clientX;mouseY=e.clientY;});
-canvas.addEventListener('click',(e)=>{interact();foodHint=0;for(let s=0;s<8;s++){const idx=allocFood();if(idx<0)break;fx[idx]=e.clientX+(Math.random()-0.5)*30;fy[idx]=e.clientY+(Math.random()-0.5)*30;falive[idx]=1;fglow[idx]=Math.random()*TAU;}});
+canvas.addEventListener('pointermove',(e)=>{pointerKind=e.pointerType||'mouse';if(pointerKind==='mouse'){mouseX=e.clientX;mouseY=e.clientY;}});
+canvas.addEventListener('pointerdown',(e)=>{pointerKind=e.pointerType||'mouse';if(pointerKind!=='mouse')mouseX=mouseY=-1e4;});
+canvas.addEventListener('pointerleave',()=>{mouseX=mouseY=-1e4;});
+// Click or tap a creature to open its card (again to close it); click the water to close the card, or to drop food when none is open.
+canvas.addEventListener('click',(e)=>{interact();const j=findOrgAt(e.clientX,e.clientY,pointerKind==='mouse'?16:26);
+  if(j>=0){if(j===selOrg)selOrg=-1;else{selOrg=j;selId=oid[j];}tooltipTick=99;return;}
+  if(selOrg>=0){selOrg=-1;tooltipTick=99;return;}
+  foodHint=0;for(let s=0;s<8;s++){const idx=allocFood();if(idx<0)break;fx[idx]=e.clientX+(Math.random()-0.5)*30;fy[idx]=e.clientY+(Math.random()-0.5)*30;falive[idx]=1;fglow[idx]=Math.random()*TAU;}});
 canvas.addEventListener('contextmenu',(e)=>{e.preventDefault();interact();const sz0=+ui.sStartSize.value;
   let pool=liveClades.filter(c=>c.established);if(!pool.length)pool=liveClades;
   let c,g;if(pool.length){c=pool[Math.random()*pool.length|0];const n=c.pop||1;g=c.pop?c.sum.map(v=>v/n):c.ref;}
@@ -1629,7 +1654,8 @@ window.addEventListener('keydown',(e)=>{
   else if(e.key==='3'){ui.sSpeed.value='2.0';updateLabels();}
   else if(e.key==='4'){ui.sSpeed.value='5.0';updateLabels();}
   else if(e.key==='s'||e.key==='S'){toggleSound();}
-  else if(e.key==='t'||e.key==='T'){ui.panel.classList.remove('collapsed');ui.panelToggle.classList.add('hidden');document.querySelector('.tab[data-tab="tree"]').click();}
+  else if(e.key==='t'||e.key==='T'){showPanel(true);document.querySelector('.tab[data-tab="tree"]').click();}
+  else if(e.key==='Escape'&&selOrg>=0){selOrg=-1;tooltipTick=99;}
   else if(e.key==='Escape'&&spotClade>=0){setSpot(spotClade);}
   else if(e.key==='l'||e.key==='L'){
     if(ui.aiPanel.classList.contains('collapsed')){ui.aiPanel.classList.remove('collapsed');ui.aiToggle.classList.add('hidden');}

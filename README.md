@@ -6,7 +6,7 @@
 
 A real-time WebGL ecosystem where living cells eat, hunt, flee, flock, reproduce, mutate, and split into new species that nobody designed, with a multi-provider AI Lab Partner that observes, experiments, and writes research reports on the living world. All from simple rules, all in your browser.
 
-**[Launch Primordial](https://jkh2.github.io/Primordial-Sim/)** · Version 5.6 · Single-file HTML · Zero install · GitHub Pages
+**[Launch Primordial](https://jkh2.github.io/Primordial-Sim/)** · Version 5.6.1 · Single-file HTML · Zero install · GitHub Pages
 
 **New here?** Choose the **Origin of Species** preset in the World tab and press **T**. Everything starts as one red species; within a few minutes the family tree fills with species that split off on their own.
 
@@ -25,6 +25,11 @@ We believe this is how humans and AI should work together: as partners with comp
 ---
 
 ## What's New in v5
+
+**v5.6.1, October 3, 2026: friendlier on phones**
+
+- **Creature cards open only when you ask.** Click or tap a creature to open its card. The card follows that creature until you click or tap the water, press Esc, or the creature dies. On phones, cards used to pop open by themselves wherever your last tap had been, and covered much of the screen. On a desktop, the creature under the mouse still grows a little to show you can click it.
+- **Phones start with the full pond.** On phones and tablets the controls start closed. A **MENU** button in the top left opens them, and a **PAUSE** button beside it pauses the pond, so you can stop the action and tap a creature. The AI Lab button is labeled too, and it no longer covers the close button of the open menu on a phone.
 
 **v5.6, October 3, 2026: protective mothers**
 
@@ -121,7 +126,7 @@ The AI Lab Partner watches it all happen, analyzes the data, designs and runs ex
 
 **Predator-prey food chains** — An optional Rock-Paper-Scissors mode creates circular predation: each starting species hunts the next one in sequence, wrapping around, and new species inherit their ancestor's place in the cycle. This prevents any single lineage from dominating and produces classic Lotka-Volterra population oscillations in the population graph.
 
-**Interactive sandbox** — Left-click drops a cluster of food. Right-click brings in a small group of a living species (or a new arrival if everything has died out). Hover over any organism to see its species and where that species came from, its size, energy, age, kills, generation, and all four genes. Space pauses, and 1 to 4 set the speed from slow motion to 5x. Seven tuned presets range from a peaceful aquarium to extinction events and the Origin of Species. You can record video of a run, go fullscreen, share your settings as a link, or export them to a file.
+**Interactive sandbox** — Left-click drops a cluster of food. Right-click brings in a small group of a living species (or a new arrival if everything has died out). Click or tap any organism to open its card: its species and where that species came from, its size, energy, age, kills, generation, and its genes. The card follows the creature until you click the water or press Esc. Space pauses, and 1 to 4 set the speed from slow motion to 5x. Seven tuned presets range from a peaceful aquarium to extinction events and the Origin of Species. You can record video of a run, go fullscreen, share your settings as a link, or export them to a file.
 
 **Living visuals** — Organisms are drawn as teardrop cells pointed the way they swim, with a membrane rim and a nucleus. Their genes are visible: a longer tail means a faster swimmer, spines and a redder rim mean aggression, glowing eye-spots mean sharp perception, and a translucent body means an efficient metabolism. Cells pulse like a heartbeat, stretch when they move fast, and dim and flicker when starving. The world is primordial water with drifting caustic light and plankton, food is swaying bioluminescent algae, and oases are glowing springs with rising bubbles. Kills pull the prey's motes toward the predator, births split like dividing cells, and dead bodies linger as faint, see-through cells that shrink and fade while algae sprouts around them. Glow Strength sets how brightly crowds of cells light each other up. On slower machines, turn off Water Effects or Detailed Creatures in the Visual tab.
 
@@ -229,15 +234,16 @@ The AI Lab Partner operates through four integrated systems:
 
 | Input | Action |
 |-------|--------|
-| Left click | Drop food cluster |
+| Click a creature | Open its card: species and its ancestor, size, energy, age, kills, generation, genes, diet, sex, care. Click the water or press Esc to close it |
+| Left click on water | Drop food cluster (closes an open card first) |
 | Right click | Bring in a small group of a living species |
-| Hover | Inspect organism (species and its ancestor, size, energy, age, kills, generation, genes, diet, sex, care) |
 | Space | Pause / Resume |
 | 1 / 2 / 3 / 4 | Speed: 0.5x / 1x / 2x / 5x |
 | S | Toggle sound |
 | L | Toggle AI Lab Partner panel |
 | T | Open the family tree |
-| Esc | Clear a family spotlight |
+| Esc | Close a creature card, or clear a family spotlight |
+| On phones | Tap a creature for its card, tap the water for food; MENU opens the controls and PAUSE stops the pond |
 
 ### UI Tabs (Left Panel)
 
