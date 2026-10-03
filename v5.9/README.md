@@ -1,12 +1,14 @@
+> **Archived README for v5.9.2, the public version on October 3, 2026 (before smart guards).** This is how the README read while v5.9.2 was the public version. Play it at [/v5.9](https://jkh2.github.io/Primordial-Sim/v5.9/). The current README is [here](../README.md). Only the image and file links below were changed so they work from this folder; the untouched original is on the [`v5.9.2-release`](https://github.com/jkh2/Primordial-Sim/tree/v5.9.2-release) branch (v5.9 itself: [`v5.9-release`](https://github.com/jkh2/Primordial-Sim/tree/v5.9-release)).
+
 # Primordial-Sim
 
-![Primordial-Sim Banner](banner.png)
+![Primordial-Sim Banner](../banner.png)
 
 ### Emergent Artificial Life Engine
 
 A real-time WebGL ecosystem where living cells eat, hunt, flee, flock, reproduce, mutate, and split into new species that nobody designed, with a multi-provider AI Lab Partner that observes, experiments, and writes research reports on the living world. All from simple rules, all in your browser.
 
-**[Launch Primordial](https://jkh2.github.io/Primordial-Sim/)** · Version 5.10 · Single-file HTML · Zero install · GitHub Pages
+**[Launch Primordial](https://jkh2.github.io/Primordial-Sim/)** · Version 5.9.2 · Single-file HTML · Zero install · GitHub Pages
 
 **New here?** Choose the **Origin of Species** preset in the World tab and press **T**. Everything starts as one red species; within a few minutes the family tree fills with species that split off on their own.
 
@@ -25,13 +27,6 @@ We believe this is how humans and AI should work together: as partners with comp
 ---
 
 ## What's New in v5
-
-**v5.10, October 3, 2026: smart guards**
-
-- **Guards that size up the danger.** A new **Smart Guards** switch, under Protective Parents in the Evolve tab, makes a guarding parent judge each hunter near its young. A hunter too small to eat the guard gets mobbed: the guard chases it and drives it off the moment they touch, the way songbirds mob a crow and nesting terns dive at a fox. Each drive-off costs the guard energy and a moment's rest.
-- **Bold or shy.** A hunter big enough to eat the guard is a gamble. After each birth a guard is bold as often as its care gene is high. A bold guard faces the hunter anyway, as a moose cow faces wolves. A shy one leads its young away while they huddle close, the way a mother duck leads her ducklings from a pike. Click a guard to see whether it is mobbing or leading its young away.
-- **Good parents are hard on predators.** In Predators and Prey with protective parents, grazers and hunters both lasted ten minutes in all 9 worlds we ran with smart guards (without them, the grazers lasted in 8). In Males and Females with protective parents, the guarded babies were eaten about 40% less often. The hunters there had been living on those babies, and on parents who charged hunters too big for them. With smart guards the hunters lasted in only 2 to 4 of 9 worlds (mother, both or Evolves guarding), against 6 to 8 without. We kept that result rather than tuning it away. It is what real predators of young face, and a counter, such as hunters that work in packs, is on the roadmap.
-- **Off plays exactly like v5.9.** With Smart Guards off, the default, every seed replays as before, and settings saved before v5.10 load with it off. The Lab Partner knows the rule.
 
 **v5.9.2, October 3, 2026: blue ghost fireflies**
 
@@ -148,16 +143,15 @@ We believe this is how humans and AI should work together: as partners with comp
 
 | Version | Play it | Its README | Exact source |
 |---------|---------|------------|--------------|
-| v5.9.2 (October 3, 2026) | [/v5.9](https://jkh2.github.io/Primordial-Sim/v5.9/) | [v5.9/README.md](v5.9/README.md) | [`v5.9.2-release`](https://github.com/jkh2/Primordial-Sim/tree/v5.9.2-release) branch (v5.9: [`v5.9-release`](https://github.com/jkh2/Primordial-Sim/tree/v5.9-release), v5.9.1: [`v5.9.1-release`](https://github.com/jkh2/Primordial-Sim/tree/v5.9.1-release)) |
-| v5.8 (October 3, 2026) | [/v5.8](https://jkh2.github.io/Primordial-Sim/v5.8/) | [v5.8/README.md](v5.8/README.md) | [`v5.8-release`](https://github.com/jkh2/Primordial-Sim/tree/v5.8-release) branch |
-| v5.7 (October 3, 2026) | [/v5.7](https://jkh2.github.io/Primordial-Sim/v5.7/) | [v5.7/README.md](v5.7/README.md) | [`v5.7-release`](https://github.com/jkh2/Primordial-Sim/tree/v5.7-release) branch |
-| v5.6.1 (October 3, 2026) | [/v5.6](https://jkh2.github.io/Primordial-Sim/v5.6/) | [v5.6/README.md](v5.6/README.md) | [`v5.6.1-release`](https://github.com/jkh2/Primordial-Sim/tree/v5.6.1-release) branch (v5.6 itself: [`v5.6-release`](https://github.com/jkh2/Primordial-Sim/tree/v5.6-release)) |
-| v5.5 (October 3, 2026) | [/v5.5](https://jkh2.github.io/Primordial-Sim/v5.5/) | [v5.5/README.md](v5.5/README.md) | [`v5.5-release`](https://github.com/jkh2/Primordial-Sim/tree/v5.5-release) branch |
-| v5.4 (October 3, 2026) | [/v5.4](https://jkh2.github.io/Primordial-Sim/v5.4/) | [v5.4/README.md](v5.4/README.md) | [`v5.4-release`](https://github.com/jkh2/Primordial-Sim/tree/v5.4-release) branch |
-| v5.3 (October 2, 2026) | [/v5.3](https://jkh2.github.io/Primordial-Sim/v5.3/) | [v5.3/README.md](v5.3/README.md) | [`v5.3-release`](https://github.com/jkh2/Primordial-Sim/tree/v5.3-release) branch |
-| v5 (September 29, 2026) | [/v5](https://jkh2.github.io/Primordial-Sim/v5/) | [v5/README.md](v5/README.md) | [`v5-release`](https://github.com/jkh2/Primordial-Sim/tree/v5-release) branch |
-| v4 (September 29, 2026) | [/v4](https://jkh2.github.io/Primordial-Sim/v4/) | [v4/README.md](v4/README.md) | [`v4-release`](https://github.com/jkh2/Primordial-Sim/tree/v4-release) branch |
-| v3, the original (March 12, 2026) | [/classic](https://jkh2.github.io/Primordial-Sim/classic/) | [classic/README.md](classic/README.md) | [`v3-original`](https://github.com/jkh2/Primordial-Sim/tree/v3-original) branch |
+| v5.8 (October 3, 2026) | [/v5.8](https://jkh2.github.io/Primordial-Sim/v5.8/) | [v5.8/README.md](../v5.8/README.md) | [`v5.8-release`](https://github.com/jkh2/Primordial-Sim/tree/v5.8-release) branch |
+| v5.7 (October 3, 2026) | [/v5.7](https://jkh2.github.io/Primordial-Sim/v5.7/) | [v5.7/README.md](../v5.7/README.md) | [`v5.7-release`](https://github.com/jkh2/Primordial-Sim/tree/v5.7-release) branch |
+| v5.6.1 (October 3, 2026) | [/v5.6](https://jkh2.github.io/Primordial-Sim/v5.6/) | [v5.6/README.md](../v5.6/README.md) | [`v5.6.1-release`](https://github.com/jkh2/Primordial-Sim/tree/v5.6.1-release) branch (v5.6 itself: [`v5.6-release`](https://github.com/jkh2/Primordial-Sim/tree/v5.6-release)) |
+| v5.5 (October 3, 2026) | [/v5.5](https://jkh2.github.io/Primordial-Sim/v5.5/) | [v5.5/README.md](../v5.5/README.md) | [`v5.5-release`](https://github.com/jkh2/Primordial-Sim/tree/v5.5-release) branch |
+| v5.4 (October 3, 2026) | [/v5.4](https://jkh2.github.io/Primordial-Sim/v5.4/) | [v5.4/README.md](../v5.4/README.md) | [`v5.4-release`](https://github.com/jkh2/Primordial-Sim/tree/v5.4-release) branch |
+| v5.3 (October 2, 2026) | [/v5.3](https://jkh2.github.io/Primordial-Sim/v5.3/) | [v5.3/README.md](../v5.3/README.md) | [`v5.3-release`](https://github.com/jkh2/Primordial-Sim/tree/v5.3-release) branch |
+| v5 (September 29, 2026) | [/v5](https://jkh2.github.io/Primordial-Sim/v5/) | [v5/README.md](../v5/README.md) | [`v5-release`](https://github.com/jkh2/Primordial-Sim/tree/v5-release) branch |
+| v4 (September 29, 2026) | [/v4](https://jkh2.github.io/Primordial-Sim/v4/) | [v4/README.md](../v4/README.md) | [`v4-release`](https://github.com/jkh2/Primordial-Sim/tree/v4-release) branch |
+| v3, the original (March 12, 2026) | [/classic](https://jkh2.github.io/Primordial-Sim/classic/) | [classic/README.md](../classic/README.md) | [`v3-original`](https://github.com/jkh2/Primordial-Sim/tree/v3-original) branch |
 
 ## What It Is
 
@@ -369,8 +363,6 @@ After a birth, a parent guards for six seconds times its care. It doesn't feed o
 
 **Who guards.** Without males and females, the parent that gave birth guards. With Reproduction set to Male and female, the **Who Guards** menu decides: **Mother** (the default, and how every world before v5.8 played), **Father**, **Both**, or **Evolves**. Only a grown father, one big enough to breed, stays to guard; a young one leaves. While a father guards he can't mate or go looking for a mate, so a father who leaves can sire more young, and a mother who leaves can feed and breed again sooner. With **Evolves**, every creature carries a who-guards gene that starts near 50%: at 0% only the mother guards, at 50% both do, at 100% only the father, and in between the less involved parent guards for part of its time. Each species finds its own way, and the family tree and a creature's card show where it stands.
 
-**Smart guards.** With **Smart Guards** on, a guard sizes up each creature near it that could eat a newborn. One too small to eat the guard is mobbed: the guard chases it, and on contact the hunter is stunned and pushed off, at a cost of 1 energy and 2 seconds' rest for the guard. Against one big enough to eat the guard, a guard is bold as often as its care, decided after each birth. A bold guard charges anyway, as every guard did before; a shy one turns away and leads its young off while they huddle close. In Males and Females this saves many young and starves the hunters that lived on them (they lasted in 2 to 4 of 9 worlds instead of 6 to 8); in Predators and Prey both lasted in all 9.
-
 What we found: in crowded ponds care seems to cost more than it pays. They held fewer creatures with care on, and in the default world care drifted down to about 43%. Its effect on the hunters depends on the world: in Predators and Prey they did as well as without care, but in Males and Females they died out on three of the nine seeds we tried, where without care they died out on one. Care moves slowly; the clearest change we saw was in Origin of Species, where it rose to about 58% while hunters were multiplying and fell back once they had eaten nearly everything else. Who guards changes the balance too. In the Males and Females world the grazers lasted ten minutes on all 27 seeds we ran with the mother guarding but the hunters on only 17; with both parents guarding the hunters lasted on 24 and the grazers on 20; with Evolves the grazers lasted on 26 and the hunters on 22. In Origin of Species with Evolves, the grazers' fathers evolved to do more of the guarding.
 
 ### Bite Contests
@@ -409,7 +401,7 @@ Any modern browser with WebGL: Chrome, Firefox, Safari, Edge. No plugins, no ext
 
 ## Where It's Going
 
-- **Now: richer life.** Toxins and warning colors, small evolved brains as an optional replacement for the five fixed drives, day and night, seasons, terrain and currents, disease, life stages, hunters that work in packs, fighters and sneakers (rivals who back off after a loss, and males who slip in to mate while others fight), scent trails, colonies, and a WebGPU engine for 100,000 or more organisms where the browser supports it.
+- **Now: richer life.** Toxins and warning colors, small evolved brains as an optional replacement for the five fixed drives, day and night, seasons, terrain and currents, disease, life stages, guards that mob hunters they can beat and hide their young from ones they can't, fighters and sneakers (rivals who back off after a loss, and males who slip in to mate while others fight), scent trails, colonies, and a WebGPU engine for 100,000 or more organisms where the browser supports it.
 - **Paused, coming back: the Lab Partner as a working scientist.** Proper tool calls instead of parsing text, time-series records so reports cite trends, experiments repeated across several seeds against an unchanged control, a lab notebook that persists between sessions, charts in its reports, and an Alliance mode where Claude, Grok and Gemini each interpret the same result, plus a pond news feed and hall of fame for new species, extinctions and records.
 - **Then: a world worth sharing.** A camera that follows one creature through its life, zoom and pan, dragging to stir a current, a narrated documentary mode, and the Wellspring at the heart of the world.
 - **Someday: a 3D world** people can step into with VR headsets, right in the browser.
@@ -426,7 +418,7 @@ Learn more about the SIDLF framework and human-AI symbiosis at [jameskeithharwoo
 
 ## License
 
-**Sentinel AI Systems Non-Commercial License v1.0** — See [LICENSE](LICENSE) for full terms.
+**Sentinel AI Systems Non-Commercial License v1.0** — See [LICENSE](../LICENSE) for full terms.
 
 **Free for:** personal use, entertainment, education, academic research, classroom instruction, and learning from the code.
 
@@ -434,4 +426,4 @@ Learn more about the SIDLF framework and human-AI symbiosis at [jameskeithharwoo
 
 We built this openly so people can learn from it, enjoy it, and be inspired by it. We ask that if you profit from it, you include us in that conversation.
 
-See [IP-DECLARATION.md](IP-DECLARATION.md) for the formal intellectual property declaration and prior art documentation.
+See [IP-DECLARATION.md](../IP-DECLARATION.md) for the formal intellectual property declaration and prior art documentation.
